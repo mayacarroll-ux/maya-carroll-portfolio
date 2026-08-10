@@ -73,6 +73,45 @@
       transition: background 0.25s ease, color 0.25s ease;
     }
 
+    /* ---------- Animated location backgrounds ---------- */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+    .bg-scene canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .bg-silhouette {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 34vh;
+      min-height: 220px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bg-scene {
+        transition: none;
+      }
+    }
+
+    /* Everything the visitor reads/clicks sits above the fixed backgrounds. */
+    #topbar,
+    main,
+    footer {
+      position: relative;
+      z-index: 1;
+    }
+
     :focus-visible {
       outline: 2px solid var(--focus-ring);
       outline-offset: 3px;
@@ -351,6 +390,56 @@
   </style>
 </head>
 <body>
+  <div id="bg-miami" class="bg-scene" aria-hidden="true">
+    <svg class="bg-silhouette" viewBox="0 0 800 220" preserveAspectRatio="xMidYMax slice">
+      <g fill="var(--color-surface)" opacity="0.92">
+        <rect x="10" y="110" width="36" height="110" />
+        <rect x="55" y="80" width="26" height="140" />
+        <rect x="95" y="130" width="44" height="90" />
+        <polygon points="150,220 150,90 170,90 170,72 190,72 190,90 210,90 210,220" />
+        <rect x="225" y="140" width="30" height="80" />
+        <rect x="345" y="95" width="40" height="125" />
+        <rect x="395" y="150" width="34" height="70" />
+        <polygon points="440,220 440,100 458,100 458,84 478,84 478,100 498,100 498,220" />
+        <rect x="515" y="120" width="28" height="100" />
+        <rect x="620" y="85" width="38" height="135" />
+        <rect x="665" y="135" width="30" height="85" />
+        <rect x="710" y="105" width="42" height="115" />
+        <rect x="760" y="145" width="30" height="75" />
+      </g>
+      <g id="miami-palm-template">
+        <path d="M0,0 C-5,-28 5,-52 -2,-78" stroke="var(--color-accent-3)" stroke-width="3.5" fill="none" stroke-linecap="round" />
+        <g stroke="var(--color-accent-3)" stroke-width="2.5" fill="none" stroke-linecap="round">
+          <path d="M-2,-78 C-32,-92 -54,-86 -70,-70" />
+          <path d="M-2,-78 C-22,-98 -22,-114 -38,-124" />
+          <path d="M-2,-78 C6,-104 6,-120 -4,-134" />
+          <path d="M-2,-78 C26,-92 42,-86 58,-70" />
+          <path d="M-2,-78 C16,-98 28,-108 40,-118" />
+        </g>
+      </g>
+      <use href="#miami-palm-template" x="80" y="220" transform="scale(0.85)" />
+      <use href="#miami-palm-template" x="320" y="220" transform="scale(1.05)" />
+      <use href="#miami-palm-template" x="600" y="220" transform="scale(0.75)" />
+    </svg>
+    <canvas id="bg-canvas-miami"></canvas>
+  </div>
+
+  <div id="bg-helsinki" class="bg-scene" aria-hidden="true">
+    <svg class="bg-silhouette" viewBox="0 0 800 220" preserveAspectRatio="xMidYMax slice">
+      <polygon
+        fill="var(--color-border)"
+        opacity="0.75"
+        points="0,220 0,150 40,95 80,150 120,85 160,150 200,75 240,150 280,95 320,150 360,80 400,150 440,100 480,150 520,85 560,150 600,95 640,150 680,80 720,150 760,100 800,150 800,220"
+      />
+      <polygon
+        fill="var(--color-accent)"
+        opacity="0.85"
+        points="0,220 0,175 30,125 60,175 90,115 120,175 150,120 180,175 210,110 240,175 270,125 300,175 330,115 360,175 390,125 420,175 450,110 480,175 510,120 540,175 570,115 600,175 630,125 660,175 690,110 720,175 750,120 780,175 800,175 800,220"
+      />
+    </svg>
+    <canvas id="bg-canvas-helsinki"></canvas>
+  </div>
+
   <header id="topbar">
     <div id="brand">
       <img id="nav-avatar" src="avatar.jpg" alt="Maya Carroll" />
@@ -710,5 +799,6 @@
       updateUnitToggleLabel();
     })();
   </script>
+  <script src="background.js"></script>
 </body>
 </html>
