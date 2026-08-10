@@ -20,6 +20,14 @@
       font-size: 2rem;
       font-weight: 500;
     }
+    #site-title {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0;
+    }
     #lang-switcher {
       position: absolute;
       top: 1.5rem;
@@ -93,6 +101,16 @@
     .flag {
       font-size: 1.1rem;
     }
+    .globe {
+      font-size: 1rem;
+    }
+    .menu-heading {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #6e6e73;
+      padding: 0.3rem 0.6rem 0.4rem;
+    }
     footer {
       position: absolute;
       bottom: 1.5rem;
@@ -105,13 +123,16 @@
   </style>
 </head>
 <body>
+  <p id="site-title">Maya Carroll</p>
+
   <div id="lang-switcher" data-open="false">
-    <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false">
-      <span class="flag" id="lang-toggle-flag">🇬🇧</span>
+    <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language">
+      <span class="globe" aria-hidden="true">🌐</span>
       <span id="lang-toggle-label">EN</span>
       <span class="chevron">▼</span>
     </button>
     <ul id="lang-menu" role="listbox" aria-label="Select language">
+      <li class="menu-heading" aria-hidden="true">Language</li>
       <li role="option"><button type="button" data-lang="en"><span class="flag">🇬🇧</span> English</button></li>
       <li role="option"><button type="button" data-lang="es"><span class="flag">🇪🇸</span> Español</button></li>
       <li role="option"><button type="button" data-lang="fi"><span class="flag">🇫🇮</span> Suomi</button></li>
@@ -131,7 +152,6 @@
 
     const switcher = document.getElementById("lang-switcher");
     const toggle = document.getElementById("lang-toggle");
-    const toggleFlag = document.getElementById("lang-toggle-flag");
     const toggleLabel = document.getElementById("lang-toggle-label");
     const greeting = document.getElementById("greeting");
     const options = document.querySelectorAll("#lang-menu button");
@@ -140,7 +160,6 @@
       const t = translations[lang];
       if (!t) return;
       greeting.textContent = t.greeting;
-      toggleFlag.textContent = t.flag;
       toggleLabel.textContent = t.label;
       document.documentElement.lang = lang;
       options.forEach((opt) => {
