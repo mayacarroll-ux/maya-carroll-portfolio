@@ -1,32 +1,65 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var theme =
+          saved ||
+          (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Maya Carroll</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
+    /* ---------- Theme tokens ---------- */
     :root[data-theme="dark"] {
-      --bg: #0b0b0f;
-      --fg: #f5f5f7;
-      --muted: #a1a1a6;
-      --border: #333338;
-      --menu-bg: #17171c;
-      --menu-hover: #26262c;
-      --menu-active: #2c2c33;
-      --footer-color: #6e6e73;
-      --shadow: rgba(0, 0, 0, 0.4);
+      /* Miami at Night */
+      --color-bg: #070b18;
+      --color-surface: #10172a;
+      --color-text: #f7f3ee;
+      --color-text-secondary: #aab4c8;
+      --color-accent: #ff5c7a; /* coral */
+      --color-accent-2: #39e6d0; /* aqua */
+      --color-accent-3: #f4c76b; /* gold */
+      --color-border: rgba(247, 243, 238, 0.14);
+      --focus-ring: #39e6d0;
+      --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.55);
+      --glow-hover: 0 0 0 1px rgba(57, 230, 208, 0.4), 0 0 18px rgba(57, 230, 208, 0.28);
     }
     :root[data-theme="light"] {
-      --bg: #f7f7f8;
-      --fg: #14141a;
-      --muted: #6e6e76;
-      --border: #d8d8dd;
-      --menu-bg: #ffffff;
-      --menu-hover: #f0f0f3;
-      --menu-active: #e6e6ea;
-      --footer-color: #7a7a82;
-      --shadow: rgba(0, 0, 0, 0.12);
+      /* Snowy Finnish Forest */
+      --color-bg: #f5f7f6;
+      --color-surface: #ffffff;
+      --color-text: #17211e;
+      --color-text-secondary: #60706a;
+      --color-accent: #1f5a4a; /* pine */
+      --color-accent-2: #a7d8e5; /* ice — decorative only, not for text */
+      --color-accent-3: #dce6e2; /* frost — decorative only */
+      --color-border: #dce6e2;
+      --focus-ring: #1f5a4a;
+      --shadow-elevated: 0 12px 32px rgba(23, 33, 30, 0.1);
+      --glow-hover: 0 0 0 1px rgba(31, 90, 74, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       height: 100vh;
@@ -34,37 +67,57 @@
       align-items: center;
       justify-content: center;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--fg);
+      background: var(--color-bg);
+      color: var(--color-text);
       position: relative;
-      transition: background 0.2s ease, color 0.2s ease;
+      transition: background 0.25s ease, color 0.25s ease;
     }
+
+    :focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
     main {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1.5rem;
     }
-    #avatar {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--border);
-    }
     h1 {
       font-size: 2rem;
       font-weight: 500;
       margin: 0;
     }
-    #site-title {
+
+    /* ---------- Brand lockup (avatar + signature) ---------- */
+    #brand {
       position: absolute;
       top: 1.5rem;
       left: 1.5rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
+    #nav-avatar {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--color-accent-3);
+      flex-shrink: 0;
+    }
+    #site-title {
+      font-family: "Dancing Script", cursive;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin: 0;
+      line-height: 1;
+    }
+
+    /* ---------- Controls (theme + language) ---------- */
     #controls {
       position: absolute;
       top: 1.5rem;
@@ -74,45 +127,53 @@
       gap: 0.5rem;
       font-size: 0.9rem;
     }
-    #theme-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.15rem;
-      height: 2.15rem;
-      font-size: 1rem;
+    button {
       font-family: inherit;
-      background: transparent;
-      color: var(--fg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0;
-      cursor: pointer;
     }
-    #theme-toggle:hover {
-      border-color: var(--muted);
-    }
-    #lang-switcher {
-      position: relative;
-    }
+    #theme-toggle,
     #lang-toggle {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: inherit;
       font-size: inherit;
-      background: transparent;
-      color: var(--fg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.4rem 0.7rem;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
       cursor: pointer;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
     }
+    #theme-toggle {
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      font-size: 1rem;
+      padding: 0;
+    }
+    #lang-toggle {
+      padding: 0.4rem 0.7rem;
+    }
+    #theme-toggle:hover,
     #lang-toggle:hover {
-      border-color: var(--muted);
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+    #theme-toggle:active,
+    #lang-toggle:active {
+      transform: scale(0.96);
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #lang-switcher {
+      position: relative;
     }
     #lang-toggle .chevron {
-      color: var(--muted);
+      color: var(--color-text-secondary);
       font-size: 0.7rem;
       transition: transform 0.15s ease;
     }
@@ -127,10 +188,11 @@
       list-style: none;
       margin: 0;
       padding: 0.3rem;
-      background: var(--menu-bg);
-      border: 1px solid var(--border);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-top: 2px solid var(--color-accent);
       border-radius: 8px;
-      box-shadow: 0 8px 24px var(--shadow);
+      box-shadow: var(--shadow-elevated);
       display: none;
       flex-direction: column;
     }
@@ -142,22 +204,23 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: inherit;
       font-size: inherit;
       background: transparent;
-      color: var(--fg);
+      color: var(--color-text);
       border: none;
       border-radius: 5px;
       padding: 0.4rem 0.6rem;
       cursor: pointer;
       text-align: left;
       white-space: nowrap;
+      transition: background 0.15s ease;
     }
     #lang-menu li button:hover {
-      background: var(--menu-hover);
+      background: var(--color-bg);
     }
     #lang-menu li button[aria-current="true"] {
-      background: var(--menu-active);
+      background: var(--color-bg);
+      box-shadow: inset 2px 0 0 var(--color-accent);
     }
     .flag {
       font-size: 1.1rem;
@@ -169,9 +232,10 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--muted);
+      color: var(--color-text-secondary);
       padding: 0.3rem 0.6rem 0.4rem;
     }
+
     footer {
       position: absolute;
       bottom: 1.5rem;
@@ -179,12 +243,25 @@
       right: 0;
       text-align: center;
       font-size: 0.8rem;
-      color: var(--footer-color);
+      color: var(--color-text-secondary);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
 <body>
-  <p id="site-title">Maya Carroll</p>
+  <div id="brand">
+    <img id="nav-avatar" src="avatar.jpg" alt="Maya Carroll" />
+    <p id="site-title">Maya Carroll</p>
+  </div>
 
   <div id="controls">
     <button type="button" id="theme-toggle" aria-label="Toggle light/dark theme">
@@ -207,7 +284,6 @@
   </div>
 
   <main>
-    <img id="avatar" src="avatar.jpg" alt="Maya Carroll" />
     <h1 id="greeting">Hello world</h1>
   </main>
 
@@ -238,44 +314,6 @@
     const themeToggle = document.getElementById("theme-toggle");
     const themeIcon = document.getElementById("theme-icon");
 
-    function getTimeOfDayTheme() {
-      const hour = new Date().getHours();
-      return hour >= 7 && hour < 19 ? "light" : "dark";
-    }
-
-    // Approximate sunrise/sunset (ignores atmospheric refraction and the
-    // equation of time; accurate to within ~15 minutes, which is plenty
-    // for picking a default theme).
-    function getSolarTheme(lat, lon, date = new Date()) {
-      const rad = Math.PI / 180;
-      const start = Date.UTC(date.getUTCFullYear(), 0, 0);
-      const dayOfYear = Math.floor((date - start) / 86400000);
-
-      const declination = 23.44 * Math.sin(((2 * Math.PI) / 365) * (dayOfYear - 81));
-      const latRad = lat * rad;
-      const decRad = declination * rad;
-
-      const cosHourAngle = -Math.tan(latRad) * Math.tan(decRad);
-      if (cosHourAngle <= -1) return "light"; // polar day
-      if (cosHourAngle >= 1) return "dark"; // polar night
-
-      const hourAngle = Math.acos(cosHourAngle); // radians
-      const dayLengthHours = (24 / Math.PI) * hourAngle;
-
-      const solarNoonUtc = 12 - lon / 15;
-      const sunriseUtc = solarNoonUtc - dayLengthHours / 2;
-      const sunsetUtc = solarNoonUtc + dayLengthHours / 2;
-
-      const nowUtc = date.getUTCHours() + date.getUTCMinutes() / 60;
-      const normalize = (h) => ((h % 24) + 24) % 24;
-      const n = normalize(nowUtc);
-      const r = normalize(sunriseUtc);
-      const s = normalize(sunsetUtc);
-
-      const isDaytime = r < s ? n >= r && n < s : n >= r || n < s;
-      return isDaytime ? "light" : "dark";
-    }
-
     function applyTheme(theme) {
       document.documentElement.setAttribute("data-theme", theme);
       themeIcon.textContent = theme === "dark" ? "🌙" : "☀️";
@@ -285,6 +323,10 @@
       );
     }
 
+    // Sync the toggle icon/label with whatever the head script already
+    // applied (localStorage override, or OS preference as the default).
+    applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+
     themeToggle.addEventListener("click", () => {
       const current = document.documentElement.getAttribute("data-theme");
       const next = current === "dark" ? "light" : "dark";
@@ -292,24 +334,14 @@
       localStorage.setItem("theme", next);
     });
 
-    applyTheme(localStorage.getItem("theme") || getTimeOfDayTheme());
-
-    // Refine the auto theme with real sunrise/sunset once we know the
-    // visitor's location. Only applies if they haven't manually overridden
-    // the theme (before or during the geolocation request).
-    if (!localStorage.getItem("theme") && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          if (localStorage.getItem("theme")) return;
-          const solarTheme = getSolarTheme(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-          applyTheme(solarTheme);
-        },
-        () => {}, // permission denied or unavailable: keep the device-clock fallback
-        { timeout: 8000, maximumAge: 3600000 }
-      );
+    // Keep following the OS preference live, as long as the visitor hasn't
+    // made an explicit choice of their own.
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        if (!localStorage.getItem("theme")) {
+          applyTheme(e.matches ? "dark" : "light");
+        }
+      });
     }
 
     const switcher = document.getElementById("lang-switcher");
