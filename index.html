@@ -40,6 +40,7 @@
       --focus-ring: #39e6d0;
       --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.55);
       --glow-hover: 0 0 0 1px rgba(57, 230, 208, 0.4), 0 0 18px rgba(57, 230, 208, 0.28);
+      --status-glow: 0 0 12px rgba(57, 230, 208, 0.22);
     }
     :root[data-theme="light"] {
       /* Snowy Finnish Forest */
@@ -54,6 +55,7 @@
       --focus-ring: #1f5a4a;
       --shadow-elevated: 0 12px 32px rgba(23, 33, 30, 0.1);
       --glow-hover: 0 0 0 1px rgba(31, 90, 74, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
+      --status-glow: none;
     }
 
     * {
@@ -62,14 +64,12 @@
 
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--color-bg);
       color: var(--color-text);
-      position: relative;
       transition: background 0.25s ease, color 0.25s ease;
     }
 
@@ -80,10 +80,13 @@
     }
 
     main {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 1.5rem;
+      padding: 2rem 1rem;
     }
     h1 {
       font-size: 2rem;
@@ -91,14 +94,26 @@
       margin: 0;
     }
 
+    /* ---------- Top navigation ---------- */
+    #topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.25rem;
+      padding: 1rem 1.5rem;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
     /* ---------- Brand lockup (avatar + signature) ---------- */
     #brand {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      margin-right: auto;
     }
     #nav-avatar {
       width: 2.75rem;
@@ -117,15 +132,86 @@
       line-height: 1;
     }
 
+    /* ---------- Status bar (time + weather) ---------- */
+    #status-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+      order: 3;
+      flex-basis: 100%;
+      justify-content: center;
+      padding-top: 0.35rem;
+      border-top: 1px solid var(--color-border);
+    }
+    @media (min-width: 720px) {
+      #status-bar {
+        order: 2;
+        flex-basis: auto;
+        justify-content: center;
+        padding-top: 0;
+        border-top: none;
+      }
+    }
+    .city-status {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .city-status .city-name {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      color: var(--color-text);
+    }
+    .city-status .sep {
+      opacity: 0.45;
+    }
+    .city-status time {
+      font-variant-numeric: tabular-nums;
+    }
+    .city-status .weather {
+      display: inline-block;
+      min-width: 2.6em;
+      color: var(--color-accent-2-text, var(--color-text-secondary));
+    }
+    :root[data-theme="dark"] .city-status .weather {
+      color: var(--color-accent-2);
+      text-shadow: var(--status-glow);
+    }
+    .city-status .weather.is-stale {
+      opacity: 0.65;
+      font-style: italic;
+    }
+    .city-status .weather.is-unavailable {
+      font-style: italic;
+    }
+    #unit-toggle {
+      background: transparent;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.45rem;
+      cursor: pointer;
+      transition: border-color 0.18s ease, color 0.18s ease;
+    }
+    #unit-toggle:hover {
+      border-color: var(--color-accent);
+      color: var(--color-text);
+    }
+
     /* ---------- Controls (theme + language) ---------- */
     #controls {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
       display: flex;
       align-items: flex-start;
       gap: 0.5rem;
       font-size: 0.9rem;
+      margin-left: auto;
     }
     button {
       font-family: inherit;
@@ -237,13 +323,20 @@
     }
 
     footer {
-      position: absolute;
-      bottom: 1.5rem;
-      left: 0;
-      right: 0;
       text-align: center;
       font-size: 0.8rem;
       color: var(--color-text-secondary);
+      padding: 1.5rem 1rem;
+    }
+
+    @media (max-width: 480px) {
+      #topbar {
+        padding: 0.85rem 1rem;
+      }
+      #status-bar {
+        gap: 0.4rem 0.9rem;
+        font-size: 0.72rem;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -258,30 +351,52 @@
   </style>
 </head>
 <body>
-  <div id="brand">
-    <img id="nav-avatar" src="avatar.jpg" alt="Maya Carroll" />
-    <p id="site-title">Maya Carroll</p>
-  </div>
-
-  <div id="controls">
-    <button type="button" id="theme-toggle" aria-label="Toggle light/dark theme">
-      <span id="theme-icon" aria-hidden="true">🌙</span>
-    </button>
-
-    <div id="lang-switcher" data-open="false">
-      <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language">
-        <span class="globe" aria-hidden="true">🌐</span>
-        <span id="lang-toggle-label">EN</span>
-        <span class="chevron">▼</span>
-      </button>
-      <ul id="lang-menu" role="listbox" aria-label="Select language">
-        <li class="menu-heading" aria-hidden="true">Language</li>
-        <li role="option"><button type="button" data-lang="en"><span class="flag">🇬🇧</span> English</button></li>
-        <li role="option"><button type="button" data-lang="es"><span class="flag">🇪🇸</span> Español</button></li>
-        <li role="option"><button type="button" data-lang="fi"><span class="flag">🇫🇮</span> Suomi</button></li>
-      </ul>
+  <header id="topbar">
+    <div id="brand">
+      <img id="nav-avatar" src="avatar.jpg" alt="Maya Carroll" />
+      <p id="site-title">Maya Carroll</p>
     </div>
-  </div>
+
+    <div id="status-bar" aria-label="Local time and weather">
+      <div class="city-status" data-city="miami">
+        <span class="city-name">Miami</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-miami">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-miami" class="weather" aria-live="polite">&hellip;</span>
+      </div>
+      <div class="city-status" data-city="helsinki">
+        <span class="city-name">Helsinki</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-helsinki">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
+      </div>
+      <button type="button" id="unit-toggle" aria-label="Temperature units: default (Miami °F, Helsinki °C). Click to show both in Fahrenheit.">
+        °F&thinsp;/&thinsp;°C
+      </button>
+    </div>
+
+    <div id="controls">
+      <button type="button" id="theme-toggle" aria-label="Toggle light/dark theme">
+        <span id="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+
+      <div id="lang-switcher" data-open="false">
+        <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language">
+          <span class="globe" aria-hidden="true">🌐</span>
+          <span id="lang-toggle-label">EN</span>
+          <span class="chevron">▼</span>
+        </button>
+        <ul id="lang-menu" role="listbox" aria-label="Select language">
+          <li class="menu-heading" aria-hidden="true">Language</li>
+          <li role="option"><button type="button" data-lang="en"><span class="flag">🇬🇧</span> English</button></li>
+          <li role="option"><button type="button" data-lang="es"><span class="flag">🇪🇸</span> Español</button></li>
+          <li role="option"><button type="button" data-lang="fi"><span class="flag">🇫🇮</span> Suomi</button></li>
+        </ul>
+      </div>
+    </div>
+  </header>
 
   <main>
     <h1 id="greeting">Hello world</h1>
@@ -400,6 +515,200 @@
 
     const saved = localStorage.getItem("lang");
     setLanguage(saved || getDeviceLanguage());
+
+    // ---------- Time + weather status bar ----------
+    (function () {
+      const CITIES = {
+        miami: { label: "Miami", timeZone: "America/New_York", lat: 25.7617, lon: -80.1918, defaultUnit: "F" },
+        helsinki: { label: "Helsinki", timeZone: "Europe/Helsinki", lat: 60.1699, lon: 24.9384, defaultUnit: "C" },
+      };
+      const WEATHER_REFRESH_MS = 12 * 60 * 1000; // 10–15 min window
+      const CACHE_KEY = "weatherCache";
+      const UNIT_KEY = "tempUnitOverride"; // null | "F" | "C"
+
+      const timeEls = {
+        miami: document.getElementById("time-miami"),
+        helsinki: document.getElementById("time-helsinki"),
+      };
+      const weatherEls = {
+        miami: document.getElementById("weather-miami"),
+        helsinki: document.getElementById("weather-helsinki"),
+      };
+      const unitToggle = document.getElementById("unit-toggle");
+
+      const timeFormatters = {};
+      function formatTime(city) {
+        if (!timeFormatters[city]) {
+          timeFormatters[city] = new Intl.DateTimeFormat(undefined, {
+            timeZone: CITIES[city].timeZone,
+            hour: "numeric",
+            minute: "2-digit",
+          });
+        }
+        return timeFormatters[city].format(new Date());
+      }
+
+      function tickClocks() {
+        Object.keys(CITIES).forEach((city) => {
+          timeEls[city].textContent = formatTime(city);
+        });
+      }
+      tickClocks();
+      setInterval(tickClocks, 30 * 1000);
+
+      // ---- Weather ----
+      function celsiusToFahrenheit(c) {
+        return (c * 9) / 5 + 32;
+      }
+
+      function currentUnitFor(city) {
+        const override = localStorage.getItem(UNIT_KEY);
+        return override === "F" || override === "C" ? override : CITIES[city].defaultUnit;
+      }
+
+      function formatTemp(tempC, unit) {
+        const value = unit === "F" ? celsiusToFahrenheit(tempC) : tempC;
+        return `${Math.round(value)}°${unit}`;
+      }
+
+      function loadCache() {
+        try {
+          return JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
+        } catch (e) {
+          return {};
+        }
+      }
+      function saveCache(cache) {
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+        } catch (e) {
+          /* storage unavailable — degrade silently */
+        }
+      }
+
+      let cache = loadCache();
+
+      function renderWeather(city) {
+        const el = weatherEls[city];
+        const entry = cache[city];
+        const unit = currentUnitFor(city);
+
+        if (!entry) {
+          el.textContent = "…";
+          el.classList.remove("is-stale");
+          el.classList.remove("is-unavailable");
+          el.removeAttribute("title");
+          el.setAttribute(
+            "aria-label",
+            `${CITIES[city].label} weather: loading`
+          );
+          return;
+        }
+
+        if (entry.tempC == null) {
+          el.textContent = "Weather unavailable";
+          el.classList.add("is-unavailable");
+          el.classList.remove("is-stale");
+          el.removeAttribute("title");
+          el.setAttribute("aria-label", `${CITIES[city].label} weather unavailable`);
+          return;
+        }
+
+        const isStale = Date.now() - entry.updatedAt > WEATHER_REFRESH_MS * 2;
+        el.textContent = formatTemp(entry.tempC, unit);
+        el.classList.toggle("is-stale", isStale);
+        el.classList.remove("is-unavailable");
+        const updatedLabel = new Intl.DateTimeFormat(undefined, {
+          hour: "numeric",
+          minute: "2-digit",
+        }).format(new Date(entry.updatedAt));
+        el.title = `Updated ${updatedLabel}`;
+        el.setAttribute(
+          "aria-label",
+          `${CITIES[city].label} temperature: ${formatTemp(entry.tempC, unit)}, updated ${updatedLabel}`
+        );
+      }
+
+      function renderAll() {
+        Object.keys(CITIES).forEach(renderWeather);
+      }
+
+      async function fetchWeather(city) {
+        const { lat, lon } = CITIES[city];
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 6000);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          if (!res.ok) throw new Error("Weather request failed");
+          const data = await res.json();
+          const tempC = data && data.current && typeof data.current.temperature_2m === "number"
+            ? data.current.temperature_2m
+            : null;
+          if (tempC == null) throw new Error("Malformed weather response");
+          cache[city] = { tempC, updatedAt: Date.now() };
+          saveCache(cache);
+        } catch (e) {
+          // Keep the last successful reading if we have one; only mark
+          // "unavailable" when there has never been a successful reading.
+          if (!cache[city]) {
+            cache[city] = { tempC: null, updatedAt: Date.now() };
+          }
+        } finally {
+          clearTimeout(timeout);
+          renderWeather(city);
+        }
+      }
+
+      function isStaleEnough(city) {
+        const entry = cache[city];
+        if (!entry || entry.tempC == null) return true;
+        return Date.now() - entry.updatedAt > WEATHER_REFRESH_MS;
+      }
+
+      function refreshWeatherIfNeeded() {
+        if (document.hidden) return;
+        Object.keys(CITIES).forEach((city) => {
+          if (isStaleEnough(city)) fetchWeather(city);
+        });
+      }
+
+      renderAll();
+      refreshWeatherIfNeeded();
+
+      let weatherInterval = setInterval(refreshWeatherIfNeeded, WEATHER_REFRESH_MS);
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshWeatherIfNeeded();
+      });
+
+      // ---- Unit toggle (cycles: default mixed → all °F → all °C) ----
+      function updateUnitToggleLabel() {
+        const override = localStorage.getItem(UNIT_KEY);
+        const next = override === null ? "F" : override === "F" ? "C" : null;
+        const nextLabel =
+          next === null
+            ? "default units (Miami °F, Helsinki °C)"
+            : `both cities in °${next}`;
+        unitToggle.setAttribute("aria-label", `Show ${nextLabel}. Currently: ${
+          override === null ? "default units" : `both in °${override}`
+        }.`);
+      }
+
+      unitToggle.addEventListener("click", () => {
+        const current = localStorage.getItem(UNIT_KEY);
+        const next = current === null ? "F" : current === "F" ? "C" : null;
+        if (next === null) {
+          localStorage.removeItem(UNIT_KEY);
+        } else {
+          localStorage.setItem(UNIT_KEY, next);
+        }
+        renderAll();
+        updateUnitToggleLabel();
+      });
+
+      updateUnitToggleLabel();
+    })();
   </script>
 </body>
 </html>
