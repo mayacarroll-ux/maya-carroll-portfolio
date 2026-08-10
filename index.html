@@ -24,60 +24,142 @@
       position: absolute;
       top: 1.5rem;
       right: 1.5rem;
-      display: flex;
-      gap: 0.5rem;
+      font-size: 0.9rem;
     }
-    #lang-switcher button {
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: inherit;
       background: transparent;
-      color: #a1a1a6;
+      color: #f5f5f7;
       border: 1px solid #333338;
       border-radius: 6px;
-      padding: 0.35rem 0.7rem;
+      padding: 0.4rem 0.7rem;
       cursor: pointer;
     }
-    #lang-switcher button:hover {
+    #lang-toggle:hover {
       border-color: #666;
-      color: #f5f5f7;
     }
-    #lang-switcher button[aria-current="true"] {
-      background: #f5f5f7;
-      color: #0b0b0f;
-      border-color: #f5f5f7;
+    #lang-toggle .chevron {
+      color: #a1a1a6;
+      font-size: 0.7rem;
+      transition: transform 0.15s ease;
+    }
+    #lang-switcher[data-open="true"] #lang-toggle .chevron {
+      transform: rotate(180deg);
+    }
+    #lang-menu {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      right: 0;
+      min-width: 100%;
+      list-style: none;
+      margin: 0;
+      padding: 0.3rem;
+      background: #17171c;
+      border: 1px solid #333338;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      display: none;
+      flex-direction: column;
+    }
+    #lang-switcher[data-open="true"] #lang-menu {
+      display: flex;
+    }
+    #lang-menu li button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: inherit;
+      font-size: inherit;
+      background: transparent;
+      color: #f5f5f7;
+      border: none;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+    }
+    #lang-menu li button:hover {
+      background: #26262c;
+    }
+    #lang-menu li button[aria-current="true"] {
+      background: #2c2c33;
+    }
+    .flag {
+      font-size: 1.1rem;
     }
   </style>
 </head>
 <body>
-  <nav id="lang-switcher" aria-label="Language switcher">
-    <button type="button" data-lang="en">EN</button>
-    <button type="button" data-lang="es">ES</button>
-    <button type="button" data-lang="fi">FI</button>
-  </nav>
+  <div id="lang-switcher" data-open="false">
+    <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false">
+      <span class="flag" id="lang-toggle-flag">🇬🇧</span>
+      <span id="lang-toggle-label">EN</span>
+      <span class="chevron">▼</span>
+    </button>
+    <ul id="lang-menu" role="listbox" aria-label="Select language">
+      <li role="option"><button type="button" data-lang="en"><span class="flag">🇬🇧</span> English</button></li>
+      <li role="option"><button type="button" data-lang="es"><span class="flag">🇪🇸</span> Español</button></li>
+      <li role="option"><button type="button" data-lang="fi"><span class="flag">🇫🇮</span> Suomi</button></li>
+    </ul>
+  </div>
+
   <h1 id="greeting">Hello world</h1>
 
   <script>
     const translations = {
-      en: "Hello world",
-      es: "Hola mundo",
-      fi: "Hei maailma",
+      en: { greeting: "Hello world", flag: "🇬🇧", label: "EN" },
+      es: { greeting: "Hola mundo", flag: "🇪🇸", label: "ES" },
+      fi: { greeting: "Hei maailma", flag: "🇫🇮", label: "FI" },
     };
 
+    const switcher = document.getElementById("lang-switcher");
+    const toggle = document.getElementById("lang-toggle");
+    const toggleFlag = document.getElementById("lang-toggle-flag");
+    const toggleLabel = document.getElementById("lang-toggle-label");
     const greeting = document.getElementById("greeting");
-    const buttons = document.querySelectorAll("#lang-switcher button");
+    const options = document.querySelectorAll("#lang-menu button");
 
     function setLanguage(lang) {
-      if (!translations[lang]) return;
-      greeting.textContent = translations[lang];
+      const t = translations[lang];
+      if (!t) return;
+      greeting.textContent = t.greeting;
+      toggleFlag.textContent = t.flag;
+      toggleLabel.textContent = t.label;
       document.documentElement.lang = lang;
-      buttons.forEach((btn) => {
-        btn.setAttribute("aria-current", btn.dataset.lang === lang ? "true" : "false");
+      options.forEach((opt) => {
+        opt.setAttribute("aria-current", opt.dataset.lang === lang ? "true" : "false");
       });
       localStorage.setItem("lang", lang);
     }
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+    function openMenu(open) {
+      switcher.setAttribute("data-open", String(open));
+      toggle.setAttribute("aria-expanded", String(open));
+    }
+
+    toggle.addEventListener("click", () => {
+      openMenu(switcher.getAttribute("data-open") !== "true");
+    });
+
+    options.forEach((opt) => {
+      opt.addEventListener("click", () => {
+        setLanguage(opt.dataset.lang);
+        openMenu(false);
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!switcher.contains(e.target)) openMenu(false);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") openMenu(false);
     });
 
     const saved = localStorage.getItem("lang");
