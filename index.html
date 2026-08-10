@@ -211,13 +211,28 @@
     <h1 id="greeting">Hello world</h1>
   </main>
 
-  <footer>&copy; Maya Carroll 2026 | From Miami to Helsinki&mdash;designing what&rsquo;s next.</footer>
+  <footer id="footer">&copy; Maya Carroll 2026 | From Miami to Helsinki&mdash;designing what&rsquo;s next.</footer>
 
   <script>
     const translations = {
-      en: { greeting: "Hello world", flag: "🇬🇧", label: "EN" },
-      es: { greeting: "Hola mundo", flag: "🇪🇸", label: "ES" },
-      fi: { greeting: "Hei maailma", flag: "🇫🇮", label: "FI" },
+      en: {
+        greeting: "Hello world",
+        footer: "© Maya Carroll 2026 | From Miami to Helsinki—designing what's next.",
+        flag: "🇬🇧",
+        label: "EN",
+      },
+      es: {
+        greeting: "Hola mundo",
+        footer: "© Maya Carroll 2026 | De Miami a Helsinki—diseñando lo que viene.",
+        flag: "🇪🇸",
+        label: "ES",
+      },
+      fi: {
+        greeting: "Hei maailma",
+        footer: "© Maya Carroll 2026 | Miamista Helsinkiin—suunnitellaan tulevaa.",
+        flag: "🇫🇮",
+        label: "FI",
+      },
     };
 
     const themeToggle = document.getElementById("theme-toggle");
@@ -250,12 +265,14 @@
     const toggle = document.getElementById("lang-toggle");
     const toggleLabel = document.getElementById("lang-toggle-label");
     const greeting = document.getElementById("greeting");
+    const footer = document.getElementById("footer");
     const options = document.querySelectorAll("#lang-menu button");
 
     function setLanguage(lang) {
       const t = translations[lang];
       if (!t) return;
       greeting.textContent = t.greeting;
+      footer.textContent = t.footer;
       toggleLabel.textContent = t.label;
       document.documentElement.lang = lang;
       options.forEach((opt) => {
