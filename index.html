@@ -16,9 +16,23 @@
       color: #f5f5f7;
       position: relative;
     }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    #avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #333338;
+    }
     h1 {
       font-size: 2rem;
       font-weight: 500;
+      margin: 0;
     }
     #site-title {
       position: absolute;
@@ -139,7 +153,10 @@
     </ul>
   </div>
 
-  <h1 id="greeting">Hello world</h1>
+  <main>
+    <img id="avatar" src="avatar.jpg" alt="Maya Carroll" />
+    <h1 id="greeting">Hello world</h1>
+  </main>
 
   <footer>&copy; Maya Carroll 2026 | From Miami to Helsinki with love</footer>
 
