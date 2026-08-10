@@ -197,8 +197,13 @@
       ctx.fillRect(0, 0, width, height);
     }
 
-    function drawClouds(dt, intensity) {
+    function drawClouds(dt, intensity, coverPct) {
+      // Fade proportionally to actual cloud cover so a clear (0%) sky
+      // shows no clouds at all, rather than a fixed decorative amount.
+      const alpha = Math.min(coverPct / 70, 1);
+      if (alpha <= 0.03) return;
       ctx.save();
+      ctx.globalAlpha = alpha;
       ctx.fillStyle = city === "miami" ? PALETTES.miami.cloud : PALETTES.helsinki.cloud;
       clouds.forEach((c) => {
         c.x += c.speed * dt * (1 + intensity);
@@ -343,8 +348,9 @@
       if (!envState) return; // calm neutral: base sky only, no invented conditions
 
       const hurricane = isHurricaneMode();
-      const cloudIntensity = Math.min((envState.cloudCover || 0) / 100, 1) + (hurricane ? 0.6 : 0);
-      drawClouds(dt, cloudIntensity);
+      const cloudCoverPct = envState.cloudCover || 0;
+      const cloudIntensity = Math.min(cloudCoverPct / 100, 1) + (hurricane ? 0.6 : 0);
+      drawClouds(dt, cloudIntensity, hurricane ? Math.max(cloudCoverPct, 70) : cloudCoverPct);
 
       if (city === "miami") {
         if (envState.condition === "clear" && !envState.isDaylight) drawStars(0.85);
