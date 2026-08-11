@@ -114,7 +114,7 @@
       border-color: var(--color-border);
     }
     main {
-      max-width: 40rem;
+      max-width: 68rem;
       margin: 0 auto;
       padding: 3rem 1.5rem;
     }
@@ -258,6 +258,133 @@
       opacity: 0.75;
       padding: 0.3rem 0;
     }
+    #week-days {
+      max-width: 40rem;
+    }
+    .view-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .view-tab {
+      padding: 0.4rem 0.9rem;
+    }
+    .view-tab[aria-selected="true"] {
+      color: var(--color-text);
+      border-color: var(--color-accent);
+      background: var(--color-surface);
+    }
+    #week-grid-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: 3.25rem repeat(7, minmax(7rem, 1fr));
+      min-width: 44rem;
+    }
+    .cal-corner {
+      position: sticky;
+      left: 0;
+      background: var(--color-bg);
+      z-index: 2;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .cal-day-header {
+      padding: 0.5rem 0.4rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+      border-bottom: 1px solid var(--color-border);
+      border-left: 1px solid var(--color-border);
+    }
+    .cal-day-header.is-today {
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+    .cal-allday-label {
+      font-size: 0.65rem;
+      color: var(--color-text-secondary);
+      padding: 0.3rem 0.4rem;
+      position: sticky;
+      left: 0;
+      background: var(--color-bg);
+      z-index: 2;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .cal-allday-cell {
+      border-left: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: 0.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-height: 1.6rem;
+    }
+    .cal-allday-chip {
+      font-size: 0.66rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 0.1rem 0.3rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cal-time-col {
+      position: sticky;
+      left: 0;
+      background: var(--color-bg);
+      z-index: 2;
+    }
+    .cal-time-label {
+      font-size: 0.62rem;
+      color: var(--color-text-secondary);
+      text-align: right;
+      padding-right: 0.4rem;
+      transform: translateY(-0.6em);
+    }
+    .cal-day-body {
+      position: relative;
+      border-left: 1px solid var(--color-border);
+    }
+    .cal-hour-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--color-border);
+      opacity: 0.5;
+    }
+    .cal-event-block {
+      position: absolute;
+      background: var(--color-surface);
+      border: 1px solid var(--color-accent-2);
+      border-left: 3px solid var(--color-accent-2);
+      border-radius: 4px;
+      padding: 0.15rem 0.35rem;
+      font-size: 0.68rem;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .cal-event-block .cal-event-title {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cal-event-block .cal-event-time {
+      color: var(--color-text-secondary);
+      font-size: 0.6rem;
+    }
+    .cal-now-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-accent);
+      z-index: 3;
+    }
   </style>
 </head>
 <body>
@@ -272,7 +399,7 @@
   <main hidden>
     <nav class="crumbs"><a href="dashboard.html">Dashboard</a> / Calendar</nav>
     <h1 style="margin-top: 1rem">Calendar</h1>
-    <p>A single, merged view of today across every calendar you connect.</p>
+    <p>A single, merged view of your week across every calendar you connect.</p>
 
     <div id="status-banner" hidden></div>
 
@@ -289,11 +416,18 @@
       <span class="range-label" id="week-range-label" aria-live="polite"></span>
       <button id="next-week" type="button" aria-label="Next week">Next →</button>
     </div>
+
+    <div class="view-tabs" role="tablist" aria-label="Calendar view">
+      <button type="button" id="tab-list" class="view-tab" role="tab" aria-selected="true">List</button>
+      <button type="button" id="tab-grid" class="view-tab" role="tab" aria-selected="false">Calendar</button>
+    </div>
+
     <p class="empty-state" id="week-loading">Loading…</p>
     <p class="empty-state" id="week-empty" hidden>
       Nothing on the calendar this week — or nothing connected yet.
     </p>
     <div id="week-days" hidden></div>
+    <div id="week-grid-wrap" hidden><div id="week-grid"></div></div>
   </main>
 
   <script>
@@ -304,12 +438,19 @@
     var weekLoadingEl = document.getElementById("week-loading");
     var weekEmptyEl = document.getElementById("week-empty");
     var weekDaysEl = document.getElementById("week-days");
+    var weekGridWrapEl = document.getElementById("week-grid-wrap");
+    var weekGridEl = document.getElementById("week-grid");
     var weekRangeLabelEl = document.getElementById("week-range-label");
     var statusBannerEl = document.getElementById("status-banner");
+    var tabListEl = document.getElementById("tab-list");
+    var tabGridEl = document.getElementById("tab-grid");
 
     var HOME_TIMEZONE = "America/New_York";
     var WEEK_DAYS = 7;
+    var PX_PER_HOUR = 48;
     var currentAnchor = null; // "YYYY-MM-DD", set from the server's notion of "today" on first load
+    var activeView = "list";
+    var lastWeekData = null;
 
     var PROVIDER_LABELS = { google: "Google Calendar", microsoft: "Outlook Calendar" };
 
@@ -437,31 +578,62 @@
       return start + " – " + end;
     }
 
-    function renderWeek(data) {
-      weekLoadingEl.hidden = true;
-      var events = data.events || [];
-      var todayKey = dayKeyInZone(new Date().toISOString(), false);
+    function weekDayKeys(data) {
+      var days = [];
+      var cursor = data.startDate;
+      var guard = 0;
+      while (cursor <= data.endDate && guard < 31) {
+        days.push(cursor);
+        cursor = addDaysLocal(cursor, 1);
+        guard++;
+      }
+      return days;
+    }
 
-      weekRangeLabelEl.textContent = formatRangeLabel(data.startDate, data.endDate);
-
+    function groupByDay(events) {
       var byDay = {};
       events.forEach(function (event) {
         var key = dayKeyInZone(event.start, event.allDay);
         (byDay[key] = byDay[key] || []).push(event);
       });
+      return byDay;
+    }
 
-      weekDaysEl.innerHTML = "";
-      var dayCount = 0;
-      var cursor = data.startDate;
-      while (cursor <= data.endDate) {
-        dayCount++;
-        renderDaySection(cursor, byDay[cursor] || [], cursor === todayKey);
-        cursor = addDaysLocal(cursor, 1);
-        if (dayCount > 31) break; // safety net against a malformed range
+    // Both views are derived from the same fetched week — switching tabs
+    // re-renders from lastWeekData rather than refetching.
+    function renderActiveView() {
+      if (!lastWeekData) return;
+      var hasEvents = (lastWeekData.events || []).length > 0;
+      if (!hasEvents) {
+        weekDaysEl.hidden = true;
+        weekGridWrapEl.hidden = true;
+        return;
       }
+      if (activeView === "grid") {
+        weekDaysEl.hidden = true;
+        weekGridWrapEl.hidden = false;
+        renderWeekGrid(lastWeekData);
+      } else {
+        weekGridWrapEl.hidden = true;
+        weekDaysEl.hidden = false;
+        renderWeekList(lastWeekData);
+      }
+    }
 
-      weekEmptyEl.hidden = events.length > 0;
-      weekDaysEl.hidden = false;
+    function setActiveView(view) {
+      activeView = view;
+      tabListEl.setAttribute("aria-selected", String(view === "list"));
+      tabGridEl.setAttribute("aria-selected", String(view === "grid"));
+      renderActiveView();
+    }
+
+    function renderWeekList(data) {
+      var todayKey = dayKeyInZone(new Date().toISOString(), false);
+      var byDay = groupByDay(data.events || []);
+      weekDaysEl.innerHTML = "";
+      weekDayKeys(data).forEach(function (dateStr) {
+        renderDaySection(dateStr, byDay[dateStr] || [], dateStr === todayKey);
+      });
     }
 
     function renderDaySection(dateStr, dayEvents, isToday) {
@@ -520,6 +692,194 @@
       weekDaysEl.appendChild(section);
     }
 
+    // ---------- Grid (time-axis) view ----------
+    function hourFloatInZone(iso) {
+      var parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: HOME_TIMEZONE,
+        hour: "numeric",
+        minute: "numeric",
+        hourCycle: "h23",
+      }).formatToParts(new Date(iso));
+      var get = function (t) { return Number(parts.find(function (p) { return p.type === t; }).value); };
+      return get("hour") + get("minute") / 60;
+    }
+
+    function formatHourLabel(h) {
+      var period = h < 12 || h === 24 ? "AM" : "PM";
+      var h12 = h % 12 === 0 ? 12 : h % 12;
+      return h12 + " " + period;
+    }
+
+    function formatDayHeaderShort(dateStr) {
+      var d = new Date(dateStr + "T12:00:00Z");
+      return new Intl.DateTimeFormat(undefined, { weekday: "short", day: "numeric", timeZone: "UTC" }).format(d);
+    }
+
+    // Default to a 6am-10pm window, widened to fit any events that fall
+    // outside it so nothing is ever clipped off-grid.
+    function computeGridHours(events) {
+      var startHour = 6;
+      var endHour = 22;
+      events.forEach(function (e) {
+        if (e.allDay) return;
+        var s = hourFloatInZone(e.start);
+        var en = hourFloatInZone(e.end);
+        if (s < startHour) startHour = Math.floor(s);
+        if (en > endHour) endHour = Math.ceil(en);
+      });
+      startHour = Math.max(0, startHour);
+      endHour = Math.min(24, endHour);
+      if (endHour <= startHour) endHour = startHour + 1;
+      return { startHour: startHour, endHour: endHour };
+    }
+
+    // Sort by start time, then greedily place each event in the first lane
+    // whose previous occupant has already ended — guarantees no two events
+    // in the same lane ever overlap, which is what actually matters for
+    // spotting conflicts at a glance (this isn't optimal packing, but it's
+    // correct and simple).
+    function assignLanes(dayEvents) {
+      var sorted = dayEvents.slice().sort(function (a, b) { return new Date(a.start) - new Date(b.start); });
+      var laneEnds = [];
+      var placements = sorted.map(function (event) {
+        var startMs = new Date(event.start).getTime();
+        var endMs = new Date(event.end).getTime();
+        var lane = -1;
+        for (var i = 0; i < laneEnds.length; i++) {
+          if (laneEnds[i] <= startMs) { lane = i; break; }
+        }
+        if (lane === -1) { lane = laneEnds.length; laneEnds.push(0); }
+        laneEnds[lane] = endMs;
+        return { event: event, lane: lane };
+      });
+      var totalLanes = laneEnds.length || 1;
+      return placements.map(function (p) { return { event: p.event, lane: p.lane, totalLanes: totalLanes }; });
+    }
+
+    function renderGridDayBody(dateStr, dayEvents, startHour, endHour, isToday) {
+      var body = document.createElement("div");
+      body.className = "cal-day-body";
+      var totalPx = (endHour - startHour) * PX_PER_HOUR;
+      body.style.height = totalPx + "px";
+
+      for (var h = startHour; h <= endHour; h++) {
+        var line = document.createElement("div");
+        line.className = "cal-hour-line";
+        line.style.top = (h - startHour) * PX_PER_HOUR + "px";
+        body.appendChild(line);
+      }
+
+      var timed = dayEvents.filter(function (e) { return !e.allDay; });
+      assignLanes(timed).forEach(function (p) {
+        var e = p.event;
+        var startHourF = hourFloatInZone(e.start);
+        var endHourF = hourFloatInZone(e.end);
+        if (endHourF <= startHourF) endHourF = endHour; // crosses midnight / degenerate — clip to end of grid
+        var clampedStart = Math.max(startHourF, startHour);
+        var clampedEnd = Math.min(endHourF, endHour);
+        var top = (clampedStart - startHour) * PX_PER_HOUR;
+        var height = Math.max(18, (clampedEnd - clampedStart) * PX_PER_HOUR);
+        var widthPct = 100 / p.totalLanes;
+
+        var block = document.createElement("div");
+        block.className = "cal-event-block";
+        block.style.top = top + "px";
+        block.style.height = height + "px";
+        block.style.left = p.lane * widthPct + "%";
+        block.style.width = widthPct + "%";
+        block.title =
+          e.title + "\n" + formatEventTime(e.start, false) + " – " + formatEventTime(e.end, false) + "\n" + e.accountEmail;
+
+        var titleEl = document.createElement("div");
+        titleEl.className = "cal-event-title";
+        titleEl.textContent = e.title;
+        var timeEl = document.createElement("div");
+        timeEl.className = "cal-event-time";
+        timeEl.textContent = formatEventTime(e.start, false);
+        block.appendChild(titleEl);
+        block.appendChild(timeEl);
+        body.appendChild(block);
+      });
+
+      if (isToday) {
+        var nowHourF = hourFloatInZone(new Date().toISOString());
+        if (nowHourF >= startHour && nowHourF <= endHour) {
+          var nowLine = document.createElement("div");
+          nowLine.className = "cal-now-line";
+          nowLine.style.top = (nowHourF - startHour) * PX_PER_HOUR + "px";
+          body.appendChild(nowLine);
+        }
+      }
+
+      return body;
+    }
+
+    function renderWeekGrid(data) {
+      var events = data.events || [];
+      var todayKey = dayKeyInZone(new Date().toISOString(), false);
+      var byDay = groupByDay(events);
+      var days = weekDayKeys(data);
+      var range = computeGridHours(events);
+
+      weekGridEl.innerHTML = "";
+      var grid = document.createElement("div");
+      grid.className = "cal-grid";
+
+      var corner = document.createElement("div");
+      corner.className = "cal-corner";
+      grid.appendChild(corner);
+      days.forEach(function (d) {
+        var h = document.createElement("div");
+        h.className = "cal-day-header" + (d === todayKey ? " is-today" : "");
+        h.textContent = formatDayHeaderShort(d);
+        grid.appendChild(h);
+      });
+
+      var adLabel = document.createElement("div");
+      adLabel.className = "cal-allday-label";
+      adLabel.textContent = "All day";
+      grid.appendChild(adLabel);
+      days.forEach(function (d) {
+        var cell = document.createElement("div");
+        cell.className = "cal-allday-cell";
+        (byDay[d] || [])
+          .filter(function (e) { return e.allDay; })
+          .forEach(function (e) {
+            var chip = document.createElement("div");
+            chip.className = "cal-allday-chip";
+            chip.textContent = e.title;
+            chip.title = e.title + "\n" + e.accountEmail;
+            cell.appendChild(chip);
+          });
+        grid.appendChild(cell);
+      });
+
+      var totalPx = (range.endHour - range.startHour) * PX_PER_HOUR;
+      var timeCol = document.createElement("div");
+      timeCol.className = "cal-time-col";
+      timeCol.style.height = totalPx + "px";
+      timeCol.style.position = "relative";
+      for (var h = range.startHour; h < range.endHour; h++) {
+        var lbl = document.createElement("div");
+        lbl.className = "cal-time-label";
+        lbl.style.position = "absolute";
+        lbl.style.top = (h - range.startHour) * PX_PER_HOUR + "px";
+        lbl.style.right = "0.4rem";
+        lbl.textContent = formatHourLabel(h);
+        timeCol.appendChild(lbl);
+      }
+      grid.appendChild(timeCol);
+
+      days.forEach(function (d) {
+        grid.appendChild(renderGridDayBody(d, byDay[d] || [], range.startHour, range.endHour, d === todayKey));
+      });
+
+      weekGridEl.appendChild(grid);
+    }
+
+    tabListEl.addEventListener("click", function () { setActiveView("list"); });
+    tabGridEl.addEventListener("click", function () { setActiveView("grid"); });
+
     var prevWeekBtn = document.getElementById("prev-week");
     var nextWeekBtn = document.getElementById("next-week");
 
@@ -527,6 +887,7 @@
       weekLoadingEl.hidden = false;
       weekEmptyEl.hidden = true;
       weekDaysEl.hidden = true;
+      weekGridWrapEl.hidden = true;
       // Disabled for the duration of the request — otherwise a fast
       // double-click both fire from the same stale currentAnchor (it isn't
       // updated until the response lands) and one navigation step is lost.
@@ -538,7 +899,11 @@
         .then(function (res) { return res.json(); })
         .then(function (data) {
           currentAnchor = data.startDate;
-          renderWeek(data);
+          lastWeekData = data;
+          weekLoadingEl.hidden = true;
+          weekRangeLabelEl.textContent = formatRangeLabel(data.startDate, data.endDate);
+          weekEmptyEl.hidden = (data.events || []).length > 0;
+          renderActiveView();
           if (data.accounts) renderAccounts(data.accounts);
         })
         .catch(function () {
