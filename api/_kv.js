@@ -1,37 +1,55 @@
-// Minimal Upstash Redis REST client — plain `fetch`, no npm dependency.
-// This project has no package.json/build step, so a real Redis client
-// library isn't an option; Upstash's REST API (a Vercel KV integration
-// injects these two env vars) is a good fit for that constraint.
-async function kvRequest(command) {
-  const url = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
-  if (!url || !token) throw new Error("KV is not configured (KV_REST_API_URL/TOKEN missing)");
+// Postgres-backed (Neon) key-value storage — a single JSONB column table,
+// used only for the connected-calendar-accounts blob. Keeps the same
+// kvGetJSON/kvSetJSON interface the rest of the calendar code expects, so
+// swapping the backing store (Upstash Redis -> Neon Postgres, matching
+// what's actually attached in Vercel Storage) didn't require touching
+// _calendar-accounts.js at all.
+//
+// Neon's HTTP driver runs SQL over https (no persistent TCP connection),
+// which is what makes it usable from a stateless serverless function
+// without connection-pooling infrastructure.
+const { neon } = require("@neondatabase/serverless");
 
-  // POST with the command as a JSON body array (Upstash's documented
-  // "pipeline"-free command format) — avoids URL-encoding/length pitfalls
-  // that the path-segment style has for arbitrary JSON string values.
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-    body: JSON.stringify(command),
-  });
-  if (!res.ok) throw new Error(`KV request failed: ${res.status}`);
-  const data = await res.json();
-  return data.result;
+let client = null;
+function getClient() {
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    throw new Error("DATABASE_URL is not configured (connect a Neon database in Vercel's Storage tab)");
+  }
+  if (!client) client = neon(url);
+  return client;
+}
+
+let tableReady = null;
+function ensureTable() {
+  if (!tableReady) {
+    const sql = getClient();
+    tableReady = sql`
+      CREATE TABLE IF NOT EXISTS kv_store (
+        key TEXT PRIMARY KEY,
+        value JSONB NOT NULL,
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      )
+    `;
+  }
+  return tableReady;
 }
 
 async function kvGetJSON(key) {
-  const raw = await kvRequest(["GET", key]);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch (e) {
-    return null;
-  }
+  await ensureTable();
+  const sql = getClient();
+  const rows = await sql`SELECT value FROM kv_store WHERE key = ${key}`;
+  return rows.length ? rows[0].value : null;
 }
 
 async function kvSetJSON(key, value) {
-  await kvRequest(["SET", key, JSON.stringify(value)]);
+  await ensureTable();
+  const sql = getClient();
+  await sql`
+    INSERT INTO kv_store (key, value, updated_at)
+    VALUES (${key}, ${JSON.stringify(value)}::jsonb, now())
+    ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()
+  `;
 }
 
 module.exports = { kvGetJSON, kvSetJSON };

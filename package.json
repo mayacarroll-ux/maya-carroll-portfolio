@@ -1,0 +1,8 @@
+{
+  "name": "maya-carroll-portfolio",
+  "private": true,
+  "description": "Static portfolio site with Vercel serverless functions. No build step for the site itself — this package.json exists only so Vercel installs dependencies for the api/ functions.",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  }
+}
