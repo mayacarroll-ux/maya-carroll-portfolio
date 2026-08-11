@@ -105,6 +105,14 @@
       color: var(--color-text);
       border-color: var(--color-accent);
     }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    button:disabled:hover {
+      color: var(--color-text-secondary);
+      border-color: var(--color-border);
+    }
     main {
       max-width: 40rem;
       margin: 0 auto;
@@ -512,10 +520,18 @@
       weekDaysEl.appendChild(section);
     }
 
+    var prevWeekBtn = document.getElementById("prev-week");
+    var nextWeekBtn = document.getElementById("next-week");
+
     function loadWeek(anchorDate) {
       weekLoadingEl.hidden = false;
       weekEmptyEl.hidden = true;
       weekDaysEl.hidden = true;
+      // Disabled for the duration of the request — otherwise a fast
+      // double-click both fire from the same stale currentAnchor (it isn't
+      // updated until the response lands) and one navigation step is lost.
+      prevWeekBtn.disabled = true;
+      nextWeekBtn.disabled = true;
 
       var url = "/api/calendar-events?days=" + WEEK_DAYS + (anchorDate ? "&date=" + anchorDate : "");
       fetch(url)
@@ -528,6 +544,10 @@
         .catch(function () {
           weekLoadingEl.hidden = true;
           weekEmptyEl.hidden = false;
+        })
+        .finally(function () {
+          prevWeekBtn.disabled = false;
+          nextWeekBtn.disabled = false;
         });
     }
 
