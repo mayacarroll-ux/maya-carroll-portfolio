@@ -181,13 +181,17 @@
       const handles = editable
         ? `<span class="resize-handle left" data-role="resize-left"></span><span class="resize-handle right" data-role="resize-right"></span>`
         : "";
+      const timeLabel = editable
+        ? `${S.formatHour(block.startHour, prefs.format)} to ${S.formatHour(block.endHour, prefs.format)} Miami time`
+        : `${S.formatHour(start, prefs.format)} to ${S.formatHour(end, prefs.format)} Helsinki time`;
+      const interactiveAttrs = editable
+        ? `tabindex="0" role="button" aria-label="${type.label}: ${block.name}, ${timeLabel}${block.enabled ? "" : " (disabled)"}. Press Enter to edit."`
+        : `role="img" aria-label="${type.label}: ${block.name}, ${timeLabel}${block.enabled ? "" : " (disabled)"}."`;
       return `<div class="block ${disabledClass}" data-id="${block.id}" data-editable="${editable}"
                 style="left:${left}%;width:${width}%;background:${block.color}"
-                tabindex="${editable ? 0 : -1}"
-                role="button"
-                aria-label="${type.label}: ${block.name}, ${S.formatHour(block.startHour, prefs.format)} to ${S.formatHour(block.endHour, prefs.format)} Miami time${block.enabled ? "" : " (disabled)"}">
+                ${interactiveAttrs}>
                 ${handles}
-                <span class="block-icon">${type.icon}</span><span class="block-label">${block.name}</span>
+                <span class="block-icon" aria-hidden="true">${type.icon}</span><span class="block-label" aria-hidden="true">${block.name}</span>
               </div>`;
     }
 
