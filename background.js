@@ -380,6 +380,66 @@
       ctx.restore();
     }
 
+    function drawOcean(t) {
+      const bandH = height * 0.16;
+      const top = height - bandH;
+      const windSpeed = (envState && envState.windSpeed) || 10;
+      const activity = 1 + Math.min(windSpeed / 40, 0.7);
+
+      ctx.save();
+
+      const base = ctx.createLinearGradient(0, top, 0, height);
+      base.addColorStop(0, "rgba(8,14,30,0)");
+      base.addColorStop(0.35, "rgba(7,12,26,0.85)");
+      base.addColorStop(1, "rgba(4,8,18,0.96)");
+      ctx.fillStyle = base;
+      ctx.fillRect(0, top, width, bandH);
+
+      // A soft reflected column of the horizon glow, gently swaying.
+      const reflX = width / 2 + Math.sin(t / 3200) * width * 0.05;
+      const refl = ctx.createLinearGradient(0, top, 0, height);
+      refl.addColorStop(0, "rgba(255,150,120,0.14)");
+      refl.addColorStop(1, "rgba(255,150,120,0)");
+      ctx.globalAlpha = 0.7 + 0.2 * Math.sin(t / 1600);
+      ctx.fillStyle = refl;
+      ctx.fillRect(reflX - width * 0.05, top, width * 0.1, bandH);
+      ctx.globalAlpha = 1;
+
+      const swells = [
+        { amp: 5 * activity, freq: 0.012, speed: 0.0007, y: top + bandH * 0.18, color: "rgba(57,230,208,0.09)" },
+        { amp: 8 * activity, freq: 0.009, speed: 0.0011, y: top + bandH * 0.48, color: "rgba(57,230,208,0.14)" },
+        { amp: 6 * activity, freq: 0.018, speed: 0.0019, y: top + bandH * 0.8, color: "rgba(247,243,238,0.12)" },
+      ];
+
+      swells.forEach((s) => {
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+        for (let x = 0; x <= width; x += 10) {
+          ctx.lineTo(x, s.y + Math.sin(x * s.freq + t * s.speed) * s.amp);
+        }
+        ctx.lineTo(width, height);
+        ctx.closePath();
+        ctx.fillStyle = s.color;
+        ctx.fill();
+      });
+
+      // Foam line riding the frontmost swell, catching a little glow.
+      const front = swells[swells.length - 1];
+      ctx.beginPath();
+      for (let x = 0; x <= width; x += 10) {
+        const y = front.y + Math.sin(x * front.freq + t * front.speed) * front.amp;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = "rgba(247,243,238,0.45)";
+      ctx.shadowColor = "rgba(57,230,208,0.55)";
+      ctx.shadowBlur = 7;
+      ctx.lineWidth = 1.25;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
     function drawHeatShimmer(t) {
       ctx.save();
       ctx.globalAlpha = 0.1 + 0.05 * Math.sin(t / 1400);
@@ -433,7 +493,11 @@
       // even with no data, and stay proportionally faint in daylight.
       const moteAlpha = envState && envState.isDaylight ? 0.35 : 1;
       drawMotes(dt, moteAlpha);
-      if (!envState) return; // calm neutral: sky + motes only, no invented conditions
+      // The surf is a location fixture, not a depicted weather condition —
+      // Miami has an ocean regardless of data availability — so it renders
+      // even in the calm-neutral state, same as the horizon glow.
+      if (city === "miami") drawOcean(ts);
+      if (!envState) return; // calm neutral: sky + motes (+ surf) only, no invented conditions
 
       const hurricane = isHurricaneMode();
       const cloudCoverPct = envState.cloudCover || 0;
