@@ -18,12 +18,16 @@ const SCHEDULE_CONFIG = {
   miami: {
     label: "Miami",
     timeZone: "America/New_York",
+    lat: 25.7617,
+    lon: -80.1918,
     sleep: [14, 22], // 2:00 PM – 10:00 PM
     focus: [5, 13], // 5:00 AM – 1:00 PM
   },
   helsinki: {
     label: "Helsinki",
     timeZone: "Europe/Helsinki",
+    lat: 60.1699,
+    lon: 24.9384,
     sleep: [21, 5], // 9:00 PM – 5:00 AM
     focus: [8, 16], // 8:00 AM – 4:00 PM
   },
@@ -131,6 +135,47 @@ function formatHour(hourFloat, format) {
   const period = h < 12 ? "AM" : "PM";
   const h12 = h % 12 === 0 ? 12 : h % 12;
   return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
+// Compact header badge only, by design — see chat: a full dual-ring
+// schedule visualization was scoped out to keep the homepage short and
+// avoid decorative sections competing with hiring-relevant content in the
+// first viewport. The richer view (rings, text-equivalent table, DST/format
+// controls) can be added later as an opt-in expandable panel if wanted.
+function mountAvailabilityBadge() {
+  const badge = document.getElementById("availability-badge");
+  if (!badge) return;
+
+  function render() {
+    const status = availabilityStatus(new Date());
+    const isAvailable = status === "available";
+    badge.textContent = isAvailable ? "Available" : "Offline";
+    badge.classList.toggle("is-available", isAvailable);
+    badge.classList.toggle("is-offline", !isAvailable);
+    badge.setAttribute(
+      "title",
+      isAvailable
+        ? "Currently within planned focus hours in Miami or Helsinki time"
+        : "Outside planned focus hours in Miami and Helsinki time"
+    );
+    badge.setAttribute(
+      "aria-label",
+      `Availability: ${isAvailable ? "Available" : "Offline"}. ${
+        isAvailable
+          ? "Currently within planned focus hours."
+          : "Outside planned focus hours."
+      } Reflects a planned working rhythm, not current physical location.`
+    );
+  }
+
+  render();
+  setInterval(render, 60 * 1000);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", mountAvailabilityBadge);
+} else {
+  mountAvailabilityBadge();
 }
 
 window.MayaSchedule = {
