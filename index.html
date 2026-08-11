@@ -18,7 +18,19 @@
   </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maya Carroll</title>
+  <title>Maya Carroll — Product Designer in South Florida</title>
+  <meta
+    name="description"
+    content="Remote product designer based in South Florida with more than 20 years of experience in technology. Explore selected work, design approach, and availability."
+  />
+  <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Maya Carroll — Product Designer in South Florida" />
+  <meta
+    property="og:description"
+    content="I turn complex ideas and workflows into clear, useful digital products. Based in South Florida and working remotely."
+  />
+  <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -31,6 +43,7 @@
       /* Miami at Night */
       --color-bg: #070b18;
       --color-surface: #10172a;
+      --color-surface-translucent: rgba(16, 23, 42, 0.74);
       --color-text: #f7f3ee;
       --color-text-secondary: #aab4c8;
       --color-accent: #ff5c7a; /* coral */
@@ -46,6 +59,7 @@
       /* Snowy Finnish Forest */
       --color-bg: #f5f7f6;
       --color-surface: #ffffff;
+      --color-surface-translucent: rgba(255, 255, 255, 0.78);
       --color-text: #17211e;
       --color-text-secondary: #60706a;
       --color-accent: #1f5a4a; /* pine */
@@ -62,15 +76,23 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-padding-top: 6.5rem;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--color-bg);
       color: var(--color-text);
       transition: background 0.25s ease, color 0.25s ease;
+      line-height: 1.55;
     }
 
     /* ---------- Animated location backgrounds ---------- */
@@ -110,19 +132,195 @@
       border-radius: 4px;
     }
 
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 2rem 1rem;
+    .skip-link {
+      position: absolute;
+      top: -3rem;
+      left: 1rem;
+      z-index: 100;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      transition: top 0.15s ease;
+    }
+    .skip-link:focus {
+      top: 0.75rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-weight: 600;
+      line-height: 1.15;
     }
     h1 {
-      font-size: 2rem;
-      font-weight: 500;
+      font-size: clamp(2rem, 4.2vw, 3rem);
+    }
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+    }
+    h3 {
+      font-size: 1.05rem;
+    }
+    p {
       margin: 0;
+      color: var(--color-text-secondary);
+    }
+
+    section {
+      padding: clamp(3rem, 7vw, 5.5rem) 0;
+    }
+
+    .section-head {
+      max-width: 640px;
+      margin-bottom: clamp(2rem, 5vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    /* ---------- Buttons / CTAs ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease, background 0.18s ease;
+      border: 1px solid transparent;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+    :root[data-theme="light"] .btn-primary {
+      color: var(--color-surface);
+    }
+    .btn-primary:hover {
+      box-shadow: var(--glow-hover);
+    }
+    .btn-secondary {
+      background: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.75rem;
+    }
+    .pending-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    .meta-line {
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+      color: var(--color-text-secondary);
+      margin-top: 1.5rem;
+    }
+
+    /* ---------- Surfaces (frosted cards over the animated background) ---------- */
+    .surface {
+      background: var(--color-surface-translucent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+    }
+
+    /* ---------- Hero ---------- */
+    #hero .container {
+      padding-top: clamp(2rem, 6vw, 4rem);
+      padding-bottom: clamp(2rem, 6vw, 3rem);
+      max-width: 760px;
+    }
+    #hero p {
+      margin-top: 1.25rem;
+      font-size: 1.05rem;
+      max-width: 60ch;
+    }
+
+    /* ---------- Grids ---------- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .card h3 {
+      color: var(--color-text);
+    }
+    .card p {
+      font-size: 0.92rem;
+    }
+
+    .work-card .work-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.4rem;
+    }
+    .work-card .work-meta strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .approach-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .approach-step .step-number {
+      font-variant-numeric: tabular-nums;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--color-accent);
+    }
+
+    #about .container {
+      max-width: 720px;
+    }
+    #about p + p {
+      margin-top: 1rem;
+    }
+
+    #contact .container {
+      max-width: 640px;
     }
 
     /* ---------- Top navigation ---------- */
@@ -139,12 +337,35 @@
       border-bottom: 1px solid var(--color-border);
     }
 
+    #primary-nav {
+      order: 2;
+      flex-basis: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 0.88rem;
+    }
+    #primary-nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+    }
+    #primary-nav a:hover {
+      color: var(--color-text);
+    }
+    @media (min-width: 860px) {
+      #primary-nav {
+        order: 1;
+        flex-basis: auto;
+        margin: 0 auto;
+      }
+    }
+
     /* ---------- Brand lockup (avatar + signature) ---------- */
     #brand {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      margin-right: auto;
+      order: 0;
     }
     #nav-avatar {
       width: 2.75rem;
@@ -161,6 +382,7 @@
       color: var(--color-text);
       margin: 0;
       line-height: 1;
+      text-decoration: none;
     }
 
     /* ---------- Status bar (time + weather) ---------- */
@@ -177,13 +399,13 @@
       padding-top: 0.35rem;
       border-top: 1px solid var(--color-border);
     }
-    @media (min-width: 720px) {
+    @media (min-width: 860px) {
       #status-bar {
-        order: 2;
         flex-basis: auto;
-        justify-content: center;
+        justify-content: flex-end;
         padding-top: 0;
         border-top: none;
+        margin-left: auto;
       }
     }
     .city-status {
@@ -242,7 +464,13 @@
       align-items: flex-start;
       gap: 0.5rem;
       font-size: 0.9rem;
+      order: 0;
       margin-left: auto;
+    }
+    @media (min-width: 860px) {
+      #controls {
+        margin-left: 0;
+      }
     }
     button {
       font-family: inherit;
@@ -355,9 +583,17 @@
 
     footer {
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--color-text-secondary);
-      padding: 1.5rem 1rem;
+      padding: 2.5rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    footer .copyright {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      opacity: 0.8;
     }
 
     @media (max-width: 480px) {
@@ -367,6 +603,10 @@
       #status-bar {
         gap: 0.4rem 0.9rem;
         font-size: 0.72rem;
+      }
+      #primary-nav {
+        gap: 1rem;
+        font-size: 0.82rem;
       }
     }
 
@@ -382,6 +622,8 @@
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
   <div id="bg-miami" class="bg-scene" aria-hidden="true">
     <canvas id="bg-canvas-miami"></canvas>
   </div>
@@ -391,10 +633,17 @@
   </div>
 
   <header id="topbar">
-    <div id="brand">
+    <a id="brand" href="#main-content">
       <img id="nav-avatar" src="avatar.jpg" alt="Maya Carroll" />
-      <p id="site-title">Maya Carroll</p>
-    </div>
+      <span id="site-title">Maya Carroll</span>
+    </a>
+
+    <nav id="primary-nav" aria-label="Primary">
+      <a href="#work" data-i18n="nav_work">Work</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+      <a href="#approach" data-i18n="nav_approach">Approach</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+    </nav>
 
     <div id="status-bar" aria-label="Local time and weather">
       <div class="city-status" data-city="miami">
@@ -437,31 +686,224 @@
     </div>
   </header>
 
-  <main>
-    <h1 id="greeting">Hello world</h1>
+  <main id="main-content">
+    <section id="hero">
+      <div class="container">
+        <h1>Product design grounded in 20+ years of technology experience.</h1>
+        <p>
+          I help teams turn complex ideas and workflows into clear, useful digital products. I'm a remote
+          product designer based in South Florida and available to work with companies and clients across the
+          United States.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#work" data-i18n="cta_view_work">View my work</a>
+          <a class="btn btn-secondary" href="mailto:hiring@mayacarroll.com" data-i18n="cta_start_conversation">Start a conversation</a>
+        </div>
+        <p class="meta-line">Based in South Florida &middot; Working remotely &middot; US citizen</p>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="container">
+        <div class="section-head">
+          <h2>Work that shows how I think</h2>
+          <p>
+            A selection of product-design projects covering the problems, constraints, decisions, collaboration,
+            and outcomes behind the final experience.
+          </p>
+        </div>
+        <div class="card-grid">
+          <article class="card surface work-card">
+            <h3>[Project title]</h3>
+            <p>A concise description of the product, the problem, and the value of your contribution.</p>
+            <div class="work-meta">
+              <div><strong>Role:</strong> Product Designer</div>
+              <div><strong>Focus:</strong> [Research, UX strategy, interaction design, prototyping]</div>
+              <div><strong>Outcome:</strong> [Verified result or qualitative outcome]</div>
+            </div>
+            <span class="pending-link" data-i18n="cta_case_study">Case study coming soon</span>
+          </article>
+          <article class="card surface work-card">
+            <h3>[Project title]</h3>
+            <p>A concise description of what needed to change and how you helped the team move forward.</p>
+            <div class="work-meta">
+              <div><strong>Role:</strong> Product Designer</div>
+              <div><strong>Focus:</strong> [Relevant responsibilities]</div>
+              <div><strong>Outcome:</strong> [Verified result or qualitative outcome]</div>
+            </div>
+            <span class="pending-link" data-i18n="cta_case_study">Case study coming soon</span>
+          </article>
+          <article class="card surface work-card">
+            <h3>[Project title]</h3>
+            <p>A concise description of the challenge and the people affected by it.</p>
+            <div class="work-meta">
+              <div><strong>Role:</strong> Product Designer</div>
+              <div><strong>Focus:</strong> [Relevant responsibilities]</div>
+              <div><strong>Outcome:</strong> [Verified result or qualitative outcome]</div>
+            </div>
+            <span class="pending-link" data-i18n="cta_case_study">Case study coming soon</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="capabilities">
+      <div class="container">
+        <div class="section-head">
+          <h2>Product thinking shaped by years in technology</h2>
+          <p>
+            My background helps me understand both the customer experience and the realities of building
+            software. I bring a practical, collaborative approach to product design&mdash;from defining the
+            problem through refining the final experience.
+          </p>
+        </div>
+        <div class="card-grid">
+          <div class="card surface">
+            <h3>Clarity from complexity</h3>
+            <p>I organize complicated requirements, workflows, and information into experiences people can understand and use.</p>
+          </div>
+          <div class="card surface">
+            <h3>Cross-functional collaboration</h3>
+            <p>I work closely with product managers, engineers, stakeholders, and customers to build shared understanding and make informed decisions.</p>
+          </div>
+          <div class="card surface">
+            <h3>End-to-end design</h3>
+            <p>I can contribute across discovery, user flows, information architecture, wireframes, prototypes, interface design, and implementation support.</p>
+          </div>
+          <div class="card surface">
+            <h3>Technology perspective</h3>
+            <p>More than 20 years in technology gives me valuable context for navigating constraints, communicating with technical teams, and designing solutions that can be built.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="approach">
+      <div class="container">
+        <div class="section-head">
+          <h2>Thoughtful design, without unnecessary ceremony</h2>
+          <p>
+            Every project is different, but my process usually begins with understanding the people, business
+            goals, technical constraints, and unanswered questions involved. I use research, mapping,
+            prototyping, and testing where they provide meaningful evidence&mdash;not simply to check boxes. The
+            goal is to help the team make better decisions and create a product that works well for the people
+            using it.
+          </p>
+        </div>
+        <div class="card-grid approach-grid">
+          <div class="card surface approach-step">
+            <span class="step-number">01 &middot; UNDERSTAND</span>
+            <p>Clarify the problem, audience, goals, constraints, and measures of success.</p>
+          </div>
+          <div class="card surface approach-step">
+            <span class="step-number">02 &middot; EXPLORE</span>
+            <p>Map workflows, identify opportunities, and compare possible directions.</p>
+          </div>
+          <div class="card surface approach-step">
+            <span class="step-number">03 &middot; MAKE</span>
+            <p>Turn promising ideas into flows, prototypes, and refined interface designs.</p>
+          </div>
+          <div class="card surface approach-step">
+            <span class="step-number">04 &middot; LEARN</span>
+            <p>Gather feedback, test assumptions, and improve the experience before and after launch.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <h2>Experience, curiosity, and a broader horizon</h2>
+        </div>
+        <p>
+          I'm a product designer based in South Florida with more than 20 years of experience working in
+          technology.
+        </p>
+        <p>
+          That background has taught me how to approach complex problems, collaborate across disciplines, and
+          balance customer needs with business and technical realities. I work remotely and value clear
+          communication, thoughtful decisions, and dependable follow-through.
+        </p>
+        <p>
+          Outside of design, I'm studying Finnish and developing a deeper connection with Finland&mdash;its
+          language, culture, and design perspective. Helsinki is on my horizon, but South Florida is currently
+          home.
+        </p>
+        <p>I am a US citizen and open to remote employment, contract engagements, and selected client projects.</p>
+        <div class="btn-row">
+          <a class="btn btn-secondary" href="#about" data-i18n="cta_learn_more">Learn more about me</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <h2>Let's make a complex product feel simpler.</h2>
+          <p>
+            If you're hiring a product designer, building a digital product, or looking for experienced design
+            support, I'd be glad to learn more.
+          </p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com" data-i18n="cta_get_in_touch">Get in touch</a>
+          <a class="btn btn-secondary" href="#" data-i18n="cta_linkedin">Connect on LinkedIn</a>
+        </div>
+        <p class="meta-line">South Florida &middot; Remote collaboration &middot; United States</p>
+      </div>
+    </section>
   </main>
 
-  <footer id="footer">&copy; Maya Carroll 2026 | From Miami to Helsinki&mdash;designing what&rsquo;s next.</footer>
+  <footer id="footer">
+    <p>Product designer working remotely from South Florida.</p>
+    <p>Studying Finnish, designing useful products, and looking toward Helsinki.</p>
+    <p class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</p>
+  </footer>
 
   <script>
     const translations = {
       en: {
-        greeting: "Hello world",
-        footer: "© Maya Carroll 2026 | From Miami to Helsinki—designing what's next.",
-        flag: "🇬🇧",
         label: "EN",
+        flag: "🇬🇧",
+        nav_work: "Work",
+        nav_about: "About",
+        nav_approach: "Approach",
+        nav_contact: "Contact",
+        cta_view_work: "View my work",
+        cta_start_conversation: "Start a conversation",
+        cta_case_study: "Case study coming soon",
+        cta_learn_more: "Learn more about me",
+        cta_get_in_touch: "Get in touch",
+        cta_linkedin: "Connect on LinkedIn",
       },
       es: {
-        greeting: "Hola mundo",
-        footer: "© Maya Carroll 2026 | De Miami a Helsinki—diseñando lo que viene.",
-        flag: "🇪🇸",
         label: "ES",
+        flag: "🇪🇸",
+        nav_work: "Trabajo",
+        nav_about: "Acerca de",
+        nav_approach: "Enfoque",
+        nav_contact: "Contacto",
+        cta_view_work: "Ver mi trabajo",
+        cta_start_conversation: "Iniciar una conversación",
+        cta_case_study: "Caso de estudio próximamente",
+        cta_learn_more: "Conocer más sobre mí",
+        cta_get_in_touch: "Ponerse en contacto",
+        cta_linkedin: "Conectar en LinkedIn",
       },
       fi: {
-        greeting: "Hei maailma",
-        footer: "© Maya Carroll 2026 | Miamista Helsinkiin—suunnitellaan tulevaa.",
-        flag: "🇫🇮",
         label: "FI",
+        flag: "🇫🇮",
+        nav_work: "Työt",
+        nav_about: "Tietoa",
+        nav_approach: "Lähestymistapa",
+        nav_contact: "Yhteystiedot",
+        cta_view_work: "Katso työni",
+        cta_start_conversation: "Aloita keskustelu",
+        cta_case_study: "Referenssi tulossa pian",
+        cta_learn_more: "Lue lisää minusta",
+        cta_get_in_touch: "Ota yhteyttä",
+        cta_linkedin: "Yhdistä LinkedInissä",
       },
     };
 
@@ -501,15 +943,21 @@
     const switcher = document.getElementById("lang-switcher");
     const toggle = document.getElementById("lang-toggle");
     const toggleLabel = document.getElementById("lang-toggle-label");
-    const greeting = document.getElementById("greeting");
-    const footer = document.getElementById("footer");
     const options = document.querySelectorAll("#lang-menu button");
+    const i18nEls = document.querySelectorAll("[data-i18n]");
 
+    // Only short UI chrome (nav labels, button labels) is translated here.
+    // The long-form hero/about/work copy stays in English across all three
+    // languages for now — auto-translating paragraphs of professional
+    // marketing copy without native review risks real accuracy errors, so
+    // it's deliberately left out rather than silently machine-translated.
     function setLanguage(lang) {
       const t = translations[lang];
       if (!t) return;
-      greeting.textContent = t.greeting;
-      footer.textContent = t.footer;
+      i18nEls.forEach((el) => {
+        const key = el.dataset.i18n;
+        if (t[key]) el.textContent = t[key];
+      });
       toggleLabel.textContent = t.label;
       document.documentElement.lang = lang;
       options.forEach((opt) => {
@@ -554,6 +1002,8 @@
 
     const saved = localStorage.getItem("lang");
     setLanguage(saved || getDeviceLanguage());
+
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
 
     // ---------- Time + weather status bar ----------
     (function () {
