@@ -1036,6 +1036,7 @@
         <a class="nav-signin" id="nav-signin" href="login.html" data-i18n="nav_signin">Sign in</a>
         <a class="nav-signin nav-authed" id="nav-calendar" href="calendar.html" data-i18n="nav_calendar" hidden>Calendar</a>
         <a class="nav-signin nav-authed" id="nav-dashboard" href="dashboard.html" data-i18n="nav_dashboard" hidden>Dashboard</a>
+        <a class="nav-signin nav-authed" id="nav-signout" href="login.html" data-i18n="nav_signout" hidden>Sign out</a>
       </nav>
 
       <div id="preferences" aria-label="Preferences">
@@ -1247,6 +1248,7 @@
         nav_signin: "Sign in",
         nav_calendar: "Calendar",
         nav_dashboard: "Dashboard",
+        nav_signout: "Sign out",
         cta_view_work: "View my work",
         cta_start_conversation: "Start a conversation",
         cta_case_study: "Case study coming soon",
@@ -1295,6 +1297,7 @@
         nav_signin: "Iniciar sesión",
         nav_calendar: "Calendario",
         nav_dashboard: "Panel",
+        nav_signout: "Cerrar sesión",
         cta_view_work: "Ver mi trabajo",
         cta_start_conversation: "Iniciar una conversación",
         cta_case_study: "Caso de estudio próximamente",
@@ -1343,6 +1346,7 @@
         nav_signin: "Kirjaudu sisään",
         nav_calendar: "Kalenteri",
         nav_dashboard: "Kojelauta",
+        nav_signout: "Kirjaudu ulos",
         cta_view_work: "Katso työni",
         cta_start_conversation: "Aloita keskustelu",
         cta_case_study: "Referenssi tulossa pian",
@@ -1855,6 +1859,14 @@
     // A visitor is essentially always signed out; this only changes
     // anything when it's actually you, signed in, browsing your own site.
     (function () {
+      var signoutLink = document.getElementById("nav-signout");
+      signoutLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        fetch("/api/logout", { method: "POST" }).finally(function () {
+          window.location.href = "login.html";
+        });
+      });
+
       fetch("/api/session")
         .then(function (res) { return res.json(); })
         .then(function (data) {
