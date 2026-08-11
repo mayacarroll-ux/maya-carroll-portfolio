@@ -93,7 +93,9 @@
     }
 
     html {
-      scroll-padding-top: 6.5rem;
+      /* Was 6.5rem to clear the old two-row header (nav + city-strip);
+         now just one row since city-strip moved to the footer. */
+      scroll-padding-top: 5rem;
     }
     @media (prefers-reduced-motion: no-preference) {
       html {
@@ -162,7 +164,10 @@
       position: sticky;
       bottom: 0;
       z-index: 10;
-      background: var(--color-bg);
+      background: var(--color-surface-translucent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--color-border);
     }
 
     :focus-visible {
@@ -379,13 +384,12 @@
 
     /* ---------- Top navigation ---------- */
     /* ==================== Header ====================
-       Two coordinated levels: #header-primary (brand / nav / preferences /
-       menu button) and #city-strip (quieter secondary row, always visible).
-       At >=960px both rows are fully inline. Below that, #primary-nav and
-       #preferences are moved — the same DOM nodes, not copies, so every
-       existing id-based behavior keeps working — into the mobile drawer by
-       the header-behavior script further down this file; #city-strip
-       always stays put. */
+       #header-primary holds brand / nav / preferences / menu button. Below
+       960px, #primary-nav and #preferences are moved — the same DOM nodes,
+       not copies, so every existing id-based behavior keeps working — into
+       the mobile drawer by the header-behavior script further down this
+       file. (#city-strip used to live here too; it's now at the top of the
+       footer, which is sticky, so it's still always visible.) */
     #topbar {
       position: sticky;
       top: 0;
@@ -669,24 +673,20 @@
       }
     }
 
-    /* ---------- City strip (secondary, quieter row — always visible) ---------- */
+    /* ---------- City strip (secondary, quieter row — lives at the top of
+       the footer, always visible since the footer is sticky) ---------- */
     #city-strip {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
       gap: 0.4rem 1.5rem;
-      padding: 0.5rem 1.5rem 0.65rem;
+      padding-bottom: 1.1rem;
+      margin-bottom: 0.9rem;
       font-size: 0.76rem;
       color: var(--color-text-secondary);
-      border-top: 1px solid var(--color-border);
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    @media (min-width: 960px) {
-      #city-strip {
-        justify-content: flex-end;
-      }
+      border-bottom: 1px solid var(--color-border);
+      width: 100%;
     }
     .city-status {
       display: flex;
@@ -981,26 +981,6 @@
         </span>
       </button>
     </div>
-
-    <div id="city-strip" aria-label="Local time and weather">
-      <div class="city-status" data-city="miami">
-        <span class="city-name">Miami</span>
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <time id="time-miami">&nbsp;</time>
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <span id="weather-miami" class="weather" aria-live="polite">&hellip;</span>
-      </div>
-      <div class="city-status" data-city="helsinki">
-        <span class="city-name">Helsinki</span>
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <time id="time-helsinki">&nbsp;</time>
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
-      </div>
-      <button type="button" id="unit-toggle" aria-label="Temperature units: default (Miami °F, Helsinki °C). Click to show both in Fahrenheit.">
-        °F&thinsp;/&thinsp;°C
-      </button>
-    </div>
   </header>
 
   <div id="mobile-menu-backdrop" hidden></div>
@@ -1120,8 +1100,26 @@
   </main>
 
   <footer id="footer">
-    <p data-i18n="footer_p1">Product designer working remotely from South Florida.</p>
-    <p data-i18n="footer_p2">Studying Finnish, designing useful products, and looking toward Helsinki.</p>
+    <div id="city-strip" aria-label="Local time and weather">
+      <div class="city-status" data-city="miami">
+        <span class="city-name">Miami</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-miami">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-miami" class="weather" aria-live="polite">&hellip;</span>
+      </div>
+      <div class="city-status" data-city="helsinki">
+        <span class="city-name">Helsinki</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-helsinki">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
+      </div>
+      <button type="button" id="unit-toggle" aria-label="Temperature units: default (Miami °F, Helsinki °C). Click to show both in Fahrenheit.">
+        °F&thinsp;/&thinsp;°C
+      </button>
+    </div>
+    <p data-i18n="footer_p1">From Miami to Helsinki—designing what's next.</p>
     <p class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</p>
   </footer>
 
@@ -1173,8 +1171,7 @@
         contact_h2: "Let's make a complex product feel simpler.",
         contact_p: "If you're hiring a product designer or need experienced design support, I'd love to hear from you.",
         contact_meta: "South Florida · Remote collaboration · United States",
-        footer_p1: "Product designer working remotely from South Florida.",
-        footer_p2: "Studying Finnish, designing useful products, and looking toward Helsinki.",
+        footer_p1: "From Miami to Helsinki—designing what's next.",
       },
       es: {
         label: "ES",
@@ -1222,8 +1219,7 @@
         contact_h2: "Hagamos que un producto complejo se sienta más simple.",
         contact_p: "Si estás contratando a una diseñadora de producto o necesitas apoyo de diseño con experiencia, me encantaría saber de ti.",
         contact_meta: "Sur de Florida · Colaboración remota · Estados Unidos",
-        footer_p1: "Diseñadora de producto que trabaja de forma remota desde el sur de Florida.",
-        footer_p2: "Estudiando finlandés, diseñando productos útiles y mirando hacia Helsinki.",
+        footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
       },
       fi: {
         label: "FI",
@@ -1271,8 +1267,7 @@
         contact_h2: "Tehdään monimutkaisesta tuotteesta yksinkertaisemman tuntuinen.",
         contact_p: "Jos olet palkkaamassa tuotesuunnittelijaa tai tarvitset kokenutta suunnittelutukea, kuulisin mielelläni sinusta.",
         contact_meta: "Etelä-Florida · Etäyhteistyö · Yhdysvallat",
-        footer_p1: "Tuotesuunnittelija, joka työskentelee etänä Etelä-Floridasta.",
-        footer_p2: "Opiskelee suomea, suunnittelee hyödyllisiä tuotteita ja katsoo kohti Helsinkiä.",
+        footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
       },
     };
 
