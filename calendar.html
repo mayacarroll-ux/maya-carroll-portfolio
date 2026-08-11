@@ -31,8 +31,10 @@
       --color-text: #f7f3ee;
       --color-text-secondary: #aab4c8;
       --color-accent: #ff5c7a;
+      --color-accent-2: #39e6d0;
       --color-border: rgba(247, 243, 238, 0.14);
       --focus-ring: #39e6d0;
+      --warning: #f4c76b;
     }
     :root[data-theme="light"] {
       --color-bg: #f5f7f6;
@@ -40,8 +42,10 @@
       --color-text: #17211e;
       --color-text-secondary: #60706a;
       --color-accent: #1f5a4a;
+      --color-accent-2: #1f5a4a;
       --color-border: #dce6e2;
       --focus-ring: #1f5a4a;
+      --warning: #b5760f;
     }
     * {
       box-sizing: border-box;
@@ -83,7 +87,8 @@
       font-size: 0.8rem;
       color: var(--color-text-secondary);
     }
-    button {
+    button,
+    .btn {
       font-family: inherit;
       font-size: 0.85rem;
       background: transparent;
@@ -92,8 +97,11 @@
       border-radius: 6px;
       padding: 0.45rem 0.8rem;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
     }
-    button:hover {
+    button:hover,
+    .btn:hover {
       color: var(--color-text);
       border-color: var(--color-accent);
     }
@@ -109,21 +117,96 @@
       font-size: 1.6rem;
       margin: 0 0 0.5rem;
     }
-    main p {
+    h2 {
+      font-size: 1rem;
+      margin: 2.5rem 0 1rem;
+    }
+    main > p {
       color: var(--color-text-secondary);
+    }
+    .banner {
+      margin-top: 1.25rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      border: 1px solid var(--color-border);
+    }
+    .banner.success {
+      border-color: var(--color-accent-2);
+      color: var(--color-accent-2);
+    }
+    .banner.error {
+      border-color: var(--warning);
+      color: var(--warning);
     }
     .connect-row {
       display: flex;
       gap: 0.75rem;
       flex-wrap: wrap;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
-    .connect-row button {
+    .connect-row .btn {
       padding: 0.6rem 1rem;
     }
-    .connect-row button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .account-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .account-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .account-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .account-meta .email {
+      font-size: 0.9rem;
+    }
+    .account-meta .provider {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+    }
+    .account-meta .account-error {
+      font-size: 0.78rem;
+      color: var(--warning);
+    }
+    .agenda {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .agenda li {
+      display: flex;
+      gap: 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .agenda time {
+      flex: 0 0 auto;
+      width: 5.5rem;
+      color: var(--color-text-secondary);
+      font-variant-numeric: tabular-nums;
+      font-size: 0.85rem;
+    }
+    .agenda .event-title {
+      font-size: 0.92rem;
+    }
+    .agenda .event-source {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+    }
+    .empty-state {
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -139,19 +222,175 @@
   <main hidden>
     <nav class="crumbs"><a href="dashboard.html">Dashboard</a> / Calendar</nav>
     <h1 style="margin-top: 1rem">Calendar</h1>
-    <p>
-      A single, merged view of your day across every Google and Outlook
-      calendar you connect — not built yet, just the entry point.
-    </p>
+    <p>A single, merged view of today across every calendar you connect.</p>
+
+    <div id="status-banner" hidden></div>
+
+    <h2>Connected accounts</h2>
+    <ul class="account-list" id="account-list"></ul>
+    <p class="empty-state" id="no-accounts" hidden>No calendars connected yet.</p>
     <div class="connect-row">
-      <button disabled type="button">Connect Google Calendar</button>
-      <button disabled type="button">Connect Outlook Calendar</button>
+      <a class="btn" href="/api/oauth/google-connect">Connect Google Calendar</a>
+      <a class="btn" href="/api/oauth/microsoft-connect">Connect Outlook Calendar</a>
     </div>
+
+    <h2 id="agenda-heading">Today</h2>
+    <p class="empty-state" id="agenda-loading">Loading…</p>
+    <p class="empty-state" id="agenda-empty" hidden>
+      Nothing on the calendar today — or nothing connected yet.
+    </p>
+    <ul class="agenda" id="agenda-list" hidden></ul>
   </main>
 
   <script>
     var mainEl = document.querySelector("main");
     var signedInAsEl = document.getElementById("signed-in-as");
+    var accountListEl = document.getElementById("account-list");
+    var noAccountsEl = document.getElementById("no-accounts");
+    var agendaLoadingEl = document.getElementById("agenda-loading");
+    var agendaEmptyEl = document.getElementById("agenda-empty");
+    var agendaListEl = document.getElementById("agenda-list");
+    var statusBannerEl = document.getElementById("status-banner");
+
+    var PROVIDER_LABELS = { google: "Google Calendar", microsoft: "Outlook Calendar" };
+
+    function showBanner(kind, text) {
+      statusBannerEl.className = "banner " + kind;
+      statusBannerEl.textContent = text;
+      statusBannerEl.hidden = false;
+    }
+
+    function handleQueryParams() {
+      var params = new URLSearchParams(window.location.search);
+      var connected = params.get("connected");
+      var error = params.get("error");
+      if (connected) {
+        showBanner("success", (PROVIDER_LABELS[connected] || connected) + " connected.");
+      } else if (error === "no_refresh_token") {
+        showBanner(
+          "error",
+          "That account was already connected once before without offline access. Try disconnecting it, then reconnect."
+        );
+      } else if (error) {
+        showBanner("error", "Couldn't connect that account (" + error + "). Please try again.");
+      }
+      if (connected || error) {
+        var url = new URL(window.location.href);
+        url.searchParams.delete("connected");
+        url.searchParams.delete("error");
+        window.history.replaceState({}, "", url.toString());
+      }
+    }
+
+    function renderAccounts(accounts) {
+      accountListEl.innerHTML = "";
+      noAccountsEl.hidden = accounts.length > 0;
+      accounts.forEach(function (account) {
+        var li = document.createElement("li");
+
+        var meta = document.createElement("div");
+        meta.className = "account-meta";
+        var providerEl = document.createElement("span");
+        providerEl.className = "provider";
+        providerEl.textContent = PROVIDER_LABELS[account.provider] || account.provider;
+        var emailEl = document.createElement("span");
+        emailEl.className = "email";
+        emailEl.textContent = account.email;
+        meta.appendChild(providerEl);
+        meta.appendChild(emailEl);
+        if (account.error) {
+          var errEl = document.createElement("span");
+          errEl.className = "account-error";
+          errEl.textContent = account.error;
+          meta.appendChild(errEl);
+        }
+
+        var disconnectBtn = document.createElement("button");
+        disconnectBtn.type = "button";
+        disconnectBtn.textContent = "Disconnect";
+        disconnectBtn.addEventListener("click", function () {
+          disconnectBtn.disabled = true;
+          fetch("/api/calendar-disconnect", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: account.id }),
+          })
+            .then(function () {
+              loadEverything();
+            })
+            .catch(function () {
+              disconnectBtn.disabled = false;
+            });
+        });
+
+        li.appendChild(meta);
+        li.appendChild(disconnectBtn);
+        accountListEl.appendChild(li);
+      });
+    }
+
+    function formatEventTime(iso, allDay) {
+      if (allDay) return "All day";
+      return new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+        timeZone: "America/New_York",
+      }).format(new Date(iso));
+    }
+
+    function renderAgenda(events) {
+      agendaLoadingEl.hidden = true;
+      if (!events.length) {
+        agendaEmptyEl.hidden = false;
+        agendaListEl.hidden = true;
+        return;
+      }
+      agendaEmptyEl.hidden = true;
+      agendaListEl.hidden = false;
+      agendaListEl.innerHTML = "";
+      events.forEach(function (event) {
+        var li = document.createElement("li");
+
+        var timeEl = document.createElement("time");
+        timeEl.textContent = formatEventTime(event.start, event.allDay);
+
+        var body = document.createElement("div");
+        var titleEl = document.createElement("div");
+        titleEl.className = "event-title";
+        titleEl.textContent = event.title;
+        var sourceEl = document.createElement("div");
+        sourceEl.className = "event-source";
+        sourceEl.textContent = event.accountEmail;
+        body.appendChild(titleEl);
+        body.appendChild(sourceEl);
+
+        li.appendChild(timeEl);
+        li.appendChild(body);
+        agendaListEl.appendChild(li);
+      });
+    }
+
+    function loadEverything() {
+      fetch("/api/calendar-accounts")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          renderAccounts(data.accounts || []);
+        });
+
+      agendaLoadingEl.hidden = false;
+      agendaEmptyEl.hidden = true;
+      agendaListEl.hidden = true;
+      fetch("/api/calendar-events")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          renderAgenda(data.events || []);
+          if (data.accounts) renderAccounts(data.accounts);
+        })
+        .catch(function () {
+          agendaLoadingEl.hidden = true;
+          agendaEmptyEl.hidden = false;
+        });
+    }
 
     fetch("/api/session")
       .then(function (res) { return res.json(); })
@@ -162,6 +401,8 @@
         }
         signedInAsEl.textContent = data.email;
         mainEl.hidden = false;
+        handleQueryParams();
+        loadEverything();
       })
       .catch(function () {
         window.location.replace("login.html");

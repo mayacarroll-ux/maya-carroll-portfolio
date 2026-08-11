@@ -66,4 +66,35 @@ function readSession(req) {
   return verify(token);
 }
 
-module.exports = { setSessionCookie, clearSessionCookie, readSession };
+// Short-lived CSRF state for the calendar-connect OAuth redirects — same
+// signing mechanism as the session cookie, separate cookie name/lifetime.
+const OAUTH_STATE_MAX_AGE_SECONDS = 60 * 10; // 10 minutes
+
+function setOAuthStateCookie(req, res, payload) {
+  const token = sign({ ...payload, exp: Date.now() + OAUTH_STATE_MAX_AGE_SECONDS * 1000 });
+  const secureAttr = isLocalHost(req) ? "" : " Secure;";
+  res.setHeader(
+    "Set-Cookie",
+    `oauth_state=${token}; HttpOnly;${secureAttr} SameSite=Lax; Path=/; Max-Age=${OAUTH_STATE_MAX_AGE_SECONDS}`
+  );
+  return token;
+}
+
+function readOAuthState(req) {
+  const token = req.cookies && req.cookies.oauth_state;
+  return verify(token);
+}
+
+function clearOAuthStateCookie(req, res) {
+  const secureAttr = isLocalHost(req) ? "" : " Secure;";
+  res.setHeader("Set-Cookie", `oauth_state=; HttpOnly;${secureAttr} SameSite=Lax; Path=/; Max-Age=0`);
+}
+
+module.exports = {
+  setSessionCookie,
+  clearSessionCookie,
+  readSession,
+  setOAuthStateCookie,
+  readOAuthState,
+  clearOAuthStateCookie,
+};
