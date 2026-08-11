@@ -42,6 +42,7 @@
     :root[data-theme="dark"] {
       /* Miami at Night */
       --color-bg: #070b18;
+      --color-bg-rgb: 7, 11, 24;
       --color-surface: #10172a;
       --color-surface-translucent: rgba(16, 23, 42, 0.74);
       --color-text: #f7f3ee;
@@ -58,6 +59,7 @@
     :root[data-theme="light"] {
       /* Snowy Finnish Forest */
       --color-bg: #f5f7f6;
+      --color-bg-rgb: 245, 247, 246;
       --color-surface: #ffffff;
       --color-surface-translucent: rgba(255, 255, 255, 0.78);
       --color-text: #17211e;
@@ -116,6 +118,18 @@
       .bg-scene {
         transition: none;
       }
+    }
+
+    /* A steady veil between the animated backdrop and the content, so body
+       copy stays legible regardless of what the sky is doing underneath —
+       weather stays decorative and subordinate to the work, per design
+       direction, rather than fighting with it for contrast. */
+    #content-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: rgba(var(--color-bg-rgb), 0.58);
+      pointer-events: none;
     }
 
     /* Everything the visitor reads/clicks sits above the fixed backgrounds. */
@@ -633,6 +647,8 @@
   <div id="bg-helsinki" class="bg-scene" aria-hidden="true">
     <canvas id="bg-canvas-helsinki"></canvas>
   </div>
+
+  <div id="content-scrim" aria-hidden="true"></div>
 
   <header id="topbar">
     <a id="brand" href="#main-content">
