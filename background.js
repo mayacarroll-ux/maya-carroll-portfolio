@@ -146,6 +146,10 @@
     const ctx = canvas.getContext("2d");
     let width = 0;
     let height = 0;
+    // The footer is sticky and sits on top of this fixed-position canvas —
+    // ground-level effects (ocean, treeline, heat shimmer) need to render
+    // above it rather than at the true bottom edge, or it just covers them.
+    let footerReserve = 0;
     let dpr = 1;
     let raf = null;
     let running = false;
@@ -173,6 +177,8 @@
       canvas.width = Math.max(1, Math.round(width * dpr));
       canvas.height = Math.max(1, Math.round(height * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const footerEl = document.getElementById("footer");
+      footerReserve = footerEl ? footerEl.offsetHeight : 0;
       initParticles();
       if (!running) drawFrame(16, performance.now());
     }
@@ -449,7 +455,7 @@
     // it reads as atmospheric depth, not clip art. Winter only.
     function drawWinterTreeline() {
       const bandH = height * 0.1;
-      const baseY = height;
+      const baseY = height - footerReserve;
       const peaks = 9;
       ctx.save();
       ctx.filter = "blur(5px)";
@@ -514,7 +520,7 @@
 
     function drawOcean(t) {
       const bandH = height * 0.16;
-      const top = height - bandH;
+      const top = height - footerReserve - bandH;
       const windSpeed = (envState && envState.windSpeed) || 10;
       const activity = 1 + Math.min(windSpeed / 40, 0.7);
 
@@ -573,13 +579,16 @@
     }
 
     function drawHeatShimmer(t) {
+      const groundY = height - footerReserve;
+      const bandH = height * 0.3;
+      const top = groundY - bandH;
       ctx.save();
       ctx.globalAlpha = 0.1 + 0.05 * Math.sin(t / 1400);
-      const g = ctx.createLinearGradient(0, height * 0.7, 0, height);
+      const g = ctx.createLinearGradient(0, top, 0, groundY);
       g.addColorStop(0, "rgba(255,150,90,0)");
       g.addColorStop(1, PALETTES.miami.heat);
       ctx.fillStyle = g;
-      ctx.fillRect(0, height * 0.7, width, height * 0.3);
+      ctx.fillRect(0, top, width, bandH);
       ctx.restore();
     }
 
