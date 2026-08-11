@@ -96,19 +96,23 @@
 
   const PALETTES = {
     miami: {
-      night: ["#050814", "#0c1330", "#131a3d"],
-      cloud: "rgba(170,180,200,0.16)",
-      rain: "rgba(57,230,208,0.35)",
+      night: ["#050712", "#0a0f24", "#0f1638", "#1a1f42"],
+      glow: "rgba(255,140,110,0.16)",
+      cloud: "rgba(180,190,215,0.22)",
+      rain: "rgba(57,230,208,0.4)",
       star: "#F7F3EE",
+      mote: "rgba(244,199,107,0.55)",
       lightning: "rgba(247,243,238,0.85)",
       heat: "rgba(255,92,122,0.16)",
     },
     helsinki: {
-      day: ["#eef4f2", "#dfe9e6", "#cfe0dc"],
-      twilight: ["#274b5e", "#3c6b7a", "#e9b98f"],
-      cloud: "rgba(96,112,106,0.14)",
+      day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
+      twilight: ["#22415a", "#3f6c7c", "#c98a6a", "#e9b98f"],
+      glow: "rgba(167,216,229,0.22)",
+      cloud: "rgba(120,138,132,0.2)",
       snow: "rgba(255,255,255,0.9)",
       fog: "rgba(200,210,215,0.4)",
+      mote: "rgba(255,255,255,0.6)",
       aurora: ["rgba(57,230,208,0.28)", "rgba(31,90,74,0.22)"],
     },
   };
@@ -127,6 +131,7 @@
     let rain = [];
     let snow = [];
     let stars = [];
+    let motes = [];
     let lightningAlpha = 0;
     let lightningTimer = randomLightningDelay();
 
@@ -147,24 +152,18 @@
 
     function initParticles() {
       const compact = width < 640;
-      clouds = Array.from({ length: compact ? 3 : 5 }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height * 0.4,
-        w: 120 + Math.random() * 180,
-        h: 28 + Math.random() * 26,
-        speed: 0.04 + Math.random() * 0.08,
-      }));
+      clouds = Array.from({ length: compact ? 4 : 7 }, () => makeCloud());
       rain = Array.from({ length: compact ? 45 : 90 }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        len: 10 + Math.random() * 14,
-        speed: 4 + Math.random() * 4,
+        len: 12 + Math.random() * 16,
+        speed: 7 + Math.random() * 6,
       }));
       snow = Array.from({ length: compact ? 45 : 100 }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: 1 + Math.random() * 2.4,
-        speed: 0.4 + Math.random() * 0.9,
+        r: 1 + Math.random() * 2.6,
+        speed: 0.7 + Math.random() * 1.3,
         drift: Math.random() * Math.PI * 2,
       }));
       stars = Array.from({ length: compact ? 40 : 70 }, () => ({
@@ -173,43 +172,123 @@
         r: 0.5 + Math.random() * 1.2,
         phase: Math.random() * Math.PI * 2,
       }));
+      // Always-present slow-drifting motes — the one element that keeps the
+      // scene visibly alive even under calm/clear/no-data conditions.
+      motes = Array.from({ length: compact ? 10 : 18 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 0.8 + Math.random() * 1.8,
+        vy: -(0.08 + Math.random() * 0.14),
+        vx: (Math.random() - 0.5) * 0.06,
+        phase: Math.random() * Math.PI * 2,
+      }));
+    }
+
+    function makeCloud() {
+      const w = 160 + Math.random() * 220;
+      return {
+        x: Math.random() * width,
+        y: height * 0.06 + Math.random() * height * 0.32,
+        w,
+        h: w * (0.22 + Math.random() * 0.1),
+        speed: 0.35 + Math.random() * 0.5,
+        puffs: Array.from({ length: 3 + Math.floor(Math.random() * 3) }, () => ({
+          dx: (Math.random() - 0.5) * 0.7,
+          dy: (Math.random() - 0.5) * 0.5,
+          scale: 0.5 + Math.random() * 0.6,
+        })),
+      };
     }
 
     function skyGradient() {
       const g = ctx.createLinearGradient(0, 0, 0, height);
       if (city === "miami") {
-        const [a, b, c] = PALETTES.miami.night;
+        const [a, b, c, d] = PALETTES.miami.night;
         g.addColorStop(0, a);
-        g.addColorStop(0.6, b);
-        g.addColorStop(1, c);
+        g.addColorStop(0.45, b);
+        g.addColorStop(0.75, c);
+        g.addColorStop(1, d);
       } else {
         const evening = envState && (envState.twilightPhase === "civil" || envState.twilightPhase === "nautical");
-        const [a, b, c] = evening ? PALETTES.helsinki.twilight : PALETTES.helsinki.day;
+        const [a, b, c, d] = evening ? PALETTES.helsinki.twilight : PALETTES.helsinki.day;
         g.addColorStop(0, a);
-        g.addColorStop(0.6, b);
-        g.addColorStop(1, c);
+        g.addColorStop(0.45, b);
+        g.addColorStop(0.75, c);
+        g.addColorStop(1, d);
       }
       return g;
     }
 
-    function drawSky() {
+    function drawSky(t) {
       ctx.fillStyle = skyGradient();
+      ctx.fillRect(0, 0, width, height);
+
+      // Soft horizon glow — a gentle abstract stand-in for "distant city
+      // glow" / low winter light, breathing very slowly.
+      const breathe = 0.85 + 0.15 * Math.sin(t / 4000);
+      const glow = ctx.createRadialGradient(
+        width / 2,
+        height * 1.05,
+        0,
+        width / 2,
+        height * 1.05,
+        width * 0.65
+      );
+      glow.addColorStop(0, (city === "miami" ? PALETTES.miami.glow : PALETTES.helsinki.glow).replace(
+        /[\d.]+\)$/,
+        `${0.5 * breathe})`
+      ));
+      glow.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
     }
 
     function drawClouds(dt, intensity, coverPct) {
       // Fade proportionally to actual cloud cover so a clear (0%) sky
       // shows no clouds at all, rather than a fixed decorative amount.
-      const alpha = Math.min(coverPct / 70, 1);
+      const alpha = Math.min(coverPct / 65, 1);
       if (alpha <= 0.03) return;
       ctx.save();
       ctx.globalAlpha = alpha;
+      ctx.filter = "blur(6px)";
       ctx.fillStyle = city === "miami" ? PALETTES.miami.cloud : PALETTES.helsinki.cloud;
       clouds.forEach((c) => {
-        c.x += c.speed * dt * (1 + intensity);
+        c.x += c.speed * dt * 0.06 * (1 + intensity);
         if (c.x - c.w > width) c.x = -c.w;
+        c.puffs.forEach((p) => {
+          ctx.beginPath();
+          ctx.ellipse(
+            c.x + c.w * p.dx,
+            c.y + c.h * p.dy,
+            (c.w / 2) * p.scale,
+            (c.h / 2) * p.scale,
+            0,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        });
+      });
+      ctx.filter = "none";
+      ctx.restore();
+    }
+
+    function drawMotes(dt, alphaScale) {
+      ctx.save();
+      ctx.fillStyle = city === "miami" ? PALETTES.miami.mote : PALETTES.helsinki.mote;
+      motes.forEach((m) => {
+        m.x += m.vx * dt * 0.06;
+        m.y += m.vy * dt * 0.06;
+        m.phase += 0.0006 * dt;
+        if (m.y < -5) m.y = height + 5;
+        if (m.x < -5) m.x = width + 5;
+        if (m.x > width + 5) m.x = -5;
+        const twinkle = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(m.phase));
+        ctx.globalAlpha = twinkle * alphaScale;
+        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowBlur = 6;
         ctx.beginPath();
-        ctx.ellipse(c.x, c.y, c.w / 2, c.h / 2, 0, 0, Math.PI * 2);
+        ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
         ctx.fill();
       });
       ctx.restore();
@@ -233,6 +312,8 @@
       const lean = ((windDir || 90) - 90) * (Math.PI / 180) * 0.35;
       ctx.save();
       ctx.strokeStyle = PALETTES.miami.rain;
+      ctx.shadowColor = PALETTES.miami.rain;
+      ctx.shadowBlur = 3;
       ctx.lineWidth = 1;
       rain.forEach((d) => {
         d.y += d.speed * intensityScale;
@@ -252,6 +333,8 @@
     function drawSnow(intensityScale) {
       ctx.save();
       ctx.fillStyle = PALETTES.helsinki.snow;
+      ctx.shadowColor = "rgba(255,255,255,0.8)";
+      ctx.shadowBlur = 2;
       ctx.globalAlpha = 0.85;
       snow.forEach((f) => {
         f.y += f.speed * intensityScale;
@@ -344,8 +427,13 @@
     }
 
     function drawFrame(dt, ts) {
-      drawSky();
-      if (!envState) return; // calm neutral: base sky only, no invented conditions
+      drawSky(ts);
+      // Ambient motes drift regardless of data — pure atmosphere, not a
+      // depicted condition — so the scene never reads as a frozen slide
+      // even with no data, and stay proportionally faint in daylight.
+      const moteAlpha = envState && envState.isDaylight ? 0.35 : 1;
+      drawMotes(dt, moteAlpha);
+      if (!envState) return; // calm neutral: sky + motes only, no invented conditions
 
       const hurricane = isHurricaneMode();
       const cloudCoverPct = envState.cloudCover || 0;
