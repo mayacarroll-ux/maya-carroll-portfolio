@@ -15,6 +15,20 @@
     return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
+  const PAUSE_KEY = "animationsPaused";
+  function isExplicitlyPaused() {
+    try {
+      return localStorage.getItem(PAUSE_KEY) === "true";
+    } catch (e) {
+      return false;
+    }
+  }
+  // Either the OS-level reduced-motion preference or the visitor's own
+  // persistent pause toggle stops the animation loop — either is enough.
+  function motionAllowed() {
+    return !prefersReducedMotion() && !isExplicitlyPaused();
+  }
+
   function loadCache() {
     try {
       return JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
@@ -107,13 +121,24 @@
     },
     helsinki: {
       day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
+      // Cooler, lower-saturation daylight for winter — same family, muted.
+      winterDay: ["#e7edee", "#d6e0e2", "#bdccd0", "#a3b4b9"],
       twilight: ["#22415a", "#3f6c7c", "#c98a6a", "#e9b98f"],
+      // Nordic white nights: pale blue easing into a warm, low horizon
+      // glow — Helsinki's summer sky never actually goes black.
+      summerNight: ["#3d5c78", "#6f8ea3", "#d9a874", "#e9c98f"],
+      // Genuine winter/spring/autumn night — properly dark, gives the
+      // aurora something to read against.
+      night: ["#0c1a26", "#16293a", "#243f52", "#3a5468"],
       glow: "rgba(167,216,229,0.22)",
       cloud: "rgba(120,138,132,0.2)",
       snow: "rgba(255,255,255,0.9)",
+      sparkle: "rgba(220,240,245,0.9)",
+      treeline: "rgba(31,90,74,0.16)",
+      snowCap: "rgba(255,255,255,0.35)",
       fog: "rgba(200,210,215,0.4)",
       mote: "rgba(255,255,255,0.6)",
-      aurora: ["rgba(57,230,208,0.28)", "rgba(31,90,74,0.22)"],
+      aurora: ["rgba(57,230,208,0.26)", "rgba(100,170,240,0.18)", "rgba(150,110,215,0.15)"],
     },
   };
 
@@ -129,7 +154,9 @@
 
     let clouds = [];
     let rain = [];
-    let snow = [];
+    let snowFar = [];
+    let snowNear = [];
+    let sparkles = [];
     let stars = [];
     let motes = [];
     let lightningAlpha = 0;
@@ -150,8 +177,14 @@
       if (!running) drawFrame(16, performance.now());
     }
 
+    // Scale particle counts down on small viewports and on lower-core-count
+    // devices, so the animation stays smooth rather than device-agnostic.
+    function isLowPower() {
+      return width < 640 || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+    }
+
     function initParticles() {
-      const compact = width < 640;
+      const compact = isLowPower();
       clouds = Array.from({ length: compact ? 4 : 7 }, () => makeCloud());
       rain = Array.from({ length: compact ? 45 : 90 }, () => ({
         x: Math.random() * width,
@@ -159,12 +192,28 @@
         len: 12 + Math.random() * 16,
         speed: 7 + Math.random() * 6,
       }));
-      snow = Array.from({ length: compact ? 45 : 100 }, () => ({
+      // Two depth layers: a slower, smaller, denser backdrop and a faster,
+      // larger, closer layer — reads as real depth rather than one flat
+      // field of dots.
+      snowFar = Array.from({ length: compact ? 35 : 70 }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: 1 + Math.random() * 2.6,
-        speed: 0.7 + Math.random() * 1.3,
+        r: 0.6 + Math.random() * 1.2,
+        speed: 0.4 + Math.random() * 0.5,
         drift: Math.random() * Math.PI * 2,
+      }));
+      snowNear = Array.from({ length: compact ? 20 : 45 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 1.8 + Math.random() * 2.4,
+        speed: 1.1 + Math.random() * 1.4,
+        drift: Math.random() * Math.PI * 2,
+      }));
+      sparkles = Array.from({ length: compact ? 8 : 16 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height * 0.8,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.002 + Math.random() * 0.003,
       }));
       stars = Array.from({ length: compact ? 40 : 70 }, () => ({
         x: Math.random() * width,
@@ -200,6 +249,24 @@
       };
     }
 
+    // Which Helsinki sky palette applies right now — driven by season,
+    // daylight, and twilight phase so winter/summer/shoulder seasons each
+    // read distinctly. Falls back to the calm default "day" palette when
+    // data is unavailable, per the "stay attractive with no data" rule.
+    function helsinkiSkyState() {
+      if (!envState) return "day";
+      const season = envState.season;
+      const isDaylight = envState.isDaylight;
+      const twilight = envState.twilightPhase;
+      if (season === "summer" && !isDaylight) return "summerNight"; // white nights — never truly dark
+      if (!isDaylight && twilight === "night") return "night";
+      if (!isDaylight && (twilight === "civil" || twilight === "nautical" || twilight === "astronomical")) {
+        return "twilight";
+      }
+      if (isDaylight && season === "winter") return "winterDay";
+      return "day";
+    }
+
     function skyGradient() {
       const g = ctx.createLinearGradient(0, 0, 0, height);
       if (city === "miami") {
@@ -209,8 +276,7 @@
         g.addColorStop(0.75, c);
         g.addColorStop(1, d);
       } else {
-        const evening = envState && (envState.twilightPhase === "civil" || envState.twilightPhase === "nautical");
-        const [a, b, c, d] = evening ? PALETTES.helsinki.twilight : PALETTES.helsinki.day;
+        const [a, b, c, d] = PALETTES.helsinki[helsinkiSkyState()];
         g.addColorStop(0, a);
         g.addColorStop(0.45, b);
         g.addColorStop(0.75, c);
@@ -330,23 +396,89 @@
       ctx.restore();
     }
 
-    function drawSnow(intensityScale) {
+    function drawSnowLayer(flakes, windLean, intensityScale, alpha) {
       ctx.save();
       ctx.fillStyle = PALETTES.helsinki.snow;
       ctx.shadowColor = "rgba(255,255,255,0.8)";
       ctx.shadowBlur = 2;
-      ctx.globalAlpha = 0.85;
-      snow.forEach((f) => {
+      ctx.globalAlpha = alpha;
+      flakes.forEach((f) => {
         f.y += f.speed * intensityScale;
-        f.x += Math.sin(f.drift + f.y * 0.01) * 0.5;
+        f.x += Math.sin(f.drift + f.y * 0.01) * 0.5 + windLean;
         if (f.y > height) {
           f.y = -5;
           f.x = Math.random() * width;
         }
+        if (f.x > width + 5) f.x = -5;
+        if (f.x < -5) f.x = width + 5;
         ctx.beginPath();
         ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
         ctx.fill();
       });
+      ctx.restore();
+    }
+
+    // Gentle wind is applied as a steady horizontal lean, driven by real
+    // wind direction/speed, on top of each flake's own sine wobble.
+    function drawSnow(intensityScale, windDirection, windSpeed) {
+      const windLean = Math.sin(((windDirection || 0) * Math.PI) / 180) * Math.min((windSpeed || 0) / 30, 1.2);
+      drawSnowLayer(snowFar, windLean * 0.5, intensityScale * 0.8, 0.55);
+      drawSnowLayer(snowNear, windLean, intensityScale, 0.9);
+    }
+
+    // Occasional bright twinkles on clear, cold days — reads as sunlight
+    // catching ice/frost rather than a literal snow effect.
+    function drawIceSparkle(t) {
+      ctx.save();
+      ctx.fillStyle = PALETTES.helsinki.sparkle;
+      sparkles.forEach((s) => {
+        const twinkle = Math.max(0, Math.sin(t * s.speed + s.phase));
+        if (twinkle < 0.7) return;
+        ctx.globalAlpha = (twinkle - 0.7) / 0.3;
+        ctx.shadowColor = PALETTES.helsinki.sparkle;
+        ctx.shadowBlur = 5;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 1.1, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.restore();
+    }
+
+    // A soft, blurred pine treeline — deliberately low-contrast and blurred
+    // (same technique as the cloud layer) rather than a sharp graphic, so
+    // it reads as atmospheric depth, not clip art. Winter only.
+    function drawWinterTreeline() {
+      const bandH = height * 0.1;
+      const baseY = height;
+      const peaks = 9;
+      ctx.save();
+      ctx.filter = "blur(5px)";
+      ctx.fillStyle = PALETTES.helsinki.treeline;
+      ctx.beginPath();
+      ctx.moveTo(0, baseY);
+      for (let i = 0; i <= peaks; i++) {
+        const x = (i / peaks) * width;
+        const peakH = bandH * (0.5 + 0.5 * Math.sin(i * 1.7));
+        ctx.lineTo(x, baseY - peakH);
+      }
+      ctx.lineTo(width, baseY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Thin snow-cap highlight tracing the same ridge.
+      ctx.filter = "blur(2px)";
+      ctx.strokeStyle = PALETTES.helsinki.snowCap;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i <= peaks; i++) {
+        const x = (i / peaks) * width;
+        const peakH = bandH * (0.5 + 0.5 * Math.sin(i * 1.7));
+        const y = baseY - peakH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.filter = "none";
       ctx.restore();
     }
 
@@ -513,11 +645,19 @@
         maybeLightning(dt);
         if (envState.severeWeatherAlert && envState.severeWeatherAlert.type === "heat") drawHeatShimmer(ts);
       } else {
-        if (envState.precipitationType === "snow") drawSnow(intensityScale());
+        if (envState.season === "winter") drawWinterTreeline();
+        // Physical plausibility gate: only draw snow when it's actually
+        // cold enough, even if a provider glitch reports snow at 15°C.
+        const coldEnough = envState.temperature == null || envState.temperature <= 3;
+        if (envState.precipitationType === "snow" && coldEnough) {
+          drawSnow(intensityScale(), envState.windDirection, envState.windSpeed);
+        }
         if (envState.precipitationType === "rain" || envState.precipitationType === "sleet") {
           drawRain(envState.windDirection, intensityScale() * 0.8);
         }
         if (envState.condition === "fog") drawFog(PALETTES.helsinki.fog, 0.6);
+        const clearAndCold = envState.season === "winter" && envState.cloudCover < 35 && coldEnough;
+        if (clearAndCold) drawIceSparkle(ts);
         drawAurora(envState.auroraProbability, ts);
       }
     }
@@ -532,7 +672,7 @@
 
     function start() {
       if (running) return;
-      if (prefersReducedMotion()) {
+      if (!motionAllowed() || document.hidden) {
         drawFrame(16, performance.now());
         return;
       }
@@ -570,7 +710,13 @@
 
     setInterval(refreshIfNeeded, REFRESH_MS);
     document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) refreshIfNeeded();
+      const active = activeCityForTheme();
+      if (document.hidden) {
+        scenes[active].stop();
+      } else {
+        refreshIfNeeded();
+        scenes[active].start();
+      }
     });
 
     const themeObserver = new MutationObserver(syncActiveScene);
@@ -582,6 +728,31 @@
         scenes[active].stop();
         scenes[active].start();
       });
+    }
+
+    // Persistent, visitor-controlled pause — independent of the OS
+    // reduced-motion setting, and remembered across visits.
+    const pauseBtn = document.getElementById("motion-toggle");
+    if (pauseBtn) {
+      function syncPauseButton() {
+        const paused = isExplicitlyPaused();
+        pauseBtn.textContent = paused ? "▶" : "⏸";
+        pauseBtn.setAttribute(
+          "aria-label",
+          paused ? "Resume background animation" : "Pause background animation"
+        );
+      }
+      pauseBtn.addEventListener("click", () => {
+        const next = !isExplicitlyPaused();
+        try {
+          localStorage.setItem(PAUSE_KEY, String(next));
+        } catch (e) {}
+        syncPauseButton();
+        const active = activeCityForTheme();
+        scenes[active].stop();
+        scenes[active].start();
+      });
+      syncPauseButton();
     }
   }
 

@@ -531,6 +531,7 @@
       font-family: inherit;
     }
     #theme-toggle,
+    #motion-toggle,
     #lang-toggle {
       display: flex;
       align-items: center;
@@ -543,7 +544,8 @@
       cursor: pointer;
       transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
     }
-    #theme-toggle {
+    #theme-toggle,
+    #motion-toggle {
       justify-content: center;
       width: 2.25rem;
       height: 2.25rem;
@@ -554,11 +556,13 @@
       padding: 0.4rem 0.7rem;
     }
     #theme-toggle:hover,
+    #motion-toggle:hover,
     #lang-toggle:hover {
       border-color: var(--color-accent);
       box-shadow: var(--glow-hover);
     }
     #theme-toggle:active,
+    #motion-toggle:active,
     #lang-toggle:active {
       transform: scale(0.96);
     }
@@ -724,6 +728,8 @@
     <div id="controls">
       <span id="availability-badge" role="status" aria-live="polite"></span>
       <a id="plan-link" href="planner.html">Plan our overlap</a>
+
+      <button type="button" id="motion-toggle" aria-label="Pause background animation">⏸</button>
 
       <button type="button" id="theme-toggle" aria-label="Toggle light/dark theme">
         <span id="theme-icon" aria-hidden="true">🌙</span>
