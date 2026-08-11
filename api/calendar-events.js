@@ -1,9 +1,12 @@
-// GET /api/calendar-events?date=YYYY-MM-DD — merges today's (or the given
-// day's) events across every connected Google/Outlook account into one
-// sorted agenda. Refreshes any expired access token first.
+// GET /api/calendar-events?date=YYYY-MM-DD&days=N — merges events across
+// every connected Google/Outlook account, for the N-day window starting at
+// `date` (default: today, 1 day — a week view passes days=7), into one
+// sorted list. Refreshes any expired access token first.
 const { readSession } = require("./_session");
 const { loadAccountsWithTokens, updateAccountTokens } = require("./_calendar-accounts");
-const { dayRangeUtc, todayInZone } = require("./_day-range");
+const { dayRangeUtc, todayInZone, addDays } = require("./_day-range");
+
+const MAX_DAYS = 31;
 
 const HOME_TIMEZONE = "America/New_York";
 const REFRESH_BUFFER_MS = 60 * 1000;
@@ -60,7 +63,7 @@ async function fetchGoogleEvents(accessToken, start, end) {
     timeMax: end.toISOString(),
     singleEvents: "true",
     orderBy: "startTime",
-    maxResults: "100",
+    maxResults: "250",
   });
   const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?${params}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -110,7 +113,12 @@ module.exports = async (req, res) => {
     typeof req.query.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(req.query.date)
       ? req.query.date
       : todayInZone(HOME_TIMEZONE);
-  const { start, end } = dayRangeUtc(date, HOME_TIMEZONE);
+  const daysParsed = parseInt(req.query.days, 10);
+  const days = Number.isInteger(daysParsed) ? Math.min(Math.max(daysParsed, 1), MAX_DAYS) : 1;
+  const endDate = addDays(date, days - 1);
+
+  const { start } = dayRangeUtc(date, HOME_TIMEZONE);
+  const { end } = dayRangeUtc(endDate, HOME_TIMEZONE);
 
   let accounts;
   try {
@@ -151,5 +159,12 @@ module.exports = async (req, res) => {
 
   events.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-  res.status(200).json({ date, timeZone: HOME_TIMEZONE, events, accounts: accountStatus });
+  res.status(200).json({
+    date,
+    startDate: date,
+    endDate,
+    timeZone: HOME_TIMEZONE,
+    events,
+    accounts: accountStatus,
+  });
 };

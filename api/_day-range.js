@@ -39,4 +39,15 @@ function dayRangeUtc(dateStr, timeZone) {
   return { start, end };
 }
 
-module.exports = { dayRangeUtc, todayInZone };
+// Pure calendar-date arithmetic (no timezone involved) — dateStr is just a
+// label like "2026-08-11", so plain UTC-based Date math is safe here even
+// though the actual day boundaries it's later fed into (dayRangeUtc) are
+// zone-aware.
+function addDays(dateStr, n) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  dt.setUTCDate(dt.getUTCDate() + n);
+  return dt.toISOString().slice(0, 10);
+}
+
+module.exports = { dayRangeUtc, todayInZone, addDays };

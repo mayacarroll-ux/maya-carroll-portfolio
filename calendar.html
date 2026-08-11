@@ -208,6 +208,48 @@
       color: var(--color-text-secondary);
       font-size: 0.9rem;
     }
+    .week-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 2.5rem 0 1.25rem;
+    }
+    .week-nav .range-label {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+    .day-section {
+      margin-bottom: 1.75rem;
+    }
+    .day-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0 0 0.4rem;
+      color: var(--color-text-secondary);
+    }
+    .day-heading .day-heading-date {
+      color: var(--color-text);
+    }
+    .day-heading .today-badge {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-accent);
+      border: 1px solid var(--color-accent);
+      border-radius: 4px;
+      padding: 0.05rem 0.4rem;
+    }
+    .day-empty {
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      opacity: 0.75;
+      padding: 0.3rem 0;
+    }
   </style>
 </head>
 <body>
@@ -234,12 +276,16 @@
       <a class="btn" href="/api/oauth/microsoft-connect">Connect Outlook Calendar</a>
     </div>
 
-    <h2 id="agenda-heading">Today</h2>
-    <p class="empty-state" id="agenda-loading">Loading…</p>
-    <p class="empty-state" id="agenda-empty" hidden>
-      Nothing on the calendar today — or nothing connected yet.
+    <div class="week-nav">
+      <button id="prev-week" type="button" aria-label="Previous week">← Previous</button>
+      <span class="range-label" id="week-range-label" aria-live="polite"></span>
+      <button id="next-week" type="button" aria-label="Next week">Next →</button>
+    </div>
+    <p class="empty-state" id="week-loading">Loading…</p>
+    <p class="empty-state" id="week-empty" hidden>
+      Nothing on the calendar this week — or nothing connected yet.
     </p>
-    <ul class="agenda" id="agenda-list" hidden></ul>
+    <div id="week-days" hidden></div>
   </main>
 
   <script>
@@ -247,10 +293,15 @@
     var signedInAsEl = document.getElementById("signed-in-as");
     var accountListEl = document.getElementById("account-list");
     var noAccountsEl = document.getElementById("no-accounts");
-    var agendaLoadingEl = document.getElementById("agenda-loading");
-    var agendaEmptyEl = document.getElementById("agenda-empty");
-    var agendaListEl = document.getElementById("agenda-list");
+    var weekLoadingEl = document.getElementById("week-loading");
+    var weekEmptyEl = document.getElementById("week-empty");
+    var weekDaysEl = document.getElementById("week-days");
+    var weekRangeLabelEl = document.getElementById("week-range-label");
     var statusBannerEl = document.getElementById("status-banner");
+
+    var HOME_TIMEZONE = "America/New_York";
+    var WEEK_DAYS = 7;
+    var currentAnchor = null; // "YYYY-MM-DD", set from the server's notion of "today" on first load
 
     var PROVIDER_LABELS = { google: "Google Calendar", microsoft: "Outlook Calendar" };
 
@@ -334,40 +385,150 @@
       return new Intl.DateTimeFormat(undefined, {
         hour: "numeric",
         minute: "2-digit",
-        timeZone: "America/New_York",
+        timeZone: HOME_TIMEZONE,
       }).format(new Date(iso));
     }
 
-    function renderAgenda(events) {
-      agendaLoadingEl.hidden = true;
-      if (!events.length) {
-        agendaEmptyEl.hidden = false;
-        agendaListEl.hidden = true;
+    // Pure calendar-date arithmetic, mirroring api/_day-range.js's addDays —
+    // dateStr is just a "YYYY-MM-DD" label, so plain UTC math is safe here.
+    function addDaysLocal(dateStr, n) {
+      var parts = dateStr.split("-").map(Number);
+      var dt = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+      dt.setUTCDate(dt.getUTCDate() + n);
+      return dt.toISOString().slice(0, 10);
+    }
+
+    function dayKeyInZone(iso, allDay) {
+      if (allDay) return iso.slice(0, 10);
+      var parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: HOME_TIMEZONE,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).formatToParts(new Date(iso));
+      var get = function (t) { return parts.find(function (p) { return p.type === t; }).value; };
+      return get("year") + "-" + get("month") + "-" + get("day");
+    }
+
+    function formatDayHeading(dateStr) {
+      // dateStr is a plain calendar-date label — parsed as UTC noon so it
+      // never rolls to the adjacent day under any local browser timezone.
+      var d = new Date(dateStr + "T12:00:00Z");
+      return new Intl.DateTimeFormat(undefined, {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC",
+      }).format(d);
+    }
+
+    function formatRangeLabel(startDate, endDate) {
+      var fmt = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
+      var start = fmt.format(new Date(startDate + "T12:00:00Z"));
+      var end = fmt.format(new Date(endDate + "T12:00:00Z"));
+      return start + " – " + end;
+    }
+
+    function renderWeek(data) {
+      weekLoadingEl.hidden = true;
+      var events = data.events || [];
+      var todayKey = dayKeyInZone(new Date().toISOString(), false);
+
+      weekRangeLabelEl.textContent = formatRangeLabel(data.startDate, data.endDate);
+
+      var byDay = {};
+      events.forEach(function (event) {
+        var key = dayKeyInZone(event.start, event.allDay);
+        (byDay[key] = byDay[key] || []).push(event);
+      });
+
+      weekDaysEl.innerHTML = "";
+      var dayCount = 0;
+      var cursor = data.startDate;
+      while (cursor <= data.endDate) {
+        dayCount++;
+        renderDaySection(cursor, byDay[cursor] || [], cursor === todayKey);
+        cursor = addDaysLocal(cursor, 1);
+        if (dayCount > 31) break; // safety net against a malformed range
+      }
+
+      weekEmptyEl.hidden = events.length > 0;
+      weekDaysEl.hidden = false;
+    }
+
+    function renderDaySection(dateStr, dayEvents, isToday) {
+      var section = document.createElement("div");
+      section.className = "day-section";
+
+      var heading = document.createElement("h3");
+      heading.className = "day-heading";
+      var dateSpan = document.createElement("span");
+      dateSpan.className = "day-heading-date";
+      dateSpan.textContent = formatDayHeading(dateStr);
+      heading.appendChild(dateSpan);
+      if (isToday) {
+        var badge = document.createElement("span");
+        badge.className = "today-badge";
+        badge.textContent = "Today";
+        heading.appendChild(badge);
+      }
+      section.appendChild(heading);
+
+      if (!dayEvents.length) {
+        var empty = document.createElement("p");
+        empty.className = "day-empty";
+        empty.textContent = "No events";
+        section.appendChild(empty);
+        weekDaysEl.appendChild(section);
         return;
       }
-      agendaEmptyEl.hidden = true;
-      agendaListEl.hidden = false;
-      agendaListEl.innerHTML = "";
-      events.forEach(function (event) {
-        var li = document.createElement("li");
 
-        var timeEl = document.createElement("time");
-        timeEl.textContent = formatEventTime(event.start, event.allDay);
+      var list = document.createElement("ul");
+      list.className = "agenda";
+      dayEvents
+        .slice()
+        .sort(function (a, b) { return new Date(a.start) - new Date(b.start); })
+        .forEach(function (event) {
+          var li = document.createElement("li");
 
-        var body = document.createElement("div");
-        var titleEl = document.createElement("div");
-        titleEl.className = "event-title";
-        titleEl.textContent = event.title;
-        var sourceEl = document.createElement("div");
-        sourceEl.className = "event-source";
-        sourceEl.textContent = event.accountEmail;
-        body.appendChild(titleEl);
-        body.appendChild(sourceEl);
+          var timeEl = document.createElement("time");
+          timeEl.textContent = formatEventTime(event.start, event.allDay);
 
-        li.appendChild(timeEl);
-        li.appendChild(body);
-        agendaListEl.appendChild(li);
-      });
+          var body = document.createElement("div");
+          var titleEl = document.createElement("div");
+          titleEl.className = "event-title";
+          titleEl.textContent = event.title;
+          var sourceEl = document.createElement("div");
+          sourceEl.className = "event-source";
+          sourceEl.textContent = event.accountEmail;
+          body.appendChild(titleEl);
+          body.appendChild(sourceEl);
+
+          li.appendChild(timeEl);
+          li.appendChild(body);
+          list.appendChild(li);
+        });
+      section.appendChild(list);
+      weekDaysEl.appendChild(section);
+    }
+
+    function loadWeek(anchorDate) {
+      weekLoadingEl.hidden = false;
+      weekEmptyEl.hidden = true;
+      weekDaysEl.hidden = true;
+
+      var url = "/api/calendar-events?days=" + WEEK_DAYS + (anchorDate ? "&date=" + anchorDate : "");
+      fetch(url)
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          currentAnchor = data.startDate;
+          renderWeek(data);
+          if (data.accounts) renderAccounts(data.accounts);
+        })
+        .catch(function () {
+          weekLoadingEl.hidden = true;
+          weekEmptyEl.hidden = false;
+        });
     }
 
     function loadEverything() {
@@ -376,21 +537,15 @@
         .then(function (data) {
           renderAccounts(data.accounts || []);
         });
-
-      agendaLoadingEl.hidden = false;
-      agendaEmptyEl.hidden = true;
-      agendaListEl.hidden = true;
-      fetch("/api/calendar-events")
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          renderAgenda(data.events || []);
-          if (data.accounts) renderAccounts(data.accounts);
-        })
-        .catch(function () {
-          agendaLoadingEl.hidden = true;
-          agendaEmptyEl.hidden = false;
-        });
+      loadWeek(currentAnchor);
     }
+
+    document.getElementById("prev-week").addEventListener("click", function () {
+      loadWeek(addDaysLocal(currentAnchor, -WEEK_DAYS));
+    });
+    document.getElementById("next-week").addEventListener("click", function () {
+      loadWeek(addDaysLocal(currentAnchor, WEEK_DAYS));
+    });
 
     fetch("/api/session")
       .then(function (res) { return res.json(); })
