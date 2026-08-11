@@ -18,7 +18,7 @@
   </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard — Maya Carroll</title>
+  <title>Calendar — Maya Carroll</title>
   <meta name="robots" content="noindex, nofollow" />
   <link
     href="https://fonts.googleapis.com/css2?family=Allura&display=swap"
@@ -72,6 +72,13 @@
       color: var(--color-text);
       text-decoration: none;
     }
+    nav.crumbs {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+    nav.crumbs a {
+      color: inherit;
+    }
     #signed-in-as {
       font-size: 0.8rem;
       color: var(--color-text-secondary);
@@ -105,6 +112,19 @@
     main p {
       color: var(--color-text-secondary);
     }
+    .connect-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+    .connect-row button {
+      padding: 0.6rem 1rem;
+    }
+    .connect-row button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -117,12 +137,16 @@
   </header>
 
   <main hidden>
-    <h1>Private dashboard</h1>
+    <nav class="crumbs"><a href="dashboard.html">Dashboard</a> / Calendar</nav>
+    <h1 style="margin-top: 1rem">Calendar</h1>
     <p>
-      This space is just for you — signed in and ready for whatever personal
-      organization tools get added here next.
+      A single, merged view of your day across every Google and Outlook
+      calendar you connect — not built yet, just the entry point.
     </p>
-    <p><a href="calendar.html">Calendar →</a></p>
+    <div class="connect-row">
+      <button disabled type="button">Connect Google Calendar</button>
+      <button disabled type="button">Connect Outlook Calendar</button>
+    </div>
   </main>
 
   <script>

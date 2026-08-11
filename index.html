@@ -573,6 +573,14 @@
     #primary-nav a.nav-signin:focus-visible {
       opacity: 1;
     }
+    /* Only the first item in this group gets the divider — Calendar/
+       Dashboard sit quietly alongside Sign in/out, not each behind its own
+       rule. */
+    #primary-nav a.nav-signin ~ a.nav-signin {
+      margin-left: 0.6rem;
+      padding-left: 0;
+      border-left: none;
+    }
 
     /* ---------- Preference controls ---------- */
     #preferences {
@@ -914,6 +922,12 @@
       display: flex;
       align-items: center;
     }
+    /* An author `display` declaration otherwise beats the UA default for
+       [hidden], regardless of specificity — without this, hidden nav items
+       (e.g. "Sign in" once signed in) would still render in the drawer. */
+    #mobile-menu-nav-slot #primary-nav a[hidden] {
+      display: none;
+    }
     /* In the stacked drawer list, the divider reads better as a rule above
        rather than the desktop row's left border. */
     #mobile-menu-nav-slot a.nav-signin {
@@ -1019,7 +1033,9 @@
         <a href="#work" data-i18n="nav_work">Work</a>
         <a href="#experience" data-i18n="nav_experience">Experience</a>
         <a href="#contact" data-i18n="nav_contact">Contact</a>
-        <a class="nav-signin" href="login.html" data-i18n="nav_signin">Sign in</a>
+        <a class="nav-signin" id="nav-signin" href="login.html" data-i18n="nav_signin">Sign in</a>
+        <a class="nav-signin nav-authed" id="nav-calendar" href="calendar.html" data-i18n="nav_calendar" hidden>Calendar</a>
+        <a class="nav-signin nav-authed" id="nav-dashboard" href="dashboard.html" data-i18n="nav_dashboard" hidden>Dashboard</a>
       </nav>
 
       <div id="preferences" aria-label="Preferences">
@@ -1229,6 +1245,8 @@
         nav_experience: "Experience",
         nav_contact: "Contact",
         nav_signin: "Sign in",
+        nav_calendar: "Calendar",
+        nav_dashboard: "Dashboard",
         cta_view_work: "View my work",
         cta_start_conversation: "Start a conversation",
         cta_case_study: "Case study coming soon",
@@ -1275,6 +1293,8 @@
         nav_experience: "Experiencia",
         nav_contact: "Contacto",
         nav_signin: "Iniciar sesión",
+        nav_calendar: "Calendario",
+        nav_dashboard: "Panel",
         cta_view_work: "Ver mi trabajo",
         cta_start_conversation: "Iniciar una conversación",
         cta_case_study: "Caso de estudio próximamente",
@@ -1321,6 +1341,8 @@
         nav_experience: "Kokemus",
         nav_contact: "Yhteystiedot",
         nav_signin: "Kirjaudu sisään",
+        nav_calendar: "Kalenteri",
+        nav_dashboard: "Kojelauta",
         cta_view_work: "Katso työni",
         cta_start_conversation: "Aloita keskustelu",
         cta_case_study: "Referenssi tulossa pian",
@@ -1827,6 +1849,25 @@
         { passive: true }
       );
       updateCondensed();
+    })();
+
+    // ---------- Session-aware nav (owner-only extras) ----------
+    // A visitor is essentially always signed out; this only changes
+    // anything when it's actually you, signed in, browsing your own site.
+    (function () {
+      fetch("/api/session")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (!data.signedIn) return;
+          document.getElementById("nav-signin").hidden = true;
+          document.querySelectorAll(".nav-authed").forEach(function (el) {
+            el.hidden = false;
+          });
+        })
+        .catch(function () {
+          /* api/session unreachable (e.g. static-only local preview) —
+             leave the signed-out nav as-is. */
+        });
     })();
   </script>
   <script src="schedule.js"></script>
