@@ -471,39 +471,36 @@
     }
 
     /* ---------- Top navigation ---------- */
+    /* ==================== Header ====================
+       Two coordinated levels: #header-primary (brand / nav / preferences /
+       menu button) and #city-strip (quieter secondary row, always visible).
+       At >=960px both rows are fully inline. Below that, #primary-nav and
+       #preferences are moved — the same DOM nodes, not copies, so every
+       existing id-based behavior keeps working — into the mobile drawer by
+       clock-widget-adjacent header.js; #city-strip always stays put. */
     #topbar {
       position: sticky;
       top: 0;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.6rem 1.25rem;
-      padding: 1rem 1.5rem;
+      z-index: 20;
       background: var(--color-bg);
       border-bottom: 1px solid var(--color-border);
     }
-
-    #primary-nav {
-      order: 2;
-      flex-basis: 100%;
+    #header-primary {
       display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      font-size: 0.88rem;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 0.85rem 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      transition: padding 0.2s ease;
     }
-    #primary-nav a {
-      color: var(--color-text-secondary);
-      text-decoration: none;
+    #topbar.is-condensed #header-primary {
+      padding-top: 0.55rem;
+      padding-bottom: 0.55rem;
     }
-    #primary-nav a:hover {
-      color: var(--color-text);
-    }
-    @media (min-width: 860px) {
-      #primary-nav {
-        order: 1;
-        flex-basis: auto;
-        margin: 0 auto;
+    @media (prefers-reduced-motion: reduce) {
+      #header-primary {
+        transition: none;
       }
     }
 
@@ -511,14 +508,14 @@
     #brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      order: 0;
+      gap: 0.65rem;
       text-decoration: none;
       color: inherit;
+      flex-shrink: 0;
     }
     #nav-avatar {
-      width: 2.75rem;
-      height: 2.75rem;
+      width: 2.6rem;
+      height: 2.6rem;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid var(--color-accent-3);
@@ -526,35 +523,253 @@
     }
     #site-title {
       font-family: "Allura", cursive;
-      font-size: 2.3rem;
       font-weight: 400;
       color: var(--color-text);
-      margin: 0;
       line-height: 1;
-      text-decoration: none;
+      font-size: 2.1rem;
+      white-space: nowrap;
+    }
+    .site-title-short {
+      display: none;
+    }
+    @media (max-width: 599px) {
+      #site-title {
+        font-size: 1.6rem;
+      }
+      .site-title-full {
+        display: none;
+      }
+      .site-title-short {
+        display: inline;
+      }
     }
 
-    /* ---------- Status bar (time + weather) ---------- */
-    #status-bar {
+    /* ---------- Primary nav (inline at wide, moved into drawer below 960px) ---------- */
+    #primary-nav {
+      display: flex;
+      gap: 1.6rem;
+      font-size: 0.9rem;
+      margin-right: auto;
+    }
+    #primary-nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      padding: 0.3rem 0.1rem;
+    }
+    #primary-nav a:hover,
+    #primary-nav a:focus-visible {
+      color: var(--color-text);
+    }
+    /* Quieter than the primary destinations — personal/admin, not part of
+       the portfolio's core content — set off with a hairline divider. */
+    #primary-nav a.nav-signin {
+      margin-left: 0.4rem;
+      padding-left: 1rem;
+      border-left: 1px solid var(--color-border);
+      font-size: 0.8rem;
+      opacity: 0.75;
+    }
+    #primary-nav a.nav-signin:hover,
+    #primary-nav a.nav-signin:focus-visible {
+      opacity: 1;
+    }
+
+    /* ---------- Preference controls ---------- */
+    #preferences {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem 1.25rem;
-      font-size: 0.78rem;
-      color: var(--color-text-secondary);
-      order: 3;
-      flex-basis: 100%;
-      justify-content: center;
-      padding-top: 0.35rem;
-      border-top: 1px solid var(--color-border);
+      gap: 0.5rem;
     }
-    @media (min-width: 860px) {
-      #status-bar {
-        flex-basis: auto;
-        justify-content: flex-end;
-        padding-top: 0;
-        border-top: none;
+    button {
+      font-family: inherit;
+    }
+    #theme-toggle,
+    #motion-toggle,
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+      min-height: 44px;
+      padding: 0.5rem 0.75rem;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    #motion-toggle {
+      justify-content: center;
+      width: 44px;
+      padding: 0;
+      font-size: 1rem;
+    }
+    #theme-toggle:hover,
+    #motion-toggle:hover,
+    #lang-toggle:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+    #theme-toggle:active,
+    #motion-toggle:active,
+    #lang-toggle:active {
+      transform: scale(0.96);
+    }
+    #theme-label {
+      font-weight: 600;
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #lang-switcher {
+      position: relative;
+    }
+    #lang-toggle .chevron {
+      color: var(--color-text-secondary);
+      font-size: 0.7rem;
+      transition: transform 0.15s ease;
+    }
+    #lang-switcher[data-open="true"] #lang-toggle .chevron {
+      transform: rotate(180deg);
+    }
+    #lang-menu {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      right: 0;
+      min-width: 100%;
+      list-style: none;
+      margin: 0;
+      padding: 0.3rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-top: 2px solid var(--color-accent);
+      border-radius: 8px;
+      box-shadow: var(--shadow-elevated);
+      display: none;
+      flex-direction: column;
+      z-index: 5;
+    }
+    #lang-switcher[data-open="true"] #lang-menu {
+      display: flex;
+    }
+    #lang-menu li button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: inherit;
+      background: transparent;
+      color: var(--color-text);
+      border: none;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      min-height: 40px;
+      transition: background 0.15s ease;
+    }
+    #lang-menu li button:hover {
+      background: var(--color-bg);
+    }
+    #lang-menu li button[aria-current="true"] {
+      background: var(--color-bg);
+      box-shadow: inset 2px 0 0 var(--color-accent);
+    }
+    .flag {
+      font-size: 1.1rem;
+    }
+    .globe {
+      font-size: 1rem;
+    }
+    .menu-heading {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      padding: 0.3rem 0.6rem 0.4rem;
+    }
+
+    /* ---------- Menu (hamburger) button — hidden at wide, shown below 960px ---------- */
+    #menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #menu-toggle:hover {
+      border-color: var(--color-accent);
+    }
+    .menu-icon {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 18px;
+    }
+    .menu-icon span {
+      display: block;
+      height: 2px;
+      border-radius: 1px;
+      background: currentColor;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) {
+      opacity: 0;
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .menu-icon span {
+        transition: none;
+      }
+    }
+
+    /* Below 960px: nav + preferences move into the drawer; the header row
+       keeps only brand (left) and the menu button (right). */
+    @media (max-width: 959px) {
+      #primary-nav,
+      #header-primary > #preferences {
+        display: none;
+      }
+      #menu-toggle {
+        display: flex;
         margin-left: auto;
+      }
+    }
+
+    /* ---------- City strip (secondary, quieter row — always visible) ---------- */
+    #city-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.5rem;
+      padding: 0.5rem 1.5rem 0.65rem;
+      font-size: 0.76rem;
+      color: var(--color-text-secondary);
+      border-top: 1px solid var(--color-border);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    @media (min-width: 960px) {
+      #city-strip {
+        justify-content: flex-end;
       }
     }
     .city-status {
@@ -603,6 +818,7 @@
       border-radius: 6px;
       font-size: 0.7rem;
       padding: 0.2rem 0.45rem;
+      min-height: 28px;
       cursor: pointer;
       transition: border-color 0.18s ease, color 0.18s ease;
     }
@@ -610,132 +826,130 @@
       border-color: var(--color-accent);
       color: var(--color-text);
     }
-
-    /* ---------- Controls (theme + language) ---------- */
-    #controls {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      order: 0;
-      margin-left: auto;
-    }
-    @media (min-width: 860px) {
-      #controls {
-        margin-left: 0;
+    @media (max-width: 479px) {
+      #city-strip {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem 0.5rem;
+      }
+      #city-strip .city-status {
+        justify-content: center;
+      }
+      #unit-toggle {
+        grid-column: 1 / -1;
+        justify-self: center;
+        margin-top: 0.15rem;
       }
     }
-    button {
-      font-family: inherit;
-    }
-    #theme-toggle,
-    #motion-toggle,
-    #lang-toggle {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: inherit;
-      background: var(--color-surface);
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
-    }
-    #theme-toggle,
-    #motion-toggle {
-      justify-content: center;
-      width: 2.25rem;
-      height: 2.25rem;
-      font-size: 1rem;
-      padding: 0;
-    }
-    #lang-toggle {
-      padding: 0.4rem 0.7rem;
-    }
-    #theme-toggle:hover,
-    #motion-toggle:hover,
-    #lang-toggle:hover {
-      border-color: var(--color-accent);
-      box-shadow: var(--glow-hover);
-    }
-    #theme-toggle:active,
-    #motion-toggle:active,
-    #lang-toggle:active {
-      transform: scale(0.96);
-    }
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
-    }
 
-    #lang-switcher {
-      position: relative;
+    /* ---------- Mobile menu drawer ---------- */
+    #mobile-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 40;
     }
-    #lang-toggle .chevron {
-      color: var(--color-text-secondary);
-      font-size: 0.7rem;
-      transition: transform 0.15s ease;
-    }
-    #lang-switcher[data-open="true"] #lang-toggle .chevron {
-      transform: rotate(180deg);
-    }
-    #lang-menu {
-      position: absolute;
-      top: calc(100% + 0.4rem);
-      right: 0;
-      min-width: 100%;
-      list-style: none;
-      margin: 0;
-      padding: 0.3rem;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-top: 2px solid var(--color-accent);
-      border-radius: 8px;
-      box-shadow: var(--shadow-elevated);
+    #mobile-menu-backdrop[hidden] {
       display: none;
-      flex-direction: column;
     }
-    #lang-switcher[data-open="true"] #lang-menu {
+    #mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(320px, 85vw);
+      background: var(--color-surface);
+      border-left: 1px solid var(--color-border);
+      z-index: 50;
       display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      overflow-y: auto;
+      box-shadow: var(--shadow-elevated);
     }
-    #lang-menu li button {
-      width: 100%;
+    #mobile-menu[hidden] {
+      display: none;
+    }
+    #mobile-menu-header {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: inherit;
-      background: transparent;
-      color: var(--color-text);
-      border: none;
-      border-radius: 5px;
-      padding: 0.4rem 0.6rem;
-      cursor: pointer;
-      text-align: left;
-      white-space: nowrap;
-      transition: background 0.15s ease;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
     }
-    #lang-menu li button:hover {
-      background: var(--color-bg);
-    }
-    #lang-menu li button[aria-current="true"] {
-      background: var(--color-bg);
-      box-shadow: inset 2px 0 0 var(--color-accent);
-    }
-    .flag {
-      font-size: 1.1rem;
-    }
-    .globe {
-      font-size: 1rem;
-    }
-    .menu-heading {
-      font-size: 0.7rem;
+    #mobile-menu-title {
+      font-weight: 700;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       color: var(--color-text-secondary);
-      padding: 0.3rem 0.6rem 0.4rem;
+    }
+    #mobile-menu-close {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      line-height: 1;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    #mobile-menu-close:hover {
+      border-color: var(--color-accent);
+    }
+    #mobile-menu-nav-slot #primary-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-size: 1.05rem;
+      margin: 0 0 1.5rem;
+    }
+    #mobile-menu-nav-slot #primary-nav a {
+      padding: 0.8rem 0.2rem;
+      border-bottom: 1px solid var(--color-border);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+    /* In the stacked drawer list, the divider reads better as a rule above
+       rather than the desktop row's left border. */
+    #mobile-menu-nav-slot a.nav-signin {
+      margin-left: 0;
+      padding-left: 0.2rem;
+      border-left: none;
+      border-top: 1px solid var(--color-border);
+      opacity: 0.75;
+    }
+    #mobile-menu-prefs .menu-heading {
+      padding: 0 0 0.6rem;
+    }
+    #mobile-menu-prefs-slot #preferences {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.6rem;
+    }
+    #mobile-menu-prefs-slot #theme-toggle,
+    #mobile-menu-prefs-slot #motion-toggle,
+    #mobile-menu-prefs-slot #lang-toggle {
+      width: 100%;
+      justify-content: flex-start;
+      font-size: 0.92rem;
+    }
+    #mobile-menu-prefs-slot #lang-menu {
+      position: static;
+      margin-top: 0.4rem;
+      box-shadow: none;
+      display: flex;
+    }
+    #mobile-menu-prefs-slot #lang-switcher[data-open="false"] #lang-menu {
+      display: none;
+    }
+    body.menu-open {
+      overflow: hidden;
     }
 
     footer {
@@ -792,18 +1006,53 @@
   <div id="content-scrim" aria-hidden="true"></div>
 
   <header id="topbar">
-    <a id="brand" href="#main-content">
-      <img id="nav-avatar" src="avatar.jpg" alt="Maya Carroll" />
-      <span id="site-title">Maya Carroll</span>
-    </a>
+    <div id="header-primary">
+      <a id="brand" href="#main-content" aria-label="Maya Carroll — Home">
+        <img id="nav-avatar" src="avatar.jpg" alt="" />
+        <span id="site-title">
+          <span class="site-title-full">Maya Carroll</span>
+          <span class="site-title-short">Maya</span>
+        </span>
+      </a>
 
-    <nav id="primary-nav" aria-label="Primary">
-      <a href="#work" data-i18n="nav_work">Work</a>
-      <a href="#experience" data-i18n="nav_experience">Experience</a>
-      <a href="#contact" data-i18n="nav_contact">Contact</a>
-    </nav>
+      <nav id="primary-nav" aria-label="Primary">
+        <a href="#work" data-i18n="nav_work">Work</a>
+        <a href="#experience" data-i18n="nav_experience">Experience</a>
+        <a href="#contact" data-i18n="nav_contact">Contact</a>
+        <a class="nav-signin" href="login.html" data-i18n="nav_signin">Sign in</a>
+      </nav>
 
-    <div id="status-bar" aria-label="Local time and weather">
+      <div id="preferences" aria-label="Preferences">
+        <button type="button" id="motion-toggle" aria-label="Pause background animation">⏸</button>
+
+        <button type="button" id="theme-toggle" aria-label="Switch to light theme">
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+          <span id="theme-label">Dark</span>
+        </button>
+
+        <div id="lang-switcher" data-open="false">
+          <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language: English">
+            <span class="globe" aria-hidden="true">🌐</span>
+            <span id="lang-toggle-label">EN</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <ul id="lang-menu" role="listbox" aria-label="Select language">
+            <li class="menu-heading" aria-hidden="true">Language</li>
+            <li role="option"><button type="button" data-lang="en"><span class="flag" aria-hidden="true">🇬🇧</span> English</button></li>
+            <li role="option"><button type="button" data-lang="es"><span class="flag" aria-hidden="true">🇪🇸</span> Español</button></li>
+            <li role="option"><button type="button" data-lang="fi"><span class="flag" aria-hidden="true">🇫🇮</span> Suomi</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <button type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span class="menu-icon" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </div>
+
+    <div id="city-strip" aria-label="Local time and weather">
       <div class="city-status" data-city="miami">
         <span class="city-name">Miami</span>
         <span class="sep" aria-hidden="true">&middot;</span>
@@ -822,29 +1071,20 @@
         °F&thinsp;/&thinsp;°C
       </button>
     </div>
-
-    <div id="controls">
-      <button type="button" id="motion-toggle" aria-label="Pause background animation">⏸</button>
-
-      <button type="button" id="theme-toggle" aria-label="Toggle light/dark theme">
-        <span id="theme-icon" aria-hidden="true">🌙</span>
-      </button>
-
-      <div id="lang-switcher" data-open="false">
-        <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language">
-          <span class="globe" aria-hidden="true">🌐</span>
-          <span id="lang-toggle-label">EN</span>
-          <span class="chevron">▼</span>
-        </button>
-        <ul id="lang-menu" role="listbox" aria-label="Select language">
-          <li class="menu-heading" aria-hidden="true">Language</li>
-          <li role="option"><button type="button" data-lang="en"><span class="flag">🇬🇧</span> English</button></li>
-          <li role="option"><button type="button" data-lang="es"><span class="flag">🇪🇸</span> Español</button></li>
-          <li role="option"><button type="button" data-lang="fi"><span class="flag">🇫🇮</span> Suomi</button></li>
-        </ul>
-      </div>
-    </div>
   </header>
+
+  <div id="mobile-menu-backdrop" hidden></div>
+  <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+    <div id="mobile-menu-header">
+      <span id="mobile-menu-title" data-i18n="menu_title">Menu</span>
+      <button type="button" id="mobile-menu-close" aria-label="Close menu">&times;</button>
+    </div>
+    <div id="mobile-menu-nav-slot" aria-label="Primary"></div>
+    <div id="mobile-menu-prefs">
+      <h3 class="menu-heading" data-i18n="menu_preferences">Preferences</h3>
+      <div id="mobile-menu-prefs-slot"></div>
+    </div>
+  </div>
 
   <main id="main-content">
     <section id="hero">
@@ -980,11 +1220,15 @@
     const translations = {
       en: {
         label: "EN",
+        fullName: "English",
         flag: "🇬🇧",
         skip_link: "Skip to content",
+        menu_title: "Menu",
+        menu_preferences: "Preferences",
         nav_work: "Work",
         nav_experience: "Experience",
         nav_contact: "Contact",
+        nav_signin: "Sign in",
         cta_view_work: "View my work",
         cta_start_conversation: "Start a conversation",
         cta_case_study: "Case study coming soon",
@@ -1022,11 +1266,15 @@
       },
       es: {
         label: "ES",
+        fullName: "Español",
         flag: "🇪🇸",
         skip_link: "Saltar al contenido",
+        menu_title: "Menú",
+        menu_preferences: "Preferencias",
         nav_work: "Trabajo",
         nav_experience: "Experiencia",
         nav_contact: "Contacto",
+        nav_signin: "Iniciar sesión",
         cta_view_work: "Ver mi trabajo",
         cta_start_conversation: "Iniciar una conversación",
         cta_case_study: "Caso de estudio próximamente",
@@ -1064,11 +1312,15 @@
       },
       fi: {
         label: "FI",
+        fullName: "Suomi",
         flag: "🇫🇮",
         skip_link: "Siirry sisältöön",
+        menu_title: "Valikko",
+        menu_preferences: "Asetukset",
         nav_work: "Työt",
         nav_experience: "Kokemus",
         nav_contact: "Yhteystiedot",
+        nav_signin: "Kirjaudu sisään",
         cta_view_work: "Katso työni",
         cta_start_conversation: "Aloita keskustelu",
         cta_case_study: "Referenssi tulossa pian",
@@ -1108,13 +1360,15 @@
 
     const themeToggle = document.getElementById("theme-toggle");
     const themeIcon = document.getElementById("theme-icon");
+    const themeLabel = document.getElementById("theme-label");
 
     function applyTheme(theme) {
       document.documentElement.setAttribute("data-theme", theme);
       themeIcon.textContent = theme === "dark" ? "🌙" : "☀️";
+      themeLabel.textContent = theme === "dark" ? "Dark" : "Light";
       themeToggle.setAttribute(
         "aria-label",
-        theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
+        theme === "dark" ? "Theme: Dark. Switch to light theme" : "Theme: Light. Switch to dark theme"
       );
     }
 
@@ -1158,6 +1412,7 @@
         if (t[key]) el.textContent = t[key];
       });
       toggleLabel.textContent = t.label;
+      toggle.setAttribute("aria-label", `Language: ${t.fullName}. Choose a different language`);
       document.documentElement.lang = lang;
       options.forEach((opt) => {
         opt.setAttribute("aria-current", opt.dataset.lang === lang ? "true" : "false");
@@ -1442,6 +1697,136 @@
       });
 
       updateUnitToggleLabel();
+    })();
+
+    // ---------- Header: responsive reparenting + mobile drawer ----------
+    // Below 960px, #primary-nav and #preferences are the exact same DOM
+    // nodes moved (not cloned) into the drawer, so every id-based listener
+    // wired above keeps working no matter which container currently holds
+    // them. Above 960px they move back inline.
+    (function () {
+      const topbar = document.getElementById("topbar");
+      const headerPrimary = document.getElementById("header-primary");
+      const nav = document.getElementById("primary-nav");
+      const prefs = document.getElementById("preferences");
+      const menuToggle = document.getElementById("menu-toggle");
+      const backdrop = document.getElementById("mobile-menu-backdrop");
+      const drawer = document.getElementById("mobile-menu");
+      const drawerClose = document.getElementById("mobile-menu-close");
+      const navSlot = document.getElementById("mobile-menu-nav-slot");
+      const prefsSlot = document.getElementById("mobile-menu-prefs-slot");
+      const langSwitcher = document.getElementById("lang-switcher");
+      if (!topbar || !headerPrimary || !nav || !prefs || !menuToggle || !drawer) return;
+
+      const mq = window.matchMedia("(max-width: 959px)");
+
+      function placeControls(isNarrow) {
+        if (isNarrow) {
+          navSlot.appendChild(nav);
+          prefsSlot.appendChild(prefs);
+        } else {
+          headerPrimary.insertBefore(nav, menuToggle);
+          headerPrimary.insertBefore(prefs, menuToggle);
+        }
+      }
+      placeControls(mq.matches);
+
+      let lastFocused = null;
+
+      function trapFocus(e) {
+        if (e.key !== "Tab") return;
+        // Exclude elements hidden by a closed submenu (e.g. the language
+        // list when collapsed) — querySelectorAll matches them regardless
+        // of visibility, but they aren't real Tab stops.
+        const focusable = Array.from(
+          drawer.querySelectorAll(
+            'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => el.getClientRects().length > 0);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+
+      function openDrawer() {
+        lastFocused = document.activeElement;
+        drawer.hidden = false;
+        backdrop.hidden = false;
+        menuToggle.setAttribute("aria-expanded", "true");
+        document.body.classList.add("menu-open");
+        drawerClose.focus();
+        document.addEventListener("keydown", trapFocus);
+      }
+
+      function closeDrawer() {
+        if (drawer.hidden) return;
+        drawer.hidden = true;
+        backdrop.hidden = true;
+        menuToggle.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("menu-open");
+        document.removeEventListener("keydown", trapFocus);
+        if (lastFocused) lastFocused.focus();
+      }
+
+      menuToggle.addEventListener("click", () => {
+        if (drawer.hidden) openDrawer();
+        else closeDrawer();
+      });
+      drawerClose.addEventListener("click", closeDrawer);
+      backdrop.addEventListener("click", closeDrawer);
+
+      // Closing via navigation: only actual nav links dismiss the drawer —
+      // preference controls (theme/language/animation) stay open so a
+      // visitor can change more than one without reopening the menu.
+      navSlot.addEventListener("click", (e) => {
+        if (e.target.closest("a")) closeDrawer();
+      });
+
+      // Capture phase so this runs *before* the language menu's own Escape
+      // handler below mutates its open state — the first Escape press
+      // closes a nested-open language menu only; the drawer itself only
+      // closes on a subsequent press (or Close/backdrop/nav-click).
+      document.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key !== "Escape" || drawer.hidden) return;
+          if (langSwitcher && langSwitcher.getAttribute("data-open") === "true") return;
+          closeDrawer();
+        },
+        true
+      );
+
+      mq.addEventListener("change", (e) => {
+        placeControls(e.matches);
+        if (!e.matches) closeDrawer();
+      });
+
+      // Optional light condensed state after scroll — header stays fully
+      // visible and functional, just slightly more compact; disabled
+      // visually under prefers-reduced-motion via the CSS transition rule.
+      let ticking = false;
+      function updateCondensed() {
+        topbar.classList.toggle("is-condensed", window.scrollY > 24);
+        ticking = false;
+      }
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!ticking) {
+            window.requestAnimationFrame(updateCondensed);
+            ticking = true;
+          }
+        },
+        { passive: true }
+      );
+      updateCondensed();
     })();
   </script>
   <script src="schedule.js"></script>
