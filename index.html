@@ -489,13 +489,15 @@
       .site-title-short {
         display: inline;
       }
-      /* The hero now carries an extra meta-line (credentials) on top of
-         everything else — on short mobile viewports that pushed content
-         far enough down to land behind the sticky footer until scrolled.
-         Trimming rhythm here doesn't eliminate scrolling entirely (that'd
-         mean shrinking the headline itself), but meaningfully cuts how
-         far a visitor has to scroll before the credentials line clears
-         the footer. */
+      /* The hero (credentials meta-line) and footer (links row) have both
+         grown since this rule was first added — on short mobile viewports
+         that pushes hero content low enough to land behind the sticky
+         footer until scrolled. Trimming rhythm here + a modest headline
+         reduction (mobile only) meaningfully cuts how far a visitor has to
+         scroll before everything clears the footer. */
+      h1 {
+        font-size: 1.7rem;
+      }
       #hero .container {
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
@@ -510,6 +512,10 @@
       .meta-line {
         margin-top: 1rem;
         font-size: 0.74rem;
+      }
+      footer {
+        padding: 0.6rem 1.5rem 0.75rem;
+        gap: 0.2rem;
       }
     }
 
@@ -1038,6 +1044,23 @@
       font-size: 0.75rem;
       opacity: 0.8;
     }
+    #footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      font-size: 0.75rem;
+    }
+    #footer-links a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      opacity: 0.85;
+    }
+    #footer-links a:hover,
+    #footer-links a:focus-visible {
+      opacity: 1;
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
 
     @media (max-width: 480px) {
       #topbar {
@@ -1198,6 +1221,10 @@
       <span data-i18n="footer_p1">From Miami to Helsinki—designing what's next.</span>
       <span class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</span>
     </p>
+    <div id="footer-links">
+      <a href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener" aria-label="Maya Carroll on LinkedIn">LinkedIn</a>
+      <a href="mailto:hiring@mayacarroll.com">Email</a>
+    </div>
   </footer>
 
   <script>
@@ -1250,6 +1277,8 @@
         severe_snow_watch_aria: "Snow watch: about {cm} centimeters expected today.",
         severe_wind_watch: "Wind: {kmh} km/h gusts",
         severe_wind_watch_aria: "Wind watch: gusts up to {kmh} kilometers per hour expected today.",
+        severe_cold_snap: "Cold snap: feels {temp}",
+        severe_cold_snap_aria: "Cold snap warning: feels like {temp} today — frostbite risk.",
       },
       es: {
         label: "ES",
@@ -1299,6 +1328,8 @@
         severe_snow_watch_aria: "Aviso de nieve: se esperan unos {cm} centímetros hoy.",
         severe_wind_watch: "Viento: ráfagas de {kmh} km/h",
         severe_wind_watch_aria: "Aviso de viento: ráfagas de hasta {kmh} kilómetros por hora previstas hoy.",
+        severe_cold_snap: "Ola de frío: sensación {temp}",
+        severe_cold_snap_aria: "Aviso de ola de frío: sensación térmica de {temp} hoy — riesgo de congelación.",
       },
       fi: {
         label: "FI",
@@ -1348,6 +1379,8 @@
         severe_snow_watch_aria: "Lumivaroitus: tänään odotettavissa noin {cm} senttimetriä lunta.",
         severe_wind_watch: "Tuulta: puuskat {kmh} km/h",
         severe_wind_watch_aria: "Tuulivaroitus: tänään odotettavissa jopa {kmh} kilometrin tuntinopeuden puuskia.",
+        severe_cold_snap: "Pakkasjakso: tuntuu {temp}",
+        severe_cold_snap_aria: "Pakkasvaroitus: tänään tuntuu {temp} — paleltumisvaara.",
       },
     };
 
@@ -1744,6 +1777,9 @@
       const ENV_ALERT_CACHE_KEY = "envAlertCache";
       const SNOW_WATCH_CM = 5;
       const WIND_WATCH_KMH = 60;
+      // -20°C feels-like is a commonly cited genuine frostbite-risk
+      // threshold — real personal-safety hazard, not just "a bit cold".
+      const COLD_SNAP_FEELS_LIKE_C = -20;
       const severeEls = {
         miami: document.getElementById("severe-miami"),
         helsinki: document.getElementById("severe-helsinki"),
@@ -1788,9 +1824,18 @@
           el.innerHTML = "";
           return;
         }
+        const feelsLike = entry.feelsLikeC;
         const snow = entry.snowfallSum;
         const gusts = entry.windGustsMax;
-        if (snow != null && snow >= SNOW_WATCH_CM) {
+        // Cold snap takes priority when several hazards coincide (a real
+        // Nordic winter storm often brings cold + snow + wind together) —
+        // extreme cold is the most acutely dangerous to be caught outside
+        // in, of the three.
+        if (feelsLike != null && feelsLike <= COLD_SNAP_FEELS_LIKE_C) {
+          const temp = formatTemp(feelsLike);
+          el.innerHTML = `🥶 ${translate("severe_cold_snap", { temp })}`;
+          el.setAttribute("aria-label", translate("severe_cold_snap_aria", { temp }));
+        } else if (snow != null && snow >= SNOW_WATCH_CM) {
           const cm = Math.round(snow);
           el.innerHTML = `❄️ ${translate("severe_snow_watch", { cm })}`;
           el.setAttribute("aria-label", translate("severe_snow_watch_aria", { cm }));
