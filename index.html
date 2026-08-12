@@ -732,6 +732,46 @@
     .city-status .weather.is-unavailable {
       font-style: italic;
     }
+    /* UV reading rides inside the .weather span, quiet by default —
+       only gains the accent color at UV 6+ (High and above) so it doesn't
+       compete with the temperature at Low/Moderate levels. */
+    .city-status .uv {
+      font-size: 0.85em;
+      opacity: 0.7;
+      font-weight: 400;
+    }
+    .city-status .uv.uv-elevated {
+      opacity: 1;
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+    /* Only rendered when there's something to say (active storm for Miami,
+       snow/wind watch for Helsinki) — empty and takes no space otherwise. */
+    .severe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3em;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      border: 1px solid var(--color-accent);
+      border-radius: 999px;
+      padding: 0.1rem 0.55rem;
+      white-space: nowrap;
+    }
+    .severe-badge:empty {
+      display: none;
+      padding: 0;
+      border: 0;
+    }
+    .severe-badge a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .severe-badge a:hover,
+    .severe-badge a:focus-visible {
+      text-decoration: underline;
+    }
     @media (max-width: 479px) {
       #city-strip {
         display: grid;
@@ -740,6 +780,7 @@
       }
       #city-strip .city-status {
         justify-content: center;
+        flex-wrap: wrap;
       }
     }
 
@@ -1086,6 +1127,7 @@
         <time id="time-miami">&nbsp;</time>
         <span class="sep" aria-hidden="true">&middot;</span>
         <span id="weather-miami" class="weather" aria-live="polite">&hellip;</span>
+        <span id="severe-miami" class="severe-badge" aria-live="polite"></span>
       </div>
       <div class="city-status" data-city="helsinki">
         <span class="city-name">Helsinki</span>
@@ -1093,6 +1135,7 @@
         <time id="time-helsinki">&nbsp;</time>
         <span class="sep" aria-hidden="true">&middot;</span>
         <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
+        <span id="severe-helsinki" class="severe-badge" aria-live="polite"></span>
       </div>
     </div>
     <p>
@@ -1433,6 +1476,16 @@
         return `${Math.round(celsiusToFahrenheit(tempC))}°F`;
       }
 
+      // WHO UV index scale; "elevated" (High and up) is the only distinction
+      // the compact badge actually renders differently.
+      function uvCategory(uv) {
+        if (uv >= 11) return { label: "Extreme", elevated: true };
+        if (uv >= 8) return { label: "Very High", elevated: true };
+        if (uv >= 6) return { label: "High", elevated: true };
+        if (uv >= 3) return { label: "Moderate", elevated: false };
+        return { label: "Low", elevated: false };
+      }
+
       function loadCache() {
         try {
           return JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
@@ -1494,7 +1547,18 @@
           feelsLikeHTML = ` <span class="feels-like">feels ${feelsLikeText}</span>`;
           feelsLikeSpoken = `, feels like ${feelsLikeText}`;
         }
-        el.innerHTML = `${iconHTML}${tempText}${feelsLikeHTML}`;
+        // Only surface UV at Moderate (3) and up — Low is the common case
+        // (night, overcast, most of a Helsinki winter) and isn't worth a spot
+        // in an already-compact bar.
+        let uvHTML = "";
+        let uvSpoken = "";
+        if (entry.uvIndex != null && entry.uvIndex >= 3) {
+          const rounded = Math.round(entry.uvIndex);
+          const { label, elevated } = uvCategory(entry.uvIndex);
+          uvHTML = ` <span class="uv${elevated ? " uv-elevated" : ""}">UV ${rounded}</span>`;
+          uvSpoken = `, UV index ${rounded} (${label})`;
+        }
+        el.innerHTML = `${iconHTML}${tempText}${feelsLikeHTML}${uvHTML}`;
         el.classList.toggle("is-stale", isStale);
         el.classList.remove("is-unavailable");
         const updatedLabel = new Intl.DateTimeFormat(undefined, {
@@ -1504,7 +1568,7 @@
         el.title = `Updated ${updatedLabel}`;
         el.setAttribute(
           "aria-label",
-          `${CITIES[city].label} weather: ${conditionLabel}${tempText}${feelsLikeSpoken}, updated ${updatedLabel}`
+          `${CITIES[city].label} weather: ${conditionLabel}${tempText}${feelsLikeSpoken}${uvSpoken}, updated ${updatedLabel}`
         );
       }
 
@@ -1514,7 +1578,10 @@
 
       async function fetchWeather(city) {
         const { lat, lon } = CITIES[city];
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,is_day`;
+        const url =
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+          `&current=temperature_2m,apparent_temperature,weather_code,is_day,uv_index` +
+          `&daily=snowfall_sum,wind_gusts_10m_max&timezone=auto&forecast_days=1`;
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 6000);
         try {
@@ -1530,7 +1597,15 @@
             : null;
           const weatherCode = data.current.weather_code;
           const isDay = data.current.is_day !== 0;
-          cache[city] = { tempC, feelsLikeC, weatherCode, isDay, updatedAt: Date.now() };
+          const uvIndex = typeof data.current.uv_index === "number" ? data.current.uv_index : null;
+          const daily = data.daily || {};
+          const snowfallSum = Array.isArray(daily.snowfall_sum) && typeof daily.snowfall_sum[0] === "number"
+            ? daily.snowfall_sum[0]
+            : null;
+          const windGustsMax = Array.isArray(daily.wind_gusts_10m_max) && typeof daily.wind_gusts_10m_max[0] === "number"
+            ? daily.wind_gusts_10m_max[0]
+            : null;
+          cache[city] = { tempC, feelsLikeC, weatherCode, isDay, uvIndex, snowfallSum, windGustsMax, updatedAt: Date.now() };
           saveCache(cache);
         } catch (e) {
           // Keep the last successful reading if we have one; only mark
@@ -1541,6 +1616,7 @@
         } finally {
           clearTimeout(timeout);
           renderWeather(city);
+          renderSevere(city);
         }
       }
 
@@ -1557,13 +1633,125 @@
         });
       }
 
-      renderAll();
-      refreshWeatherIfNeeded();
+      // ---- Severe weather badges ----
+      // Miami: /api/environment already pulls active NWS point-alerts for
+      // Miami and classifies hurricane/tropical-storm/heat (see
+      // api/environment.js — it's the same endpoint the background canvas
+      // uses to decide when to draw storm rain). Reusing it here means no
+      // second server-side integration, and "alert covers this exact point"
+      // is a better signal than "a storm exists somewhere in the Atlantic".
+      // Heat is deliberately excluded from the badge — "feels like" already
+      // surfaces that above, so a second badge would just repeat it.
+      // Helsinki has no equivalent named-storm system worth integrating, so
+      // its badge is instead a simple threshold read off the same
+      // Open-Meteo response already fetched above: meaningful snow
+      // accumulation or high wind gusts forecast for today.
+      const SEVERE_REFRESH_MS = 15 * 60 * 1000;
+      const ENV_ALERT_CACHE_KEY = "envAlertCache";
+      const SNOW_WATCH_CM = 5;
+      const WIND_WATCH_KMH = 60;
+      const severeEls = {
+        miami: document.getElementById("severe-miami"),
+        helsinki: document.getElementById("severe-helsinki"),
+      };
 
-      let weatherInterval = setInterval(refreshWeatherIfNeeded, WEATHER_REFRESH_MS);
+      function loadEnvAlertCache() {
+        try {
+          return JSON.parse(localStorage.getItem(ENV_ALERT_CACHE_KEY)) || null;
+        } catch (e) {
+          return null;
+        }
+      }
+      function saveEnvAlertCache(data) {
+        try {
+          localStorage.setItem(ENV_ALERT_CACHE_KEY, JSON.stringify(data));
+        } catch (e) {
+          /* storage unavailable — degrade silently */
+        }
+      }
+      let envAlertCache = loadEnvAlertCache();
+
+      function renderMiamiSevere() {
+        const el = severeEls.miami;
+        const alert = envAlertCache && envAlertCache.alert;
+        if (!alert || !/hurricane|tropical-storm/.test(alert.type)) {
+          el.innerHTML = "";
+          el.removeAttribute("aria-label");
+          return;
+        }
+        const shortLabel = alert.type === "hurricane" ? "Hurricane alert" : "Tropical storm alert";
+        el.innerHTML = `🌀 <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener" title="${alert.headline.replace(
+          /"/g,
+          "&quot;"
+        )}">${shortLabel}</a>`;
+        el.setAttribute("aria-label", `${alert.headline}. Opens the National Hurricane Center.`);
+      }
+
+      function renderHelsinkiSevere() {
+        const el = severeEls.helsinki;
+        const entry = cache.helsinki;
+        if (!entry) {
+          el.innerHTML = "";
+          return;
+        }
+        const snow = entry.snowfallSum;
+        const gusts = entry.windGustsMax;
+        if (snow != null && snow >= SNOW_WATCH_CM) {
+          el.innerHTML = `❄️ Snow: ${Math.round(snow)}cm expected`;
+          el.setAttribute("aria-label", `Snow watch: about ${Math.round(snow)} centimeters expected today.`);
+        } else if (gusts != null && gusts >= WIND_WATCH_KMH) {
+          el.innerHTML = `💨 Wind: ${Math.round(gusts)} km/h gusts`;
+          el.setAttribute("aria-label", `Wind watch: gusts up to ${Math.round(gusts)} kilometers per hour expected today.`);
+        } else {
+          el.innerHTML = "";
+          el.removeAttribute("aria-label");
+        }
+      }
+
+      function renderSevere(city) {
+        if (city === "miami") renderMiamiSevere();
+        else if (city === "helsinki") renderHelsinkiSevere();
+      }
+
+      async function fetchMiamiAlert() {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 6000);
+        try {
+          const res = await fetch("/api/environment?city=miami", { signal: controller.signal });
+          if (!res.ok) throw new Error("Environment request failed");
+          const data = await res.json();
+          envAlertCache = { alert: data.severeWeatherAlert || null, updatedAt: Date.now() };
+          saveEnvAlertCache(envAlertCache);
+        } catch (e) {
+          // Leave the last known state in place — a transient failure
+          // shouldn't flip an active-alert badge off.
+        } finally {
+          clearTimeout(timeout);
+          renderMiamiSevere();
+        }
+      }
+
+      function refreshSevereIfNeeded() {
+        if (document.hidden) return;
+        if (!envAlertCache || Date.now() - envAlertCache.updatedAt > SEVERE_REFRESH_MS) fetchMiamiAlert();
+      }
+
+      renderAll();
+      renderSevere("miami");
+      renderSevere("helsinki");
+      refreshWeatherIfNeeded();
+      refreshSevereIfNeeded();
+
+      let weatherInterval = setInterval(() => {
+        refreshWeatherIfNeeded();
+        refreshSevereIfNeeded();
+      }, WEATHER_REFRESH_MS);
 
       document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) refreshWeatherIfNeeded();
+        if (!document.hidden) {
+          refreshWeatherIfNeeded();
+          refreshSevereIfNeeded();
+        }
       });
 
     })();
