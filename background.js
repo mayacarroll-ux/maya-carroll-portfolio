@@ -551,16 +551,6 @@
       ctx.fillStyle = base;
       ctx.fillRect(0, top, width, bandH);
 
-      // A soft reflected column of the horizon glow, gently swaying.
-      const reflX = width / 2 + Math.sin(t / 3200) * width * 0.05;
-      const refl = ctx.createLinearGradient(0, top, 0, height);
-      refl.addColorStop(0, "rgba(255,150,120,0.14)");
-      refl.addColorStop(1, "rgba(255,150,120,0)");
-      ctx.globalAlpha = 0.7 + 0.2 * Math.sin(t / 1600);
-      ctx.fillStyle = refl;
-      ctx.fillRect(reflX - width * 0.05, top, width * 0.1, bandH);
-      ctx.globalAlpha = 1;
-
       // Each swell combines two sine components at different, deliberately
       // non-multiple frequencies/speeds (the second drifting the opposite
       // direction) so crests don't repeat identically down the line —
