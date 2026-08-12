@@ -18,26 +18,32 @@
   </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maya Carroll — Product Designer in South Florida</title>
+  <title>Maya Carroll | AI Product Design Leader</title>
   <meta
     name="description"
-    content="Remote product designer based in South Florida, leading product design across enterprise, startup, and civic tech."
+    content="Maya Carroll designs clear, trustworthy AI products and complex enterprise experiences."
   />
   <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Maya Carroll — Product Designer in South Florida" />
+  <meta property="og:title" content="Maya Carroll | AI Product Design Leader" />
   <meta
     property="og:description"
-    content="I turn complex ideas and workflows into clear, useful digital products. Based in South Florida and working remotely."
+    content="Maya Carroll designs clear, trustworthy AI products and complex enterprise experiences."
   />
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Allura&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=Inter+Tight:wght@600;650;700&display=swap"
     rel="stylesheet"
   />
   <style>
+    /* ---------- Typography tokens ---------- */
+    :root {
+      --font-display: "Inter Tight", sans-serif;
+      --font-body: "Inter", sans-serif;
+    }
+
     /* ---------- Theme tokens ---------- */
     :root[data-theme="dark"] {
       /* Miami at Night */
@@ -110,11 +116,13 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--font-body);
+      font-weight: 450;
+      letter-spacing: -0.01em;
       background: var(--color-bg);
       color: var(--color-text);
       transition: background 0.25s ease, color 0.25s ease;
-      line-height: 1.55;
+      line-height: 1.5;
     }
     /* Pins the footer to the bottom of the viewport on short pages (no gap
        of bare background below it) while still flowing normally — pushed
@@ -219,11 +227,15 @@
     h2,
     h3 {
       margin: 0;
+      font-family: var(--font-display);
       font-weight: 600;
       line-height: 1.15;
     }
     h1 {
       font-size: clamp(2rem, 4.2vw, 3rem);
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: -0.045em;
     }
     h2 {
       font-size: clamp(1.5rem, 3vw, 2.1rem);
@@ -256,6 +268,7 @@
       gap: 0.5rem;
       padding: 0.75rem 1.4rem;
       border-radius: 8px;
+      font-family: var(--font-display);
       font-size: 0.95rem;
       font-weight: 600;
       text-decoration: none;
@@ -299,31 +312,6 @@
       color: var(--color-text-secondary);
       font-style: italic;
       opacity: 0.75;
-    }
-
-    .meta-line {
-      font-size: 0.8rem;
-      letter-spacing: 0.02em;
-      color: var(--color-text-secondary);
-      margin-top: 1.5rem;
-    }
-    /* A second meta-line directly under the first (e.g. credentials under
-       location) reads as one related group — tighten the gap between them
-       rather than repeating the full 1.5rem separation from the buttons. */
-    .meta-line + .meta-line {
-      margin-top: 0.35rem;
-    }
-    /* Marks the current home base in the hero's meta line — just the pin
-       plus bold weight, deliberately no color/underline: this text isn't
-       clickable, and both of those read as "link" even when nothing here
-       is one. Lives on the hero_meta_location span; update that copy (plus
-       this markup, if it ever needs to move) when home base changes. */
-    .current-pin {
-      font-size: 0.85em;
-      margin-right: 0.15em;
-    }
-    .current-location {
-      font-weight: 700;
     }
 
     /* ---------- Surfaces (frosted cards over the animated background) ---------- */
@@ -469,11 +457,12 @@
       flex-shrink: 0;
     }
     #site-title {
-      font-family: "Allura", cursive;
-      font-weight: 400;
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.02em;
       color: var(--color-text);
       line-height: 1;
-      font-size: 2.1rem;
+      font-size: 1.35rem;
       white-space: nowrap;
     }
     .site-title-short {
@@ -481,7 +470,7 @@
     }
     @media (max-width: 599px) {
       #site-title {
-        font-size: 1.6rem;
+        font-size: 1.15rem;
       }
       .site-title-full {
         display: none;
@@ -489,12 +478,6 @@
       .site-title-short {
         display: inline;
       }
-      /* The hero (credentials meta-line) and footer (links row) have both
-         grown since this rule was first added — on short mobile viewports
-         that pushes hero content low enough to land behind the sticky
-         footer until scrolled. Trimming rhythm here + a modest headline
-         reduction (mobile only) meaningfully cuts how far a visitor has to
-         scroll before everything clears the footer. */
       h1 {
         font-size: 1.7rem;
       }
@@ -509,9 +492,11 @@
       .btn-row {
         margin-top: 1.1rem;
       }
-      .meta-line {
-        margin-top: 1rem;
-        font-size: 0.74rem;
+      section {
+        padding: 1rem 0;
+      }
+      .section-head {
+        margin-bottom: 1rem;
       }
       footer {
         padding: 0.6rem 1.5rem 0.75rem;
@@ -529,6 +514,8 @@
     #primary-nav a {
       color: var(--color-text-secondary);
       text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 600;
       padding: 0.3rem 0.1rem;
     }
     #primary-nav a:hover,
@@ -550,6 +537,8 @@
     #account-nav a {
       color: var(--color-text-secondary);
       text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 600;
       opacity: 0.75;
       padding: 0.3rem 0.1rem;
     }
@@ -566,7 +555,8 @@
       gap: 0.5rem;
     }
     button {
-      font-family: inherit;
+      font-family: var(--font-display);
+      font-weight: 600;
     }
     #theme-toggle,
     #motion-toggle,
@@ -790,6 +780,26 @@
     }
     .city-status time {
       font-variant-numeric: tabular-nums;
+    }
+    /* Currency comparison sits alongside the two city blocks in the same
+       row — same quiet treatment as the weather readings, since it's the
+       same kind of "current real-world value" data. */
+    #currency-status {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+    #currency-status .currency-icon {
+      font-size: 0.95em;
+    }
+    #currency-rate {
+      font-variant-numeric: tabular-nums;
+      color: var(--color-accent-2-text, var(--color-text-secondary));
+    }
+    :root[data-theme="dark"] #currency-rate {
+      color: var(--color-accent-2);
+      text-shadow: var(--status-glow);
     }
     .city-status .weather {
       display: inline-block;
@@ -1175,24 +1185,41 @@
     <section id="hero">
       <div class="container">
         <div id="hero-copy">
-          <h1 data-i18n="hero_h1">Product design leadership across enterprise, startup, and civic tech.</h1>
+          <h1 data-i18n="hero_h1">Designing clear, trustworthy AI products.</h1>
           <p data-i18n="hero_p">
-            I turn complex ideas and workflows into clear, useful digital products for users across the United
-            States and international markets.
+            I'm Maya Carroll, a product design leader specializing in AI and complex systems.
           </p>
           <div class="btn-row">
             <a class="btn btn-primary" href="#work" data-i18n="cta_view_work">View my work</a>
-            <a class="btn btn-secondary" href="mailto:hiring@mayacarroll.com" data-i18n="cta_start_conversation">Start a conversation</a>
+            <!-- TODO: replace with a real scheduling link (e.g. Calendly/Cal.com) — no
+                 booking service is wired up yet, so this falls back to email. -->
+            <a class="btn btn-secondary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="cta_book_call">Book a call</a>
           </div>
-          <p class="meta-line">
-            <span data-i18n="hero_meta_prefix">Based in </span><span
-              class="current-location"
-              ><span class="current-pin" aria-hidden="true">📍</span><span data-i18n="hero_meta_location">South Florida</span></span
-            ><span data-i18n="hero_meta_suffix"> &middot; Working remotely &middot; US citizen</span>
-          </p>
-          <p class="meta-line" data-i18n="hero_credentials">
-            CSPO &middot; Public Trust security clearance &middot; Advanced degrees in IT &amp; Design
-          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="work_heading">Selected work</h2>
+        </div>
+        <div class="card-grid">
+          <!-- TODO: replace with real project cards (title, summary, case-study
+               link) — no portfolio content exists in this repo yet. -->
+          <p class="pending-link" data-i18n="work_placeholder">Project case studies are being added here.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="contact_heading">Let's design what's next.</h2>
+          <p data-i18n="contact_availability">Available for AI product design leadership opportunities.</p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="cta_book_call">Book a call</a>
         </div>
       </div>
     </section>
@@ -1215,6 +1242,10 @@
         <span class="sep" aria-hidden="true">&middot;</span>
         <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
         <span id="severe-helsinki" class="severe-badge" aria-live="polite"></span>
+      </div>
+      <div id="currency-status" aria-live="polite">
+        <span class="currency-icon" aria-hidden="true">💱</span>
+        <span id="currency-rate">&hellip;</span>
       </div>
     </div>
     <p>
@@ -1244,19 +1275,20 @@
         nav_dashboard: "Dashboard",
         nav_signout: "Sign out",
         cta_view_work: "View my work",
-        cta_start_conversation: "Start a conversation",
-        hero_h1: "Product design leadership across enterprise, startup, and civic tech.",
-        hero_p: "I turn complex ideas and workflows into clear, useful digital products for users across the United States and international markets.",
-        hero_meta_prefix: "Based in ",
-        hero_meta_location: "South Florida",
-        hero_meta_suffix: " · Working remotely · US citizen",
-        hero_credentials: "CSPO · Public Trust security clearance · Advanced degrees in IT & Design",
+        cta_book_call: "Book a call",
+        hero_h1: "Designing clear, trustworthy AI products.",
+        hero_p: "I'm Maya Carroll, a product design leader specializing in AI and complex systems.",
+        work_heading: "Selected work",
+        work_placeholder: "Project case studies are being added here.",
+        contact_heading: "Let's design what's next.",
+        contact_availability: "Available for AI product design leadership opportunities.",
         footer_p1: "From Miami to Helsinki—designing what's next.",
         weather_loading: "loading",
         weather_unavailable: "Weather unavailable",
         weather_feels: "feels",
         weather_feels_like: "feels like",
         weather_updated: "Updated",
+        currency_aria: "Currently 1 US dollar equals {rate} euros.",
         condition_clear: "Clear",
         condition_partlyCloudy: "Partly cloudy",
         condition_cloudy: "Cloudy",
@@ -1295,19 +1327,20 @@
         nav_dashboard: "Panel",
         nav_signout: "Cerrar sesión",
         cta_view_work: "Ver mi trabajo",
-        cta_start_conversation: "Iniciar una conversación",
-        hero_h1: "Liderazgo en diseño de producto en el ámbito empresarial, startups y tecnología cívica.",
-        hero_p: "Convierto ideas y flujos de trabajo complejos en productos digitales claros y útiles para usuarios en Estados Unidos y mercados internacionales.",
-        hero_meta_prefix: "Radicada en el ",
-        hero_meta_location: "sur de Florida",
-        hero_meta_suffix: " · Trabajo remoto · Ciudadana estadounidense",
-        hero_credentials: "CSPO · Autorización de seguridad Public Trust · Títulos de posgrado en TI y Diseño",
+        cta_book_call: "Reservar una llamada",
+        hero_h1: "Diseñando productos de IA claros y confiables.",
+        hero_p: "Soy Maya Carroll, líder de diseño de producto especializada en IA y sistemas complejos.",
+        work_heading: "Trabajo seleccionado",
+        work_placeholder: "Los estudios de caso de proyectos se están agregando aquí.",
+        contact_heading: "Diseñemos lo que sigue.",
+        contact_availability: "Disponible para oportunidades de liderazgo en diseño de producto de IA.",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
         weather_loading: "cargando",
         weather_unavailable: "Clima no disponible",
         weather_feels: "sensación",
         weather_feels_like: "sensación térmica de",
         weather_updated: "Actualizado",
+        currency_aria: "Actualmente 1 dólar estadounidense equivale a {rate} euros.",
         condition_clear: "Despejado",
         condition_partlyCloudy: "Parcialmente nublado",
         condition_cloudy: "Nublado",
@@ -1346,19 +1379,20 @@
         nav_dashboard: "Kojelauta",
         nav_signout: "Kirjaudu ulos",
         cta_view_work: "Katso työni",
-        cta_start_conversation: "Aloita keskustelu",
-        hero_h1: "Tuotesuunnittelun johtajuutta yritysmaailmassa, startupeissa ja julkishallinnon teknologiassa.",
-        hero_p: "Muutan monimutkaiset ideat ja työnkulut selkeiksi, hyödyllisiksi digitaalisiksi tuotteiksi käyttäjille Yhdysvalloissa ja kansainvälisillä markkinoilla.",
-        hero_meta_prefix: "Asuu ",
-        hero_meta_location: "Etelä-Floridassa",
-        hero_meta_suffix: " · Etätyö · Yhdysvaltain kansalainen",
-        hero_credentials: "CSPO · Public Trust -turvallisuusselvitys · Ylemmät korkeakoulututkinnot IT-alalta ja muotoilusta",
+        cta_book_call: "Varaa puhelu",
+        hero_h1: "Suunnittelen selkeitä, luotettavia tekoälytuotteita.",
+        hero_p: "Olen Maya Carroll, tuotesuunnittelun johtaja, joka on erikoistunut tekoälyyn ja monimutkaisiin järjestelmiin.",
+        work_heading: "Valitut työt",
+        work_placeholder: "Projektien tapaustutkimuksia lisätään tähän pian.",
+        contact_heading: "Suunnitellaan yhdessä seuraava askel.",
+        contact_availability: "Saatavilla tekoälytuotteiden suunnittelun johtotehtäviin.",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
         weather_loading: "ladataan",
         weather_unavailable: "Sää ei saatavilla",
         weather_feels: "tuntuu",
         weather_feels_like: "tuntuu kuin",
         weather_updated: "Päivitetty",
+        currency_aria: "Tällä hetkellä 1 Yhdysvaltain dollari vastaa {rate} euroa.",
         condition_clear: "Selkeää",
         condition_partlyCloudy: "Osittain pilvistä",
         condition_cloudy: "Pilvistä",
@@ -1877,31 +1911,108 @@
         if (!envAlertCache || Date.now() - envAlertCache.updatedAt > SEVERE_REFRESH_MS) fetchMiamiAlert();
       }
 
+      // ---- Currency (USD -> EUR) ----
+      // Real exchange rate between the two cities' currencies. Frankfurter
+      // (ECB reference rates — keyless, CORS-enabled, no API key) updates
+      // once per business day, so an hourly refresh cadence is already
+      // generous relative to how often the underlying data actually moves.
+      const CURRENCY_REFRESH_MS = 60 * 60 * 1000;
+      const CURRENCY_CACHE_KEY = "currencyCache_v1";
+      const currencyRateEl = document.getElementById("currency-rate");
+      const currencyStatusEl = document.getElementById("currency-status");
+
+      function loadCurrencyCache() {
+        try {
+          return JSON.parse(localStorage.getItem(CURRENCY_CACHE_KEY)) || null;
+        } catch (e) {
+          return null;
+        }
+      }
+      function saveCurrencyCache(data) {
+        try {
+          localStorage.setItem(CURRENCY_CACHE_KEY, JSON.stringify(data));
+        } catch (e) {
+          /* storage unavailable — degrade silently */
+        }
+      }
+      let currencyCache = loadCurrencyCache();
+
+      function renderCurrency() {
+        if (!currencyRateEl) return;
+        if (!currencyCache || currencyCache.rate == null) {
+          currencyRateEl.textContent = "…";
+          currencyStatusEl.removeAttribute("title");
+          currencyStatusEl.removeAttribute("aria-label");
+          return;
+        }
+        const rate = currencyCache.rate;
+        currencyRateEl.textContent = `$1 = €${rate.toFixed(2)}`;
+        const updatedLabel = new Intl.DateTimeFormat(undefined, {
+          hour: "numeric",
+          minute: "2-digit",
+        }).format(new Date(currencyCache.updatedAt));
+        currencyStatusEl.title = `${translate("weather_updated")} ${updatedLabel}`;
+        currencyStatusEl.setAttribute("aria-label", translate("currency_aria", { rate: rate.toFixed(2) }));
+      }
+
+      async function fetchCurrency() {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 6000);
+        try {
+          const res = await fetch("https://api.frankfurter.dev/v1/latest?base=USD&symbols=EUR", {
+            signal: controller.signal,
+          });
+          if (!res.ok) throw new Error("Currency request failed");
+          const data = await res.json();
+          const rate = data && data.rates && typeof data.rates.EUR === "number" ? data.rates.EUR : null;
+          if (rate == null) throw new Error("Malformed currency response");
+          currencyCache = { rate, updatedAt: Date.now() };
+          saveCurrencyCache(currencyCache);
+        } catch (e) {
+          // Keep the last known rate — a transient failure shouldn't blank
+          // out a previously-successful reading.
+        } finally {
+          clearTimeout(timeout);
+          renderCurrency();
+        }
+      }
+
+      function refreshCurrencyIfNeeded() {
+        if (document.hidden) return;
+        if (!currencyCache || Date.now() - currencyCache.updatedAt > CURRENCY_REFRESH_MS) fetchCurrency();
+      }
+
       renderAll();
       renderSevere("miami");
       renderSevere("helsinki");
+      renderCurrency();
       refreshWeatherIfNeeded();
       refreshSevereIfNeeded();
+      refreshCurrencyIfNeeded();
 
       let weatherInterval = setInterval(() => {
         refreshWeatherIfNeeded();
         refreshSevereIfNeeded();
+        refreshCurrencyIfNeeded();
       }, WEATHER_REFRESH_MS);
 
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden) {
           refreshWeatherIfNeeded();
           refreshSevereIfNeeded();
+          refreshCurrencyIfNeeded();
         }
       });
 
       // Re-render from the already-cached data in the new language — no
       // need to re-fetch, since only the words (condition/UV-category/
-      // severe-weather labels) change, not the underlying numbers.
+      // severe-weather labels, currency aria-label) change, not the
+      // underlying numbers.
       document.addEventListener("app:languagechange", () => {
         renderAll();
         renderSevere("miami");
         renderSevere("helsinki");
+        renderCurrency();
       });
 
     })();

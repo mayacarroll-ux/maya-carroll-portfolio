@@ -21,10 +21,14 @@
   <title>Sign in — Maya Carroll</title>
   <meta name="robots" content="noindex, nofollow" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Allura&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=Inter+Tight:wght@600;650;700&display=swap"
     rel="stylesheet"
   />
   <style>
+    :root {
+      --font-display: "Inter Tight", sans-serif;
+      --font-body: "Inter", sans-serif;
+    }
     :root[data-theme="dark"] {
       --color-bg: #070b18;
       --color-surface: #10172a;
@@ -54,10 +58,12 @@
       display: grid;
       place-items: center;
       padding: 1.5rem;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--font-body);
+      font-weight: 450;
+      letter-spacing: -0.01em;
       background: var(--color-bg);
       color: var(--color-text);
-      line-height: 1.55;
+      line-height: 1.5;
     }
     :focus-visible {
       outline: 2px solid var(--focus-ring);
@@ -75,12 +81,16 @@
     }
     .brand {
       display: inline-block;
-      font-family: "Allura", cursive;
-      font-size: 1.8rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-size: 1.35rem;
       color: var(--color-text);
       text-decoration: none;
     }
     h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
       font-size: 1.15rem;
       margin: 1.25rem 0 0.4rem;
     }
