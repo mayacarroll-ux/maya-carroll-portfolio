@@ -6,6 +6,9 @@
 //
 // Sources (none require credentials — nothing here is a secret):
 //   - Open-Meteo: current weather (clouds, precip, wind, temp, humidity)
+//   - Open-Meteo Marine: real wave/swell height & period for Miami, so the
+//     ocean animation's motion actually reflects today's sea state instead
+//     of only reacting to wind speed.
 //   - api.weather.gov (NWS): active alerts, filtered to hurricane /
 //     tropical storm / heat — the only trigger for those visuals.
 //   - NOAA SWPC: planetary K-index, used with a latitude-based heuristic
@@ -148,6 +151,7 @@ module.exports = async (req, res) => {
   let weather = null;
   let alertProps = [];
   let kp = null;
+  let marine = null;
 
   try {
     weather = await fetchJson(
@@ -173,6 +177,16 @@ module.exports = async (req, res) => {
       alertProps = (alertData.features || []).map((f) => f.properties);
     } catch (e) {
       alertProps = [];
+    }
+
+    try {
+      const marineData = await fetchJson(
+        `https://marine-api.open-meteo.com/v1/marine?latitude=${meta.lat}&longitude=${meta.lon}` +
+          `&current=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,wind_wave_height,wind_wave_period&timezone=auto`
+      );
+      marine = marineData.current || null;
+    } catch (e) {
+      marine = null;
     }
   }
 
@@ -220,6 +234,21 @@ module.exports = async (req, res) => {
 
   const auroraProbability = city === "helsinki" ? auroraVisibility(kp, isDaylight, cloudCover) : null;
 
+  // Real sea state for the Miami ocean animation — swell (the slow, tall
+  // background rollers) and wind-wave (the fast, choppy foreground surface)
+  // genuinely move differently in real water, so keeping them separate
+  // lets the animation reflect that instead of one blended number.
+  const seaState =
+    marine && typeof marine.swell_wave_height === "number"
+      ? {
+          swellHeight: marine.swell_wave_height,
+          swellPeriod: marine.swell_wave_period,
+          windWaveHeight: marine.wind_wave_height,
+          windWavePeriod: marine.wind_wave_period,
+          waveDirection: marine.wave_direction,
+        }
+      : null;
+
   const state = {
     location: city,
     observedAt: weather.current.time || null,
@@ -245,6 +274,7 @@ module.exports = async (req, res) => {
     windDirection: weather.current.wind_direction_10m,
     severeWeatherAlert: severeAlert,
     auroraProbability,
+    seaState,
     dataFreshness: "live",
   };
 

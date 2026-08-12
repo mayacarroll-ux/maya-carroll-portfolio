@@ -9,10 +9,17 @@
 (function () {
   const CITIES = ["miami", "helsinki"];
   const REFRESH_MS = 12 * 60 * 1000; // matches the API's own cache window
-  const CACHE_KEY = "envCache";
+  // Bump this suffix whenever the cached EnvironmentState shape changes
+  // (new fields, etc.) — otherwise a returning visitor's stale-but-not-yet-
+  // expired cache silently hides new features for up to REFRESH_MS.
+  const CACHE_KEY = "envCache_v2";
 
   function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
   }
 
   const PAUSE_KEY = "animationsPaused";
@@ -540,7 +547,28 @@
       const bandH = height * 0.16;
       const top = height - footerReserve - bandH;
       const windSpeed = (envState && envState.windSpeed) || 10;
-      const activity = 1 + Math.min(windSpeed / 40, 0.7);
+      const sea = envState && envState.seaState;
+
+      // Real sea state (Open-Meteo Marine, Miami only — see
+      // api/environment.js) drives the two back layers (swell: the slow,
+      // tall background roll) and the front layer (wind-chop: fast, small
+      // surface texture) independently, since that's how they actually
+      // behave in real water. 0.4m/4.5s and 0.15m/3s are typical calm-day
+      // references for this coast; real readings scale the animation
+      // relative to that baseline, clamped so a rough-weather day nudges
+      // things rather than turning the ambient background chaotic.
+      const swellHeightM = sea && typeof sea.swellHeight === "number" ? sea.swellHeight : null;
+      const swellPeriodS = sea && sea.swellPeriod ? sea.swellPeriod : null;
+      const windWaveHeightM = sea && sea.windWaveHeight ? sea.windWaveHeight : null;
+      const windWavePeriodS = sea && sea.windWavePeriod ? sea.windWavePeriod : null;
+
+      const swellScale = swellHeightM != null ? clamp(swellHeightM / 0.4, 0.6, 2.2) : 1;
+      const swellSpeedScale = swellPeriodS ? clamp(4.5 / swellPeriodS, 0.7, 1.4) : 1;
+      const chopScale =
+        windWaveHeightM != null && windWaveHeightM > 0.02
+          ? clamp(windWaveHeightM / 0.15, 0.6, 2.2)
+          : 1 + Math.min(windSpeed / 40, 0.7); // no usable wind-wave reading — fall back to wind speed
+      const chopSpeedScale = windWavePeriodS ? clamp(3 / windWavePeriodS, 0.7, 1.5) : 1;
 
       ctx.save();
 
@@ -555,17 +583,27 @@
       // non-multiple frequencies/speeds (the second drifting the opposite
       // direction) so crests don't repeat identically down the line —
       // individual humps rise, flatten, and fall on their own rather than
-      // the whole layer reading as one uniform traveling wave.
+      // the whole layer reading as one uniform traveling wave. The back two
+      // layers are "swell", the front is "wind-chop" — each scaled off its
+      // own real measurement above.
       const swells = [
-        { amp: 5 * activity, freq: 0.012, speed: 0.0007, freq2: 0.027, speed2: -0.0013, phase2: 1.1, y: top + bandH * 0.18, color: "rgba(57,230,208,0.09)" },
-        { amp: 8 * activity, freq: 0.009, speed: 0.0011, freq2: 0.021, speed2: -0.0017, phase2: 2.4, y: top + bandH * 0.48, color: "rgba(57,230,208,0.14)" },
-        { amp: 6 * activity, freq: 0.018, speed: 0.0019, freq2: 0.035, speed2: -0.0009, phase2: 0.6, y: top + bandH * 0.8, color: "rgba(247,243,238,0.12)" },
+        { amp: 5 * swellScale, freq: 0.012, speed: 0.0007 * swellSpeedScale, freq2: 0.027, speed2: -0.0013 * swellSpeedScale, phase2: 1.1, y: top + bandH * 0.18, color: "rgba(57,230,208,0.09)" },
+        { amp: 8 * swellScale, freq: 0.009, speed: 0.0011 * swellSpeedScale, freq2: 0.021, speed2: -0.0017 * swellSpeedScale, phase2: 2.4, y: top + bandH * 0.48, color: "rgba(57,230,208,0.14)" },
+        { amp: 6 * chopScale, freq: 0.018, speed: 0.0019 * chopSpeedScale, freq2: 0.035, speed2: -0.0009 * chopSpeedScale, phase2: 0.6, y: top + bandH * 0.8, color: "rgba(247,243,238,0.12)" },
       ];
+
+      // A plain sine is symmetric; real ocean waves aren't — crests peak
+      // and troughs flatten as the wave steepens. Adding a small second
+      // harmonic at the *same* phase (a first-order Stokes-wave correction)
+      // gives each crest that asymmetric shape instead of a uniform bump.
+      function stokes(theta) {
+        return Math.sin(theta) + 0.3 * Math.sin(2 * theta);
+      }
 
       function waveY(x, s) {
         return (
           s.y +
-          Math.sin(x * s.freq + t * s.speed) * s.amp * 0.65 +
+          stokes(x * s.freq + t * s.speed) * s.amp * 0.65 +
           Math.sin(x * s.freq2 + t * s.speed2 + s.phase2) * s.amp * 0.35
         );
       }
