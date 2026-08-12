@@ -561,17 +561,30 @@
       ctx.fillRect(reflX - width * 0.05, top, width * 0.1, bandH);
       ctx.globalAlpha = 1;
 
+      // Each swell combines two sine components at different, deliberately
+      // non-multiple frequencies/speeds (the second drifting the opposite
+      // direction) so crests don't repeat identically down the line —
+      // individual humps rise, flatten, and fall on their own rather than
+      // the whole layer reading as one uniform traveling wave.
       const swells = [
-        { amp: 5 * activity, freq: 0.012, speed: 0.0007, y: top + bandH * 0.18, color: "rgba(57,230,208,0.09)" },
-        { amp: 8 * activity, freq: 0.009, speed: 0.0011, y: top + bandH * 0.48, color: "rgba(57,230,208,0.14)" },
-        { amp: 6 * activity, freq: 0.018, speed: 0.0019, y: top + bandH * 0.8, color: "rgba(247,243,238,0.12)" },
+        { amp: 5 * activity, freq: 0.012, speed: 0.0007, freq2: 0.027, speed2: -0.0013, phase2: 1.1, y: top + bandH * 0.18, color: "rgba(57,230,208,0.09)" },
+        { amp: 8 * activity, freq: 0.009, speed: 0.0011, freq2: 0.021, speed2: -0.0017, phase2: 2.4, y: top + bandH * 0.48, color: "rgba(57,230,208,0.14)" },
+        { amp: 6 * activity, freq: 0.018, speed: 0.0019, freq2: 0.035, speed2: -0.0009, phase2: 0.6, y: top + bandH * 0.8, color: "rgba(247,243,238,0.12)" },
       ];
+
+      function waveY(x, s) {
+        return (
+          s.y +
+          Math.sin(x * s.freq + t * s.speed) * s.amp * 0.65 +
+          Math.sin(x * s.freq2 + t * s.speed2 + s.phase2) * s.amp * 0.35
+        );
+      }
 
       swells.forEach((s) => {
         ctx.beginPath();
         ctx.moveTo(0, height);
         for (let x = 0; x <= width; x += 10) {
-          ctx.lineTo(x, s.y + Math.sin(x * s.freq + t * s.speed) * s.amp);
+          ctx.lineTo(x, waveY(x, s));
         }
         ctx.lineTo(width, height);
         ctx.closePath();
@@ -583,7 +596,7 @@
       const front = swells[swells.length - 1];
       ctx.beginPath();
       for (let x = 0; x <= width; x += 10) {
-        const y = front.y + Math.sin(x * front.freq + t * front.speed) * front.amp;
+        const y = waveY(x, front);
         if (x === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
