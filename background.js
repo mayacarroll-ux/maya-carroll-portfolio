@@ -537,40 +537,40 @@
     }
 
     function drawOcean(t) {
-      const bandH = height * 0.16;
+      const bandH = height * 0.2;
       const top = height - footerReserve - bandH;
       const windSpeed = (envState && envState.windSpeed) || 10;
       const activity = 1 + Math.min(windSpeed / 40, 0.7);
 
       ctx.save();
 
-      const base = ctx.createLinearGradient(0, top, 0, height);
-      base.addColorStop(0, "rgba(10,22,36,0)");
-      base.addColorStop(0.35, "rgba(9,26,38,0.75)");
-      base.addColorStop(1, "rgba(6,20,30,0.88)");
-      ctx.fillStyle = base;
-      ctx.fillRect(0, top, width, bandH);
-
-      // A soft reflected column of the horizon glow, gently swaying.
+      // A soft reflected column of the horizon glow, gently swaying —
+      // drawn first so the opaque wave layers below sit on top of it.
       const reflX = width / 2 + Math.sin(t / 3200) * width * 0.05;
       const refl = ctx.createLinearGradient(0, top, 0, height);
-      refl.addColorStop(0, "rgba(255,150,120,0.14)");
+      refl.addColorStop(0, "rgba(255,150,120,0.18)");
       refl.addColorStop(1, "rgba(255,150,120,0)");
       ctx.globalAlpha = 0.7 + 0.2 * Math.sin(t / 1600);
       ctx.fillStyle = refl;
       ctx.fillRect(reflX - width * 0.05, top, width * 0.1, bandH);
       ctx.globalAlpha = 1;
 
-      const swells = [
-        { amp: 5 * activity, freq: 0.012, speed: 0.0007, y: top + bandH * 0.18, color: "rgba(80,235,215,0.24)" },
-        { amp: 8 * activity, freq: 0.009, speed: 0.0011, y: top + bandH * 0.48, color: "rgba(80,235,215,0.34)" },
-        { amp: 6 * activity, freq: 0.018, speed: 0.0019, y: top + bandH * 0.8, color: "rgba(247,243,238,0.26)" },
+      // Three nearly-opaque, distinctly-colored layers (back to front) — a
+      // flat-illustration treatment rather than translucent alpha blending
+      // over a dark base. The earlier alpha-blended version was invisible
+      // at normal viewing scale (only showed up under a zoomed crop); solid
+      // color steps plus amplitude that's a real fraction of the band
+      // height read as water at a glance instead of needing a close look.
+      const layers = [
+        { amp: 12 * activity, freq: 0.011, speed: 0.0006, y: top + bandH * 0.14, color: "#0d3f52" },
+        { amp: 17 * activity, freq: 0.008, speed: 0.001, y: top + bandH * 0.44, color: "#12657a" },
+        { amp: 14 * activity, freq: 0.015, speed: 0.0016, y: top + bandH * 0.74, color: "#1fa2ab" },
       ];
 
-      swells.forEach((s) => {
+      layers.forEach((s) => {
         ctx.beginPath();
         ctx.moveTo(0, height);
-        for (let x = 0; x <= width; x += 10) {
+        for (let x = 0; x <= width; x += 8) {
           ctx.lineTo(x, s.y + Math.sin(x * s.freq + t * s.speed) * s.amp);
         }
         ctx.lineTo(width, height);
@@ -579,16 +579,16 @@
         ctx.fill();
       });
 
-      // Foam line riding the frontmost swell, catching a little glow.
-      const front = swells[swells.length - 1];
+      // Foam line riding the frontmost layer, catching a bright glow.
+      const front = layers[layers.length - 1];
       ctx.beginPath();
-      for (let x = 0; x <= width; x += 10) {
+      for (let x = 0; x <= width; x += 8) {
         const y = front.y + Math.sin(x * front.freq + t * front.speed) * front.amp;
         if (x === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = "rgba(247,243,238,0.45)";
-      ctx.shadowColor = "rgba(57,230,208,0.55)";
+      ctx.strokeStyle = "rgba(255,255,255,0.75)";
+      ctx.shadowColor = "rgba(120,240,225,0.8)";
       ctx.shadowBlur = 7;
       ctx.lineWidth = 1.25;
       ctx.stroke();

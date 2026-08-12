@@ -120,6 +120,14 @@
        the viewport. */
     #main-content {
       flex: 1 0 auto;
+      /* Needs *some* position (without this, "static") plus a z-index
+         above the fixed-position background canvases and #content-scrim
+         (both z-index: 0) — CSS stacking paints non-positioned elements
+         before positioned ones regardless of DOM order, so without this,
+         the opaque animated background paints over the hero content
+         entirely rather than the content sitting on top of it. */
+      position: relative;
+      z-index: 1;
     }
 
     /* ---------- Animated location backgrounds ---------- */
@@ -157,9 +165,15 @@
       pointer-events: none;
     }
 
-    /* Everything the visitor reads/clicks sits above the fixed backgrounds. */
+    /* Everything the visitor reads/clicks sits above the fixed backgrounds.
+       Only the header and footer bars get this stronger glass/blur/sticky
+       treatment — #main-content deliberately stays out of it. It already
+       has #content-scrim (above) for legibility, at a much lighter 0.58
+       opacity and no blur; adding this rule's 0.74-opacity + 14px-blur
+       backdrop on top of the whole <main> element painted an almost-opaque
+       blurred pane over the entire hero/content area, which is what was
+       hiding the animated ocean/treeline behind it. */
     #topbar,
-    main,
     footer {
       position: sticky;
       bottom: 0;
@@ -705,6 +719,19 @@
       text-transform: uppercase;
       font-size: 0.68rem;
       color: var(--color-text);
+    }
+    /* Marks whichever city is home base right now (see CURRENT_LOCATION in
+       the script below) — a pin plus an accent underline so it reads as
+       "you are here", not just decoration. */
+    .city-status .current-pin {
+      font-size: 0.85em;
+      margin-right: 0.15em;
+    }
+    .city-status.is-current .city-name {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 0.2em;
     }
     .city-status .sep {
       opacity: 0.45;
@@ -1452,6 +1479,10 @@
         miami: { label: "Miami", timeZone: "America/New_York", lat: 25.7617, lon: -80.1918 },
         helsinki: { label: "Helsinki", timeZone: "Europe/Helsinki", lat: 60.1699, lon: 24.9384 },
       };
+      // Which city is home base right now — flip this one line when that
+      // changes (e.g. the eventual move to Helsinki) rather than hunting
+      // through markup.
+      const CURRENT_LOCATION = "miami";
       const WEATHER_REFRESH_MS = 12 * 60 * 1000; // 10–15 min window
       // Bump this suffix whenever the cached entry shape changes (new
       // fields, etc.) — otherwise a returning visitor's stale-but-not-yet-
@@ -1467,6 +1498,27 @@
         miami: document.getElementById("weather-miami"),
         helsinki: document.getElementById("weather-helsinki"),
       };
+
+      // One-time DOM setup: mark whichever city is CURRENT_LOCATION with a
+      // pin so it's obviously "here" vs. just another tracked city — a
+      // static label like a pin isn't announced by itself, so a
+      // visually-hidden suffix carries the meaning for screen readers too.
+      (function markCurrentLocation() {
+        const el = document.querySelector(`.city-status[data-city="${CURRENT_LOCATION}"]`);
+        if (!el) return;
+        el.classList.add("is-current");
+        const nameEl = el.querySelector(".city-name");
+        if (!nameEl) return;
+        const pin = document.createElement("span");
+        pin.className = "current-pin";
+        pin.setAttribute("aria-hidden", "true");
+        pin.textContent = "📍";
+        nameEl.prepend(pin);
+        const srSuffix = document.createElement("span");
+        srSuffix.className = "visually-hidden";
+        srSuffix.textContent = " (current location)";
+        nameEl.appendChild(srSuffix);
+      })();
 
       const timeFormatters = {};
       function formatTime(city) {
