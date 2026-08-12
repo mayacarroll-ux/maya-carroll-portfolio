@@ -1033,90 +1033,6 @@
         </div>
       </div>
     </section>
-
-    <section id="work">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-i18n="work_h2">Work that shows how I think</h2>
-          <p data-i18n="work_intro">A selection of product-design projects, from problem to outcome.</p>
-        </div>
-        <div class="card-grid">
-          <article class="card surface work-card">
-            <h3 data-i18n="work_title_placeholder">[Project title]</h3>
-            <p data-i18n="work1_desc">A concise description of the product, the problem, and the value of your contribution.</p>
-            <div class="work-meta">
-              <div><strong data-i18n="label_role">Role:</strong> <span data-i18n="value_role">Product Designer</span></div>
-              <div><strong data-i18n="label_focus">Focus:</strong> <span data-i18n="work1_focus">[Research, UX strategy, interaction design, prototyping]</span></div>
-              <div><strong data-i18n="label_outcome">Outcome:</strong> <span data-i18n="value_outcome_placeholder">[Verified result or qualitative outcome]</span></div>
-            </div>
-            <span class="pending-link" data-i18n="cta_case_study">Case study coming soon</span>
-          </article>
-          <article class="card surface work-card">
-            <h3 data-i18n="work_title_placeholder">[Project title]</h3>
-            <p data-i18n="work2_desc">A concise description of what needed to change and how you helped the team move forward.</p>
-            <div class="work-meta">
-              <div><strong data-i18n="label_role">Role:</strong> <span data-i18n="value_role">Product Designer</span></div>
-              <div><strong data-i18n="label_focus">Focus:</strong> <span data-i18n="value_focus_placeholder">[Relevant responsibilities]</span></div>
-              <div><strong data-i18n="label_outcome">Outcome:</strong> <span data-i18n="value_outcome_placeholder">[Verified result or qualitative outcome]</span></div>
-            </div>
-            <span class="pending-link" data-i18n="cta_case_study">Case study coming soon</span>
-          </article>
-          <article class="card surface work-card">
-            <h3 data-i18n="work_title_placeholder">[Project title]</h3>
-            <p data-i18n="work3_desc">A concise description of the challenge and the people affected by it.</p>
-            <div class="work-meta">
-              <div><strong data-i18n="label_role">Role:</strong> <span data-i18n="value_role">Product Designer</span></div>
-              <div><strong data-i18n="label_focus">Focus:</strong> <span data-i18n="value_focus_placeholder">[Relevant responsibilities]</span></div>
-              <div><strong data-i18n="label_outcome">Outcome:</strong> <span data-i18n="value_outcome_placeholder">[Verified result or qualitative outcome]</span></div>
-            </div>
-            <span class="pending-link" data-i18n="cta_case_study">Case study coming soon</span>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="experience">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-i18n="exp_h2">20+ years in technology</h2>
-          <p data-i18n="exp_intro">
-            I've spent two decades turning ambiguous problems into products people can use. I work closely with
-            engineering and business teams to balance user needs with technical reality. Based in South Florida,
-            studying Finnish, with an eye toward the Nordic region.
-          </p>
-        </div>
-        <div class="card-grid">
-          <div class="card surface">
-            <h3 data-i18n="exp1_title">Clarity from complexity</h3>
-            <p data-i18n="exp1_desc">Turning complicated requirements into experiences people understand.</p>
-          </div>
-          <div class="card surface">
-            <h3 data-i18n="exp2_title">Cross-functional collaboration</h3>
-            <p data-i18n="exp2_desc">Working closely with engineering, product, and business teams.</p>
-          </div>
-          <div class="card surface">
-            <h3 data-i18n="exp3_title">End-to-end execution</h3>
-            <p data-i18n="exp3_desc">From discovery through interface design and implementation support.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-i18n="contact_h2">Let's make a complex product feel simpler.</h2>
-          <p data-i18n="contact_p">
-            If you're hiring a product designer or need experienced design support, I'd love to hear from you.
-          </p>
-        </div>
-        <div class="btn-row">
-          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com" data-i18n="cta_get_in_touch">Get in touch</a>
-          <a class="btn btn-secondary" href="#" data-i18n="cta_linkedin">Connect on LinkedIn</a>
-        </div>
-        <p class="meta-line" data-i18n="contact_meta">South Florida &middot; Remote collaboration &middot; United States</p>
-      </div>
-    </section>
   </main>
 
   <footer id="footer">
@@ -1400,7 +1316,11 @@
         helsinki: { label: "Helsinki", timeZone: "Europe/Helsinki", lat: 60.1699, lon: 24.9384 },
       };
       const WEATHER_REFRESH_MS = 12 * 60 * 1000; // 10–15 min window
-      const CACHE_KEY = "weatherCache";
+      // Bump this suffix whenever the cached entry shape changes (new
+      // fields, etc.) — otherwise a returning visitor's stale-but-not-yet-
+      // expired cache silently hides new features for up to
+      // WEATHER_REFRESH_MS after a deploy.
+      const CACHE_KEY = "weatherCache_v2";
 
       const timeEls = {
         miami: document.getElementById("time-miami"),
