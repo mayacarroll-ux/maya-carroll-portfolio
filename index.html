@@ -693,6 +693,11 @@
       align-items: baseline;
       gap: 0.4rem;
       white-space: nowrap;
+      /* Flex items default to min-width:auto, which blocks shrinking below
+         content size — without this, a long UV/severe-weather label pushes
+         the grid cell wider than its column and gets clipped at the
+         viewport edge on narrow screens instead of wrapping. */
+      min-width: 0;
     }
     .city-status .city-name {
       font-weight: 700;
@@ -711,6 +716,11 @@
       display: inline-block;
       min-width: 2.6em;
       color: var(--color-accent-2-text, var(--color-text-secondary));
+      /* Overrides the inherited nowrap from .city-status — now that a UV
+         badge can ride inside this span, the whole icon+temp+feels+UV
+         string needs to be able to wrap instead of forcing one long line
+         that overflows a narrow mobile grid cell. */
+      white-space: normal;
     }
     .city-status .weather-icon {
       font-size: 0.95em;
@@ -732,18 +742,45 @@
     .city-status .weather.is-unavailable {
       font-style: italic;
     }
-    /* UV reading rides inside the .weather span, quiet by default —
-       only gains the accent color at UV 6+ (High and above) so it doesn't
-       compete with the temperature at Low/Moderate levels. */
+    /* UV reading rides inside the .weather span. A color dot carries the
+       standard WHO risk-scale color (independent of theme accents, since
+       it's a fixed universal scale, not a themed decoration) plus the
+       category word spelled out — "UV 5" alone tells nobody whether that's
+       fine or not. High and up (uv-elevated) gets a bordered pill so it
+       doesn't read as just another quiet number next to "feels like". */
     .city-status .uv {
-      font-size: 0.85em;
-      opacity: 0.7;
-      font-weight: 400;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32em;
+      font-size: 0.82em;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      white-space: normal;
+    }
+    .city-status .uv-dot {
+      width: 0.55em;
+      height: 0.55em;
+      min-width: 0.55em;
+      border-radius: 50%;
+    }
+    .city-status .uv-moderate .uv-dot {
+      background: #e8c25a;
+    }
+    .city-status .uv-high .uv-dot {
+      background: #ff9d4d;
+    }
+    .city-status .uv-veryhigh .uv-dot {
+      background: #ff5c7a;
+    }
+    .city-status .uv-extreme .uv-dot {
+      background: #b073ff;
     }
     .city-status .uv.uv-elevated {
-      opacity: 1;
+      font-weight: 700;
       color: var(--color-accent);
-      font-weight: 600;
+      border: 1px solid var(--color-accent);
+      border-radius: 999px;
+      padding: 0.05rem 0.55rem 0.05rem 0.4rem;
     }
     /* Only rendered when there's something to say (active storm for Miami,
        snow/wind watch for Helsinki) — empty and takes no space otherwise. */
@@ -757,7 +794,7 @@
       border: 1px solid var(--color-accent);
       border-radius: 999px;
       padding: 0.1rem 0.55rem;
-      white-space: nowrap;
+      white-space: normal;
     }
     .severe-badge:empty {
       display: none;
@@ -1396,14 +1433,14 @@
         return `${Math.round(celsiusToFahrenheit(tempC))}°F`;
       }
 
-      // WHO UV index scale; "elevated" (High and up) is the only distinction
-      // the compact badge actually renders differently.
+      // WHO UV index scale. `level` drives the dot color; `elevated` (High
+      // and up) additionally switches the badge to the bordered pill style.
       function uvCategory(uv) {
-        if (uv >= 11) return { label: "Extreme", elevated: true };
-        if (uv >= 8) return { label: "Very High", elevated: true };
-        if (uv >= 6) return { label: "High", elevated: true };
-        if (uv >= 3) return { label: "Moderate", elevated: false };
-        return { label: "Low", elevated: false };
+        if (uv >= 11) return { label: "Extreme", level: "extreme", elevated: true };
+        if (uv >= 8) return { label: "Very High", level: "veryhigh", elevated: true };
+        if (uv >= 6) return { label: "High", level: "high", elevated: true };
+        if (uv >= 3) return { label: "Moderate", level: "moderate", elevated: false };
+        return { label: "Low", level: "low", elevated: false };
       }
 
       function loadCache() {
@@ -1474,8 +1511,8 @@
         let uvSpoken = "";
         if (entry.uvIndex != null && entry.uvIndex >= 3) {
           const rounded = Math.round(entry.uvIndex);
-          const { label, elevated } = uvCategory(entry.uvIndex);
-          uvHTML = ` <span class="uv${elevated ? " uv-elevated" : ""}">UV ${rounded}</span>`;
+          const { label, level, elevated } = uvCategory(entry.uvIndex);
+          uvHTML = ` <span class="uv uv-${level}${elevated ? " uv-elevated" : ""}"><span class="uv-dot" aria-hidden="true"></span>UV ${rounded} ${label}</span>`;
           uvSpoken = `, UV index ${rounded} (${label})`;
         }
         el.innerHTML = `${iconHTML}${tempText}${feelsLikeHTML}${uvHTML}`;
