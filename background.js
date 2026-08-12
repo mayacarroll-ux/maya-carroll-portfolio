@@ -527,9 +527,9 @@
       ctx.save();
 
       const base = ctx.createLinearGradient(0, top, 0, height);
-      base.addColorStop(0, "rgba(8,14,30,0)");
-      base.addColorStop(0.35, "rgba(7,12,26,0.85)");
-      base.addColorStop(1, "rgba(4,8,18,0.96)");
+      base.addColorStop(0, "rgba(10,22,36,0)");
+      base.addColorStop(0.35, "rgba(9,26,38,0.75)");
+      base.addColorStop(1, "rgba(6,20,30,0.88)");
       ctx.fillStyle = base;
       ctx.fillRect(0, top, width, bandH);
 
@@ -544,9 +544,9 @@
       ctx.globalAlpha = 1;
 
       const swells = [
-        { amp: 5 * activity, freq: 0.012, speed: 0.0007, y: top + bandH * 0.18, color: "rgba(57,230,208,0.09)" },
-        { amp: 8 * activity, freq: 0.009, speed: 0.0011, y: top + bandH * 0.48, color: "rgba(57,230,208,0.14)" },
-        { amp: 6 * activity, freq: 0.018, speed: 0.0019, y: top + bandH * 0.8, color: "rgba(247,243,238,0.12)" },
+        { amp: 5 * activity, freq: 0.012, speed: 0.0007, y: top + bandH * 0.18, color: "rgba(80,235,215,0.24)" },
+        { amp: 8 * activity, freq: 0.009, speed: 0.0011, y: top + bandH * 0.48, color: "rgba(80,235,215,0.34)" },
+        { amp: 6 * activity, freq: 0.018, speed: 0.0019, y: top + bandH * 0.8, color: "rgba(247,243,238,0.26)" },
       ];
 
       swells.forEach((s) => {

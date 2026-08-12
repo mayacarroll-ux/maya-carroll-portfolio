@@ -732,21 +732,6 @@
     .city-status .weather.is-unavailable {
       font-style: italic;
     }
-    #unit-toggle {
-      background: transparent;
-      color: var(--color-text-secondary);
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      font-size: 0.7rem;
-      padding: 0.2rem 0.45rem;
-      min-height: 28px;
-      cursor: pointer;
-      transition: border-color 0.18s ease, color 0.18s ease;
-    }
-    #unit-toggle:hover {
-      border-color: var(--color-accent);
-      color: var(--color-text);
-    }
     @media (max-width: 479px) {
       #city-strip {
         display: grid;
@@ -755,11 +740,6 @@
       }
       #city-strip .city-status {
         justify-content: center;
-      }
-      #unit-toggle {
-        grid-column: 1 / -1;
-        justify-self: center;
-        margin-top: 0.15rem;
       }
     }
 
@@ -1114,9 +1094,6 @@
         <span class="sep" aria-hidden="true">&middot;</span>
         <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
       </div>
-      <button type="button" id="unit-toggle" aria-label="Temperature units: default (Miami °F, Helsinki °C). Click to show both in Fahrenheit.">
-        °F&thinsp;/&thinsp;°C
-      </button>
     </div>
     <p>
       <span data-i18n="footer_p1">From Miami to Helsinki—designing what's next.</span>
@@ -1376,12 +1353,11 @@
     // ---------- Time + weather status bar ----------
     (function () {
       const CITIES = {
-        miami: { label: "Miami", timeZone: "America/New_York", lat: 25.7617, lon: -80.1918, defaultUnit: "F" },
-        helsinki: { label: "Helsinki", timeZone: "Europe/Helsinki", lat: 60.1699, lon: 24.9384, defaultUnit: "C" },
+        miami: { label: "Miami", timeZone: "America/New_York", lat: 25.7617, lon: -80.1918 },
+        helsinki: { label: "Helsinki", timeZone: "Europe/Helsinki", lat: 60.1699, lon: 24.9384 },
       };
       const WEATHER_REFRESH_MS = 12 * 60 * 1000; // 10–15 min window
       const CACHE_KEY = "weatherCache";
-      const UNIT_KEY = "tempUnitOverride"; // null | "F" | "C"
 
       const timeEls = {
         miami: document.getElementById("time-miami"),
@@ -1391,7 +1367,6 @@
         miami: document.getElementById("weather-miami"),
         helsinki: document.getElementById("weather-helsinki"),
       };
-      const unitToggle = document.getElementById("unit-toggle");
 
       const timeFormatters = {};
       function formatTime(city) {
@@ -1454,14 +1429,8 @@
         return { icon: isDay ? entry.day : entry.night, label: entry.label };
       }
 
-      function currentUnitFor(city) {
-        const override = localStorage.getItem(UNIT_KEY);
-        return override === "F" || override === "C" ? override : CITIES[city].defaultUnit;
-      }
-
-      function formatTemp(tempC, unit) {
-        const value = unit === "F" ? celsiusToFahrenheit(tempC) : tempC;
-        return `${Math.round(value)}°${unit}`;
+      function formatTemp(tempC) {
+        return `${Math.round(celsiusToFahrenheit(tempC))}°F`;
       }
 
       function loadCache() {
@@ -1484,7 +1453,6 @@
       function renderWeather(city) {
         const el = weatherEls[city];
         const entry = cache[city];
-        const unit = currentUnitFor(city);
 
         if (!entry) {
           el.textContent = "…";
@@ -1508,7 +1476,7 @@
         }
 
         const isStale = Date.now() - entry.updatedAt > WEATHER_REFRESH_MS * 2;
-        const tempText = formatTemp(entry.tempC, unit);
+        const tempText = formatTemp(entry.tempC);
         let iconHTML = "";
         let conditionLabel = "";
         if (entry.weatherCode != null) {
@@ -1522,7 +1490,7 @@
         let feelsLikeHTML = "";
         let feelsLikeSpoken = "";
         if (entry.feelsLikeC != null && Math.abs(entry.feelsLikeC - entry.tempC) >= 2) {
-          const feelsLikeText = formatTemp(entry.feelsLikeC, unit);
+          const feelsLikeText = formatTemp(entry.feelsLikeC);
           feelsLikeHTML = ` <span class="feels-like">feels ${feelsLikeText}</span>`;
           feelsLikeSpoken = `, feels like ${feelsLikeText}`;
         }
@@ -1598,32 +1566,6 @@
         if (!document.hidden) refreshWeatherIfNeeded();
       });
 
-      // ---- Unit toggle (cycles: default mixed → all °F → all °C) ----
-      function updateUnitToggleLabel() {
-        const override = localStorage.getItem(UNIT_KEY);
-        const next = override === null ? "F" : override === "F" ? "C" : null;
-        const nextLabel =
-          next === null
-            ? "default units (Miami °F, Helsinki °C)"
-            : `both cities in °${next}`;
-        unitToggle.setAttribute("aria-label", `Show ${nextLabel}. Currently: ${
-          override === null ? "default units" : `both in °${override}`
-        }.`);
-      }
-
-      unitToggle.addEventListener("click", () => {
-        const current = localStorage.getItem(UNIT_KEY);
-        const next = current === null ? "F" : current === "F" ? "C" : null;
-        if (next === null) {
-          localStorage.removeItem(UNIT_KEY);
-        } else {
-          localStorage.setItem(UNIT_KEY, next);
-        }
-        renderAll();
-        updateUnitToggleLabel();
-      });
-
-      updateUnitToggleLabel();
     })();
 
     // ---------- Header: responsive reparenting + mobile drawer ----------
