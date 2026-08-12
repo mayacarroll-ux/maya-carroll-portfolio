@@ -159,6 +159,13 @@
       lake: "rgba(150,200,210,0.35)",
       reindeer: "rgba(52,36,24,0.9)",
       reindeerAntler: "rgba(40,28,18,0.9)",
+      // A lighter warm tan for the chest/underbelly patch real reindeer
+      // have — a single flat brown silhouette otherwise reads as "generic
+      // four-legged animal" rather than specifically a reindeer.
+      reindeerChest: "rgba(120,96,70,0.85)",
+      // A small light catch-light dot reads far better as an eye against a
+      // dark silhouette than a same-tone darker fleck would.
+      reindeerEye: "rgba(230,214,190,0.9)",
     },
   };
 
@@ -634,15 +641,35 @@
         { x: -h * 0.28, phase: Math.PI },
       ].forEach(({ x: lx, phase }) => {
         const swing = Math.sin(strideCycle + phase) * h * 0.16;
+        const footX = lx + swing;
+        const footY = h * 0.42;
         ctx.beginPath();
         ctx.moveTo(lx, h * 0.05);
-        ctx.lineTo(lx + swing, h * 0.42);
+        ctx.lineTo(footX, footY);
         ctx.stroke();
+        // A small hoof tick at the base of each leg — a flat little
+        // perpendicular cap instead of the leg just ending in a line.
+        ctx.save();
+        ctx.lineWidth = Math.max(2.5, h * 0.05);
+        ctx.beginPath();
+        ctx.moveTo(footX - h * 0.035, footY);
+        ctx.lineTo(footX + h * 0.035, footY);
+        ctx.stroke();
+        ctx.restore();
       });
       // Body.
       ctx.beginPath();
       ctx.ellipse(0, -h * 0.1, h * 0.42, h * 0.2, 0, 0, Math.PI * 2);
       ctx.fill();
+      // Chest/underbelly patch: a lighter tan area on the lower-front of
+      // the body, the two-tone marking that reads as "reindeer" rather
+      // than a generic dark quadruped silhouette.
+      ctx.save();
+      ctx.fillStyle = PALETTES.helsinki.reindeerChest;
+      ctx.beginPath();
+      ctx.ellipse(h * 0.16, -h * 0.02, h * 0.16, h * 0.1, 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
       // Neck: a tapered quad connecting the body to the head, distinctly
       // thinner than the body so the two don't read as one blob.
       const neckBaseX = h * 0.32;
@@ -661,6 +688,15 @@
       ctx.beginPath();
       ctx.ellipse(headX, headY, headR, headR * 0.82, -0.4, 0, Math.PI * 2);
       ctx.fill();
+      // Eye: a small catch-light near the front of the head — without it
+      // the head reads as a featureless rounded end rather than a face.
+      ctx.save();
+      ctx.fillStyle = PALETTES.helsinki.reindeerEye;
+      ctx.beginPath();
+      ctx.arc(headX + headR * 0.35, headY - headR * 0.05, headR * 0.16, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      ctx.fillStyle = PALETTES.helsinki.reindeer;
       // Snout, facing the direction of travel.
       ctx.beginPath();
       ctx.moveTo(headX + headR * 0.6, headY - headR * 0.15);
@@ -703,6 +739,14 @@
         ctx.lineTo(beamMidX + dir * h * 0.13, beamMidY - h * 0.06);
         ctx.moveTo(antlerBaseX + dir * h * 0.03, antlerBaseY - h * 0.08);
         ctx.lineTo(antlerBaseX + dir * h * 0.15, antlerBaseY - h * 0.14);
+        ctx.stroke();
+        // Brow tine: a short spur pointing forward (toward the snout,
+        // regardless of which side this antler is drawn on) near the base
+        // of the beam — real reindeer racks branch low as well as at the
+        // top, which the beam-plus-two-tines shape above doesn't capture.
+        ctx.beginPath();
+        ctx.moveTo(antlerBaseX + dir * h * 0.02, antlerBaseY + h * 0.03);
+        ctx.lineTo(antlerBaseX + dir * h * 0.02 + h * 0.11, antlerBaseY + h * 0.1);
         ctx.stroke();
       });
       ctx.restore();
@@ -846,8 +890,7 @@
         const topY = groundY - h;
         ctx.fillStyle = PALETTES.miami.palm;
         ctx.strokeStyle = PALETTES.miami.palm;
-        // Trunk: a gently curved quad tapering toward the crown, with a
-        // couple of faint growth-ring notches for texture.
+        // Trunk: a gently curved quad tapering toward the crown.
         ctx.beginPath();
         ctx.moveTo(x - h * 0.05, groundY);
         ctx.quadraticCurveTo(x + lean * h * 0.55, groundY - h * 0.6, topX - h * 0.025, topY);
@@ -855,15 +898,37 @@
         ctx.quadraticCurveTo(x + lean * h * 0.55 + h * 0.06, groundY - h * 0.6, x + h * 0.035, groundY);
         ctx.closePath();
         ctx.fill();
+        // Bark rings: a handful of short notches climbing the trunk — real
+        // palm trunks are visibly segmented, not a smooth taper.
+        ctx.save();
+        ctx.strokeStyle = PALETTES.miami.palmRim;
+        ctx.lineWidth = Math.max(1, h * 0.012);
+        for (let r = 1; r <= 5; r++) {
+          const ringFrac = r / 6;
+          const ringY = groundY - h * ringFrac * 0.85;
+          const ringX = x + lean * h * ringFrac * 0.75;
+          const ringW = h * (0.055 - ringFrac * 0.015);
+          ctx.beginPath();
+          ctx.moveTo(ringX - ringW, ringY + h * 0.015);
+          ctx.quadraticCurveTo(ringX, ringY - h * 0.01, ringX + ringW, ringY + h * 0.015);
+          ctx.stroke();
+        }
+        ctx.restore();
         // Crown: a fuller fan of drooping fronds radiating from the top of
         // the trunk — more blades, wider spread, and a thicker base taper so
-        // each frond reads as a distinct blade instead of a thin wisp.
+        // each frond reads as a distinct blade instead of a thin wisp. Each
+        // frond's droop/length is nudged by a deterministic (index-seeded,
+        // not random) offset so the crown reads as organic instead of a
+        // perfectly uniform fan — using Math.random() here would make it
+        // flicker into a new shape every frame instead of holding still.
         const frondCount = 8;
         for (let i = 0; i < frondCount; i++) {
+          const wobble = Math.sin(i * 2.7 + h) * 0.12;
           const angle = -Math.PI * 1.05 + (i / (frondCount - 1)) * Math.PI * 1.0;
-          const len = h * 0.62;
+          const len = h * (0.58 + wobble * 0.35);
+          const droop = 0.32 + wobble * 0.18;
           const endX = topX + Math.cos(angle) * len;
-          const endY = topY + Math.sin(angle) * len + len * 0.32; // droop
+          const endY = topY + Math.sin(angle) * len + len * droop;
           const midX = topX + Math.cos(angle) * len * 0.55;
           const midY = topY + Math.sin(angle) * len * 0.55 - len * 0.1;
           ctx.lineWidth = Math.max(3, h * 0.055);
@@ -882,6 +947,23 @@
           ctx.moveTo(topX, topY - h * 0.01);
           ctx.quadraticCurveTo(midX, midY - h * 0.02, endX, endY - h * 0.03);
           ctx.stroke();
+          ctx.restore();
+          // Leaflet ticks: a few short strokes off the frond's spine —
+          // palm fronds are pinnate (many small leaflets off a central
+          // rib), not a single smooth blade, and this is what actually
+          // reads as "leaf" rather than "wire" at a glance.
+          ctx.save();
+          ctx.lineWidth = Math.max(0.75, h * 0.01);
+          for (let s = 0.25; s <= 0.85; s += 0.2) {
+            const sx = topX + (midX - topX) * s + (endX - midX) * Math.max(0, s - 0.55) * 2.2;
+            const sy = topY + (midY - topY) * s + (endY - midY) * Math.max(0, s - 0.55) * 2.2;
+            const normalAngle = angle + Math.PI / 2;
+            const tickLen = h * 0.05 * (1 - s * 0.4);
+            ctx.beginPath();
+            ctx.moveTo(sx - Math.cos(normalAngle) * tickLen, sy - Math.sin(normalAngle) * tickLen);
+            ctx.lineTo(sx + Math.cos(normalAngle) * tickLen, sy + Math.sin(normalAngle) * tickLen);
+            ctx.stroke();
+          }
           ctx.restore();
         }
         // A small coconut cluster at the crown base — the detail that reads
@@ -954,18 +1036,56 @@
       ctx.closePath();
       ctx.fill();
       // Tail, tapering behind with a visible S-curve sway as it swims.
+      const tailMidY = Math.sin(t / 240) * bodyLen * 0.1;
+      const tailTipY = Math.sin(t / 240 + 1) * bodyLen * 0.04;
       ctx.beginPath();
       ctx.moveTo(-bodyLen * 0.54, -bodyLen * 0.02);
-      ctx.quadraticCurveTo(-bodyLen * 0.78, Math.sin(t / 240) * bodyLen * 0.1, -bodyLen * 0.98, Math.sin(t / 240 + 1) * bodyLen * 0.04);
+      ctx.quadraticCurveTo(-bodyLen * 0.78, tailMidY, -bodyLen * 0.98, tailTipY);
       ctx.quadraticCurveTo(-bodyLen * 0.78, bodyLen * 0.05, -bodyLen * 0.54, bodyLen * 0.06);
       ctx.closePath();
       ctx.fill();
+      // The dorsal ridge continues onto the tail as two smaller scutes,
+      // following the same sway — a real gator's tail crest doesn't stop
+      // where the body ends.
+      ctx.beginPath();
+      [0.62, 0.82].forEach((pos, i) => {
+        const rx = -bodyLen * pos;
+        const ry = (i === 0 ? tailMidY : tailTipY) * 0.6 - bodyLen * 0.03;
+        const rise = bodyLen * 0.06;
+        ctx.moveTo(rx - bodyLen * 0.035, ry);
+        ctx.lineTo(rx, ry - rise);
+        ctx.lineTo(rx + bodyLen * 0.035, ry);
+      });
+      ctx.closePath();
+      ctx.fill();
+      // A faint wake trailing the tail — two short ripple lines fading
+      // back from the body, the give-away of something moving through
+      // still water rather than a shape just sitting on top of it.
+      ctx.save();
+      ctx.strokeStyle = PALETTES.miami.alligator;
+      ctx.lineWidth = 1;
+      [0.85, 1.15].forEach((pos, i) => {
+        ctx.globalAlpha = 0.35 - i * 0.12;
+        const wy = Math.sin(t / 240 + i) * bodyLen * 0.05;
+        ctx.beginPath();
+        ctx.moveTo(-bodyLen * pos, wy - bodyLen * 0.06);
+        ctx.quadraticCurveTo(-bodyLen * (pos + 0.12), wy, -bodyLen * (pos + 0.24), wy - bodyLen * 0.06);
+        ctx.stroke();
+      });
+      ctx.restore();
       // Two small eye bumps just above the waterline, set back from the
       // snout tip the way a real gator's eyes sit near the top of the head.
       ctx.fillStyle = PALETTES.miami.alligatorEye;
       ctx.beginPath();
       ctx.arc(bodyLen * 0.42, -bodyLen * 0.09, bodyLen * 0.028, 0, Math.PI * 2);
       ctx.arc(bodyLen * 0.33, -bodyLen * 0.08, bodyLen * 0.028, 0, Math.PI * 2);
+      ctx.fill();
+      // Nostril bumps right at the snout tip — the other feature (besides
+      // the eyes) that stays visible above the waterline while swimming.
+      ctx.fillStyle = PALETTES.miami.alligatorRidge;
+      ctx.beginPath();
+      ctx.arc(bodyLen * 0.74, -bodyLen * 0.015, bodyLen * 0.014, 0, Math.PI * 2);
+      ctx.arc(bodyLen * 0.7, -bodyLen * 0.025, bodyLen * 0.014, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
