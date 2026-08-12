@@ -34,14 +34,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=Inter+Tight:wght@600;650;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
   <style>
     /* ---------- Typography tokens ---------- */
     :root {
-      --font-display: "Inter Tight", sans-serif;
-      --font-body: "Inter", sans-serif;
+      --font-primary: "Manrope", sans-serif;
     }
 
     /* ---------- Theme tokens ---------- */
@@ -116,13 +115,13 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      font-family: var(--font-body);
-      font-weight: 450;
+      font-family: var(--font-primary);
+      font-weight: 400;
       letter-spacing: -0.01em;
       background: var(--color-bg);
       color: var(--color-text);
       transition: background 0.25s ease, color 0.25s ease;
-      line-height: 1.5;
+      line-height: 1.55;
     }
     /* Pins the footer to the bottom of the viewport on short pages (no gap
        of bare background below it) while still flowing normally — pushed
@@ -227,15 +226,15 @@
     h2,
     h3 {
       margin: 0;
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 600;
       line-height: 1.15;
     }
     h1 {
       font-size: clamp(2rem, 4.2vw, 3rem);
       font-weight: 700;
-      line-height: 0.98;
-      letter-spacing: -0.045em;
+      line-height: 1.02;
+      letter-spacing: -0.04em;
     }
     h2 {
       font-size: clamp(1.5rem, 3vw, 2.1rem);
@@ -252,14 +251,6 @@
       padding: clamp(2.25rem, 5vw, 3.75rem) 0;
     }
 
-    .section-head {
-      max-width: 640px;
-      margin-bottom: clamp(2rem, 5vw, 3rem);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
     /* ---------- Buttons / CTAs ---------- */
     .btn {
       display: inline-flex;
@@ -268,9 +259,10 @@
       gap: 0.5rem;
       padding: 0.75rem 1.4rem;
       border-radius: 8px;
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: -0.015em;
       text-decoration: none;
       cursor: pointer;
       transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease, background 0.18s ease;
@@ -457,7 +449,7 @@
       flex-shrink: 0;
     }
     #site-title {
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--color-text);
@@ -495,9 +487,6 @@
       section {
         padding: 1rem 0;
       }
-      .section-head {
-        margin-bottom: 1rem;
-      }
       footer {
         padding: 0.6rem 1.5rem 0.75rem;
         gap: 0.2rem;
@@ -514,7 +503,7 @@
     #primary-nav a {
       color: var(--color-text-secondary);
       text-decoration: none;
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 600;
       padding: 0.3rem 0.1rem;
     }
@@ -537,7 +526,7 @@
     #account-nav a {
       color: var(--color-text-secondary);
       text-decoration: none;
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 600;
       opacity: 0.75;
       padding: 0.3rem 0.1rem;
@@ -555,7 +544,7 @@
       gap: 0.5rem;
     }
     button {
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 600;
     }
     #theme-toggle,
@@ -1044,6 +1033,7 @@
     footer {
       text-align: center;
       font-size: 0.85rem;
+      font-weight: 500;
       color: var(--color-text-secondary);
       padding: 0.85rem 1.5rem 1rem;
       display: flex;
@@ -1198,31 +1188,6 @@
         </div>
       </div>
     </section>
-
-    <section id="work">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-i18n="work_heading">Selected work</h2>
-        </div>
-        <div class="card-grid">
-          <!-- TODO: replace with real project cards (title, summary, case-study
-               link) — no portfolio content exists in this repo yet. -->
-          <p class="pending-link" data-i18n="work_placeholder">Project case studies are being added here.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-i18n="contact_heading">Let's design what's next.</h2>
-          <p data-i18n="contact_availability">Available for AI product design leadership opportunities.</p>
-        </div>
-        <div class="btn-row">
-          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="cta_book_call">Book a call</a>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer id="footer">
@@ -1278,17 +1243,13 @@
         cta_book_call: "Book a call",
         hero_h1: "Designing clear, trustworthy AI products.",
         hero_p: "I'm Maya Carroll, a product design leader specializing in AI and complex systems.",
-        work_heading: "Selected work",
-        work_placeholder: "Project case studies are being added here.",
-        contact_heading: "Let's design what's next.",
-        contact_availability: "Available for AI product design leadership opportunities.",
         footer_p1: "From Miami to Helsinki—designing what's next.",
         weather_loading: "loading",
         weather_unavailable: "Weather unavailable",
         weather_feels: "feels",
         weather_feels_like: "feels like",
         weather_updated: "Updated",
-        currency_aria: "Currently 1 US dollar equals {rate} euros.",
+        currency_aria: "1 US dollar equals {rate} euros; 1 euro equals {inverse} US dollars. {stronger} is currently the stronger currency.",
         condition_clear: "Clear",
         condition_partlyCloudy: "Partly cloudy",
         condition_cloudy: "Cloudy",
@@ -1330,17 +1291,13 @@
         cta_book_call: "Reservar una llamada",
         hero_h1: "Diseñando productos de IA claros y confiables.",
         hero_p: "Soy Maya Carroll, líder de diseño de producto especializada en IA y sistemas complejos.",
-        work_heading: "Trabajo seleccionado",
-        work_placeholder: "Los estudios de caso de proyectos se están agregando aquí.",
-        contact_heading: "Diseñemos lo que sigue.",
-        contact_availability: "Disponible para oportunidades de liderazgo en diseño de producto de IA.",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
         weather_loading: "cargando",
         weather_unavailable: "Clima no disponible",
         weather_feels: "sensación",
         weather_feels_like: "sensación térmica de",
         weather_updated: "Actualizado",
-        currency_aria: "Actualmente 1 dólar estadounidense equivale a {rate} euros.",
+        currency_aria: "1 dólar estadounidense equivale a {rate} euros; 1 euro equivale a {inverse} dólares estadounidenses. Actualmente {stronger} es la moneda más fuerte.",
         condition_clear: "Despejado",
         condition_partlyCloudy: "Parcialmente nublado",
         condition_cloudy: "Nublado",
@@ -1382,17 +1339,13 @@
         cta_book_call: "Varaa puhelu",
         hero_h1: "Suunnittelen selkeitä, luotettavia tekoälytuotteita.",
         hero_p: "Olen Maya Carroll, tuotesuunnittelun johtaja, joka on erikoistunut tekoälyyn ja monimutkaisiin järjestelmiin.",
-        work_heading: "Valitut työt",
-        work_placeholder: "Projektien tapaustutkimuksia lisätään tähän pian.",
-        contact_heading: "Suunnitellaan yhdessä seuraava askel.",
-        contact_availability: "Saatavilla tekoälytuotteiden suunnittelun johtotehtäviin.",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
         weather_loading: "ladataan",
         weather_unavailable: "Sää ei saatavilla",
         weather_feels: "tuntuu",
         weather_feels_like: "tuntuu kuin",
         weather_updated: "Päivitetty",
-        currency_aria: "Tällä hetkellä 1 Yhdysvaltain dollari vastaa {rate} euroa.",
+        currency_aria: "1 Yhdysvaltain dollari vastaa {rate} euroa; 1 euro vastaa {inverse} Yhdysvaltain dollaria. {stronger} on tällä hetkellä vahvempi valuutta.",
         condition_clear: "Selkeää",
         condition_partlyCloudy: "Osittain pilvistä",
         condition_cloudy: "Pilvistä",
@@ -1945,14 +1898,29 @@
           currencyStatusEl.removeAttribute("aria-label");
           return;
         }
+        // Showing only "$1 = €0.87" makes a reader do the mental math to
+        // tell which currency is actually stronger. Showing both
+        // directions side by side — and bolding whichever side buys more
+        // of the other — makes it visible at a glance instead.
         const rate = currencyCache.rate;
-        currencyRateEl.textContent = `$1 = €${rate.toFixed(2)}`;
+        const inverse = 1 / rate;
+        const usdStronger = rate > 1;
+        currencyRateEl.innerHTML = usdStronger
+          ? `<strong>$1</strong> = €${rate.toFixed(2)} &middot; €1 = <strong>$${inverse.toFixed(2)}</strong>`
+          : `$1 = <strong>€${rate.toFixed(2)}</strong> &middot; <strong>€1</strong> = $${inverse.toFixed(2)}`;
         const updatedLabel = new Intl.DateTimeFormat(undefined, {
           hour: "numeric",
           minute: "2-digit",
         }).format(new Date(currencyCache.updatedAt));
         currencyStatusEl.title = `${translate("weather_updated")} ${updatedLabel}`;
-        currencyStatusEl.setAttribute("aria-label", translate("currency_aria", { rate: rate.toFixed(2) }));
+        currencyStatusEl.setAttribute(
+          "aria-label",
+          translate("currency_aria", {
+            rate: rate.toFixed(2),
+            inverse: inverse.toFixed(2),
+            stronger: usdStronger ? "USD" : "EUR",
+          })
+        );
       }
 
       async function fetchCurrency() {

@@ -125,8 +125,14 @@
       mote: "rgba(244,199,107,0.55)",
       lightning: "rgba(247,243,238,0.85)",
       heat: "rgba(255,92,122,0.16)",
-      palm: "rgba(5,8,16,0.6)",
-      alligator: "rgba(8,14,10,0.65)",
+      // A true near-black silhouette — deliberately darker/more opaque than
+      // any stop in the night sky gradient (darkest is #050712) so the
+      // palms read as solid shapes against the sky/horizon-glow rather than
+      // blending into it.
+      palm: "rgba(2,3,6,0.94)",
+      palmRim: "rgba(255,170,130,0.35)",
+      alligator: "rgba(10,15,10,0.88)",
+      alligatorRidge: "rgba(4,7,5,0.9)",
       alligatorEye: "rgba(244,199,107,0.9)",
     },
     helsinki: {
@@ -151,7 +157,8 @@
       aurora: ["rgba(57,230,208,0.26)", "rgba(100,170,240,0.18)", "rgba(150,110,215,0.15)"],
       forest: "rgba(31,90,74,0.4)",
       lake: "rgba(150,200,210,0.35)",
-      reindeer: "rgba(58,44,34,0.75)",
+      reindeer: "rgba(52,36,24,0.9)",
+      reindeerAntler: "rgba(40,28,18,0.9)",
     },
   };
 
@@ -611,7 +618,7 @@
       const frac = reindeerElapsed / REINDEER_CROSSING_MS;
       const groundY = height - footerReserve;
       const x = -width * 0.08 + frac * width * 1.16;
-      const h = Math.min(height * 0.1, 62);
+      const h = Math.min(height * 0.13, 78);
       const strideCycle = t / 130;
       const strideOffset = Math.sin(strideCycle) * h * 0.06;
 
@@ -661,14 +668,41 @@
       ctx.lineTo(headX + headR * 0.55, headY + headR * 0.6);
       ctx.closePath();
       ctx.fill();
-      // Antlers: a couple of simple branching strokes above the head.
-      ctx.lineWidth = Math.max(1.5, h * 0.03);
+      // Ears: two small triangles behind the antlers — a detail that,
+      // together with the branched rack below, is what actually reads as
+      // "deer-like animal" rather than an ambiguous four-legged silhouette.
+      ctx.beginPath();
+      ctx.moveTo(headX - headR * 0.55, headY - headR * 0.55);
+      ctx.lineTo(headX - headR * 1.1, headY - headR * 0.95);
+      ctx.lineTo(headX - headR * 0.25, headY - headR * 0.75);
+      ctx.closePath();
+      ctx.fill();
+      // Small tail near the rear of the body.
+      ctx.beginPath();
+      ctx.ellipse(-h * 0.42, -h * 0.14, h * 0.055, h * 0.04, 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      // Antlers: a proper branching rack — a main beam curving forward off
+      // the head, with two smaller tines forking off each side, instead of
+      // the previous two bare strokes.
+      const antlerBaseX = headX - headR * 0.1;
+      const antlerBaseY = headY - headR * 0.8;
+      ctx.lineWidth = Math.max(1.75, h * 0.032);
       [-1, 1].forEach((dir) => {
+        const beamMidX = antlerBaseX + dir * h * 0.1;
+        const beamMidY = antlerBaseY - h * 0.22;
+        const beamTipX = antlerBaseX + dir * h * 0.22 + strideOffset * 0.15;
+        const beamTipY = antlerBaseY - h * 0.38;
+        // Main beam, gently curved forward.
         ctx.beginPath();
-        ctx.moveTo(headX - headR * 0.15, headY - headR * 0.75);
-        ctx.lineTo(headX - headR * 0.15 + dir * h * 0.09, headY - h * 0.28 + strideOffset * 0.2);
-        ctx.moveTo(headX - headR * 0.15 + dir * h * 0.03, headY - h * 0.2);
-        ctx.lineTo(headX - headR * 0.15 + dir * h * 0.14, headY - h * 0.2);
+        ctx.moveTo(antlerBaseX, antlerBaseY);
+        ctx.quadraticCurveTo(beamMidX, beamMidY, beamTipX, beamTipY);
+        ctx.stroke();
+        // Two tines forking off the beam.
+        ctx.beginPath();
+        ctx.moveTo(beamMidX, beamMidY + h * 0.03);
+        ctx.lineTo(beamMidX + dir * h * 0.13, beamMidY - h * 0.06);
+        ctx.moveTo(antlerBaseX + dir * h * 0.03, antlerBaseY - h * 0.08);
+        ctx.lineTo(antlerBaseX + dir * h * 0.15, antlerBaseY - h * 0.14);
         ctx.stroke();
       });
       ctx.restore();
@@ -803,37 +837,59 @@
     function drawPalmTrees() {
       const groundY = height - footerReserve;
       ctx.save();
-      ctx.fillStyle = PALETTES.miami.palm;
-      ctx.strokeStyle = PALETTES.miami.palm;
       ctx.lineCap = "round";
       [
-        { x: width * 0.07, h: Math.min(height * 0.14, 100), lean: 0.18 },
-        { x: width * 0.115, h: Math.min(height * 0.1, 70), lean: -0.12 },
+        { x: width * 0.07, h: Math.min(height * 0.18, 130), lean: 0.18 },
+        { x: width * 0.125, h: Math.min(height * 0.13, 92), lean: -0.12 },
       ].forEach(({ x, h, lean }) => {
         const topX = x + lean * h;
         const topY = groundY - h;
-        // Trunk: a gently curved quad tapering toward the crown.
+        ctx.fillStyle = PALETTES.miami.palm;
+        ctx.strokeStyle = PALETTES.miami.palm;
+        // Trunk: a gently curved quad tapering toward the crown, with a
+        // couple of faint growth-ring notches for texture.
         ctx.beginPath();
-        ctx.moveTo(x - h * 0.045, groundY);
-        ctx.quadraticCurveTo(x + lean * h * 0.55, groundY - h * 0.6, topX - h * 0.02, topY);
-        ctx.lineTo(topX + h * 0.03, topY);
-        ctx.quadraticCurveTo(x + lean * h * 0.55 + h * 0.05, groundY - h * 0.6, x + h * 0.03, groundY);
+        ctx.moveTo(x - h * 0.05, groundY);
+        ctx.quadraticCurveTo(x + lean * h * 0.55, groundY - h * 0.6, topX - h * 0.025, topY);
+        ctx.lineTo(topX + h * 0.035, topY);
+        ctx.quadraticCurveTo(x + lean * h * 0.55 + h * 0.06, groundY - h * 0.6, x + h * 0.035, groundY);
         ctx.closePath();
         ctx.fill();
-        // Crown: a fan of drooping fronds radiating from the top of the trunk.
-        ctx.lineWidth = Math.max(2.5, h * 0.05);
-        for (let i = 0; i < 6; i++) {
-          const angle = -Math.PI * 0.92 + (i / 5) * Math.PI * 0.84;
-          const len = h * 0.55;
+        // Crown: a fuller fan of drooping fronds radiating from the top of
+        // the trunk — more blades, wider spread, and a thicker base taper so
+        // each frond reads as a distinct blade instead of a thin wisp.
+        const frondCount = 8;
+        for (let i = 0; i < frondCount; i++) {
+          const angle = -Math.PI * 1.05 + (i / (frondCount - 1)) * Math.PI * 1.0;
+          const len = h * 0.62;
           const endX = topX + Math.cos(angle) * len;
-          const endY = topY + Math.sin(angle) * len + len * 0.35; // droop
+          const endY = topY + Math.sin(angle) * len + len * 0.32; // droop
           const midX = topX + Math.cos(angle) * len * 0.55;
           const midY = topY + Math.sin(angle) * len * 0.55 - len * 0.1;
+          ctx.lineWidth = Math.max(3, h * 0.055);
           ctx.beginPath();
           ctx.moveTo(topX, topY);
           ctx.quadraticCurveTo(midX, midY, endX, endY);
           ctx.stroke();
+          // A slim rim-light pass along the same curve — reads as the warm
+          // horizon glow catching the frond's upper edge, which both adds
+          // realism and gives the silhouette a second, lighter tone so it
+          // doesn't read as a flat blob even at a glance.
+          ctx.save();
+          ctx.strokeStyle = PALETTES.miami.palmRim;
+          ctx.lineWidth = Math.max(1, h * 0.018);
+          ctx.beginPath();
+          ctx.moveTo(topX, topY - h * 0.01);
+          ctx.quadraticCurveTo(midX, midY - h * 0.02, endX, endY - h * 0.03);
+          ctx.stroke();
+          ctx.restore();
         }
+        // A small coconut cluster at the crown base — the detail that reads
+        // "palm tree" at a glance rather than "generic frond fan".
+        ctx.beginPath();
+        ctx.ellipse(topX - h * 0.02, topY + h * 0.05, h * 0.045, h * 0.06, 0.3, 0, Math.PI * 2);
+        ctx.ellipse(topX + h * 0.05, topY + h * 0.07, h * 0.04, h * 0.055, -0.2, 0, Math.PI * 2);
+        ctx.fill();
       });
       ctx.restore();
     }
@@ -862,35 +918,54 @@
       const waterY = height - footerReserve - bandH * 0.18;
       const x = -width * 0.08 + frac * width * 1.16;
       const bob = Math.sin(t / 260) * 2.5;
-      const bodyLen = Math.max(46, width * 0.045);
+      // Larger and more elongated than before — real alligators read as a
+      // long, low, flat line riding the surface, not a short oval.
+      const bodyLen = Math.max(58, width * 0.058);
       const y = waterY + bob;
 
       ctx.save();
       ctx.translate(x, y);
       ctx.fillStyle = PALETTES.miami.alligator;
-      // Body: a low, flattened silhouette riding the waterline.
+      // Body: a long, flattened silhouette riding the waterline.
       ctx.beginPath();
-      ctx.ellipse(0, 0, bodyLen * 0.5, bodyLen * 0.15, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, bodyLen * 0.56, bodyLen * 0.12, 0, 0, Math.PI * 2);
       ctx.fill();
-      // Snout, trailing the direction of travel.
+      // Head + snout: broad at the eyes, tapering to a blunt (not pointed)
+      // tip — the flat, rounded profile that actually distinguishes a
+      // gator's head from a generic wedge.
       ctx.beginPath();
-      ctx.moveTo(bodyLen * 0.48, -bodyLen * 0.03);
-      ctx.lineTo(bodyLen * 0.72, 0);
-      ctx.lineTo(bodyLen * 0.48, bodyLen * 0.07);
+      ctx.moveTo(bodyLen * 0.4, -bodyLen * 0.09);
+      ctx.lineTo(bodyLen * 0.68, -bodyLen * 0.04);
+      ctx.lineTo(bodyLen * 0.78, 0);
+      ctx.lineTo(bodyLen * 0.68, bodyLen * 0.05);
+      ctx.lineTo(bodyLen * 0.4, bodyLen * 0.09);
       ctx.closePath();
       ctx.fill();
-      // Tail, tapering behind.
+      // Dorsal ridge: a few small triangular scutes along the spine — the
+      // single detail that most reads as "alligator" versus a plain blob.
       ctx.beginPath();
-      ctx.moveTo(-bodyLen * 0.48, -bodyLen * 0.02);
-      ctx.quadraticCurveTo(-bodyLen * 0.7, Math.sin(t / 240) * bodyLen * 0.08, -bodyLen * 0.85, 0);
-      ctx.quadraticCurveTo(-bodyLen * 0.7, bodyLen * 0.04, -bodyLen * 0.48, bodyLen * 0.06);
+      [-0.16, -0.02, 0.12, 0.26].forEach((pos) => {
+        const rx = bodyLen * pos;
+        const rise = bodyLen * 0.09;
+        ctx.moveTo(rx - bodyLen * 0.045, -bodyLen * 0.07);
+        ctx.lineTo(rx, -bodyLen * 0.07 - rise);
+        ctx.lineTo(rx + bodyLen * 0.045, -bodyLen * 0.07);
+      });
       ctx.closePath();
       ctx.fill();
-      // Two small eye bumps just above the waterline.
+      // Tail, tapering behind with a visible S-curve sway as it swims.
+      ctx.beginPath();
+      ctx.moveTo(-bodyLen * 0.54, -bodyLen * 0.02);
+      ctx.quadraticCurveTo(-bodyLen * 0.78, Math.sin(t / 240) * bodyLen * 0.1, -bodyLen * 0.98, Math.sin(t / 240 + 1) * bodyLen * 0.04);
+      ctx.quadraticCurveTo(-bodyLen * 0.78, bodyLen * 0.05, -bodyLen * 0.54, bodyLen * 0.06);
+      ctx.closePath();
+      ctx.fill();
+      // Two small eye bumps just above the waterline, set back from the
+      // snout tip the way a real gator's eyes sit near the top of the head.
       ctx.fillStyle = PALETTES.miami.alligatorEye;
       ctx.beginPath();
-      ctx.arc(bodyLen * 0.34, -bodyLen * 0.1, bodyLen * 0.025, 0, Math.PI * 2);
-      ctx.arc(bodyLen * 0.26, -bodyLen * 0.1, bodyLen * 0.025, 0, Math.PI * 2);
+      ctx.arc(bodyLen * 0.42, -bodyLen * 0.09, bodyLen * 0.028, 0, Math.PI * 2);
+      ctx.arc(bodyLen * 0.33, -bodyLen * 0.08, bodyLen * 0.028, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }

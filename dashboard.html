@@ -21,20 +21,19 @@
   <title>Dashboard — Maya Carroll</title>
   <meta name="robots" content="noindex, nofollow" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=Inter+Tight:wght@600;650;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
   <style>
     :root {
-      --font-display: "Inter Tight", sans-serif;
-      --font-body: "Inter", sans-serif;
+      --font-primary: "Manrope", sans-serif;
     }
     :root[data-theme="dark"] {
       --color-bg: #070b18;
       --color-surface: #10172a;
       --color-text: #f7f3ee;
       --color-text-secondary: #aab4c8;
-      --color-accent: #ff5c7a;
+      --color-accent: #39e6d0;
       --color-accent-3: #f4c76b;
       --color-border: rgba(247, 243, 238, 0.14);
       --focus-ring: #39e6d0;
@@ -59,12 +58,12 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: var(--font-body);
-      font-weight: 450;
+      font-family: var(--font-primary);
+      font-weight: 400;
       letter-spacing: -0.01em;
       background: var(--color-bg);
       color: var(--color-text);
-      line-height: 1.5;
+      line-height: 1.55;
     }
     :focus-visible {
       outline: 2px solid var(--focus-ring);
@@ -79,7 +78,7 @@
       display: none;
     }
     h1 {
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 700;
       font-size: 1.6rem;
       margin: 0 0 0.5rem;
@@ -127,7 +126,7 @@
       flex-shrink: 0;
     }
     #site-title {
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--color-text);
@@ -186,7 +185,7 @@
       gap: 0.5rem;
     }
     button {
-      font-family: var(--font-display);
+      font-family: var(--font-primary);
       font-weight: 600;
     }
     #theme-toggle,
