@@ -47,9 +47,10 @@
       --color-surface-translucent: rgba(16, 23, 42, 0.74);
       --color-text: #f7f3ee;
       --color-text-secondary: #aab4c8;
-      --color-accent: #ff5c7a; /* coral */
+      --color-accent: #39e6d0; /* aqua — buttons, links, interactive highlights */
       --color-accent-2: #39e6d0; /* aqua */
       --color-accent-3: #f4c76b; /* gold */
+      --color-warning: #ff5c7a; /* coral — reserved for genuine alerts (severe weather, elevated UV), never buttons/links */
       --color-border: rgba(247, 243, 238, 0.14);
       --focus-ring: #39e6d0;
       --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.55);
@@ -74,6 +75,7 @@
       --color-accent: #1f5a4a; /* pine */
       --color-accent-2: #a7d8e5; /* ice — decorative only, not for text */
       --color-accent-3: #dce6e2; /* frost — decorative only */
+      --color-warning: #c23b52; /* reserved for genuine alerts (severe weather, elevated UV), never buttons/links */
       --color-border: #dce6e2;
       --focus-ring: #1f5a4a;
       --shadow-elevated: 0 12px 32px rgba(23, 33, 30, 0.1);
@@ -305,20 +307,17 @@
       color: var(--color-text-secondary);
       margin-top: 1.5rem;
     }
-    /* Marks the current home base in the hero's meta line — a pin plus an
-       accent underline so it reads as "you are here", not just decoration.
-       Lives on the hero_meta_location span; update that copy (plus this
-       markup, if it ever needs to move) when home base changes. */
+    /* Marks the current home base in the hero's meta line — just the pin
+       plus bold weight, deliberately no color/underline: this text isn't
+       clickable, and both of those read as "link" even when nothing here
+       is one. Lives on the hero_meta_location span; update that copy (plus
+       this markup, if it ever needs to move) when home base changes. */
     .current-pin {
       font-size: 0.85em;
       margin-right: 0.15em;
     }
     .current-location {
-      color: var(--color-accent);
-      font-weight: 600;
-      text-decoration: underline;
-      text-decoration-thickness: 1.5px;
-      text-underline-offset: 0.2em;
+      font-weight: 700;
     }
 
     /* ---------- Surfaces (frosted cards over the animated background) ---------- */
@@ -806,21 +805,24 @@
     }
     .city-status .uv.uv-elevated {
       font-weight: 700;
-      color: var(--color-accent);
-      border: 1px solid var(--color-accent);
+      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
       border-radius: 999px;
       padding: 0.05rem 0.55rem 0.05rem 0.4rem;
     }
     /* Only rendered when there's something to say (active storm for Miami,
-       snow/wind watch for Helsinki) — empty and takes no space otherwise. */
+       snow/wind watch for Helsinki) — empty and takes no space otherwise.
+       Uses --color-warning (not --color-accent) deliberately: this is a
+       genuine alert, so red is semantically correct here even though
+       buttons/links elsewhere stay off red. */
     .severe-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.3em;
       font-size: 0.72rem;
       font-weight: 600;
-      color: var(--color-accent);
-      border: 1px solid var(--color-accent);
+      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
       border-radius: 999px;
       padding: 0.1rem 0.55rem;
       white-space: normal;
