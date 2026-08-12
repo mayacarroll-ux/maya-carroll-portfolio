@@ -125,6 +125,9 @@
       mote: "rgba(244,199,107,0.55)",
       lightning: "rgba(247,243,238,0.85)",
       heat: "rgba(255,92,122,0.16)",
+      palm: "rgba(5,8,16,0.6)",
+      alligator: "rgba(8,14,10,0.65)",
+      alligatorEye: "rgba(244,199,107,0.9)",
     },
     helsinki: {
       day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
@@ -146,6 +149,9 @@
       fog: "rgba(200,210,215,0.4)",
       mote: "rgba(255,255,255,0.6)",
       aurora: ["rgba(57,230,208,0.26)", "rgba(100,170,240,0.18)", "rgba(150,110,215,0.15)"],
+      forest: "rgba(31,90,74,0.4)",
+      lake: "rgba(150,200,210,0.35)",
+      reindeer: "rgba(58,44,34,0.75)",
     },
   };
 
@@ -173,8 +179,25 @@
     let lightningAlpha = 0;
     let lightningTimer = randomLightningDelay();
 
+    // Miami: alligator occasionally swims across the water. Helsinki:
+    // reindeer occasionally walks across the treeline. Same
+    // wait-then-cross-then-reset mechanic as the lightning flash above,
+    // just with a duration instead of an instant flash.
+    const ALLIGATOR_CROSSING_MS = 12000;
+    const REINDEER_CROSSING_MS = 14000;
+    let alligatorTimer = randomCrossingDelay();
+    let alligatorElapsed = 0;
+    let alligatorActive = false;
+    let reindeerTimer = randomCrossingDelay();
+    let reindeerElapsed = 0;
+    let reindeerActive = false;
+
     function randomLightningDelay() {
       return 9000 + Math.random() * 11000;
+    }
+
+    function randomCrossingDelay() {
+      return 25000 + Math.random() * 35000; // 25–60s between appearances
     }
 
     function measureFooterReserve() {
@@ -513,6 +536,144 @@
       ctx.restore();
     }
 
+    // A cluster of simple pine-tree silhouettes at the shoreline — drawn
+    // unconditionally (a location fixture, not a depicted condition), same
+    // philosophy as Miami's ocean/palms. In winter, drawWinterTreeline()
+    // layers its own blurred ridge + snow-cap on top of this.
+    function drawForest() {
+      const groundY = height - footerReserve;
+      ctx.save();
+      ctx.fillStyle = PALETTES.helsinki.forest;
+      const trees = [
+        { x: width * 0.06, h: Math.min(height * 0.09, 60) },
+        { x: width * 0.09, h: Math.min(height * 0.12, 78) },
+        { x: width * 0.123, h: Math.min(height * 0.07, 46) },
+      ];
+      trees.forEach(({ x, h }) => {
+        const w = h * 0.6;
+        // Trunk.
+        ctx.fillRect(x - w * 0.06, groundY - h * 0.12, w * 0.12, h * 0.12);
+        // Three stacked triangle tiers, classic pine silhouette.
+        for (let tier = 0; tier < 3; tier++) {
+          const tierH = h * 0.42;
+          const tierW = w * (1 - tier * 0.22);
+          const tierBaseY = groundY - h * 0.1 - tier * h * 0.3;
+          const tierTopY = tierBaseY - tierH;
+          ctx.beginPath();
+          ctx.moveTo(x - tierW / 2, tierBaseY);
+          ctx.lineTo(x + tierW / 2, tierBaseY);
+          ctx.lineTo(x, tierTopY);
+          ctx.closePath();
+          ctx.fill();
+        }
+      });
+      ctx.restore();
+    }
+
+    // A calm lake band at the shoreline — Miami's ocean equivalent, but
+    // still water rather than surf: one gentle ripple, no swells or foam.
+    function drawLake(t) {
+      const bandH = height * 0.1;
+      const top = height - footerReserve - bandH;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      for (let x = 0; x <= width; x += 12) {
+        const y = top + bandH * 0.35 + Math.sin(x * 0.01 + t / 2600) * bandH * 0.06;
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fillStyle = PALETTES.helsinki.lake;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Walks left-to-right across the treeline every 25–60s, then rests.
+    function maybeReindeer(dt, t) {
+      if (reindeerActive) {
+        reindeerElapsed += dt;
+        if (reindeerElapsed >= REINDEER_CROSSING_MS) {
+          reindeerActive = false;
+          reindeerTimer = randomCrossingDelay();
+          return;
+        }
+      } else {
+        reindeerTimer -= dt;
+        if (reindeerTimer <= 0) {
+          reindeerActive = true;
+          reindeerElapsed = 0;
+        } else {
+          return;
+        }
+      }
+
+      const frac = reindeerElapsed / REINDEER_CROSSING_MS;
+      const groundY = height - footerReserve;
+      const x = -width * 0.08 + frac * width * 1.16;
+      const h = Math.min(height * 0.1, 62);
+      const strideCycle = t / 130;
+      const strideOffset = Math.sin(strideCycle) * h * 0.06;
+
+      ctx.save();
+      ctx.translate(x, groundY - h * 0.42 + Math.abs(Math.sin(strideCycle)) * h * 0.03);
+      ctx.strokeStyle = PALETTES.helsinki.reindeer;
+      ctx.fillStyle = PALETTES.helsinki.reindeer;
+      ctx.lineCap = "round";
+      // Legs: alternating pairs for a walking gait.
+      ctx.lineWidth = Math.max(2, h * 0.045);
+      [
+        { x: h * 0.28, phase: 0 },
+        { x: -h * 0.28, phase: Math.PI },
+      ].forEach(({ x: lx, phase }) => {
+        const swing = Math.sin(strideCycle + phase) * h * 0.16;
+        ctx.beginPath();
+        ctx.moveTo(lx, h * 0.05);
+        ctx.lineTo(lx + swing, h * 0.42);
+        ctx.stroke();
+      });
+      // Body.
+      ctx.beginPath();
+      ctx.ellipse(0, -h * 0.1, h * 0.42, h * 0.2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Neck: a tapered quad connecting the body to the head, distinctly
+      // thinner than the body so the two don't read as one blob.
+      const neckBaseX = h * 0.32;
+      const neckBaseY = -h * 0.16;
+      const headX = h * 0.56;
+      const headY = -h * 0.5;
+      const headR = h * 0.15;
+      ctx.beginPath();
+      ctx.moveTo(neckBaseX - h * 0.04, neckBaseY + h * 0.08);
+      ctx.lineTo(headX - headR * 0.7, headY + headR * 0.3);
+      ctx.lineTo(headX + headR * 0.2, headY + headR * 0.6);
+      ctx.lineTo(neckBaseX + h * 0.1, neckBaseY + h * 0.1);
+      ctx.closePath();
+      ctx.fill();
+      // Head: a small rounded shape distinct from the neck.
+      ctx.beginPath();
+      ctx.ellipse(headX, headY, headR, headR * 0.82, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+      // Snout, facing the direction of travel.
+      ctx.beginPath();
+      ctx.moveTo(headX + headR * 0.6, headY - headR * 0.15);
+      ctx.lineTo(headX + headR * 1.7, headY + headR * 0.15);
+      ctx.lineTo(headX + headR * 0.55, headY + headR * 0.6);
+      ctx.closePath();
+      ctx.fill();
+      // Antlers: a couple of simple branching strokes above the head.
+      ctx.lineWidth = Math.max(1.5, h * 0.03);
+      [-1, 1].forEach((dir) => {
+        ctx.beginPath();
+        ctx.moveTo(headX - headR * 0.15, headY - headR * 0.75);
+        ctx.lineTo(headX - headR * 0.15 + dir * h * 0.09, headY - h * 0.28 + strideOffset * 0.2);
+        ctx.moveTo(headX - headR * 0.15 + dir * h * 0.03, headY - h * 0.2);
+        ctx.lineTo(headX - headR * 0.15 + dir * h * 0.14, headY - h * 0.2);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
     function drawFog(color, alpha) {
       ctx.save();
       ctx.globalAlpha = alpha;
@@ -637,6 +798,103 @@
       ctx.restore();
     }
 
+    // A couple of static palm silhouettes anchored to the shore — a
+    // location fixture like the ocean itself, not a depicted condition.
+    function drawPalmTrees() {
+      const groundY = height - footerReserve;
+      ctx.save();
+      ctx.fillStyle = PALETTES.miami.palm;
+      ctx.strokeStyle = PALETTES.miami.palm;
+      ctx.lineCap = "round";
+      [
+        { x: width * 0.07, h: Math.min(height * 0.14, 100), lean: 0.18 },
+        { x: width * 0.115, h: Math.min(height * 0.1, 70), lean: -0.12 },
+      ].forEach(({ x, h, lean }) => {
+        const topX = x + lean * h;
+        const topY = groundY - h;
+        // Trunk: a gently curved quad tapering toward the crown.
+        ctx.beginPath();
+        ctx.moveTo(x - h * 0.045, groundY);
+        ctx.quadraticCurveTo(x + lean * h * 0.55, groundY - h * 0.6, topX - h * 0.02, topY);
+        ctx.lineTo(topX + h * 0.03, topY);
+        ctx.quadraticCurveTo(x + lean * h * 0.55 + h * 0.05, groundY - h * 0.6, x + h * 0.03, groundY);
+        ctx.closePath();
+        ctx.fill();
+        // Crown: a fan of drooping fronds radiating from the top of the trunk.
+        ctx.lineWidth = Math.max(2.5, h * 0.05);
+        for (let i = 0; i < 6; i++) {
+          const angle = -Math.PI * 0.92 + (i / 5) * Math.PI * 0.84;
+          const len = h * 0.55;
+          const endX = topX + Math.cos(angle) * len;
+          const endY = topY + Math.sin(angle) * len + len * 0.35; // droop
+          const midX = topX + Math.cos(angle) * len * 0.55;
+          const midY = topY + Math.sin(angle) * len * 0.55 - len * 0.1;
+          ctx.beginPath();
+          ctx.moveTo(topX, topY);
+          ctx.quadraticCurveTo(midX, midY, endX, endY);
+          ctx.stroke();
+        }
+      });
+      ctx.restore();
+    }
+
+    // Swims left-to-right across the water every 25–60s, then rests.
+    function maybeAlligator(dt, t) {
+      if (alligatorActive) {
+        alligatorElapsed += dt;
+        if (alligatorElapsed >= ALLIGATOR_CROSSING_MS) {
+          alligatorActive = false;
+          alligatorTimer = randomCrossingDelay();
+          return;
+        }
+      } else {
+        alligatorTimer -= dt;
+        if (alligatorTimer <= 0) {
+          alligatorActive = true;
+          alligatorElapsed = 0;
+        } else {
+          return;
+        }
+      }
+
+      const frac = alligatorElapsed / ALLIGATOR_CROSSING_MS;
+      const bandH = height * 0.16;
+      const waterY = height - footerReserve - bandH * 0.18;
+      const x = -width * 0.08 + frac * width * 1.16;
+      const bob = Math.sin(t / 260) * 2.5;
+      const bodyLen = Math.max(46, width * 0.045);
+      const y = waterY + bob;
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.fillStyle = PALETTES.miami.alligator;
+      // Body: a low, flattened silhouette riding the waterline.
+      ctx.beginPath();
+      ctx.ellipse(0, 0, bodyLen * 0.5, bodyLen * 0.15, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Snout, trailing the direction of travel.
+      ctx.beginPath();
+      ctx.moveTo(bodyLen * 0.48, -bodyLen * 0.03);
+      ctx.lineTo(bodyLen * 0.72, 0);
+      ctx.lineTo(bodyLen * 0.48, bodyLen * 0.07);
+      ctx.closePath();
+      ctx.fill();
+      // Tail, tapering behind.
+      ctx.beginPath();
+      ctx.moveTo(-bodyLen * 0.48, -bodyLen * 0.02);
+      ctx.quadraticCurveTo(-bodyLen * 0.7, Math.sin(t / 240) * bodyLen * 0.08, -bodyLen * 0.85, 0);
+      ctx.quadraticCurveTo(-bodyLen * 0.7, bodyLen * 0.04, -bodyLen * 0.48, bodyLen * 0.06);
+      ctx.closePath();
+      ctx.fill();
+      // Two small eye bumps just above the waterline.
+      ctx.fillStyle = PALETTES.miami.alligatorEye;
+      ctx.beginPath();
+      ctx.arc(bodyLen * 0.34, -bodyLen * 0.1, bodyLen * 0.025, 0, Math.PI * 2);
+      ctx.arc(bodyLen * 0.26, -bodyLen * 0.1, bodyLen * 0.025, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
     function drawHeatShimmer(t) {
       const groundY = height - footerReserve;
       const bandH = height * 0.3;
@@ -693,11 +951,20 @@
       // even with no data, and stay proportionally faint in daylight.
       const moteAlpha = envState && envState.isDaylight ? 0.35 : 1;
       drawMotes(dt, moteAlpha);
-      // The surf is a location fixture, not a depicted weather condition —
-      // Miami has an ocean regardless of data availability — so it renders
-      // even in the calm-neutral state, same as the horizon glow.
-      if (city === "miami") drawOcean(ts);
-      if (!envState) return; // calm neutral: sky + motes (+ surf) only, no invented conditions
+      // The surf, palms, lake, and forest are location fixtures, not
+      // depicted weather conditions — they render regardless of data
+      // availability, same as the horizon glow. The alligator/reindeer
+      // crossings are timer-driven, independent of weather data too.
+      if (city === "miami") {
+        drawOcean(ts);
+        drawPalmTrees();
+        maybeAlligator(dt, ts);
+      } else {
+        drawLake(ts);
+        drawForest();
+        maybeReindeer(dt, ts);
+      }
+      if (!envState) return; // calm neutral: sky + motes (+ fixtures) only, no invented conditions
 
       const hurricane = isHurricaneMode();
       const cloudCoverPct = envState.cloudCover || 0;
