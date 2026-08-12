@@ -305,6 +305,21 @@
       color: var(--color-text-secondary);
       margin-top: 1.5rem;
     }
+    /* Marks the current home base in the hero's meta line — a pin plus an
+       accent underline so it reads as "you are here", not just decoration.
+       Lives on the hero_meta_location span; update that copy (plus this
+       markup, if it ever needs to move) when home base changes. */
+    .current-pin {
+      font-size: 0.85em;
+      margin-right: 0.15em;
+    }
+    .current-location {
+      color: var(--color-accent);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 0.2em;
+    }
 
     /* ---------- Surfaces (frosted cards over the animated background) ---------- */
     .surface {
@@ -720,19 +735,6 @@
       font-size: 0.68rem;
       color: var(--color-text);
     }
-    /* Marks whichever city is home base right now (see CURRENT_LOCATION in
-       the script below) — a pin plus an accent underline so it reads as
-       "you are here", not just decoration. */
-    .city-status .current-pin {
-      font-size: 0.85em;
-      margin-right: 0.15em;
-    }
-    .city-status.is-current .city-name {
-      color: var(--color-accent);
-      text-decoration: underline;
-      text-decoration-thickness: 1.5px;
-      text-underline-offset: 0.2em;
-    }
     .city-status .sep {
       opacity: 0.45;
     }
@@ -1093,7 +1095,12 @@
             <a class="btn btn-primary" href="#work" data-i18n="cta_view_work">View my work</a>
             <a class="btn btn-secondary" href="mailto:hiring@mayacarroll.com" data-i18n="cta_start_conversation">Start a conversation</a>
           </div>
-          <p class="meta-line" data-i18n="hero_meta">Based in South Florida &middot; Working remotely &middot; US citizen</p>
+          <p class="meta-line">
+            <span data-i18n="hero_meta_prefix">Based in </span><span
+              class="current-location"
+              ><span class="current-pin" aria-hidden="true">📍</span><span data-i18n="hero_meta_location">South Florida</span></span
+            ><span data-i18n="hero_meta_suffix"> &middot; Working remotely &middot; US citizen</span>
+          </p>
         </div>
       </div>
     </section>
@@ -1147,7 +1154,9 @@
         cta_linkedin: "Connect on LinkedIn",
         hero_h1: "Product design grounded in 20+ years of technology experience.",
         hero_p: "I turn complex ideas and workflows into clear, useful digital products for teams across the United States.",
-        hero_meta: "Based in South Florida · Working remotely · US citizen",
+        hero_meta_prefix: "Based in ",
+        hero_meta_location: "South Florida",
+        hero_meta_suffix: " · Working remotely · US citizen",
         work_h2: "Work that shows how I think",
         work_intro: "A selection of product-design projects, from problem to outcome.",
         work_title_placeholder: "[Project title]",
@@ -1220,7 +1229,9 @@
         cta_linkedin: "Conectar en LinkedIn",
         hero_h1: "Diseño de producto respaldado por más de 20 años de experiencia en tecnología.",
         hero_p: "Convierto ideas y flujos de trabajo complejos en productos digitales claros y útiles para equipos en todo Estados Unidos.",
-        hero_meta: "Radicada en el sur de Florida · Trabajo remoto · Ciudadana estadounidense",
+        hero_meta_prefix: "Radicada en el ",
+        hero_meta_location: "sur de Florida",
+        hero_meta_suffix: " · Trabajo remoto · Ciudadana estadounidense",
         work_h2: "Trabajo que muestra cómo pienso",
         work_intro: "Una selección de proyectos de diseño de producto, del problema al resultado.",
         work_title_placeholder: "[Título del proyecto]",
@@ -1293,7 +1304,9 @@
         cta_linkedin: "Yhdistä LinkedInissä",
         hero_h1: "Tuotesuunnittelua, jonka pohjana on yli 20 vuoden kokemus teknologia-alalta.",
         hero_p: "Muutan monimutkaiset ideat ja työnkulut selkeiksi, hyödyllisiksi digitaalisiksi tuotteiksi tiimeille eri puolilla Yhdysvaltoja.",
-        hero_meta: "Asuu Etelä-Floridassa · Etätyö · Yhdysvaltain kansalainen",
+        hero_meta_prefix: "Asuu ",
+        hero_meta_location: "Etelä-Floridassa",
+        hero_meta_suffix: " · Etätyö · Yhdysvaltain kansalainen",
         work_h2: "Työt, jotka kertovat ajattelutavastani",
         work_intro: "Valikoima tuotesuunnitteluprojekteja, ongelmasta tulokseen.",
         work_title_placeholder: "[Projektin nimi]",
@@ -1479,10 +1492,6 @@
         miami: { label: "Miami", timeZone: "America/New_York", lat: 25.7617, lon: -80.1918 },
         helsinki: { label: "Helsinki", timeZone: "Europe/Helsinki", lat: 60.1699, lon: 24.9384 },
       };
-      // Which city is home base right now — flip this one line when that
-      // changes (e.g. the eventual move to Helsinki) rather than hunting
-      // through markup.
-      const CURRENT_LOCATION = "miami";
       const WEATHER_REFRESH_MS = 12 * 60 * 1000; // 10–15 min window
       // Bump this suffix whenever the cached entry shape changes (new
       // fields, etc.) — otherwise a returning visitor's stale-but-not-yet-
@@ -1498,27 +1507,6 @@
         miami: document.getElementById("weather-miami"),
         helsinki: document.getElementById("weather-helsinki"),
       };
-
-      // One-time DOM setup: mark whichever city is CURRENT_LOCATION with a
-      // pin so it's obviously "here" vs. just another tracked city — a
-      // static label like a pin isn't announced by itself, so a
-      // visually-hidden suffix carries the meaning for screen readers too.
-      (function markCurrentLocation() {
-        const el = document.querySelector(`.city-status[data-city="${CURRENT_LOCATION}"]`);
-        if (!el) return;
-        el.classList.add("is-current");
-        const nameEl = el.querySelector(".city-name");
-        if (!nameEl) return;
-        const pin = document.createElement("span");
-        pin.className = "current-pin";
-        pin.setAttribute("aria-hidden", "true");
-        pin.textContent = "📍";
-        nameEl.prepend(pin);
-        const srSuffix = document.createElement("span");
-        srSuffix.className = "visually-hidden";
-        srSuffix.textContent = " (current location)";
-        nameEl.appendChild(srSuffix);
-      })();
 
       const timeFormatters = {};
       function formatTime(city) {
