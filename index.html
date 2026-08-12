@@ -1609,9 +1609,14 @@
         // in an already-compact bar.
         let uvHTML = "";
         let uvSpoken = "";
-        if (entry.uvIndex != null && entry.uvIndex >= 3) {
-          const rounded = Math.round(entry.uvIndex);
-          const { labelKey, level, elevated } = uvCategory(entry.uvIndex);
+        const roundedUv = entry.uvIndex != null ? Math.round(entry.uvIndex) : null;
+        if (roundedUv != null && roundedUv >= 3) {
+          const rounded = roundedUv;
+          // Categorize the rounded value, not the raw one — otherwise a
+          // reading like 5.6 displays as "UV 6" (rounded) but categorizes
+          // as Moderate (5.6 < 6), showing a number and label that disagree
+          // right at the category boundary.
+          const { labelKey, level, elevated } = uvCategory(rounded);
           const label = translate(labelKey);
           uvHTML = ` <span class="uv uv-${level}${elevated ? " uv-elevated" : ""}"><span class="uv-dot" aria-hidden="true"></span>UV ${rounded} ${label}</span>`;
           uvSpoken = `, UV ${rounded} (${label})`;
