@@ -1146,6 +1146,31 @@
         contact_p: "If you're hiring a product designer or need experienced design support, I'd love to hear from you.",
         contact_meta: "South Florida · Remote collaboration · United States",
         footer_p1: "From Miami to Helsinki—designing what's next.",
+        weather_loading: "loading",
+        weather_unavailable: "Weather unavailable",
+        weather_feels: "feels",
+        weather_feels_like: "feels like",
+        weather_updated: "Updated",
+        condition_clear: "Clear",
+        condition_partlyCloudy: "Partly cloudy",
+        condition_cloudy: "Cloudy",
+        condition_fog: "Foggy",
+        condition_drizzle: "Drizzle",
+        condition_rain: "Rain",
+        condition_snow: "Snow",
+        condition_thunderstorm: "Thunderstorm",
+        uv_low: "Low",
+        uv_moderate: "Moderate",
+        uv_high: "High",
+        uv_veryhigh: "Very High",
+        uv_extreme: "Extreme",
+        severe_hurricane_alert: "Hurricane alert",
+        severe_tropical_storm_alert: "Tropical storm alert",
+        severe_opens_nhc: "Opens the National Hurricane Center.",
+        severe_snow_watch: "Snow: {cm}cm expected",
+        severe_snow_watch_aria: "Snow watch: about {cm} centimeters expected today.",
+        severe_wind_watch: "Wind: {kmh} km/h gusts",
+        severe_wind_watch_aria: "Wind watch: gusts up to {kmh} kilometers per hour expected today.",
       },
       es: {
         label: "ES",
@@ -1194,6 +1219,31 @@
         contact_p: "Si estás contratando a una diseñadora de producto o necesitas apoyo de diseño con experiencia, me encantaría saber de ti.",
         contact_meta: "Sur de Florida · Colaboración remota · Estados Unidos",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
+        weather_loading: "cargando",
+        weather_unavailable: "Clima no disponible",
+        weather_feels: "sensación",
+        weather_feels_like: "sensación térmica de",
+        weather_updated: "Actualizado",
+        condition_clear: "Despejado",
+        condition_partlyCloudy: "Parcialmente nublado",
+        condition_cloudy: "Nublado",
+        condition_fog: "Neblina",
+        condition_drizzle: "Llovizna",
+        condition_rain: "Lluvia",
+        condition_snow: "Nieve",
+        condition_thunderstorm: "Tormenta eléctrica",
+        uv_low: "Bajo",
+        uv_moderate: "Moderado",
+        uv_high: "Alto",
+        uv_veryhigh: "Muy alto",
+        uv_extreme: "Extremo",
+        severe_hurricane_alert: "Alerta de huracán",
+        severe_tropical_storm_alert: "Alerta de tormenta tropical",
+        severe_opens_nhc: "Abre el Centro Nacional de Huracanes.",
+        severe_snow_watch: "Nieve: se esperan {cm}cm",
+        severe_snow_watch_aria: "Aviso de nieve: se esperan unos {cm} centímetros hoy.",
+        severe_wind_watch: "Viento: ráfagas de {kmh} km/h",
+        severe_wind_watch_aria: "Aviso de viento: ráfagas de hasta {kmh} kilómetros por hora previstas hoy.",
       },
       fi: {
         label: "FI",
@@ -1242,6 +1292,31 @@
         contact_p: "Jos olet palkkaamassa tuotesuunnittelijaa tai tarvitset kokenutta suunnittelutukea, kuulisin mielelläni sinusta.",
         contact_meta: "Etelä-Florida · Etäyhteistyö · Yhdysvallat",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
+        weather_loading: "ladataan",
+        weather_unavailable: "Sää ei saatavilla",
+        weather_feels: "tuntuu",
+        weather_feels_like: "tuntuu kuin",
+        weather_updated: "Päivitetty",
+        condition_clear: "Selkeää",
+        condition_partlyCloudy: "Osittain pilvistä",
+        condition_cloudy: "Pilvistä",
+        condition_fog: "Sumuista",
+        condition_drizzle: "Tihkusadetta",
+        condition_rain: "Sadetta",
+        condition_snow: "Lunta",
+        condition_thunderstorm: "Ukkosmyrsky",
+        uv_low: "Matala",
+        uv_moderate: "Kohtalainen",
+        uv_high: "Korkea",
+        uv_veryhigh: "Erittäin korkea",
+        uv_extreme: "Äärimmäinen",
+        severe_hurricane_alert: "Hurrikaanivaroitus",
+        severe_tropical_storm_alert: "Trooppisen myrskyn varoitus",
+        severe_opens_nhc: "Avaa National Hurricane Centerin sivun.",
+        severe_snow_watch: "Lunta: odotettavissa {cm}cm",
+        severe_snow_watch_aria: "Lumivaroitus: tänään odotettavissa noin {cm} senttimetriä lunta.",
+        severe_wind_watch: "Tuulta: puuskat {kmh} km/h",
+        severe_wind_watch_aria: "Tuulivaroitus: tänään odotettavissa jopa {kmh} kilometrin tuntinopeuden puuskia.",
       },
     };
 
@@ -1286,6 +1361,25 @@
     const options = document.querySelectorAll("#lang-menu button");
     const i18nEls = document.querySelectorAll("[data-i18n]");
 
+    // Current language, readable by any section of this script (e.g. the
+    // weather ticker below, which renders dynamic strings that data-i18n's
+    // static textContent swap can't reach).
+    let currentLang = "en";
+
+    // Looks up `key` in the active language, falling back to English, then
+    // to the key itself. `vars` does simple {name} substitution for the
+    // handful of strings that carry a number (snow cm, wind km/h, etc).
+    function translate(key, vars) {
+      const dict = translations[currentLang] || translations.en;
+      let str = dict[key] != null ? dict[key] : (translations.en[key] != null ? translations.en[key] : key);
+      if (vars) {
+        Object.keys(vars).forEach((k) => {
+          str = str.replace(`{${k}}`, vars[k]);
+        });
+      }
+      return str;
+    }
+
     // Only short UI chrome (nav labels, button labels) is translated here.
     // The long-form hero/about/work copy stays in English across all three
     // languages for now — auto-translating paragraphs of professional
@@ -1294,6 +1388,7 @@
     function setLanguage(lang) {
       const t = translations[lang];
       if (!t) return;
+      currentLang = lang;
       i18nEls.forEach((el) => {
         const key = el.dataset.i18n;
         if (t[key]) el.textContent = t[key];
@@ -1305,6 +1400,11 @@
         opt.setAttribute("aria-current", opt.dataset.lang === lang ? "true" : "false");
       });
       localStorage.setItem("lang", lang);
+      // Dynamic content (weather/UV/severe-weather ticker) isn't covered by
+      // the data-i18n textContent swap above since it's rendered from live
+      // data, not static markup — this lets that section re-render itself
+      // in the new language without this code needing to know it exists.
+      document.dispatchEvent(new CustomEvent("app:languagechange"));
     }
 
     function openMenu(open) {
@@ -1396,15 +1496,17 @@
       // Same WMO weather-code groupings used by the animated background
       // (api/environment.js), mapped to a compact icon instead of a
       // condition string. is_day picks the sun/moon variant for a clear sky.
+      // labelKey looks up the translated condition name at render time
+      // (not baked in here) so it follows the active language.
       const WEATHER_ICONS = {
-        clear: { day: "☀️", night: "🌙", label: "Clear" },
-        partlyCloudy: { day: "⛅", night: "☁️", label: "Partly cloudy" },
-        cloudy: { day: "☁️", night: "☁️", label: "Cloudy" },
-        fog: { day: "🌫️", night: "🌫️", label: "Foggy" },
-        drizzle: { day: "🌦️", night: "🌦️", label: "Drizzle" },
-        rain: { day: "🌧️", night: "🌧️", label: "Rain" },
-        snow: { day: "🌨️", night: "🌨️", label: "Snow" },
-        thunderstorm: { day: "⛈️", night: "⛈️", label: "Thunderstorm" },
+        clear: { day: "☀️", night: "🌙", labelKey: "condition_clear" },
+        partlyCloudy: { day: "⛅", night: "☁️", labelKey: "condition_partlyCloudy" },
+        cloudy: { day: "☁️", night: "☁️", labelKey: "condition_cloudy" },
+        fog: { day: "🌫️", night: "🌫️", labelKey: "condition_fog" },
+        drizzle: { day: "🌦️", night: "🌦️", labelKey: "condition_drizzle" },
+        rain: { day: "🌧️", night: "🌧️", labelKey: "condition_rain" },
+        snow: { day: "🌨️", night: "🌨️", labelKey: "condition_snow" },
+        thunderstorm: { day: "⛈️", night: "⛈️", labelKey: "condition_thunderstorm" },
       };
       function weatherIconFor(code, isDay) {
         const group =
@@ -1426,7 +1528,7 @@
             ? "thunderstorm"
             : "cloudy";
         const entry = WEATHER_ICONS[group];
-        return { icon: isDay ? entry.day : entry.night, label: entry.label };
+        return { icon: isDay ? entry.day : entry.night, label: translate(entry.labelKey) };
       }
 
       function formatTemp(tempC) {
@@ -1435,12 +1537,13 @@
 
       // WHO UV index scale. `level` drives the dot color; `elevated` (High
       // and up) additionally switches the badge to the bordered pill style.
+      // `labelKey` is resolved to the translated word at render time.
       function uvCategory(uv) {
-        if (uv >= 11) return { label: "Extreme", level: "extreme", elevated: true };
-        if (uv >= 8) return { label: "Very High", level: "veryhigh", elevated: true };
-        if (uv >= 6) return { label: "High", level: "high", elevated: true };
-        if (uv >= 3) return { label: "Moderate", level: "moderate", elevated: false };
-        return { label: "Low", level: "low", elevated: false };
+        if (uv >= 11) return { labelKey: "uv_extreme", level: "extreme", elevated: true };
+        if (uv >= 8) return { labelKey: "uv_veryhigh", level: "veryhigh", elevated: true };
+        if (uv >= 6) return { labelKey: "uv_high", level: "high", elevated: true };
+        if (uv >= 3) return { labelKey: "uv_moderate", level: "moderate", elevated: false };
+        return { labelKey: "uv_low", level: "low", elevated: false };
       }
 
       function loadCache() {
@@ -1469,19 +1572,16 @@
           el.classList.remove("is-stale");
           el.classList.remove("is-unavailable");
           el.removeAttribute("title");
-          el.setAttribute(
-            "aria-label",
-            `${CITIES[city].label} weather: loading`
-          );
+          el.setAttribute("aria-label", `${CITIES[city].label}: ${translate("weather_loading")}`);
           return;
         }
 
         if (entry.tempC == null) {
-          el.textContent = "Weather unavailable";
+          el.textContent = translate("weather_unavailable");
           el.classList.add("is-unavailable");
           el.classList.remove("is-stale");
           el.removeAttribute("title");
-          el.setAttribute("aria-label", `${CITIES[city].label} weather unavailable`);
+          el.setAttribute("aria-label", translate("weather_unavailable"));
           return;
         }
 
@@ -1501,8 +1601,8 @@
         let feelsLikeSpoken = "";
         if (entry.feelsLikeC != null && Math.abs(entry.feelsLikeC - entry.tempC) >= 2) {
           const feelsLikeText = formatTemp(entry.feelsLikeC);
-          feelsLikeHTML = ` <span class="feels-like">feels ${feelsLikeText}</span>`;
-          feelsLikeSpoken = `, feels like ${feelsLikeText}`;
+          feelsLikeHTML = ` <span class="feels-like">${translate("weather_feels")} ${feelsLikeText}</span>`;
+          feelsLikeSpoken = `, ${translate("weather_feels_like")} ${feelsLikeText}`;
         }
         // Only surface UV at Moderate (3) and up — Low is the common case
         // (night, overcast, most of a Helsinki winter) and isn't worth a spot
@@ -1511,9 +1611,10 @@
         let uvSpoken = "";
         if (entry.uvIndex != null && entry.uvIndex >= 3) {
           const rounded = Math.round(entry.uvIndex);
-          const { label, level, elevated } = uvCategory(entry.uvIndex);
+          const { labelKey, level, elevated } = uvCategory(entry.uvIndex);
+          const label = translate(labelKey);
           uvHTML = ` <span class="uv uv-${level}${elevated ? " uv-elevated" : ""}"><span class="uv-dot" aria-hidden="true"></span>UV ${rounded} ${label}</span>`;
-          uvSpoken = `, UV index ${rounded} (${label})`;
+          uvSpoken = `, UV ${rounded} (${label})`;
         }
         el.innerHTML = `${iconHTML}${tempText}${feelsLikeHTML}${uvHTML}`;
         el.classList.toggle("is-stale", isStale);
@@ -1522,10 +1623,10 @@
           hour: "numeric",
           minute: "2-digit",
         }).format(new Date(entry.updatedAt));
-        el.title = `Updated ${updatedLabel}`;
+        el.title = `${translate("weather_updated")} ${updatedLabel}`;
         el.setAttribute(
           "aria-label",
-          `${CITIES[city].label} weather: ${conditionLabel}${tempText}${feelsLikeSpoken}${uvSpoken}, updated ${updatedLabel}`
+          `${CITIES[city].label}: ${conditionLabel}${tempText}${feelsLikeSpoken}${uvSpoken}, ${translate("weather_updated").toLowerCase()} ${updatedLabel}`
         );
       }
 
@@ -1636,12 +1737,12 @@
           el.removeAttribute("aria-label");
           return;
         }
-        const shortLabel = alert.type === "hurricane" ? "Hurricane alert" : "Tropical storm alert";
+        const shortLabel = translate(alert.type === "hurricane" ? "severe_hurricane_alert" : "severe_tropical_storm_alert");
         el.innerHTML = `🌀 <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener" title="${alert.headline.replace(
           /"/g,
           "&quot;"
         )}">${shortLabel}</a>`;
-        el.setAttribute("aria-label", `${alert.headline}. Opens the National Hurricane Center.`);
+        el.setAttribute("aria-label", `${alert.headline}. ${translate("severe_opens_nhc")}`);
       }
 
       function renderHelsinkiSevere() {
@@ -1654,11 +1755,13 @@
         const snow = entry.snowfallSum;
         const gusts = entry.windGustsMax;
         if (snow != null && snow >= SNOW_WATCH_CM) {
-          el.innerHTML = `❄️ Snow: ${Math.round(snow)}cm expected`;
-          el.setAttribute("aria-label", `Snow watch: about ${Math.round(snow)} centimeters expected today.`);
+          const cm = Math.round(snow);
+          el.innerHTML = `❄️ ${translate("severe_snow_watch", { cm })}`;
+          el.setAttribute("aria-label", translate("severe_snow_watch_aria", { cm }));
         } else if (gusts != null && gusts >= WIND_WATCH_KMH) {
-          el.innerHTML = `💨 Wind: ${Math.round(gusts)} km/h gusts`;
-          el.setAttribute("aria-label", `Wind watch: gusts up to ${Math.round(gusts)} kilometers per hour expected today.`);
+          const kmh = Math.round(gusts);
+          el.innerHTML = `💨 ${translate("severe_wind_watch", { kmh })}`;
+          el.setAttribute("aria-label", translate("severe_wind_watch_aria", { kmh }));
         } else {
           el.innerHTML = "";
           el.removeAttribute("aria-label");
@@ -1709,6 +1812,15 @@
           refreshWeatherIfNeeded();
           refreshSevereIfNeeded();
         }
+      });
+
+      // Re-render from the already-cached data in the new language — no
+      // need to re-fetch, since only the words (condition/UV-category/
+      // severe-weather labels) change, not the underlying numbers.
+      document.addEventListener("app:languagechange", () => {
+        renderAll();
+        renderSevere("miami");
+        renderSevere("helsinki");
       });
 
     })();

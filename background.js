@@ -170,6 +170,11 @@
       return 9000 + Math.random() * 11000;
     }
 
+    function measureFooterReserve() {
+      const footerEl = document.getElementById("footer");
+      return footerEl ? footerEl.offsetHeight : 0;
+    }
+
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = canvas.clientWidth;
@@ -177,9 +182,22 @@
       canvas.width = Math.max(1, Math.round(width * dpr));
       canvas.height = Math.max(1, Math.round(height * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const footerEl = document.getElementById("footer");
-      footerReserve = footerEl ? footerEl.offsetHeight : 0;
+      footerReserve = measureFooterReserve();
       initParticles();
+      if (!running) drawFrame(16, performance.now());
+    }
+
+    // The footer's height isn't only driven by window resize — it also
+    // grows/shrinks asynchronously as weather, UV, and severe-weather data
+    // stream into the ticker after load. Without this, footerReserve stays
+    // pinned to the footer's pre-data height and the ground line ends up
+    // rendered partly or fully behind the (now taller) footer. Deliberately
+    // skips initParticles() so particles don't visibly jump every time a
+    // badge nudges the footer's height by a few pixels.
+    function syncFooterReserve() {
+      const next = measureFooterReserve();
+      if (next === footerReserve) return;
+      footerReserve = next;
       if (!running) drawFrame(16, performance.now());
     }
 
@@ -703,6 +721,9 @@
 
     window.addEventListener("resize", resize);
     resize();
+
+    const footerEl = document.getElementById("footer");
+    if (footerEl) new ResizeObserver(syncFooterReserve).observe(footerEl);
 
     return { start, stop, resize, setState };
   }
