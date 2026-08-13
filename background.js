@@ -134,6 +134,15 @@
       alligator: "rgba(10,15,10,0.88)",
       alligatorRidge: "rgba(4,7,5,0.9)",
       alligatorEye: "rgba(244,199,107,0.9)",
+      // Near-black, same recipe as the palm silhouette: a navy-tinted
+      // translucent skyline (tried first, twice) kept blending into the
+      // night sky gradient at some viewport heights — variations on that
+      // idea couldn't out-contrast every stop of that gradient. Only an
+      // actually-dark color reliably can. The blur filter
+      // drawMiamiSkyline() applies is what keeps this reading as
+      // hazy/distant rather than as crisp as the palm trees in front.
+      skyline: "rgba(3,4,9,0.93)",
+      skylineWindow: "rgba(244,199,107,0.9)",
     },
     helsinki: {
       day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
@@ -166,6 +175,16 @@
       // A small light catch-light dot reads far better as an eye against a
       // dark silhouette than a same-tone darker fleck would.
       reindeerEye: "rgba(230,214,190,0.9)",
+      // The summer cottage/sauna are drawn in actual color rather than the
+      // flat translucent silhouettes used elsewhere — a little "punainen
+      // mökki" (red cottage) by the lake reads as charming precisely
+      // because it's not just another dark shape.
+      cottageWall: "rgba(122,45,38,0.92)",
+      cottageTrim: "rgba(250,247,238,0.92)",
+      cottageRoof: "rgba(38,28,24,0.92)",
+      cottageChimney: "rgba(96,58,44,0.92)",
+      cottageWindow: "rgba(248,206,120,0.85)",
+      saunaWall: "rgba(94,68,46,0.9)",
     },
   };
 
@@ -584,6 +603,94 @@
       ctx.restore();
     }
 
+    // A little lakeside summer cottage (mökki) with its own sauna, just
+    // along the shore from the pine cluster — a location fixture like the
+    // forest/lake, drawn unconditionally. Unlike the flat translucent
+    // silhouettes used elsewhere, this one is drawn in actual color: a
+    // small red-and-white cottage reads as "charming" in a way a dark
+    // shape doesn't.
+    function drawSummerCottage() {
+      const groundY = height - footerReserve;
+      ctx.save();
+
+      // --- Main cottage ---
+      const cx = width * 0.175;
+      const cw = Math.min(height * 0.16, 92);
+      const ch = cw * 0.62;
+      const roofH = ch * 0.65;
+      const wallTop = groundY - ch;
+
+      ctx.fillStyle = PALETTES.helsinki.cottageWall;
+      ctx.fillRect(cx - cw / 2, wallTop, cw, ch);
+      // Corner trim.
+      ctx.fillStyle = PALETTES.helsinki.cottageTrim;
+      ctx.fillRect(cx - cw / 2, wallTop, cw * 0.05, ch);
+      ctx.fillRect(cx + cw / 2 - cw * 0.05, wallTop, cw * 0.05, ch);
+      // Roof.
+      ctx.fillStyle = PALETTES.helsinki.cottageRoof;
+      ctx.beginPath();
+      ctx.moveTo(cx - cw * 0.62, wallTop);
+      ctx.lineTo(cx, wallTop - roofH);
+      ctx.lineTo(cx + cw * 0.62, wallTop);
+      ctx.closePath();
+      ctx.fill();
+      // Chimney — its own color (not roof-colored, which made it
+      // invisible) and tall enough to clearly clear the roof peak.
+      ctx.fillStyle = PALETTES.helsinki.cottageChimney;
+      const chimneyTop = wallTop - roofH * 1.18;
+      ctx.fillRect(cx + cw * 0.14, chimneyTop, cw * 0.08, roofH * 0.75);
+      // Door.
+      ctx.fillStyle = PALETTES.helsinki.cottageTrim;
+      const doorW = cw * 0.16;
+      const doorH = ch * 0.5;
+      ctx.fillRect(cx - doorW / 2, groundY - doorH, doorW, doorH);
+      // Windows, either side of the door — a warm glow for coziness.
+      ctx.fillStyle = PALETTES.helsinki.cottageWindow;
+      const winW = cw * 0.15;
+      const winY = wallTop + ch * 0.22;
+      [cx - cw * 0.32, cx + cw * 0.32].forEach((wx) => {
+        ctx.fillRect(wx - winW / 2, winY, winW, winW);
+      });
+      // Window cross-bars.
+      ctx.strokeStyle = PALETTES.helsinki.cottageWall;
+      ctx.lineWidth = Math.max(1, winW * 0.09);
+      [cx - cw * 0.32, cx + cw * 0.32].forEach((wx) => {
+        ctx.beginPath();
+        ctx.moveTo(wx, winY);
+        ctx.lineTo(wx, winY + winW);
+        ctx.moveTo(wx - winW / 2, winY + winW / 2);
+        ctx.lineTo(wx + winW / 2, winY + winW / 2);
+        ctx.stroke();
+      });
+
+      // --- Sauna: a smaller weathered-wood building beside it, the way
+      // lakeside saunas actually sit apart from the main cottage. ---
+      const sx = cx + cw * 1.05;
+      const sw = cw * 0.58;
+      const sh = sw * 0.62;
+      const sRoofH = sh * 0.55;
+      const sWallTop = groundY - sh;
+      ctx.fillStyle = PALETTES.helsinki.saunaWall;
+      ctx.fillRect(sx - sw / 2, sWallTop, sw, sh);
+      // Roof — a distinct darker color from the walls, same as the cottage.
+      ctx.fillStyle = PALETTES.helsinki.cottageRoof;
+      ctx.beginPath();
+      ctx.moveTo(sx - sw * 0.58, sWallTop);
+      ctx.lineTo(sx, sWallTop - sRoofH);
+      ctx.lineTo(sx + sw * 0.58, sWallTop);
+      ctx.closePath();
+      ctx.fill();
+      // Stovepipe — tall enough to clear the roof peak, same chimney color
+      // as the cottage.
+      ctx.fillStyle = PALETTES.helsinki.cottageChimney;
+      ctx.fillRect(sx - sw * 0.22, sWallTop - sRoofH * 1.2, sw * 0.07, sRoofH * 0.75);
+      // Small window, same warm glow as the cottage.
+      ctx.fillStyle = PALETTES.helsinki.cottageWindow;
+      ctx.fillRect(sx - sw * 0.11, sWallTop + sh * 0.32, sw * 0.22, sw * 0.22);
+
+      ctx.restore();
+    }
+
     // A calm lake band at the shoreline — Miami's ocean equivalent, but
     // still water rather than surf: one gentle ripple, no swells or foam.
     function drawLake(t) {
@@ -779,6 +886,83 @@
         ctx.fillRect(0, 0, width * 0.7, height * 0.6);
         ctx.restore();
       });
+      ctx.restore();
+    }
+
+    // Downtown Miami's skyline, hazy across the water — a location fixture
+    // like the ocean/palms, drawn unconditionally. Sits behind the ocean
+    // (drawn next, in drawFrame) so its translucent water bands wash over
+    // the buildings' feet, and it's deliberately lower-contrast/blurred
+    // than the palm trees in front so it reads as background depth rather
+    // than a second foreground shape competing with them.
+    function drawMiamiSkyline() {
+      // Anchored to groundY and pixel-capped, same pattern as the palm
+      // trees/forest — a bandH-relative anchor (tried first) put the
+      // skyline at very different heights on tall mobile viewports vs.
+      // wide desktop ones, in some cases pushing it up against the plain
+      // night sky with nothing behind it for contrast.
+      const groundY = height - footerReserve;
+      const baseY = groundY - Math.min(height * 0.02, 8);
+      // Heights/widths are hand-picked (not procedural) for a silhouette
+      // that reads as a real, slightly irregular skyline rather than a
+      // repeating pattern — same approach as the palm/forest clusters.
+      const buildings = [
+        { x: 0.17, w: 0.016, h: 0.07 },
+        { x: 0.193, w: 0.012, h: 0.045 },
+        { x: 0.212, w: 0.018, h: 0.095 },
+        { x: 0.238, w: 0.014, h: 0.06 },
+        { x: 0.258, w: 0.02, h: 0.13, deco: true }, // tallest — stepped art-deco crown
+        { x: 0.286, w: 0.013, h: 0.05 },
+        { x: 0.305, w: 0.016, h: 0.08 },
+        { x: 0.328, w: 0.011, h: 0.04 },
+        { x: 0.344, w: 0.017, h: 0.1 },
+        { x: 0.368, w: 0.013, h: 0.055 },
+        { x: 0.388, w: 0.015, h: 0.07 },
+      ];
+      ctx.save();
+      ctx.filter = "blur(1.3px)";
+      buildings.forEach((b, i) => {
+        const x = width * b.x;
+        const w = Math.max(3, width * b.w);
+        // Capped in px (not just a height fraction) so buildings stay a
+        // sensible size on tall/narrow mobile viewports instead of
+        // scaling up with the full page height.
+        const h = Math.min(height * b.h, 140 * (b.h / 0.13));
+        const top = baseY - h;
+        ctx.fillStyle = PALETTES.miami.skyline;
+        if (b.deco) {
+          // A simple stepped crown — a small nod to Miami's actual Art
+          // Deco skyline character instead of every tower being a plain box.
+          ctx.beginPath();
+          ctx.moveTo(x, baseY);
+          ctx.lineTo(x, top + h * 0.22);
+          ctx.lineTo(x + w * 0.22, top + h * 0.22);
+          ctx.lineTo(x + w * 0.22, top);
+          ctx.lineTo(x + w * 0.78, top);
+          ctx.lineTo(x + w * 0.78, top + h * 0.22);
+          ctx.lineTo(x + w, top + h * 0.22);
+          ctx.lineTo(x + w, baseY);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.fillRect(x, top, w, h);
+        }
+        // A handful of deterministic (index-seeded, not random) lit
+        // windows, so downtown reads as inhabited without flickering a
+        // new random pattern every frame.
+        ctx.fillStyle = PALETTES.miami.skylineWindow;
+        for (let row = 0; row < 4; row++) {
+          for (let col = 0; col < 2; col++) {
+            if (Math.sin(i * 3.1 + row * 1.7 + col * 2.3) > 0.5) {
+              const wx = x + w * (0.25 + col * 0.45);
+              const wy = top + h * (0.18 + row * 0.2);
+              const wSize = Math.max(1, w * 0.14);
+              ctx.fillRect(wx, wy, wSize, wSize);
+            }
+          }
+        }
+      });
+      ctx.filter = "none";
       ctx.restore();
     }
 
@@ -1151,12 +1335,17 @@
       // availability, same as the horizon glow. The alligator/reindeer
       // crossings are timer-driven, independent of weather data too.
       if (city === "miami") {
+        // Skyline first, so the ocean's translucent water bands (drawn
+        // next) wash over its base — it needs to sit visually behind the
+        // water, not float in front of it.
+        drawMiamiSkyline();
         drawOcean(ts);
         drawPalmTrees();
         maybeAlligator(dt, ts);
       } else {
         drawLake(ts);
         drawForest();
+        drawSummerCottage();
         maybeReindeer(dt, ts);
       }
       if (!envState) return; // calm neutral: sky + motes (+ fixtures) only, no invented conditions
