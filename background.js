@@ -141,26 +141,28 @@
       // actually-dark color reliably can. The blur filter
       // drawMiamiSkyline() applies is what keeps this reading as
       // hazy/distant rather than as crisp as the palm trees in front.
-      skyline: "rgba(3,4,9,0.93)",
-      skylineWindow: "rgba(244,199,107,0.9)",
+      // Softened from an earlier, nearly-opaque version (0.93) once it no
+      // longer needed to fight for contrast against the plain night sky —
+      // repositioning it near the horizon glow (see baseY below) handled
+      // that, freeing this up to blend more like real atmospheric haze.
+      skyline: "rgba(6,9,16,0.8)",
+      // A lighter, more transparent haze tone — used for the distant
+      // second row and for fading each building's roofline into the sky,
+      // rather than every structure reading as one uniform silhouette.
+      skylineFar: "rgba(20,26,42,0.35)",
+      skylineWindow: "rgba(244,199,107,0.85)",
       // South Beach Art Deco neon — hot pink and cyan tube signage, the
       // two colors that dominate an Ocean Drive night shot, plus a
       // secondary violet for variety. Cyan intentionally matches
       // --color-accent so the skyline's lighting ties back into the
       // site's own palette rather than introducing an unrelated hue.
-      neonPink: "rgba(255,55,150,0.95)",
-      neonCyan: "rgba(80,240,220,0.95)",
-      neonPurple: "rgba(180,110,255,0.9)",
+      neonPink: "rgba(255,55,150,0.8)",
+      neonCyan: "rgba(80,240,220,0.8)",
+      neonPurple: "rgba(180,110,255,0.75)",
       // A soft, wide bloom sitting low in the sky above the strip — the
       // colored haze neon signage casts on real overcast/humid Miami
       // nights, drawn once behind all the buildings rather than per-light.
       neonBloom: "rgba(255,70,170,0.1)",
-      // Same near-black, high-opacity recipe as the palm/skyline — a bird
-      // silhouette crosses through every part of the sky gradient during
-      // its flight, so it needs to out-contrast all of it, not just
-      // whichever stop it started against.
-      pelican: "rgba(6,8,14,0.92)",
-      pelicanRim: "rgba(255,190,150,0.4)",
     },
     helsinki: {
       day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
@@ -204,10 +206,6 @@
       cottageWindow: "rgba(248,206,120,0.85)",
       saunaWall: "rgba(94,68,46,0.9)",
       smoke: "rgba(235,233,228,1)",
-      // Dark enough to contrast against both the pale day sky and the
-      // dark night/winter sky — an owl crosses through whichever is active.
-      owl: "rgba(42,32,24,0.92)",
-      owlEye: "rgba(244,199,107,0.9)",
     },
   };
 
@@ -247,17 +245,6 @@
     let reindeerTimer = randomCrossingDelay();
     let reindeerElapsed = 0;
     let reindeerActive = false;
-
-    // Same mechanic again, but through the sky rather than along the
-    // ground/water — Miami's pelican, Helsinki's owl.
-    const PELICAN_CROSSING_MS = 10000;
-    const OWL_CROSSING_MS = 11000;
-    let pelicanTimer = randomCrossingDelay();
-    let pelicanElapsed = 0;
-    let pelicanActive = false;
-    let owlTimer = randomCrossingDelay();
-    let owlElapsed = 0;
-    let owlActive = false;
 
     function randomLightningDelay() {
       return 9000 + Math.random() * 11000;
@@ -944,127 +931,6 @@
       ctx.restore();
     }
 
-    // Flies left-to-right across the sky every 25–60s, then rests — same
-    // mechanic as the reindeer's ground crossing, just airborne.
-    function maybeOwl(dt, t) {
-      if (owlActive) {
-        owlElapsed += dt;
-        if (owlElapsed >= OWL_CROSSING_MS) {
-          owlActive = false;
-          owlTimer = randomCrossingDelay();
-          return;
-        }
-      } else {
-        owlTimer -= dt;
-        if (owlTimer <= 0) {
-          owlActive = true;
-          owlElapsed = 0;
-        } else {
-          return;
-        }
-      }
-
-      const frac = owlElapsed / OWL_CROSSING_MS;
-      const x = -width * 0.08 + frac * width * 1.16;
-      const flightY = height * 0.26 + Math.sin(frac * Math.PI * 2.2) * height * 0.02;
-      const s = Math.min(height * 0.1, 42);
-      // Slower, broader wingbeat than the pelican's, with a distinct pause
-      // at the top of each stroke — owls fly with a few slow flaps and a
-      // long glide, not a continuous even oscillation. Raising a sine to
-      // an odd power keeps its range and sign but flattens it near the
-      // extremes and steepens it through the middle, giving that
-      // flap-flap-glide rhythm instead of a metronome swing.
-      const raw = Math.sin(t / 320);
-      const flap = Math.sign(raw) * Math.pow(Math.abs(raw), 0.6);
-      // Extra fold at the wrist on the upstroke, same idea as the
-      // pelican's — a rigid paddle sweeping symmetrically doesn't read as
-      // a real wingbeat.
-      const wristBend = Math.max(0, flap) * 0.7;
-
-      ctx.save();
-      ctx.translate(x, flightY);
-
-      // A broad, rounded wing in two hinged segments, with a softly
-      // fringed trailing edge — the comb-like serration on a real owl's
-      // flight feathers that gives it silent flight, and a good visual
-      // cue distinguishing it from the pelican's smoother, pointed wing.
-      function owlWing(shoulderAngle) {
-        ctx.save();
-        ctx.rotate(shoulderAngle);
-        ctx.fillStyle = PALETTES.helsinki.owl;
-        // Inner wing (arm) — broad and rounded.
-        ctx.beginPath();
-        ctx.moveTo(0, -s * 0.12);
-        ctx.quadraticCurveTo(-s * 0.28, -s * 0.32, -s * 0.5, -s * 0.1);
-        ctx.lineTo(-s * 0.5, s * 0.14);
-        ctx.quadraticCurveTo(-s * 0.24, s * 0.22, 0, s * 0.14);
-        ctx.closePath();
-        ctx.fill();
-        // Outer wing (hand), hinged at the wrist, rounded at the tip with
-        // a fringed trailing edge.
-        ctx.translate(-s * 0.5, 0);
-        ctx.rotate(wristBend);
-        ctx.beginPath();
-        ctx.moveTo(0, -s * 0.1);
-        ctx.quadraticCurveTo(-s * 0.3, -s * 0.16, -s * 0.5, -s * 0.02);
-        ctx.quadraticCurveTo(-s * 0.56, s * 0.04, -s * 0.46, s * 0.08);
-        // Fringe: a few small comb-teeth along the trailing edge.
-        ctx.lineTo(-s * 0.36, s * 0.05);
-        ctx.lineTo(-s * 0.28, s * 0.1);
-        ctx.lineTo(-s * 0.19, s * 0.06);
-        ctx.lineTo(-s * 0.11, s * 0.1);
-        ctx.lineTo(0, s * 0.07);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // Far wing.
-      ctx.save();
-      ctx.translate(-s * 0.02, -s * 0.06);
-      owlWing(-0.3 - flap * 0.55);
-      ctx.restore();
-
-      // Body — rounder than the pelican's.
-      ctx.fillStyle = PALETTES.helsinki.owl;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, s * 0.38, s * 0.26, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Round head with two small ear tufts.
-      const headX = s * 0.26;
-      const headY = -s * 0.16;
-      ctx.beginPath();
-      ctx.arc(headX, headY, s * 0.22, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(headX - s * 0.14, headY - s * 0.18);
-      ctx.lineTo(headX - s * 0.2, headY - s * 0.32);
-      ctx.lineTo(headX - s * 0.04, headY - s * 0.2);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(headX + s * 0.1, headY - s * 0.2);
-      ctx.lineTo(headX + s * 0.17, headY - s * 0.33);
-      ctx.lineTo(headX + s * 0.21, headY - s * 0.18);
-      ctx.closePath();
-      ctx.fill();
-      // Eyes — small warm catch-lights, same trick used for the reindeer.
-      ctx.fillStyle = PALETTES.helsinki.owlEye;
-      ctx.beginPath();
-      ctx.arc(headX - s * 0.07, headY - s * 0.02, s * 0.045, 0, Math.PI * 2);
-      ctx.arc(headX + s * 0.08, headY - s * 0.02, s * 0.045, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Near wing, broad and rounded, flapping.
-      ctx.save();
-      ctx.translate(-s * 0.02, s * 0.04);
-      owlWing(0.25 + flap * 0.6);
-      ctx.restore();
-
-      ctx.restore();
-    }
-
     function drawFog(color, alpha) {
       ctx.save();
       ctx.globalAlpha = alpha;
@@ -1159,6 +1025,27 @@
 
       ctx.save();
 
+      // A hazier, heavily-blurred second row of low bumps behind the main
+      // buildings — real skylines have depth, city receding into the haze
+      // rather than one flat row of towers. No windows/neon here, just
+      // silhouette, so it reads as "more city, further back" rather than
+      // competing for attention with the buildings in front of it.
+      ctx.save();
+      ctx.filter = "blur(4px)";
+      ctx.fillStyle = PALETTES.miami.skylineFar;
+      ctx.beginPath();
+      ctx.moveTo(width * 0.14, baseY);
+      const farBumps = [0.03, 0.06, 0.045, 0.07, 0.05, 0.08, 0.04, 0.065, 0.035, 0.055, 0.045, 0.03];
+      farBumps.forEach((hFrac, i) => {
+        const fx = width * (0.14 + (i / (farBumps.length - 1)) * 0.29);
+        const fh = Math.min(height * hFrac, 55);
+        ctx.lineTo(fx, baseY - fh);
+      });
+      ctx.lineTo(width * 0.43, baseY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
       // Soft ambient bloom low in the sky above the strip — drawn once,
       // behind every building, rather than glow-per-light, so it reads as
       // one atmospheric wash instead of eleven overlapping haloes.
@@ -1175,7 +1062,10 @@
       ctx.fillStyle = bloom;
       ctx.fillRect(0, baseY - height * 0.22, width, height * 0.24);
 
-      ctx.filter = "blur(1.3px)";
+      // A touch more blur than before, softening the whole cluster so it
+      // reads as sitting back in the scene rather than pasted flat on top
+      // of it — the palm trees in front stay crisp by contrast.
+      ctx.filter = "blur(1.8px)";
       buildings.forEach((b, i) => {
         const x = width * b.x;
         const w = Math.max(3, width * b.w);
@@ -1184,7 +1074,15 @@
         // scaling up with the full page height.
         const h = Math.min(height * b.h, 140 * (b.h / 0.13));
         const top = baseY - h;
-        ctx.fillStyle = PALETTES.miami.skyline;
+        // A vertical gradient rather than a flat fill — slightly darker at
+        // the base, easing toward the haze color at the roofline, the way
+        // real distant buildings fade into atmosphere rather than
+        // presenting one uniform silhouette top to bottom.
+        const buildingFill = ctx.createLinearGradient(0, top, 0, baseY);
+        buildingFill.addColorStop(0, PALETTES.miami.skylineFar);
+        buildingFill.addColorStop(0.35, PALETTES.miami.skyline);
+        buildingFill.addColorStop(1, PALETTES.miami.skyline);
+        ctx.fillStyle = buildingFill;
         if (b.deco) {
           // A simple stepped crown — a small nod to Miami's actual Art
           // Deco skyline character instead of every tower being a plain box.
@@ -1572,131 +1470,6 @@
       ctx.restore();
     }
 
-    // Flies left-to-right across the sky every 25–60s, then rests — same
-    // wait-then-cross-then-reset mechanic as the alligator, just airborne.
-    function maybePelican(dt, t) {
-      if (pelicanActive) {
-        pelicanElapsed += dt;
-        if (pelicanElapsed >= PELICAN_CROSSING_MS) {
-          pelicanActive = false;
-          pelicanTimer = randomCrossingDelay();
-          return;
-        }
-      } else {
-        pelicanTimer -= dt;
-        if (pelicanTimer <= 0) {
-          pelicanActive = true;
-          pelicanElapsed = 0;
-        } else {
-          return;
-        }
-      }
-
-      const frac = pelicanElapsed / PELICAN_CROSSING_MS;
-      const x = -width * 0.08 + frac * width * 1.16;
-      // Low, coastal flight, close over the water — and, just as
-      // importantly, inside the warmer/lighter lower portion of the sky
-      // gradient near the horizon glow. Flying it up in the darker upper
-      // sky (tried first) put a near-black silhouette against near-black
-      // sky, the same low-contrast mistake the palm trees originally had.
-      const flightY = height * 0.52 + Math.sin(frac * Math.PI * 2.5) * height * 0.02;
-      const s = Math.min(height * 0.12, 50);
-      // A slower, more deliberate beat than a small songbird's — pelicans
-      // alternate a few unhurried flaps with long glides.
-      const flapCycle = t / 260;
-      const flap = Math.sin(flapCycle);
-      // Extra bend at the "wrist" partway along the wing, biased toward
-      // the upstroke (flap > 0 here) — real flapping isn't a rigid paddle
-      // sweeping symmetrically; the outer wing folds more on the way up
-      // than it does on the way down.
-      const wristBend = Math.max(0, flap) * 0.8;
-
-      ctx.save();
-      ctx.translate(x, flightY);
-
-      // A wing, drawn in two hinged segments (shoulder→wrist, then
-      // wrist→tip) so the flap has a visible bend instead of swinging as
-      // one stiff paddle, with a couple of notches at the tip suggesting
-      // primary feathers.
-      function pelicanWing(shoulderAngle) {
-        ctx.save();
-        ctx.rotate(shoulderAngle);
-        ctx.fillStyle = PALETTES.miami.pelican;
-        // Inner wing (arm).
-        ctx.beginPath();
-        ctx.moveTo(0, -s * 0.08);
-        ctx.quadraticCurveTo(-s * 0.28, -s * 0.22, -s * 0.52, -s * 0.06);
-        ctx.lineTo(-s * 0.52, s * 0.1);
-        ctx.quadraticCurveTo(-s * 0.26, s * 0.16, 0, s * 0.1);
-        ctx.closePath();
-        ctx.fill();
-        // Rim-light along the leading edge, catching the horizon glow —
-        // the same trick that made the palm fronds read as distinct
-        // blades instead of a flat silhouette.
-        ctx.save();
-        ctx.strokeStyle = PALETTES.miami.pelicanRim;
-        ctx.lineWidth = Math.max(1, s * 0.02);
-        ctx.beginPath();
-        ctx.moveTo(0, -s * 0.07);
-        ctx.quadraticCurveTo(-s * 0.28, -s * 0.2, -s * 0.5, -s * 0.05);
-        ctx.stroke();
-        ctx.restore();
-        // Outer wing (hand/primaries), hinged at the wrist.
-        ctx.translate(-s * 0.52, 0);
-        ctx.rotate(wristBend);
-        ctx.beginPath();
-        ctx.moveTo(0, -s * 0.07);
-        ctx.quadraticCurveTo(-s * 0.32, -s * 0.1, -s * 0.55, 0);
-        ctx.lineTo(-s * 0.4, s * 0.05);
-        ctx.lineTo(-s * 0.26, s * 0.02);
-        ctx.lineTo(-s * 0.12, s * 0.08);
-        ctx.lineTo(0, s * 0.06);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // Far wing first, so the body/near wing paint over it.
-      ctx.save();
-      ctx.translate(-s * 0.04, -s * 0.04);
-      pelicanWing(-0.35 - flap * 0.4);
-      ctx.restore();
-
-      // Body.
-      ctx.fillStyle = PALETTES.miami.pelican;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, s * 0.5, s * 0.2, -0.05, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Head, long beak, and the droopy throat pouch — the single detail
-      // that makes this read as "pelican" instead of "generic bird".
-      const headX = s * 0.55;
-      const headY = -s * 0.02;
-      ctx.beginPath();
-      ctx.ellipse(headX, headY, s * 0.14, s * 0.11, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(headX + s * 0.1, headY - s * 0.02);
-      ctx.lineTo(headX + s * 0.62, headY + s * 0.04);
-      ctx.lineTo(headX + s * 0.1, headY + s * 0.13);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(headX + s * 0.15, headY + s * 0.08);
-      ctx.quadraticCurveTo(headX + s * 0.32, headY + s * 0.27, headX + s * 0.5, headY + s * 0.09);
-      ctx.quadraticCurveTo(headX + s * 0.34, headY + s * 0.16, headX + s * 0.15, headY + s * 0.08);
-      ctx.closePath();
-      ctx.fill();
-
-      // Near wing, on top, flapping.
-      ctx.save();
-      ctx.translate(-s * 0.01, s * 0.03);
-      pelicanWing(0.3 + flap * 0.55);
-      ctx.restore();
-
-      ctx.restore();
-    }
-
     function drawHeatShimmer(t) {
       const groundY = height - footerReserve;
       const bandH = height * 0.3;
@@ -1765,13 +1538,11 @@
         drawOcean(ts);
         drawPalmTrees();
         maybeAlligator(dt, ts);
-        maybePelican(dt, ts);
       } else {
         drawLake(ts);
         drawForest();
         drawSummerCottage(ts);
         maybeReindeer(dt, ts);
-        maybeOwl(dt, ts);
       }
       if (!envState) return; // calm neutral: sky + motes (+ fixtures) only, no invented conditions
 
