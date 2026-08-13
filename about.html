@@ -506,7 +506,11 @@
     .hero-banner {
       position: relative;
       width: 100%;
-      aspect-ratio: 2 / 1;
+      /* A pure aspect-ratio here scales the banner with viewport width
+         alone, so it turns genuinely huge on wide monitors — a capped,
+         viewport-relative height keeps it a proportioned banner instead
+         of a page-dominating slab at any width. */
+      height: clamp(260px, 34vw, 420px);
       overflow: hidden;
     }
     .hero-banner-img {
@@ -577,7 +581,7 @@
     }
     @media (max-width: 767px) {
       .hero-banner {
-        aspect-ratio: 5 / 6;
+        height: clamp(280px, 62vw, 360px);
       }
       .hero-banner-img {
         object-position: 62% 38%;

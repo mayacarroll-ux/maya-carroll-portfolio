@@ -551,6 +551,23 @@
     renderCurrency();
   });
 
+  // ---- Footer clearance ----
+  // The footer is position:sticky, so on any page short enough that it
+  // rests at the viewport bottom without scrolling, main's fixed
+  // padding-bottom has to be at least the footer's real rendered height
+  // or the footer sits on top of (and hides) the last bit of content.
+  // A fixed guess breaks the moment the footer wraps differently — a
+  // longer translated tagline, a taller mobile ticker slide, a narrower
+  // viewport — so this measures it instead.
+  const footerEl = document.getElementById("footer");
+  const mainEl = document.querySelector("main");
+  function adjustFooterClearance() {
+    if (!footerEl || !mainEl) return;
+    mainEl.style.paddingBottom = footerEl.offsetHeight + 24 + "px";
+  }
+  adjustFooterClearance();
+  window.addEventListener("resize", adjustFooterClearance);
+
   // ---- Mobile ticker rotation ----
   // Below 600px (see each host page's #city-strip CSS) only one of the
   // three direct children — Miami, Helsinki, currency — is shown at a
@@ -563,6 +580,9 @@
     let slideIndex = 0;
     function showSlide(i) {
       slides.forEach((el, idx) => el.classList.toggle("is-active", idx === i));
+      // Different slides can wrap to different heights (a severe-weather
+      // badge, a longer translated string), so re-measure after each swap.
+      adjustFooterClearance();
     }
     showSlide(0);
     setInterval(() => {
