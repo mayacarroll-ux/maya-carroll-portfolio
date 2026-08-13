@@ -471,6 +471,7 @@
       font-weight: 500;
       opacity: 0.8;
       color: var(--color-text-secondary);
+      white-space: nowrap;
     }
 
     /* ---------- Footer: shared city-strip (time + weather + currency) ----------
@@ -642,6 +643,12 @@
       }
       footer {
         font-size: 0.76rem;
+      }
+      footer p {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.15rem;
       }
     }
     @media (max-width: 599px) and (prefers-reduced-motion: reduce) {
