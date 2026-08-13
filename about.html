@@ -495,11 +495,8 @@
     }
 
     /* ==================== About hero: full-bleed photo banner ====================
-       Text always sits directly on the photo via a gradient scrim rather
-       than beside it — heading/role overlaid top-left on desktop, the
-       gradient direction flips to top-down on mobile since the taller
-       crop there puts more of the empty wall above the subject rather
-       than to her left. */
+       Carries only the role text now — the greeting + avatar sit below
+       the photo, centered, rather than overlaid on it. */
     #about-hero {
       padding-bottom: clamp(2.5rem, 6vw, 4rem);
     }
@@ -539,31 +536,34 @@
       padding: 0 clamp(1.5rem, 6vw, 4rem);
       background: linear-gradient(100deg, rgba(7, 11, 24, 0.6) 0%, rgba(7, 11, 24, 0.28) 42%, rgba(7, 11, 24, 0) 62%);
     }
-    .hero-banner-overlay h1 {
-      color: #fff;
-      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
-      font-size: clamp(2rem, 5vw, 3.2rem);
-    }
     .hero-banner-overlay .hero-role {
       color: #fff;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-      margin: 0.5rem 0 0;
+      margin: 0;
       font-size: 1.1rem;
       font-weight: 700;
     }
-    .hero-content {
+
+    /* ==================== About intro: centered avatar + heading ==================== */
+    .intro-header {
       max-width: 46rem;
       margin: 0 auto;
       padding: clamp(2rem, 5vw, 3rem) 1.5rem 0;
+      text-align: center;
     }
-    .hero-portrait {
-      float: left;
+    .intro-avatar {
+      display: block;
       width: 128px;
       height: 128px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 0.25rem 1.5rem 1rem 0;
+      margin: 0 auto 1.5rem;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    .hero-content {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 2rem) 1.5rem 0;
     }
     .hero-copy {
       margin: 0 0 1.1rem;
@@ -606,16 +606,13 @@
         object-position: 62% 38%;
       }
       .hero-banner-overlay {
-        justify-content: flex-start;
-        padding-top: clamp(1.5rem, 6vw, 2.5rem);
-        background: linear-gradient(180deg, rgba(7, 11, 24, 0.65) 0%, rgba(7, 11, 24, 0.25) 38%, rgba(7, 11, 24, 0) 60%);
+        justify-content: flex-end;
+        padding-bottom: clamp(1.5rem, 6vw, 2.5rem);
+        background: linear-gradient(0deg, rgba(7, 11, 24, 0.65) 0%, rgba(7, 11, 24, 0.25) 38%, rgba(7, 11, 24, 0) 60%);
       }
-      .hero-portrait {
-        float: none;
-        display: block;
+      .intro-avatar {
         width: 96px;
         height: 96px;
-        margin: 0 0 1.1rem;
       }
     }
 
@@ -930,20 +927,23 @@
           height="900"
         />
         <div class="hero-banner-overlay">
-          <h1 data-i18n="about_h1">Hi, I'm Maya.</h1>
-          <p class="hero-role" data-i18n="about_title">AI Product &amp; Design Leader</p>
+          <p class="hero-role">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
       </div>
 
-      <div class="hero-content">
+      <div class="intro-header">
         <img
-          class="hero-portrait"
+          class="intro-avatar"
           src="about-portrait.jpg"
           alt="Maya Carroll headshot"
           width="128"
           height="128"
           loading="lazy"
         />
+        <h1 data-i18n="about_h1">Hi, I'm Maya.</h1>
+      </div>
+
+      <div class="hero-content">
         <p class="hero-copy" data-i18n="about_p1">
           I turn complex technology into clear, useful products people can trust. My
           background spans product design, product management, and user research—from senior
