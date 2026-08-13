@@ -160,6 +160,7 @@
       // its flight, so it needs to out-contrast all of it, not just
       // whichever stop it started against.
       pelican: "rgba(6,8,14,0.92)",
+      pelicanRim: "rgba(255,190,150,0.4)",
     },
     helsinki: {
       day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
@@ -767,8 +768,30 @@
       }
       ctx.lineTo(width, height);
       ctx.closePath();
-      ctx.fillStyle = PALETTES.helsinki.lake;
+      // A gradient that darkens/deepens toward the bottom, same idea as
+      // the ocean's base — a single flat 0.35-alpha fill (tried first)
+      // washed out into an indistinct gray smear against warm dusk/day
+      // skies instead of reading as water, the same low-contrast mistake
+      // the palm trees and skyline originally had.
+      const base = ctx.createLinearGradient(0, top, 0, height);
+      base.addColorStop(0, "rgba(120,178,195,0.4)");
+      base.addColorStop(0.4, "rgba(88,150,175,0.68)");
+      base.addColorStop(1, "rgba(55,112,142,0.88)");
+      ctx.fillStyle = base;
       ctx.fill();
+      // A bright ripple line tracing the water's leading edge — the same
+      // "give the surface a visible highlight" technique as the ocean's
+      // foam line, so the lake reads as a body of water rather than a
+      // flat color block.
+      ctx.beginPath();
+      for (let x = 0; x <= width; x += 12) {
+        const y = top + bandH * 0.35 + Math.sin(x * 0.01 + t / 2600) * bandH * 0.06;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = "rgba(255,255,255,0.55)";
+      ctx.lineWidth = 1.25;
+      ctx.stroke();
       ctx.restore();
     }
 
@@ -945,24 +968,65 @@
       const x = -width * 0.08 + frac * width * 1.16;
       const flightY = height * 0.26 + Math.sin(frac * Math.PI * 2.2) * height * 0.02;
       const s = Math.min(height * 0.1, 42);
-      // Slower, broader wingbeat than the pelican's — owls fly with slow,
-      // near-silent flaps rather than quick strokes.
-      const flap = Math.sin(t / 220);
+      // Slower, broader wingbeat than the pelican's, with a distinct pause
+      // at the top of each stroke — owls fly with a few slow flaps and a
+      // long glide, not a continuous even oscillation. Raising a sine to
+      // an odd power keeps its range and sign but flattens it near the
+      // extremes and steepens it through the middle, giving that
+      // flap-flap-glide rhythm instead of a metronome swing.
+      const raw = Math.sin(t / 320);
+      const flap = Math.sign(raw) * Math.pow(Math.abs(raw), 0.6);
+      // Extra fold at the wrist on the upstroke, same idea as the
+      // pelican's — a rigid paddle sweeping symmetrically doesn't read as
+      // a real wingbeat.
+      const wristBend = Math.max(0, flap) * 0.7;
 
       ctx.save();
       ctx.translate(x, flightY);
-      ctx.fillStyle = PALETTES.helsinki.owl;
+
+      // A broad, rounded wing in two hinged segments, with a softly
+      // fringed trailing edge — the comb-like serration on a real owl's
+      // flight feathers that gives it silent flight, and a good visual
+      // cue distinguishing it from the pelican's smoother, pointed wing.
+      function owlWing(shoulderAngle) {
+        ctx.save();
+        ctx.rotate(shoulderAngle);
+        ctx.fillStyle = PALETTES.helsinki.owl;
+        // Inner wing (arm) — broad and rounded.
+        ctx.beginPath();
+        ctx.moveTo(0, -s * 0.12);
+        ctx.quadraticCurveTo(-s * 0.28, -s * 0.32, -s * 0.5, -s * 0.1);
+        ctx.lineTo(-s * 0.5, s * 0.14);
+        ctx.quadraticCurveTo(-s * 0.24, s * 0.22, 0, s * 0.14);
+        ctx.closePath();
+        ctx.fill();
+        // Outer wing (hand), hinged at the wrist, rounded at the tip with
+        // a fringed trailing edge.
+        ctx.translate(-s * 0.5, 0);
+        ctx.rotate(wristBend);
+        ctx.beginPath();
+        ctx.moveTo(0, -s * 0.1);
+        ctx.quadraticCurveTo(-s * 0.3, -s * 0.16, -s * 0.5, -s * 0.02);
+        ctx.quadraticCurveTo(-s * 0.56, s * 0.04, -s * 0.46, s * 0.08);
+        // Fringe: a few small comb-teeth along the trailing edge.
+        ctx.lineTo(-s * 0.36, s * 0.05);
+        ctx.lineTo(-s * 0.28, s * 0.1);
+        ctx.lineTo(-s * 0.19, s * 0.06);
+        ctx.lineTo(-s * 0.11, s * 0.1);
+        ctx.lineTo(0, s * 0.07);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
 
       // Far wing.
       ctx.save();
       ctx.translate(-s * 0.02, -s * 0.06);
-      ctx.rotate(-0.25 - flap * 0.45);
-      ctx.beginPath();
-      ctx.ellipse(-s * 0.45, 0, s * 0.5, s * 0.2, 0.15, 0, Math.PI * 2);
-      ctx.fill();
+      owlWing(-0.3 - flap * 0.55);
       ctx.restore();
 
       // Body — rounder than the pelican's.
+      ctx.fillStyle = PALETTES.helsinki.owl;
       ctx.beginPath();
       ctx.ellipse(0, 0, s * 0.38, s * 0.26, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -993,13 +1057,9 @@
       ctx.fill();
 
       // Near wing, broad and rounded, flapping.
-      ctx.fillStyle = PALETTES.helsinki.owl;
       ctx.save();
       ctx.translate(-s * 0.02, s * 0.04);
-      ctx.rotate(0.2 + flap * 0.5);
-      ctx.beginPath();
-      ctx.ellipse(-s * 0.48, 0, s * 0.55, s * 0.22, -0.1, 0, Math.PI * 2);
-      ctx.fill();
+      owlWing(0.25 + flap * 0.6);
       ctx.restore();
 
       ctx.restore();
@@ -1534,30 +1594,76 @@
 
       const frac = pelicanElapsed / PELICAN_CROSSING_MS;
       const x = -width * 0.08 + frac * width * 1.16;
-      // Low, coastal flight — pelicans typically glide close over the
-      // water — with a gentle undulating glide rather than a flat line.
-      const flightY = height * 0.34 + Math.sin(frac * Math.PI * 2.5) * height * 0.015;
-      const s = Math.min(height * 0.09, 40);
-      const flap = Math.sin(t / 170);
+      // Low, coastal flight, close over the water — and, just as
+      // importantly, inside the warmer/lighter lower portion of the sky
+      // gradient near the horizon glow. Flying it up in the darker upper
+      // sky (tried first) put a near-black silhouette against near-black
+      // sky, the same low-contrast mistake the palm trees originally had.
+      const flightY = height * 0.52 + Math.sin(frac * Math.PI * 2.5) * height * 0.02;
+      const s = Math.min(height * 0.12, 50);
+      // A slower, more deliberate beat than a small songbird's — pelicans
+      // alternate a few unhurried flaps with long glides.
+      const flapCycle = t / 260;
+      const flap = Math.sin(flapCycle);
+      // Extra bend at the "wrist" partway along the wing, biased toward
+      // the upstroke (flap > 0 here) — real flapping isn't a rigid paddle
+      // sweeping symmetrically; the outer wing folds more on the way up
+      // than it does on the way down.
+      const wristBend = Math.max(0, flap) * 0.8;
 
       ctx.save();
       ctx.translate(x, flightY);
-      ctx.fillStyle = PALETTES.miami.pelican;
 
-      // Far wing, drawn first so the body/near wing paint over it — a
-      // little depth without needing a true 3D silhouette.
+      // A wing, drawn in two hinged segments (shoulder→wrist, then
+      // wrist→tip) so the flap has a visible bend instead of swinging as
+      // one stiff paddle, with a couple of notches at the tip suggesting
+      // primary feathers.
+      function pelicanWing(shoulderAngle) {
+        ctx.save();
+        ctx.rotate(shoulderAngle);
+        ctx.fillStyle = PALETTES.miami.pelican;
+        // Inner wing (arm).
+        ctx.beginPath();
+        ctx.moveTo(0, -s * 0.08);
+        ctx.quadraticCurveTo(-s * 0.28, -s * 0.22, -s * 0.52, -s * 0.06);
+        ctx.lineTo(-s * 0.52, s * 0.1);
+        ctx.quadraticCurveTo(-s * 0.26, s * 0.16, 0, s * 0.1);
+        ctx.closePath();
+        ctx.fill();
+        // Rim-light along the leading edge, catching the horizon glow —
+        // the same trick that made the palm fronds read as distinct
+        // blades instead of a flat silhouette.
+        ctx.save();
+        ctx.strokeStyle = PALETTES.miami.pelicanRim;
+        ctx.lineWidth = Math.max(1, s * 0.02);
+        ctx.beginPath();
+        ctx.moveTo(0, -s * 0.07);
+        ctx.quadraticCurveTo(-s * 0.28, -s * 0.2, -s * 0.5, -s * 0.05);
+        ctx.stroke();
+        ctx.restore();
+        // Outer wing (hand/primaries), hinged at the wrist.
+        ctx.translate(-s * 0.52, 0);
+        ctx.rotate(wristBend);
+        ctx.beginPath();
+        ctx.moveTo(0, -s * 0.07);
+        ctx.quadraticCurveTo(-s * 0.32, -s * 0.1, -s * 0.55, 0);
+        ctx.lineTo(-s * 0.4, s * 0.05);
+        ctx.lineTo(-s * 0.26, s * 0.02);
+        ctx.lineTo(-s * 0.12, s * 0.08);
+        ctx.lineTo(0, s * 0.06);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Far wing first, so the body/near wing paint over it.
       ctx.save();
-      ctx.translate(-s * 0.05, -s * 0.05);
-      ctx.rotate(-0.3 - flap * 0.35);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.quadraticCurveTo(-s * 0.4, -s * 0.15, -s * 0.85, -s * 0.05);
-      ctx.quadraticCurveTo(-s * 0.45, s * 0.08, -s * 0.1, s * 0.1);
-      ctx.closePath();
-      ctx.fill();
+      ctx.translate(-s * 0.04, -s * 0.04);
+      pelicanWing(-0.35 - flap * 0.4);
       ctx.restore();
 
       // Body.
+      ctx.fillStyle = PALETTES.miami.pelican;
       ctx.beginPath();
       ctx.ellipse(0, 0, s * 0.5, s * 0.2, -0.05, 0, Math.PI * 2);
       ctx.fill();
@@ -1567,31 +1673,25 @@
       const headX = s * 0.55;
       const headY = -s * 0.02;
       ctx.beginPath();
-      ctx.ellipse(headX, headY, s * 0.13, s * 0.1, 0, 0, Math.PI * 2);
+      ctx.ellipse(headX, headY, s * 0.14, s * 0.11, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(headX + s * 0.09, headY - s * 0.02);
-      ctx.lineTo(headX + s * 0.55, headY + s * 0.04);
-      ctx.lineTo(headX + s * 0.09, headY + s * 0.12);
+      ctx.moveTo(headX + s * 0.1, headY - s * 0.02);
+      ctx.lineTo(headX + s * 0.62, headY + s * 0.04);
+      ctx.lineTo(headX + s * 0.1, headY + s * 0.13);
       ctx.closePath();
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(headX + s * 0.14, headY + s * 0.07);
-      ctx.quadraticCurveTo(headX + s * 0.3, headY + s * 0.24, headX + s * 0.46, headY + s * 0.08);
-      ctx.quadraticCurveTo(headX + s * 0.32, headY + s * 0.14, headX + s * 0.14, headY + s * 0.07);
+      ctx.moveTo(headX + s * 0.15, headY + s * 0.08);
+      ctx.quadraticCurveTo(headX + s * 0.32, headY + s * 0.27, headX + s * 0.5, headY + s * 0.09);
+      ctx.quadraticCurveTo(headX + s * 0.34, headY + s * 0.16, headX + s * 0.15, headY + s * 0.08);
       ctx.closePath();
       ctx.fill();
 
       // Near wing, on top, flapping.
       ctx.save();
-      ctx.translate(-s * 0.02, s * 0.02);
-      ctx.rotate(0.25 + flap * 0.5);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.quadraticCurveTo(-s * 0.35, s * 0.35, -s * 0.9, s * 0.5);
-      ctx.quadraticCurveTo(-s * 0.5, s * 0.15, -s * 0.12, s * 0.1);
-      ctx.closePath();
-      ctx.fill();
+      ctx.translate(-s * 0.01, s * 0.03);
+      pelicanWing(0.3 + flap * 0.55);
       ctx.restore();
 
       ctx.restore();

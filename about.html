@@ -1,0 +1,1452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var theme =
+          saved ||
+          (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Maya Carroll</title>
+  <meta
+    name="description"
+    content="Maya Carroll's professional background, presented as a passport — specialties, experience, and credentials at a glance."
+  />
+  <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/about.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Petit+Formal+Script&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --font-primary: "Manrope", sans-serif;
+      --font-signature: "Petit Formal Script", cursive;
+    }
+    :root[data-theme="dark"] {
+      --color-bg: #070b18;
+      --color-surface: #10172a;
+      --color-text: #f7f3ee;
+      --color-text-secondary: #aab4c8;
+      --color-accent: #39e6d0;
+      --color-accent-3: #f4c76b;
+      --color-warning: #ff5c7a;
+      --color-border: rgba(247, 243, 238, 0.14);
+      --focus-ring: #39e6d0;
+      --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.55);
+      --glow-hover: 0 0 0 1px rgba(57, 230, 208, 0.4), 0 0 18px rgba(57, 230, 208, 0.28);
+    }
+    :root[data-theme="light"] {
+      --color-bg: #f5f7f6;
+      --color-surface: #ffffff;
+      --color-text: #17211e;
+      --color-text-secondary: #60706a;
+      --color-accent: #1f5a4a;
+      --color-accent-3: #dce6e2;
+      --color-warning: #c23b52;
+      --color-border: #dce6e2;
+      --focus-ring: #1f5a4a;
+      --shadow-elevated: 0 12px 32px rgba(23, 33, 30, 0.1);
+      --glow-hover: 0 0 0 1px rgba(31, 90, 74, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-primary);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.55;
+    }
+    :focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    main {
+      padding-bottom: 4rem;
+    }
+    h1, h2, h3 {
+      font-family: var(--font-primary);
+      margin: 0;
+    }
+
+    /* ==================== Header (same as index.html) ====================
+       Kept byte-identical in structure across pages on purpose so it
+       doesn't drift. No #city-strip / animated background here — this is
+       a content page, same footprint as dashboard.html/calendar.html. */
+    #topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+    #header-primary {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 0.85rem 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    #brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: inherit;
+      flex-shrink: 0;
+    }
+    #nav-avatar {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--color-accent-3);
+      flex-shrink: 0;
+    }
+    #site-title {
+      font-family: var(--font-primary);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      line-height: 1;
+      font-size: 1.35rem;
+      white-space: nowrap;
+    }
+    .site-title-short {
+      display: none;
+    }
+    @media (max-width: 599px) {
+      #site-title {
+        font-size: 1.15rem;
+      }
+      .site-title-full {
+        display: none;
+      }
+      .site-title-short {
+        display: inline;
+      }
+    }
+    #primary-nav {
+      display: flex;
+      gap: 1.6rem;
+      font-size: 0.9rem;
+      margin-right: auto;
+    }
+    #primary-nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-family: var(--font-primary);
+      font-weight: 600;
+      padding: 0.3rem 0.1rem;
+    }
+    #primary-nav a:hover,
+    #primary-nav a:focus-visible,
+    #primary-nav a[aria-current="page"] {
+      color: var(--color-text);
+    }
+    #account-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-size: 0.8rem;
+    }
+    #account-nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-family: var(--font-primary);
+      font-weight: 600;
+      opacity: 0.75;
+      padding: 0.3rem 0.1rem;
+    }
+    #account-nav a:hover,
+    #account-nav a:focus-visible {
+      opacity: 1;
+      color: var(--color-text);
+    }
+    #preferences {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    button {
+      font-family: var(--font-primary);
+      font-weight: 600;
+    }
+    #theme-toggle,
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+      min-height: 44px;
+      padding: 0.5rem 0.75rem;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    #theme-toggle:hover,
+    #lang-toggle:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+    #theme-toggle:active,
+    #lang-toggle:active {
+      transform: scale(0.96);
+    }
+    #theme-label {
+      font-weight: 600;
+    }
+    #lang-switcher {
+      position: relative;
+    }
+    #lang-toggle .chevron {
+      color: var(--color-text-secondary);
+      font-size: 0.7rem;
+      transition: transform 0.15s ease;
+    }
+    #lang-switcher[data-open="true"] #lang-toggle .chevron {
+      transform: rotate(180deg);
+    }
+    #lang-menu {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      right: 0;
+      min-width: 100%;
+      list-style: none;
+      margin: 0;
+      padding: 0.3rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-top: 2px solid var(--color-accent);
+      border-radius: 8px;
+      box-shadow: var(--shadow-elevated);
+      display: none;
+      flex-direction: column;
+      z-index: 5;
+    }
+    #lang-switcher[data-open="true"] #lang-menu {
+      display: flex;
+    }
+    #lang-menu li button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: inherit;
+      background: transparent;
+      color: var(--color-text);
+      border: none;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      min-height: 40px;
+      transition: background 0.15s ease;
+    }
+    #lang-menu li button:hover {
+      background: var(--color-bg);
+    }
+    #lang-menu li button[aria-current="true"] {
+      background: var(--color-bg);
+      box-shadow: inset 2px 0 0 var(--color-accent);
+    }
+    .flag {
+      font-size: 1.1rem;
+    }
+    .globe {
+      font-size: 1rem;
+    }
+    .menu-heading {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      padding: 0.3rem 0.6rem 0.4rem;
+    }
+    #menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #menu-toggle:hover {
+      border-color: var(--color-accent);
+    }
+    .menu-icon {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 18px;
+    }
+    .menu-icon span {
+      display: block;
+      height: 2px;
+      border-radius: 1px;
+      background: currentColor;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) {
+      opacity: 0;
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .menu-icon span {
+        transition: none;
+      }
+    }
+    @media (max-width: 959px) {
+      #primary-nav,
+      #account-nav,
+      #header-primary > #preferences {
+        display: none;
+      }
+      #menu-toggle {
+        display: flex;
+        margin-left: auto;
+      }
+    }
+    #mobile-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 40;
+    }
+    #mobile-menu-backdrop[hidden] {
+      display: none;
+    }
+    #mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(320px, 85vw);
+      background: var(--color-surface);
+      border-left: 1px solid var(--color-border);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      overflow-y: auto;
+      box-shadow: var(--shadow-elevated);
+    }
+    #mobile-menu[hidden] {
+      display: none;
+    }
+    #mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    #mobile-menu-title {
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+    }
+    #mobile-menu-close {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      line-height: 1;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    #mobile-menu-close:hover {
+      border-color: var(--color-accent);
+    }
+    #mobile-menu-nav-slot #primary-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-size: 1.05rem;
+      margin: 0 0 1.5rem;
+    }
+    #mobile-menu-nav-slot #primary-nav a {
+      padding: 0.8rem 0.2rem;
+      border-bottom: 1px solid var(--color-border);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+    #mobile-menu-account-slot #account-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-size: 1.05rem;
+      margin: 0 0 1.5rem;
+    }
+    #mobile-menu-account-slot #account-nav a {
+      padding: 0.8rem 0.2rem;
+      border-bottom: 1px solid var(--color-border);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      opacity: 0.75;
+    }
+    #mobile-menu-account-slot #account-nav a[hidden] {
+      display: none;
+    }
+    #mobile-menu-prefs .menu-heading {
+      padding: 0 0 0.6rem;
+    }
+    #mobile-menu-prefs-slot #preferences {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.6rem;
+    }
+    #mobile-menu-prefs-slot #theme-toggle,
+    #mobile-menu-prefs-slot #lang-toggle {
+      width: 100%;
+      justify-content: flex-start;
+      font-size: 0.92rem;
+    }
+    #mobile-menu-prefs-slot #lang-menu {
+      position: static;
+      margin-top: 0.4rem;
+      box-shadow: none;
+      display: flex;
+    }
+    #mobile-menu-prefs-slot #lang-switcher[data-open="false"] #lang-menu {
+      display: none;
+    }
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    /* ==================== Passport ==================== */
+    #passport-cover {
+      background: linear-gradient(160deg, #0d2b22 0%, #143a2d 55%, #0d2b22 100%);
+      color: #f2ede0;
+      padding: clamp(2.5rem, 7vw, 4.5rem) 0 clamp(2rem, 5vw, 3rem);
+      text-align: center;
+      border-bottom: 4px solid #c9a45c;
+      position: relative;
+      overflow: hidden;
+    }
+    #passport-cover::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(201, 164, 92, 0.45);
+      pointer-events: none;
+    }
+    #passport-cover .emblem {
+      font-size: 2.2rem;
+      margin-bottom: 0.75rem;
+      filter: grayscale(0.15) sepia(0.15);
+    }
+    #passport-cover .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #c9a45c;
+      font-weight: 700;
+      margin: 0 0 0.6rem;
+    }
+    #passport-cover h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.6rem;
+    }
+    #passport-cover p {
+      color: #d8d0bd;
+      font-size: 1rem;
+      max-width: 34rem;
+      margin: 0 auto;
+    }
+
+    .data-page {
+      background: #f5f1e6;
+      color: #2a2620;
+      border-radius: 14px;
+      box-shadow: var(--shadow-elevated);
+      margin-top: -2.5rem;
+      position: relative;
+      z-index: 1;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      border: 1px solid rgba(42, 38, 32, 0.12);
+    }
+    .data-page::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed rgba(42, 38, 32, 0.25);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+    .data-page-grid {
+      display: grid;
+      grid-template-columns: 9rem 1fr;
+      gap: 1.5rem 2rem;
+      align-items: start;
+    }
+    .data-photo {
+      width: 9rem;
+      height: 11rem;
+      object-fit: cover;
+      border: 1px solid rgba(42, 38, 32, 0.3);
+      border-radius: 4px;
+      background: #e3ddc9;
+    }
+    .data-fields {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem 1.5rem;
+      font-size: 0.85rem;
+    }
+    .data-field .label {
+      display: block;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #6b6353;
+      margin-bottom: 0.15rem;
+    }
+    .data-field .value {
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .data-field.span-2 {
+      grid-column: span 2;
+    }
+    .data-bio {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed rgba(42, 38, 32, 0.25);
+      font-size: 0.92rem;
+      color: #4a4436;
+      max-width: 52rem;
+    }
+    .data-signature {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .signature-script {
+      font-family: var(--font-signature);
+      font-size: 2rem;
+      color: #2a2620;
+    }
+    .signature-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #6b6353;
+      border-top: 1px solid rgba(42, 38, 32, 0.35);
+      padding-top: 0.3rem;
+      min-width: 12rem;
+      text-align: center;
+    }
+
+    .endorsements {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed rgba(42, 38, 32, 0.25);
+    }
+    .endorsements .label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #6b6353;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .endorsement-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .endorsement-tags span {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid rgba(42, 38, 32, 0.25);
+      border-radius: 999px;
+      color: #3a352a;
+    }
+
+    @media (max-width: 599px) {
+      .data-page-grid {
+        grid-template-columns: 1fr;
+      }
+      .data-photo {
+        width: 7rem;
+        height: 8.6rem;
+      }
+      .data-fields {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* ---------- Page sections ---------- */
+    .page-section {
+      padding: clamp(2.5rem, 6vw, 3.5rem) 0;
+    }
+    .section-head {
+      max-width: 640px;
+      margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+    }
+    .section-head .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+    }
+    .section-head h2 {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .section-head p {
+      color: var(--color-text-secondary);
+      margin-top: 0.5rem;
+      font-size: 0.92rem;
+    }
+
+    /* ---------- Visa stamps ---------- */
+    .stamp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .stamp {
+      position: relative;
+      background: var(--color-surface);
+      border: 2px solid var(--color-accent);
+      border-radius: 10px;
+      padding: 1.1rem 1.2rem;
+      transform: rotate(var(--tilt, -0.6deg));
+    }
+    .stamp:nth-child(3n+2) {
+      --tilt: 0.8deg;
+      border-color: var(--color-accent-3);
+    }
+    .stamp:nth-child(3n+3) {
+      --tilt: -1.1deg;
+      border-color: var(--color-warning);
+    }
+    .stamp .stamp-badge {
+      position: absolute;
+      top: -0.7rem;
+      right: 1rem;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      color: var(--color-text-secondary);
+    }
+    .stamp .role {
+      font-weight: 700;
+      font-size: 0.98rem;
+      margin: 0 0 0.15rem;
+    }
+    .stamp .org {
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      margin: 0 0 0.15rem;
+    }
+    .stamp .dates {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin: 0 0 0.5rem;
+    }
+    .stamp .desc {
+      font-size: 0.84rem;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    /* ---------- Compact lists (earlier stamps, projects) ---------- */
+    .compact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--color-border);
+    }
+    .compact-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.88rem;
+    }
+    .compact-list .who {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    .compact-list .org-inline {
+      color: var(--color-text-secondary);
+      font-weight: 400;
+    }
+    .compact-list .when {
+      color: var(--color-text-secondary);
+      font-size: 0.78rem;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .project-item .title {
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+    .project-item .meta {
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin: 0.1rem 0 0.3rem;
+    }
+    .project-item .desc {
+      font-size: 0.86rem;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    /* ---------- Seals (certifications) ---------- */
+    .seal-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+    .seal {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      border-radius: 999px;
+      padding: 0.5rem 1rem 0.5rem 0.6rem;
+    }
+    .seal .seal-icon {
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    :root[data-theme="light"] .seal .seal-icon {
+      color: var(--color-surface);
+    }
+    .seal .seal-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+    .seal .seal-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .seal .seal-issuer {
+      font-size: 0.72rem;
+      color: var(--color-text-secondary);
+    }
+
+    .membership-row {
+      font-size: 0.88rem;
+      color: var(--color-text-secondary);
+    }
+    .membership-row strong {
+      color: var(--color-text);
+    }
+
+    /* ---------- Closing CTA ---------- */
+    #passport-cta {
+      text-align: center;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: clamp(2.5rem, 6vw, 3.5rem) 0;
+    }
+    #passport-cta h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    #passport-cta p {
+      color: var(--color-text-secondary);
+      margin: 0.6rem 0 1.5rem;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      font-family: var(--font-primary);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+    :root[data-theme="light"] .btn-primary {
+      color: var(--color-surface);
+    }
+    .btn-primary:hover {
+      box-shadow: var(--glow-hover);
+    }
+    .btn-secondary {
+      background: var(--color-bg);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+      padding: 1.5rem;
+    }
+    footer a {
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+  <header id="topbar">
+    <div id="header-primary">
+      <a id="brand" href="index.html" aria-label="Maya Carroll — Home">
+        <img id="nav-avatar" src="avatar.jpg" alt="" />
+        <span id="site-title">
+          <span class="site-title-full">Maya Carroll</span>
+          <span class="site-title-short">Maya</span>
+        </span>
+      </a>
+
+      <nav id="primary-nav" aria-label="Primary">
+        <a href="index.html#work" data-i18n="nav_work">Work</a>
+        <a href="about.html" aria-current="page" data-i18n="nav_about">About</a>
+        <a href="index.html#contact" data-i18n="nav_contact">Contact</a>
+      </nav>
+
+      <div id="account-nav" aria-label="Account">
+        <a id="nav-signin" href="login.html" data-i18n="nav_signin">Sign in</a>
+        <a class="nav-authed" id="nav-calendar" href="calendar.html" data-i18n="nav_calendar" hidden>Calendar</a>
+        <a class="nav-authed" id="nav-dashboard" href="dashboard.html" data-i18n="nav_dashboard" hidden>Dashboard</a>
+        <a class="nav-authed" id="nav-signout" href="login.html" data-i18n="nav_signout" hidden>Sign out</a>
+      </div>
+
+      <div id="preferences" aria-label="Preferences">
+        <button type="button" id="theme-toggle" aria-label="Switch to light theme">
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+          <span id="theme-label">Dark</span>
+        </button>
+
+        <div id="lang-switcher" data-open="false">
+          <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language: English">
+            <span class="globe" aria-hidden="true">🌐</span>
+            <span id="lang-toggle-label">EN</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <ul id="lang-menu" role="listbox" aria-label="Select language">
+            <li class="menu-heading" aria-hidden="true">Language</li>
+            <li role="option"><button type="button" data-lang="en"><span class="flag" aria-hidden="true">🇬🇧</span> English</button></li>
+            <li role="option"><button type="button" data-lang="es"><span class="flag" aria-hidden="true">🇪🇸</span> Español</button></li>
+            <li role="option"><button type="button" data-lang="fi"><span class="flag" aria-hidden="true">🇫🇮</span> Suomi</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <button type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span class="menu-icon" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <div id="mobile-menu-backdrop" hidden></div>
+  <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+    <div id="mobile-menu-header">
+      <span id="mobile-menu-title" data-i18n="menu_title">Menu</span>
+      <button type="button" id="mobile-menu-close" aria-label="Close menu">&times;</button>
+    </div>
+    <div id="mobile-menu-nav-slot" aria-label="Primary"></div>
+    <div id="mobile-menu-account-slot" aria-label="Account"></div>
+    <div id="mobile-menu-prefs">
+      <h3 class="menu-heading" data-i18n="menu_preferences">Preferences</h3>
+      <div id="mobile-menu-prefs-slot"></div>
+    </div>
+  </div>
+
+  <main>
+    <section id="passport-cover">
+      <div class="container">
+        <div class="emblem" aria-hidden="true">🛂</div>
+        <p class="eyebrow">Passport · Product &amp; UX Design</p>
+        <h1>Maya Carroll</h1>
+        <p>A working record of where the design has taken her — enterprise, startup, and civic tech, stamped page by page.</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="data-page">
+        <div class="data-page-grid">
+          <img class="data-photo" src="avatar.jpg" alt="Maya Carroll" />
+          <div>
+            <div class="data-fields">
+              <div class="data-field">
+                <span class="label">Surname</span>
+                <span class="value">Carroll</span>
+              </div>
+              <div class="data-field">
+                <span class="label">Given Names</span>
+                <span class="value">Maya</span>
+              </div>
+              <div class="data-field">
+                <span class="label">Occupation</span>
+                <span class="value">Product &amp; UX Design Leader</span>
+              </div>
+              <div class="data-field">
+                <span class="label">Nationality</span>
+                <span class="value">United States of America</span>
+              </div>
+              <div class="data-field">
+                <span class="label">Place of Residence</span>
+                <span class="value">South Florida, USA</span>
+              </div>
+              <div class="data-field">
+                <span class="label">Security Classification</span>
+                <span class="value">Public Trust Clearance</span>
+              </div>
+              <div class="data-field span-2">
+                <span class="label">Education</span>
+                <span class="value">M.S. Information Technology, Florida Atlantic University · B.F.A. Graphic Design, Florida State University</span>
+              </div>
+            </div>
+            <p class="data-bio">
+              A product and UX design leader working across enterprise, startup, and civic tech — from federal
+              platforms to venture-backed startups. Equally at home setting strategy in the room and shipping the
+              work personally, with a practice built on human-centered design, accessibility, and, increasingly,
+              thoughtful AI-enhanced experiences. Agile practitioner across Kanban, Scrum, SAFe, and squad models.
+            </p>
+          </div>
+        </div>
+
+        <div class="data-signature">
+          <span class="signature-script" aria-hidden="true">Maya Carroll</span>
+          <span class="signature-label">Holder&rsquo;s Signature</span>
+        </div>
+
+        <div class="endorsements">
+          <span class="label">Endorsements</span>
+          <div class="endorsement-tags">
+            <span>Product Design</span>
+            <span>UX Research</span>
+            <span>Service Design</span>
+            <span>Growth Design</span>
+            <span>AI Design</span>
+            <span>Accessibility</span>
+            <span>Human-Centered Design</span>
+            <span>Interaction Design</span>
+            <span>DesignOps &amp; ResearchOps</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="page-section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Visa Stamps</p>
+          <h2>Recent experience</h2>
+          <p>Each stamp marks a place the work took her — most recent first.</p>
+        </div>
+        <div class="stamp-grid">
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">UX Design &amp; Operations Lead</p>
+            <p class="org">By Light — contracted to U.S. Dept. of Veterans Affairs (VA.gov)</p>
+            <p class="dates">Remote · Apr 2025–Present</p>
+            <p class="desc">Leading UX for secure messaging, access, and portals; unifying My HealtheVet and VA.gov experiences.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">Sr. Human-Centered Design Lead</p>
+            <p class="org">Agile Six — contracted to U.S. Dept. of Veterans Affairs (VA.gov)</p>
+            <p class="dates">Remote · Aug 2024–Mar 2025</p>
+            <p class="desc">Led design and research for VA disability claims; optimized service design and integrated the PACT Act.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">Director of Product Design</p>
+            <p class="org">Coforma — contracted to U.S. Dept. of Veterans Affairs (VA.gov)</p>
+            <p class="dates">Remote · Sept 2023–Feb 2024</p>
+            <p class="desc">Managed a team of 10 designers; optimized VA pension claims, reducing overpayments and drop-offs.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">Director of Product Design</p>
+            <p class="org">Spec</p>
+            <p class="dates">Remote · Jun 2020–Mar 2023</p>
+            <p class="desc">Led end-to-end design of a cybersecurity fraud-detection platform MVP; established the design system.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">Lead Product Designer</p>
+            <p class="org">Kandji</p>
+            <p class="dates">Remote · Oct 2021–Jan 2022</p>
+            <p class="desc">Led research and design for new endpoint detection &amp; response and vulnerability management features.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">Senior Product Designer</p>
+            <p class="org">UserTesting</p>
+            <p class="dates">Remote · Jun 2020–Jun 2021</p>
+            <p class="desc">Drove growth partnerships and cross-platform API integrations; launched the developer portal.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">UI/UX Design Mentor</p>
+            <p class="org">Springboard</p>
+            <p class="dates">Remote · Jun 2020–Nov 2024</p>
+            <p class="desc">Coached 60+ designers in UI/UX and research; led design critiques and portfolio reviews.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">UX Researcher</p>
+            <p class="org">BriteCore</p>
+            <p class="dates">Remote · May 2019–May 2020</p>
+            <p class="desc">Established ResearchOps; operationalized feedback loops and redesigned the insurance platform.</p>
+          </div>
+          <div class="stamp">
+            <span class="stamp-badge">Entry</span>
+            <p class="role">UI/UX Design Manager</p>
+            <p class="org">Northplains</p>
+            <p class="dates">Remote · Jan 2017–Apr 2019</p>
+            <p class="desc">Established DesignOps; scaled the design system through an end-to-end product suite redesign.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Earlier Stamps</p>
+          <h2>Where it started</h2>
+        </div>
+        <ul class="compact-list">
+          <li><span class="who">UX Designer <span class="org-inline">— Citrix Systems</span></span><span class="when">2016</span></li>
+          <li><span class="who">UX/UI Designer <span class="org-inline">— TradeStation</span></span><span class="when">2015</span></li>
+          <li><span class="who">UX Designer <span class="org-inline">— Zimmerman Advertising</span></span><span class="when">2014</span></li>
+          <li><span class="who">Usability Architect Intern <span class="org-inline">— Office Depot</span></span><span class="when">2013</span></li>
+          <li><span class="who">Web Designer <span class="org-inline">— Florida Atlantic University</span></span><span class="when">2011–2012</span></li>
+          <li><span class="who">Graphic Designer <span class="org-inline">— Florida State University</span></span><span class="when">2006–2010</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="page-section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Notable Projects</p>
+          <h2>Special endorsements</h2>
+        </div>
+        <div class="project-list">
+          <div class="project-item">
+            <p class="title">SPRUCE RTEP — VA Design System Challenge</p>
+            <p class="meta">Agile Six · 2025</p>
+            <p class="desc">Designed an automated pipeline to streamline design system governance and UI component delivery.</p>
+          </div>
+          <div class="project-item">
+            <p class="title">CEDAR RTEP — VA AI Chatbot Pilot</p>
+            <p class="meta">Agile Six · 2024</p>
+            <p class="desc">Designed an HR chatbot using RAG to deliver accurate, cited responses from the VA employee handbook.</p>
+          </div>
+          <div class="project-item">
+            <p class="title">CEDAR RTEP — Homeland Security Portal</p>
+            <p class="meta">IT Strategies · 2024</p>
+            <p class="desc">Designed a secure, role-based knowledge portal to streamline workflows and support interagency collaboration.</p>
+          </div>
+          <div class="project-item">
+            <p class="title">HackInMiami</p>
+            <p class="meta">Hackathon · 2024</p>
+            <p class="desc">Designed a multi-modal AI voice assistant in a two-day sprint.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Official Seals</p>
+          <h2>Certifications</h2>
+        </div>
+        <div class="seal-grid">
+          <div class="seal">
+            <span class="seal-icon" aria-hidden="true">✓</span>
+            <span class="seal-text"><span class="seal-name">Certified Scrum Product Owner (CSPO)</span><span class="seal-issuer">Scrum Alliance</span></span>
+          </div>
+          <div class="seal">
+            <span class="seal-icon" aria-hidden="true">✓</span>
+            <span class="seal-text"><span class="seal-name">AI Essentials</span><span class="seal-issuer">Google</span></span>
+          </div>
+          <div class="seal">
+            <span class="seal-icon" aria-hidden="true">✓</span>
+            <span class="seal-text"><span class="seal-name">AI Prompting</span><span class="seal-issuer">Google</span></span>
+          </div>
+          <div class="seal">
+            <span class="seal-icon" aria-hidden="true">✓</span>
+            <span class="seal-text"><span class="seal-name">AI Clinic</span><span class="seal-issuer">Miami Dade College</span></span>
+          </div>
+          <div class="seal">
+            <span class="seal-icon" aria-hidden="true">✓</span>
+            <span class="seal-text"><span class="seal-name">Product-Led</span><span class="seal-issuer">Pendo</span></span>
+          </div>
+        </div>
+        <p class="membership-row" style="margin-top: 1.5rem;">
+          <strong>Professional memberships:</strong> Interaction Design Foundation · Miami AI Hub · GPTechDay
+        </p>
+      </div>
+    </section>
+
+    <section id="passport-cta">
+      <div class="container">
+        <h2>Let's work together.</h2>
+        <p>Available for product design leadership opportunities.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
+          <a class="btn btn-secondary" href="index.html">Back to home</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Maya Carroll · <a href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener">LinkedIn</a> · <a href="mailto:hiring@mayacarroll.com">Email</a></p>
+  </footer>
+
+  <script>
+    var translations = {
+      en: {
+        label: "EN",
+        fullName: "English",
+        menu_title: "Menu",
+        menu_preferences: "Preferences",
+        nav_work: "Work",
+        nav_about: "About",
+        nav_contact: "Contact",
+        nav_signin: "Sign in",
+        nav_calendar: "Calendar",
+        nav_dashboard: "Dashboard",
+        nav_signout: "Sign out",
+      },
+      es: {
+        label: "ES",
+        fullName: "Español",
+        menu_title: "Menú",
+        menu_preferences: "Preferencias",
+        nav_work: "Trabajo",
+        nav_about: "Acerca de",
+        nav_contact: "Contacto",
+        nav_signin: "Iniciar sesión",
+        nav_calendar: "Calendario",
+        nav_dashboard: "Panel",
+        nav_signout: "Cerrar sesión",
+      },
+      fi: {
+        label: "FI",
+        fullName: "Suomi",
+        menu_title: "Valikko",
+        menu_preferences: "Asetukset",
+        nav_work: "Työt",
+        nav_about: "Tietoa",
+        nav_contact: "Yhteystiedot",
+        nav_signin: "Kirjaudu sisään",
+        nav_calendar: "Kalenteri",
+        nav_dashboard: "Kojelauta",
+        nav_signout: "Kirjaudu ulos",
+      },
+    };
+
+    // ---------- Theme toggle ----------
+    var themeToggle = document.getElementById("theme-toggle");
+    var themeIcon = document.getElementById("theme-icon");
+    var themeLabel = document.getElementById("theme-label");
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      themeIcon.textContent = theme === "dark" ? "🌙" : "☀️";
+      themeLabel.textContent = theme === "dark" ? "Dark" : "Light";
+      themeToggle.setAttribute(
+        "aria-label",
+        theme === "dark" ? "Theme: Dark. Switch to light theme" : "Theme: Light. Switch to dark theme"
+      );
+    }
+    applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+    themeToggle.addEventListener("click", function () {
+      var current = document.documentElement.getAttribute("data-theme");
+      var next = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      localStorage.setItem("theme", next);
+    });
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
+        if (!localStorage.getItem("theme")) applyTheme(e.matches ? "dark" : "light");
+      });
+    }
+
+    // ---------- Language switcher ----------
+    var switcher = document.getElementById("lang-switcher");
+    var langToggle = document.getElementById("lang-toggle");
+    var toggleLabel = document.getElementById("lang-toggle-label");
+    var langOptions = document.querySelectorAll("#lang-menu button");
+    var i18nEls = document.querySelectorAll("[data-i18n]");
+
+    function setLanguage(lang) {
+      var t = translations[lang];
+      if (!t) return;
+      i18nEls.forEach(function (el) {
+        var key = el.dataset.i18n;
+        if (t[key]) el.textContent = t[key];
+      });
+      toggleLabel.textContent = t.label;
+      langToggle.setAttribute("aria-label", "Language: " + t.fullName + ". Choose a different language");
+      document.documentElement.lang = lang;
+      langOptions.forEach(function (opt) {
+        opt.setAttribute("aria-current", opt.dataset.lang === lang ? "true" : "false");
+      });
+      localStorage.setItem("lang", lang);
+    }
+
+    function openLangMenu(open) {
+      switcher.setAttribute("data-open", String(open));
+      langToggle.setAttribute("aria-expanded", String(open));
+    }
+    langToggle.addEventListener("click", function () {
+      openLangMenu(switcher.getAttribute("data-open") !== "true");
+    });
+    langOptions.forEach(function (opt) {
+      opt.addEventListener("click", function () {
+        setLanguage(opt.dataset.lang);
+        openLangMenu(false);
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (!switcher.contains(e.target)) openLangMenu(false);
+    });
+
+    function getDeviceLanguage() {
+      var preferences = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+      var match = preferences.map(function (tag) { return tag.slice(0, 2).toLowerCase(); }).find(function (code) { return translations[code]; });
+      return match || "en";
+    }
+    setLanguage(localStorage.getItem("lang") || getDeviceLanguage());
+
+    // ---------- Header: responsive reparenting + mobile drawer ----------
+    (function () {
+      var topbar = document.getElementById("topbar");
+      var headerPrimary = document.getElementById("header-primary");
+      var nav = document.getElementById("primary-nav");
+      var accountNav = document.getElementById("account-nav");
+      var prefs = document.getElementById("preferences");
+      var menuToggle = document.getElementById("menu-toggle");
+      var backdrop = document.getElementById("mobile-menu-backdrop");
+      var drawer = document.getElementById("mobile-menu");
+      var drawerClose = document.getElementById("mobile-menu-close");
+      var navSlot = document.getElementById("mobile-menu-nav-slot");
+      var accountSlot = document.getElementById("mobile-menu-account-slot");
+      var prefsSlot = document.getElementById("mobile-menu-prefs-slot");
+      var langSwitcher = document.getElementById("lang-switcher");
+      if (!topbar || !headerPrimary || !nav || !menuToggle || !drawer) return;
+
+      var mq = window.matchMedia("(max-width: 959px)");
+      function placeControls(isNarrow) {
+        if (isNarrow) {
+          navSlot.appendChild(nav);
+          accountSlot.appendChild(accountNav);
+          prefsSlot.appendChild(prefs);
+        } else {
+          headerPrimary.insertBefore(nav, menuToggle);
+          headerPrimary.insertBefore(accountNav, menuToggle);
+          headerPrimary.insertBefore(prefs, menuToggle);
+        }
+      }
+      placeControls(mq.matches);
+
+      var lastFocused = null;
+      function trapFocus(e) {
+        if (e.key !== "Tab") return;
+        var focusable = Array.prototype.filter.call(
+          drawer.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'),
+          function (el) { return el.getClientRects().length > 0; }
+        );
+        if (!focusable.length) return;
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+
+      function openDrawer() {
+        lastFocused = document.activeElement;
+        drawer.hidden = false;
+        backdrop.hidden = false;
+        menuToggle.setAttribute("aria-expanded", "true");
+        document.body.classList.add("menu-open");
+        drawerClose.focus();
+        document.addEventListener("keydown", trapFocus);
+      }
+      function closeDrawer() {
+        if (drawer.hidden) return;
+        drawer.hidden = true;
+        backdrop.hidden = true;
+        menuToggle.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("menu-open");
+        document.removeEventListener("keydown", trapFocus);
+        if (lastFocused) lastFocused.focus();
+      }
+
+      menuToggle.addEventListener("click", function () {
+        if (drawer.hidden) openDrawer();
+        else closeDrawer();
+      });
+      drawerClose.addEventListener("click", closeDrawer);
+      backdrop.addEventListener("click", closeDrawer);
+      [navSlot, accountSlot].forEach(function (slot) {
+        slot.addEventListener("click", function (e) {
+          if (e.target.closest("a")) closeDrawer();
+        });
+      });
+      document.addEventListener(
+        "keydown",
+        function (e) {
+          if (e.key !== "Escape" || drawer.hidden) return;
+          if (langSwitcher && langSwitcher.getAttribute("data-open") === "true") return;
+          closeDrawer();
+        },
+        true
+      );
+      mq.addEventListener("change", function (e) {
+        placeControls(e.matches);
+        if (!e.matches) closeDrawer();
+      });
+    })();
+
+    // ---------- Sign-in state ----------
+    (function () {
+      var signinLink = document.getElementById("nav-signin");
+      var authedLinks = document.querySelectorAll(".nav-authed");
+      var signoutLink = document.getElementById("nav-signout");
+      signoutLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        fetch("/api/logout", { method: "POST" }).finally(function () {
+          window.location.href = "login.html";
+        });
+      });
+      fetch("/api/session")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.signedIn) {
+            signinLink.hidden = true;
+            authedLinks.forEach(function (el) { el.hidden = false; });
+          }
+        })
+        .catch(function () {
+          /* api/session unreachable (e.g. static-only local preview) — stay
+             signed-out, same graceful fallback as the homepage. */
+        });
+    })();
+  </script>
+</body>
+</html>
