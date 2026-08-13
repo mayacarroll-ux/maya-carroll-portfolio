@@ -550,4 +550,24 @@
     renderSevere("helsinki");
     renderCurrency();
   });
+
+  // ---- Mobile ticker rotation ----
+  // Below 600px (see each host page's #city-strip CSS) only one of the
+  // three direct children — Miami, Helsinki, currency — is shown at a
+  // time, cycling in that order on a slow loop instead of cramming all
+  // three into a wrapped grid. Harmless at wider viewports since the CSS
+  // that makes .is-active visually meaningful only applies under 600px.
+  const cityStripEl = document.getElementById("city-strip");
+  if (cityStripEl) {
+    const slides = Array.prototype.slice.call(cityStripEl.children);
+    let slideIndex = 0;
+    function showSlide(i) {
+      slides.forEach((el, idx) => el.classList.toggle("is-active", idx === i));
+    }
+    showSlide(0);
+    setInterval(() => {
+      slideIndex = (slideIndex + 1) % slides.length;
+      showSlide(slideIndex);
+    }, 4500);
+  }
 })();

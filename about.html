@@ -776,15 +776,39 @@
     .severe-badge a:focus-visible {
       text-decoration: underline;
     }
-    @media (max-width: 479px) {
+    /* Below 600px the three items (Miami, Helsinki, currency) no longer
+       fit on one line without cramped wrapping — instead of a 2-column
+       grid, show one at a time on a slow auto-rotating loop (JS in
+       footer-widget.js toggles .is-active on #city-strip's three direct
+       children). The fade only runs when motion isn't reduced; the
+       rotation itself still happens either way since it's a content swap,
+       not decorative motion. */
+    @media (max-width: 599px) {
       #city-strip {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.4rem 0.5rem;
+        display: block;
+        position: relative;
       }
-      #city-strip .city-status {
+      #city-strip > * {
+        display: none;
+      }
+      #city-strip > *.is-active {
+        display: flex;
         justify-content: center;
         flex-wrap: wrap;
+        animation: city-strip-fade 0.6s ease;
+      }
+    }
+    @media (max-width: 599px) and (prefers-reduced-motion: reduce) {
+      #city-strip > *.is-active {
+        animation: none;
+      }
+    }
+    @keyframes city-strip-fade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
       }
     }
   </style>
