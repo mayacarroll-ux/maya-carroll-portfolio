@@ -143,6 +143,23 @@
       // hazy/distant rather than as crisp as the palm trees in front.
       skyline: "rgba(3,4,9,0.93)",
       skylineWindow: "rgba(244,199,107,0.9)",
+      // South Beach Art Deco neon — hot pink and cyan tube signage, the
+      // two colors that dominate an Ocean Drive night shot, plus a
+      // secondary violet for variety. Cyan intentionally matches
+      // --color-accent so the skyline's lighting ties back into the
+      // site's own palette rather than introducing an unrelated hue.
+      neonPink: "rgba(255,55,150,0.95)",
+      neonCyan: "rgba(80,240,220,0.95)",
+      neonPurple: "rgba(180,110,255,0.9)",
+      // A soft, wide bloom sitting low in the sky above the strip — the
+      // colored haze neon signage casts on real overcast/humid Miami
+      // nights, drawn once behind all the buildings rather than per-light.
+      neonBloom: "rgba(255,70,170,0.1)",
+      // Same near-black, high-opacity recipe as the palm/skyline — a bird
+      // silhouette crosses through every part of the sky gradient during
+      // its flight, so it needs to out-contrast all of it, not just
+      // whichever stop it started against.
+      pelican: "rgba(6,8,14,0.92)",
     },
     helsinki: {
       day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
@@ -185,6 +202,11 @@
       cottageChimney: "rgba(96,58,44,0.92)",
       cottageWindow: "rgba(248,206,120,0.85)",
       saunaWall: "rgba(94,68,46,0.9)",
+      smoke: "rgba(235,233,228,1)",
+      // Dark enough to contrast against both the pale day sky and the
+      // dark night/winter sky — an owl crosses through whichever is active.
+      owl: "rgba(42,32,24,0.92)",
+      owlEye: "rgba(244,199,107,0.9)",
     },
   };
 
@@ -224,6 +246,17 @@
     let reindeerTimer = randomCrossingDelay();
     let reindeerElapsed = 0;
     let reindeerActive = false;
+
+    // Same mechanic again, but through the sky rather than along the
+    // ground/water — Miami's pelican, Helsinki's owl.
+    const PELICAN_CROSSING_MS = 10000;
+    const OWL_CROSSING_MS = 11000;
+    let pelicanTimer = randomCrossingDelay();
+    let pelicanElapsed = 0;
+    let pelicanActive = false;
+    let owlTimer = randomCrossingDelay();
+    let owlElapsed = 0;
+    let owlActive = false;
 
     function randomLightningDelay() {
       return 9000 + Math.random() * 11000;
@@ -603,13 +636,41 @@
       ctx.restore();
     }
 
+    // A few soft puffs rising and drifting from a chimney, looping
+    // seamlessly (each puff's alpha fades in from and back out to zero
+    // over its cycle, so there's no pop at the loop boundary). t drives
+    // the motion the same way it drives waves/clouds elsewhere — no
+    // per-puff state to track between frames.
+    function drawChimneySmoke(x, topY, scale, t) {
+      ctx.save();
+      ctx.fillStyle = PALETTES.helsinki.smoke;
+      const puffCount = 4;
+      const cycleMs = 3400;
+      const riseDistance = scale * 3.2;
+      for (let i = 0; i < puffCount; i++) {
+        const loopT = (t + (i * cycleMs) / puffCount) % cycleMs;
+        const frac = loopT / cycleMs;
+        const y = topY - frac * riseDistance;
+        const drift = Math.sin(frac * Math.PI * 2.1 + i * 1.7) * scale * 0.55 * frac;
+        const x2 = x + drift + frac * scale * 0.25; // gentle overall lean, like a light breeze
+        const radius = scale * (0.16 + frac * 0.24);
+        const alpha = Math.sin(frac * Math.PI) * 0.4;
+        if (alpha <= 0.01) continue;
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.arc(x2, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
     // A little lakeside summer cottage (mökki) with its own sauna, just
     // along the shore from the pine cluster — a location fixture like the
     // forest/lake, drawn unconditionally. Unlike the flat translucent
     // silhouettes used elsewhere, this one is drawn in actual color: a
     // small red-and-white cottage reads as "charming" in a way a dark
     // shape doesn't.
-    function drawSummerCottage() {
+    function drawSummerCottage(t) {
       const groundY = height - footerReserve;
       ctx.save();
 
@@ -639,6 +700,7 @@
       ctx.fillStyle = PALETTES.helsinki.cottageChimney;
       const chimneyTop = wallTop - roofH * 1.18;
       ctx.fillRect(cx + cw * 0.14, chimneyTop, cw * 0.08, roofH * 0.75);
+      drawChimneySmoke(cx + cw * 0.14 + cw * 0.04, chimneyTop, cw * 0.22, t);
       // Door.
       ctx.fillStyle = PALETTES.helsinki.cottageTrim;
       const doorW = cw * 0.16;
@@ -859,6 +921,90 @@
       ctx.restore();
     }
 
+    // Flies left-to-right across the sky every 25–60s, then rests — same
+    // mechanic as the reindeer's ground crossing, just airborne.
+    function maybeOwl(dt, t) {
+      if (owlActive) {
+        owlElapsed += dt;
+        if (owlElapsed >= OWL_CROSSING_MS) {
+          owlActive = false;
+          owlTimer = randomCrossingDelay();
+          return;
+        }
+      } else {
+        owlTimer -= dt;
+        if (owlTimer <= 0) {
+          owlActive = true;
+          owlElapsed = 0;
+        } else {
+          return;
+        }
+      }
+
+      const frac = owlElapsed / OWL_CROSSING_MS;
+      const x = -width * 0.08 + frac * width * 1.16;
+      const flightY = height * 0.26 + Math.sin(frac * Math.PI * 2.2) * height * 0.02;
+      const s = Math.min(height * 0.1, 42);
+      // Slower, broader wingbeat than the pelican's — owls fly with slow,
+      // near-silent flaps rather than quick strokes.
+      const flap = Math.sin(t / 220);
+
+      ctx.save();
+      ctx.translate(x, flightY);
+      ctx.fillStyle = PALETTES.helsinki.owl;
+
+      // Far wing.
+      ctx.save();
+      ctx.translate(-s * 0.02, -s * 0.06);
+      ctx.rotate(-0.25 - flap * 0.45);
+      ctx.beginPath();
+      ctx.ellipse(-s * 0.45, 0, s * 0.5, s * 0.2, 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Body — rounder than the pelican's.
+      ctx.beginPath();
+      ctx.ellipse(0, 0, s * 0.38, s * 0.26, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Round head with two small ear tufts.
+      const headX = s * 0.26;
+      const headY = -s * 0.16;
+      ctx.beginPath();
+      ctx.arc(headX, headY, s * 0.22, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(headX - s * 0.14, headY - s * 0.18);
+      ctx.lineTo(headX - s * 0.2, headY - s * 0.32);
+      ctx.lineTo(headX - s * 0.04, headY - s * 0.2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(headX + s * 0.1, headY - s * 0.2);
+      ctx.lineTo(headX + s * 0.17, headY - s * 0.33);
+      ctx.lineTo(headX + s * 0.21, headY - s * 0.18);
+      ctx.closePath();
+      ctx.fill();
+      // Eyes — small warm catch-lights, same trick used for the reindeer.
+      ctx.fillStyle = PALETTES.helsinki.owlEye;
+      ctx.beginPath();
+      ctx.arc(headX - s * 0.07, headY - s * 0.02, s * 0.045, 0, Math.PI * 2);
+      ctx.arc(headX + s * 0.08, headY - s * 0.02, s * 0.045, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Near wing, broad and rounded, flapping.
+      ctx.fillStyle = PALETTES.helsinki.owl;
+      ctx.save();
+      ctx.translate(-s * 0.02, s * 0.04);
+      ctx.rotate(0.2 + flap * 0.5);
+      ctx.beginPath();
+      ctx.ellipse(-s * 0.48, 0, s * 0.55, s * 0.22, -0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      ctx.restore();
+    }
+
     function drawFog(color, alpha) {
       ctx.save();
       ctx.globalAlpha = alpha;
@@ -889,6 +1035,35 @@
       ctx.restore();
     }
 
+    // A dim, softened mirror of the aurora on the lake's surface — the
+    // reflection calm-water aurora photos are known for. Same color array
+    // and horizontal sway as drawAurora() (so the reflection visibly
+    // tracks its source) but clipped to the lake band, brightest right at
+    // the shoreline and fading with distance, and at a lower alpha
+    // throughout since a reflection is always a fainter echo of the sky.
+    function drawAuroraReflection(probability, t) {
+      if (!probability) return;
+      const bandH = height * 0.1;
+      const lakeTop = height - footerReserve - bandH;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, lakeTop, width, height - lakeTop);
+      ctx.clip();
+      ctx.globalAlpha = Math.min(probability / 100, 0.6) * 0.55;
+      PALETTES.helsinki.aurora.forEach((color, i) => {
+        const g = ctx.createLinearGradient(0, lakeTop, 0, height);
+        g.addColorStop(0, color);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        const sway = Math.sin(t / 2200 + i * 2) * 50;
+        ctx.save();
+        ctx.translate(width * 0.25 * i + sway, 0);
+        ctx.fillRect(0, lakeTop, width * 0.7, height - lakeTop);
+        ctx.restore();
+      });
+      ctx.restore();
+    }
+
     // Downtown Miami's skyline, hazy across the water — a location fixture
     // like the ocean/palms, drawn unconditionally. Sits behind the ocean
     // (drawn next, in drawFrame) so its translucent water bands wash over
@@ -896,13 +1071,14 @@
     // than the palm trees in front so it reads as background depth rather
     // than a second foreground shape competing with them.
     function drawMiamiSkyline() {
-      // Anchored to groundY and pixel-capped, same pattern as the palm
-      // trees/forest — a bandH-relative anchor (tried first) put the
-      // skyline at very different heights on tall mobile viewports vs.
-      // wide desktop ones, in some cases pushing it up against the plain
-      // night sky with nothing behind it for contrast.
+      // Anchored just above the ocean's own top edge (bandH matches
+      // drawOcean's) so only the buildings' feet sit in the water — flush
+      // against groundY (tried first) put the whole skyline inside the
+      // ocean band's vertical span, i.e. fully submerged under its
+      // translucent wash instead of rising above the waterline.
       const groundY = height - footerReserve;
-      const baseY = groundY - Math.min(height * 0.02, 8);
+      const bandH = height * 0.16;
+      const baseY = groundY - bandH * 0.8;
       // Heights/widths are hand-picked (not procedural) for a silhouette
       // that reads as a real, slightly irregular skyline rather than a
       // repeating pattern — same approach as the palm/forest clusters.
@@ -919,7 +1095,26 @@
         { x: 0.368, w: 0.013, h: 0.055 },
         { x: 0.388, w: 0.015, h: 0.07 },
       ];
+      const neonColors = [PALETTES.miami.neonPink, PALETTES.miami.neonCyan, PALETTES.miami.neonPurple];
+
       ctx.save();
+
+      // Soft ambient bloom low in the sky above the strip — drawn once,
+      // behind every building, rather than glow-per-light, so it reads as
+      // one atmospheric wash instead of eleven overlapping haloes.
+      const bloom = ctx.createRadialGradient(
+        width * 0.28,
+        baseY,
+        0,
+        width * 0.28,
+        baseY,
+        width * 0.22
+      );
+      bloom.addColorStop(0, PALETTES.miami.neonBloom);
+      bloom.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = bloom;
+      ctx.fillRect(0, baseY - height * 0.22, width, height * 0.24);
+
       ctx.filter = "blur(1.3px)";
       buildings.forEach((b, i) => {
         const x = width * b.x;
@@ -961,6 +1156,49 @@
             }
           }
         }
+
+        // Neon Art Deco trim: a glowing vertical tube along one edge of
+        // the facade, the signature South Beach look (Ocean Drive hotels
+        // are lit with exactly this — a single bright stripe up the
+        // corner of the building, not floodlighting). Color cycles
+        // deterministically through pink/cyan/violet by building index.
+        const neonColor = neonColors[i % neonColors.length];
+        ctx.save();
+        ctx.strokeStyle = neonColor;
+        ctx.shadowColor = neonColor;
+        ctx.shadowBlur = Math.max(3, w * 0.6);
+        ctx.lineWidth = Math.max(1, w * 0.09);
+        ctx.beginPath();
+        ctx.moveTo(x + w * 0.14, baseY - h * 0.05);
+        ctx.lineTo(x + w * 0.14, top + h * 0.08);
+        ctx.stroke();
+        // On alternating buildings, a second, shorter horizontal band
+        // near the base — a marquee/awning sign, in a different neon
+        // color than the vertical stripe for variety.
+        if (i % 2 === 0) {
+          const marqueeColor = neonColors[(i + 1) % neonColors.length];
+          ctx.strokeStyle = marqueeColor;
+          ctx.shadowColor = marqueeColor;
+          ctx.lineWidth = Math.max(1, h * 0.045);
+          ctx.beginPath();
+          ctx.moveTo(x + w * 0.1, baseY - h * 0.22);
+          ctx.lineTo(x + w * 0.85, baseY - h * 0.22);
+          ctx.stroke();
+        }
+        // The tallest tower's stepped crown gets its outline traced in
+        // neon too, echoing how Deco hotels light their roofline.
+        if (b.deco) {
+          ctx.strokeStyle = neonColors[(i + 2) % neonColors.length];
+          ctx.shadowColor = ctx.strokeStyle;
+          ctx.lineWidth = Math.max(1, w * 0.05);
+          ctx.beginPath();
+          ctx.moveTo(x + w * 0.22, top + h * 0.22);
+          ctx.lineTo(x + w * 0.22, top);
+          ctx.lineTo(x + w * 0.78, top);
+          ctx.lineTo(x + w * 0.78, top + h * 0.22);
+          ctx.stroke();
+        }
+        ctx.restore();
       });
       ctx.filter = "none";
       ctx.restore();
@@ -1274,6 +1512,91 @@
       ctx.restore();
     }
 
+    // Flies left-to-right across the sky every 25–60s, then rests — same
+    // wait-then-cross-then-reset mechanic as the alligator, just airborne.
+    function maybePelican(dt, t) {
+      if (pelicanActive) {
+        pelicanElapsed += dt;
+        if (pelicanElapsed >= PELICAN_CROSSING_MS) {
+          pelicanActive = false;
+          pelicanTimer = randomCrossingDelay();
+          return;
+        }
+      } else {
+        pelicanTimer -= dt;
+        if (pelicanTimer <= 0) {
+          pelicanActive = true;
+          pelicanElapsed = 0;
+        } else {
+          return;
+        }
+      }
+
+      const frac = pelicanElapsed / PELICAN_CROSSING_MS;
+      const x = -width * 0.08 + frac * width * 1.16;
+      // Low, coastal flight — pelicans typically glide close over the
+      // water — with a gentle undulating glide rather than a flat line.
+      const flightY = height * 0.34 + Math.sin(frac * Math.PI * 2.5) * height * 0.015;
+      const s = Math.min(height * 0.09, 40);
+      const flap = Math.sin(t / 170);
+
+      ctx.save();
+      ctx.translate(x, flightY);
+      ctx.fillStyle = PALETTES.miami.pelican;
+
+      // Far wing, drawn first so the body/near wing paint over it — a
+      // little depth without needing a true 3D silhouette.
+      ctx.save();
+      ctx.translate(-s * 0.05, -s * 0.05);
+      ctx.rotate(-0.3 - flap * 0.35);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(-s * 0.4, -s * 0.15, -s * 0.85, -s * 0.05);
+      ctx.quadraticCurveTo(-s * 0.45, s * 0.08, -s * 0.1, s * 0.1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Body.
+      ctx.beginPath();
+      ctx.ellipse(0, 0, s * 0.5, s * 0.2, -0.05, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Head, long beak, and the droopy throat pouch — the single detail
+      // that makes this read as "pelican" instead of "generic bird".
+      const headX = s * 0.55;
+      const headY = -s * 0.02;
+      ctx.beginPath();
+      ctx.ellipse(headX, headY, s * 0.13, s * 0.1, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(headX + s * 0.09, headY - s * 0.02);
+      ctx.lineTo(headX + s * 0.55, headY + s * 0.04);
+      ctx.lineTo(headX + s * 0.09, headY + s * 0.12);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(headX + s * 0.14, headY + s * 0.07);
+      ctx.quadraticCurveTo(headX + s * 0.3, headY + s * 0.24, headX + s * 0.46, headY + s * 0.08);
+      ctx.quadraticCurveTo(headX + s * 0.32, headY + s * 0.14, headX + s * 0.14, headY + s * 0.07);
+      ctx.closePath();
+      ctx.fill();
+
+      // Near wing, on top, flapping.
+      ctx.save();
+      ctx.translate(-s * 0.02, s * 0.02);
+      ctx.rotate(0.25 + flap * 0.5);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(-s * 0.35, s * 0.35, -s * 0.9, s * 0.5);
+      ctx.quadraticCurveTo(-s * 0.5, s * 0.15, -s * 0.12, s * 0.1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      ctx.restore();
+    }
+
     function drawHeatShimmer(t) {
       const groundY = height - footerReserve;
       const bandH = height * 0.3;
@@ -1342,11 +1665,13 @@
         drawOcean(ts);
         drawPalmTrees();
         maybeAlligator(dt, ts);
+        maybePelican(dt, ts);
       } else {
         drawLake(ts);
         drawForest();
-        drawSummerCottage();
+        drawSummerCottage(ts);
         maybeReindeer(dt, ts);
+        maybeOwl(dt, ts);
       }
       if (!envState) return; // calm neutral: sky + motes (+ fixtures) only, no invented conditions
 
@@ -1378,6 +1703,7 @@
         const clearAndCold = envState.season === "winter" && envState.cloudCover < 35 && coldEnough;
         if (clearAndCold) drawIceSparkle(ts);
         drawAurora(envState.auroraProbability, ts);
+        drawAuroraReflection(envState.auroraProbability, ts);
       }
     }
 
