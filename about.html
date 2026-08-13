@@ -482,16 +482,19 @@
     }
     .hero-grid {
       display: grid;
-      grid-template-columns: 13rem 1fr;
+      grid-template-columns: 14rem 1fr;
       gap: clamp(1.5rem, 4vw, 3rem);
       align-items: center;
     }
     .hero-photo {
-      width: 13rem;
-      height: 13rem;
-      border-radius: 50%;
+      width: 14rem;
+      aspect-ratio: 4 / 5;
+      height: auto;
+      border-radius: 1.25rem;
       object-fit: cover;
+      object-position: 50% 22%;
       border: 3px solid var(--color-accent-3);
+      box-shadow: var(--shadow-elevated);
     }
     #about-hero .eyebrow {
       font-size: 0.72rem;
@@ -551,8 +554,8 @@
         justify-items: center;
       }
       .hero-photo {
-        width: 8rem;
-        height: 8rem;
+        width: 9.5rem;
+        aspect-ratio: 4 / 5;
       }
       #about-hero .btn-row {
         justify-content: center;
@@ -767,7 +770,7 @@
     <section id="about-hero">
       <div class="container">
         <div class="hero-grid">
-          <img class="hero-photo" src="avatar.jpg" alt="Maya Carroll" />
+          <img class="hero-photo" src="about-photo.jpg" alt="Maya Carroll" />
           <div>
             <p class="eyebrow">About · AI Product Design &amp; Strategy</p>
             <h1>Product design and strategy leadership for AI-native products.</h1>
