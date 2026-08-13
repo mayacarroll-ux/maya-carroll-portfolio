@@ -21,13 +21,13 @@
   <title>Maya Carroll | AI Product Design & Strategy Leader</title>
   <meta
     name="description"
-    content="Maya Carroll is a product design and strategy leader building AI-native products — generative AI pilots, 0-to-1 product development, and federal-scale platforms. Available for senior AI product roles."
+    content="Maya Carroll — AI Product Design & Strategy Leader. Open to senior AI product roles."
   />
   <meta property="og:type" content="profile" />
   <meta property="og:title" content="Maya Carroll | AI Product Design & Strategy Leader" />
   <meta
     property="og:description"
-    content="Product design and strategy leader building AI-native products — generative AI pilots, 0-to-1 product development, and federal-scale platforms."
+    content="I turn AI capability into products people trust — 0-to-1 concepts to platforms serving millions."
   />
   <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/about.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -503,12 +503,39 @@
       color: var(--color-accent);
       font-weight: 700;
       margin: 0 0 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .status-dot {
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
+    @media (max-width: 599px) {
+      #about-hero .eyebrow {
+        justify-content: center;
+      }
     }
     .hero-pitch {
       margin-top: 1.1rem;
-      font-size: 1.02rem;
+      font-size: 1.05rem;
       color: var(--color-text-secondary);
-      max-width: 46rem;
+      max-width: 40rem;
+    }
+    .linkedin-link {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+    }
+    .linkedin-link:hover,
+    .linkedin-link:focus-visible {
+      color: var(--color-accent);
     }
 
     /* ---------- Quick facts + endorsements ---------- */
@@ -620,9 +647,10 @@
       color: var(--color-text-secondary);
       margin: 0 0 0.6rem;
     }
-    .role-card .desc {
+    .role-card .outcome {
       font-size: 0.87rem;
-      color: var(--color-text-secondary);
+      font-weight: 700;
+      color: var(--color-accent);
       margin: 0;
     }
 
@@ -772,20 +800,16 @@
         <div class="hero-grid">
           <img class="hero-photo" src="about-photo.jpg" alt="Maya Carroll" />
           <div>
-            <p class="eyebrow">About · AI Product Design &amp; Strategy</p>
-            <h1>Product design and strategy leadership for AI-native products.</h1>
+            <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Open to senior AI product roles</p>
+            <h1>AI Product Design &amp; Strategy Leader</h1>
             <p class="hero-pitch">
-              Maya is a product design and strategy leader who partners with engineering and data science to
-              ship AI-native products — from a RAG-powered chatbot pilot for the U.S. Department of Veterans
-              Affairs to a cybersecurity fraud-detection MVP. She works the full arc of product development:
-              user research, product strategy and roadmapping, 0-to-1 design, and cross-functional leadership
-              of teams of 10+. Fluent in generative AI tools and workflows, she's now focused on designing and
-              building the next generation of AI products.
+              I turn AI capability into products people trust — 0-to-1 concepts to platforms serving millions.
             </p>
             <div class="btn-row" style="margin-top: 1.5rem;">
               <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
               <a class="btn btn-secondary" href="index.html#work">View my work</a>
             </div>
+            <a class="linkedin-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
           </div>
         </div>
       </div>
@@ -794,10 +818,6 @@
     <section class="page-section">
       <div class="container">
         <div class="fact-grid">
-          <div class="fact">
-            <span class="label">Focus</span>
-            <span class="value">AI Product Design &amp; Strategy</span>
-          </div>
           <div class="fact">
             <span class="label">Location</span>
             <span class="value">South Florida, USA</span>
@@ -810,10 +830,6 @@
             <span class="label">Security Clearance</span>
             <span class="value">Public Trust</span>
           </div>
-          <div class="fact">
-            <span class="label">Education</span>
-            <span class="value">M.S. IT, FAU · B.F.A. Graphic Design, FSU</span>
-          </div>
         </div>
         <div class="endorsement-tags">
           <span>AI Product Design</span>
@@ -822,7 +838,6 @@
           <span>User Research</span>
           <span>0-to-1 Product Development</span>
           <span>Cross-Functional Leadership</span>
-          <span>DesignOps &amp; ResearchOps</span>
         </div>
       </div>
     </section>
@@ -831,33 +846,28 @@
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Experience</p>
-          <h2>Where the leadership shows</h2>
-          <p>The roles that best show the range and the results — most recent first.</p>
+          <h2>Selected experience</h2>
         </div>
         <div class="role-grid">
           <div class="role-card">
             <p class="role">Sr. Human-Centered Design Lead</p>
-            <p class="org">Agile Six — contracted to U.S. Dept. of Veterans Affairs (VA.gov)</p>
-            <p class="dates">Remote · Aug 2024–Mar 2025</p>
-            <p class="desc">Led design and research for a nationwide disability-claims system; shipped a RAG-powered AI chatbot pilot and integrated the PACT Act into the live product.</p>
+            <p class="org">Agile Six (VA.gov) · 2024–2025</p>
+            <p class="outcome">Shipped a RAG-powered AI chatbot pilot</p>
           </div>
           <div class="role-card">
             <p class="role">Director of Product Design</p>
-            <p class="org">Coforma — contracted to U.S. Dept. of Veterans Affairs (VA.gov)</p>
-            <p class="dates">Remote · Sept 2023–Feb 2024</p>
-            <p class="desc">Managed a team of 10 designers delivering pension-claims tools that measurably reduced overpayments and drop-offs at federal scale.</p>
+            <p class="org">Coforma (VA.gov) · 2023–2024</p>
+            <p class="outcome">Led a team of 10 at federal scale</p>
           </div>
           <div class="role-card">
             <p class="role">Director of Product Design</p>
-            <p class="org">Spec</p>
-            <p class="dates">Remote · Jun 2020–Mar 2023</p>
-            <p class="desc">Owned end-to-end design of a cybersecurity fraud-detection platform from MVP through scale, establishing the company's design system.</p>
+            <p class="org">Spec · 2020–2023</p>
+            <p class="outcome">Built a fraud-detection MVP to scale</p>
           </div>
           <div class="role-card">
             <p class="role">UI/UX Design Manager</p>
-            <p class="org">Northplains</p>
-            <p class="dates">Remote · Jan 2017–Apr 2019</p>
-            <p class="desc">Built DesignOps from the ground up and led an end-to-end redesign of the company's full product suite.</p>
+            <p class="org">Northplains · 2017–2019</p>
+            <p class="outcome">Built DesignOps from zero</p>
           </div>
         </div>
       </div>
@@ -865,11 +875,9 @@
 
     <section id="about-cta">
       <div class="container">
-        <h2>Let's build AI products together.</h2>
-        <p>Available for senior AI product design, strategy, and leadership roles.</p>
+        <h2>Let's talk AI products.</h2>
         <div class="btn-row">
           <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
-          <a class="btn btn-secondary" href="index.html">Back to home</a>
         </div>
       </div>
     </section>
