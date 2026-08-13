@@ -134,35 +134,6 @@
       alligator: "rgba(10,15,10,0.88)",
       alligatorRidge: "rgba(4,7,5,0.9)",
       alligatorEye: "rgba(244,199,107,0.9)",
-      // Near-black, same recipe as the palm silhouette: a navy-tinted
-      // translucent skyline (tried first, twice) kept blending into the
-      // night sky gradient at some viewport heights — variations on that
-      // idea couldn't out-contrast every stop of that gradient. Only an
-      // actually-dark color reliably can. The blur filter
-      // drawMiamiSkyline() applies is what keeps this reading as
-      // hazy/distant rather than as crisp as the palm trees in front.
-      // Softened from an earlier, nearly-opaque version (0.93) once it no
-      // longer needed to fight for contrast against the plain night sky —
-      // repositioning it near the horizon glow (see baseY below) handled
-      // that, freeing this up to blend more like real atmospheric haze.
-      skyline: "rgba(6,9,16,0.8)",
-      // A lighter, more transparent haze tone — used for the distant
-      // second row and for fading each building's roofline into the sky,
-      // rather than every structure reading as one uniform silhouette.
-      skylineFar: "rgba(20,26,42,0.35)",
-      skylineWindow: "rgba(244,199,107,0.85)",
-      // South Beach Art Deco neon — hot pink and cyan tube signage, the
-      // two colors that dominate an Ocean Drive night shot, plus a
-      // secondary violet for variety. Cyan intentionally matches
-      // --color-accent so the skyline's lighting ties back into the
-      // site's own palette rather than introducing an unrelated hue.
-      neonPink: "rgba(255,55,150,0.8)",
-      neonCyan: "rgba(80,240,220,0.8)",
-      neonPurple: "rgba(180,110,255,0.75)",
-      // A soft, wide bloom sitting low in the sky above the strip — the
-      // colored haze neon signage casts on real overcast/humid Miami
-      // nights, drawn once behind all the buildings rather than per-light.
-      neonBloom: "rgba(255,70,170,0.1)",
     },
     helsinki: {
       day: ["#f2f7f6", "#e6eeec", "#d7e5e1", "#c8dcd6"],
@@ -759,7 +730,7 @@
       // the ocean's base — a single flat 0.35-alpha fill (tried first)
       // washed out into an indistinct gray smear against warm dusk/day
       // skies instead of reading as water, the same low-contrast mistake
-      // the palm trees and skyline originally had.
+      // the palm trees originally had.
       const base = ctx.createLinearGradient(0, top, 0, height);
       base.addColorStop(0, "rgba(120,178,195,0.4)");
       base.addColorStop(0.4, "rgba(88,150,175,0.68)");
@@ -987,178 +958,6 @@
         ctx.fillRect(0, lakeTop, width * 0.7, height - lakeTop);
         ctx.restore();
       });
-      ctx.restore();
-    }
-
-    // Downtown Miami's skyline, hazy across the water — a location fixture
-    // like the ocean/palms, drawn unconditionally. Sits behind the ocean
-    // (drawn next, in drawFrame) so its translucent water bands wash over
-    // the buildings' feet, and it's deliberately lower-contrast/blurred
-    // than the palm trees in front so it reads as background depth rather
-    // than a second foreground shape competing with them.
-    function drawMiamiSkyline() {
-      // Anchored just above the ocean's own top edge (bandH matches
-      // drawOcean's) so only the buildings' feet sit in the water — flush
-      // against groundY (tried first) put the whole skyline inside the
-      // ocean band's vertical span, i.e. fully submerged under its
-      // translucent wash instead of rising above the waterline.
-      const groundY = height - footerReserve;
-      const bandH = height * 0.16;
-      const baseY = groundY - bandH * 0.8;
-      // Heights/widths are hand-picked (not procedural) for a silhouette
-      // that reads as a real, slightly irregular skyline rather than a
-      // repeating pattern — same approach as the palm/forest clusters.
-      const buildings = [
-        { x: 0.17, w: 0.016, h: 0.07 },
-        { x: 0.193, w: 0.012, h: 0.045 },
-        { x: 0.212, w: 0.018, h: 0.095 },
-        { x: 0.238, w: 0.014, h: 0.06 },
-        { x: 0.258, w: 0.02, h: 0.13, deco: true }, // tallest — stepped art-deco crown
-        { x: 0.286, w: 0.013, h: 0.05 },
-        { x: 0.305, w: 0.016, h: 0.08 },
-        { x: 0.328, w: 0.011, h: 0.04 },
-        { x: 0.344, w: 0.017, h: 0.1 },
-        { x: 0.368, w: 0.013, h: 0.055 },
-        { x: 0.388, w: 0.015, h: 0.07 },
-      ];
-      const neonColors = [PALETTES.miami.neonPink, PALETTES.miami.neonCyan, PALETTES.miami.neonPurple];
-
-      ctx.save();
-
-      // A hazier, heavily-blurred second row of low bumps behind the main
-      // buildings — real skylines have depth, city receding into the haze
-      // rather than one flat row of towers. No windows/neon here, just
-      // silhouette, so it reads as "more city, further back" rather than
-      // competing for attention with the buildings in front of it.
-      ctx.save();
-      ctx.filter = "blur(4px)";
-      ctx.fillStyle = PALETTES.miami.skylineFar;
-      ctx.beginPath();
-      ctx.moveTo(width * 0.14, baseY);
-      const farBumps = [0.03, 0.06, 0.045, 0.07, 0.05, 0.08, 0.04, 0.065, 0.035, 0.055, 0.045, 0.03];
-      farBumps.forEach((hFrac, i) => {
-        const fx = width * (0.14 + (i / (farBumps.length - 1)) * 0.29);
-        const fh = Math.min(height * hFrac, 55);
-        ctx.lineTo(fx, baseY - fh);
-      });
-      ctx.lineTo(width * 0.43, baseY);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-
-      // Soft ambient bloom low in the sky above the strip — drawn once,
-      // behind every building, rather than glow-per-light, so it reads as
-      // one atmospheric wash instead of eleven overlapping haloes.
-      const bloom = ctx.createRadialGradient(
-        width * 0.28,
-        baseY,
-        0,
-        width * 0.28,
-        baseY,
-        width * 0.22
-      );
-      bloom.addColorStop(0, PALETTES.miami.neonBloom);
-      bloom.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = bloom;
-      ctx.fillRect(0, baseY - height * 0.22, width, height * 0.24);
-
-      // A touch more blur than before, softening the whole cluster so it
-      // reads as sitting back in the scene rather than pasted flat on top
-      // of it — the palm trees in front stay crisp by contrast.
-      ctx.filter = "blur(1.8px)";
-      buildings.forEach((b, i) => {
-        const x = width * b.x;
-        const w = Math.max(3, width * b.w);
-        // Capped in px (not just a height fraction) so buildings stay a
-        // sensible size on tall/narrow mobile viewports instead of
-        // scaling up with the full page height.
-        const h = Math.min(height * b.h, 140 * (b.h / 0.13));
-        const top = baseY - h;
-        // A vertical gradient rather than a flat fill — slightly darker at
-        // the base, easing toward the haze color at the roofline, the way
-        // real distant buildings fade into atmosphere rather than
-        // presenting one uniform silhouette top to bottom.
-        const buildingFill = ctx.createLinearGradient(0, top, 0, baseY);
-        buildingFill.addColorStop(0, PALETTES.miami.skylineFar);
-        buildingFill.addColorStop(0.35, PALETTES.miami.skyline);
-        buildingFill.addColorStop(1, PALETTES.miami.skyline);
-        ctx.fillStyle = buildingFill;
-        if (b.deco) {
-          // A simple stepped crown — a small nod to Miami's actual Art
-          // Deco skyline character instead of every tower being a plain box.
-          ctx.beginPath();
-          ctx.moveTo(x, baseY);
-          ctx.lineTo(x, top + h * 0.22);
-          ctx.lineTo(x + w * 0.22, top + h * 0.22);
-          ctx.lineTo(x + w * 0.22, top);
-          ctx.lineTo(x + w * 0.78, top);
-          ctx.lineTo(x + w * 0.78, top + h * 0.22);
-          ctx.lineTo(x + w, top + h * 0.22);
-          ctx.lineTo(x + w, baseY);
-          ctx.closePath();
-          ctx.fill();
-        } else {
-          ctx.fillRect(x, top, w, h);
-        }
-        // A handful of deterministic (index-seeded, not random) lit
-        // windows, so downtown reads as inhabited without flickering a
-        // new random pattern every frame.
-        ctx.fillStyle = PALETTES.miami.skylineWindow;
-        for (let row = 0; row < 4; row++) {
-          for (let col = 0; col < 2; col++) {
-            if (Math.sin(i * 3.1 + row * 1.7 + col * 2.3) > 0.5) {
-              const wx = x + w * (0.25 + col * 0.45);
-              const wy = top + h * (0.18 + row * 0.2);
-              const wSize = Math.max(1, w * 0.14);
-              ctx.fillRect(wx, wy, wSize, wSize);
-            }
-          }
-        }
-
-        // Neon Art Deco trim: a glowing vertical tube along one edge of
-        // the facade, the signature South Beach look (Ocean Drive hotels
-        // are lit with exactly this — a single bright stripe up the
-        // corner of the building, not floodlighting). Color cycles
-        // deterministically through pink/cyan/violet by building index.
-        const neonColor = neonColors[i % neonColors.length];
-        ctx.save();
-        ctx.strokeStyle = neonColor;
-        ctx.shadowColor = neonColor;
-        ctx.shadowBlur = Math.max(3, w * 0.6);
-        ctx.lineWidth = Math.max(1, w * 0.09);
-        ctx.beginPath();
-        ctx.moveTo(x + w * 0.14, baseY - h * 0.05);
-        ctx.lineTo(x + w * 0.14, top + h * 0.08);
-        ctx.stroke();
-        // On alternating buildings, a second, shorter horizontal band
-        // near the base — a marquee/awning sign, in a different neon
-        // color than the vertical stripe for variety.
-        if (i % 2 === 0) {
-          const marqueeColor = neonColors[(i + 1) % neonColors.length];
-          ctx.strokeStyle = marqueeColor;
-          ctx.shadowColor = marqueeColor;
-          ctx.lineWidth = Math.max(1, h * 0.045);
-          ctx.beginPath();
-          ctx.moveTo(x + w * 0.1, baseY - h * 0.22);
-          ctx.lineTo(x + w * 0.85, baseY - h * 0.22);
-          ctx.stroke();
-        }
-        // The tallest tower's stepped crown gets its outline traced in
-        // neon too, echoing how Deco hotels light their roofline.
-        if (b.deco) {
-          ctx.strokeStyle = neonColors[(i + 2) % neonColors.length];
-          ctx.shadowColor = ctx.strokeStyle;
-          ctx.lineWidth = Math.max(1, w * 0.05);
-          ctx.beginPath();
-          ctx.moveTo(x + w * 0.22, top + h * 0.22);
-          ctx.lineTo(x + w * 0.22, top);
-          ctx.lineTo(x + w * 0.78, top);
-          ctx.lineTo(x + w * 0.78, top + h * 0.22);
-          ctx.stroke();
-        }
-        ctx.restore();
-      });
-      ctx.filter = "none";
       ctx.restore();
     }
 
@@ -1531,10 +1330,6 @@
       // availability, same as the horizon glow. The alligator/reindeer
       // crossings are timer-driven, independent of weather data too.
       if (city === "miami") {
-        // Skyline first, so the ocean's translucent water bands (drawn
-        // next) wash over its base — it needs to sit visually behind the
-        // water, not float in front of it.
-        drawMiamiSkyline();
         drawOcean(ts);
         drawPalmTrees();
         maybeAlligator(dt, ts);
