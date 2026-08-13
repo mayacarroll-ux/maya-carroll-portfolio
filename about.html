@@ -66,28 +66,34 @@
     :root[data-theme="dark"] {
       --color-bg: #070b18;
       --color-surface: #10172a;
+      --color-surface-translucent: rgba(16, 23, 42, 0.74);
       --color-text: #f7f3ee;
       --color-text-secondary: #aab4c8;
       --color-accent: #39e6d0;
+      --color-accent-2: #39e6d0;
       --color-accent-3: #f4c76b;
       --color-warning: #ff5c7a;
       --color-border: rgba(247, 243, 238, 0.14);
       --focus-ring: #39e6d0;
       --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.55);
       --glow-hover: 0 0 0 1px rgba(57, 230, 208, 0.4), 0 0 18px rgba(57, 230, 208, 0.28);
+      --status-glow: 0 0 12px rgba(57, 230, 208, 0.22);
     }
     :root[data-theme="light"] {
       --color-bg: #f5f7f6;
       --color-surface: #ffffff;
+      --color-surface-translucent: rgba(255, 255, 255, 0.78);
       --color-text: #17211e;
       --color-text-secondary: #60706a;
       --color-accent: #1f5a4a;
+      --color-accent-2: #a7d8e5;
       --color-accent-3: #dce6e2;
       --color-warning: #c23b52;
       --color-border: #dce6e2;
       --focus-ring: #1f5a4a;
       --shadow-elevated: 0 12px 32px rgba(23, 33, 30, 0.1);
       --glow-hover: 0 0 0 1px rgba(31, 90, 74, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
+      --status-glow: none;
     }
     * {
       box-sizing: border-box;
@@ -609,6 +615,12 @@
       text-align: center;
       padding: 0.85rem 1.5rem 1rem;
       border-top: 1px solid var(--color-border);
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      background: var(--color-surface-translucent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
     footer .copyright {
       margin: 0;
@@ -616,6 +628,164 @@
       font-weight: 500;
       opacity: 0.8;
       color: var(--color-text-secondary);
+    }
+
+    /* ---------- Footer: shared city-strip (time + weather + currency) ----------
+       Markup/behavior powered by footer-widget.js — kept in sync with
+       index.html's inline copy of the same widget. */
+    #city-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.5rem;
+      padding-bottom: 0.55rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.76rem;
+      color: var(--color-text-secondary);
+      width: 100%;
+      position: relative;
+    }
+    #city-strip::after {
+      content: "";
+      position: absolute;
+      left: -1.5rem;
+      right: -1.5rem;
+      bottom: 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .city-status {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      white-space: nowrap;
+      min-width: 0;
+    }
+    .city-status .city-name {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      color: var(--color-text);
+    }
+    .city-status .sep {
+      opacity: 0.45;
+    }
+    .city-status time {
+      font-variant-numeric: tabular-nums;
+    }
+    #currency-status {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+    #currency-status .currency-icon {
+      font-size: 0.95em;
+    }
+    #currency-rate {
+      font-variant-numeric: tabular-nums;
+      color: var(--color-accent-2-text, var(--color-text-secondary));
+    }
+    :root[data-theme="dark"] #currency-rate {
+      color: var(--color-accent-2);
+      text-shadow: var(--status-glow);
+    }
+    .city-status .weather {
+      display: inline-block;
+      min-width: 2.6em;
+      color: var(--color-accent-2-text, var(--color-text-secondary));
+      white-space: normal;
+    }
+    .city-status .weather-icon {
+      font-size: 0.95em;
+      filter: grayscale(0.15);
+    }
+    .city-status .feels-like {
+      font-size: 0.85em;
+      opacity: 0.7;
+      font-weight: 400;
+    }
+    :root[data-theme="dark"] .city-status .weather {
+      color: var(--color-accent-2);
+      text-shadow: var(--status-glow);
+    }
+    .city-status .weather.is-stale {
+      opacity: 0.65;
+      font-style: italic;
+    }
+    .city-status .weather.is-unavailable {
+      font-style: italic;
+    }
+    .city-status .uv {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32em;
+      font-size: 0.82em;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      white-space: normal;
+    }
+    .city-status .uv-dot {
+      width: 0.55em;
+      height: 0.55em;
+      min-width: 0.55em;
+      border-radius: 50%;
+    }
+    .city-status .uv-moderate .uv-dot {
+      background: #e8c25a;
+    }
+    .city-status .uv-high .uv-dot {
+      background: #ff9d4d;
+    }
+    .city-status .uv-veryhigh .uv-dot {
+      background: #ff5c7a;
+    }
+    .city-status .uv-extreme .uv-dot {
+      background: #b073ff;
+    }
+    .city-status .uv.uv-elevated {
+      font-weight: 700;
+      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
+      border-radius: 999px;
+      padding: 0.05rem 0.55rem 0.05rem 0.4rem;
+    }
+    .severe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3em;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
+      border-radius: 999px;
+      padding: 0.1rem 0.55rem;
+      white-space: normal;
+    }
+    .severe-badge:empty {
+      display: none;
+      padding: 0;
+      border: 0;
+    }
+    .severe-badge a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .severe-badge a:hover,
+    .severe-badge a:focus-visible {
+      text-decoration: underline;
+    }
+    @media (max-width: 479px) {
+      #city-strip {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem 0.5rem;
+      }
+      #city-strip .city-status {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -719,8 +889,33 @@
     </section>
   </main>
 
-  <footer>
-    <p class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</p>
+  <footer id="footer">
+    <div id="city-strip" aria-label="Local time and weather">
+      <div class="city-status" data-city="miami">
+        <span class="city-name">Miami</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-miami">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-miami" class="weather" aria-live="polite">&hellip;</span>
+        <span id="severe-miami" class="severe-badge" aria-live="polite"></span>
+      </div>
+      <div class="city-status" data-city="helsinki">
+        <span class="city-name">Helsinki</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-helsinki">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
+        <span id="severe-helsinki" class="severe-badge" aria-live="polite"></span>
+      </div>
+      <div id="currency-status" aria-live="polite">
+        <span class="currency-icon" aria-hidden="true">💱</span>
+        <span id="currency-rate">&hellip;</span>
+      </div>
+    </div>
+    <p>
+      <span data-i18n="footer_p1">From Miami to Helsinki—designing what's next.</span>
+      <span class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</span>
+    </p>
   </footer>
 
   <script>
@@ -747,6 +942,7 @@
         contact_email: "Email",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "South Florida, USA · U.S. Citizen · Public Trust Clearance",
+        footer_p1: "From Miami to Helsinki—designing what's next.",
       },
       es: {
         label: "ES",
@@ -770,6 +966,7 @@
         contact_email: "Correo",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sur de Florida, EE. UU. · Ciudadana estadounidense · Autorización Public Trust",
+        footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
       },
       fi: {
         label: "FI",
@@ -793,6 +990,7 @@
         contact_email: "Sähköposti",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Etelä-Florida, Yhdysvallat · Yhdysvaltain kansalainen · Public Trust -turvallisuusselvitys",
+        footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
       },
     };
 
@@ -846,6 +1044,9 @@
         opt.setAttribute("aria-current", opt.dataset.lang === lang ? "true" : "false");
       });
       localStorage.setItem("lang", lang);
+      // Lets footer-widget.js (weather/currency ticker) re-render itself in
+      // the new language without this code needing to know it exists.
+      document.dispatchEvent(new CustomEvent("app:languagechange"));
     }
 
     function openLangMenu(open) {
@@ -992,5 +1193,6 @@
         });
     })();
   </script>
+  <script src="footer-widget.js"></script>
 </body>
 </html>
