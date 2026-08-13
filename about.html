@@ -545,6 +545,17 @@
       line-height: 1.02;
       letter-spacing: -0.04em;
     }
+    .hero-banner-overlay .hero-actions {
+      margin: 1.5rem 0 0;
+    }
+    .hero-banner-overlay .contact-link {
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+    .hero-banner-overlay .contact-link:hover,
+    .hero-banner-overlay .contact-link:focus-visible {
+      color: var(--color-accent);
+    }
 
     /* ==================== About intro: centered avatar + heading ==================== */
     .intro-header {
@@ -595,10 +606,10 @@
       color: var(--color-accent);
     }
     .hero-credentials {
-      margin: 0;
+      margin: 0.75rem 0 0;
       font-size: 0.82rem;
       color: var(--color-text-secondary);
-      text-align: left;
+      text-align: center;
     }
     @media (max-width: 767px) {
       .hero-banner {
@@ -940,6 +951,11 @@
         />
         <div class="hero-banner-overlay">
           <p class="hero-role" data-i18n="about_title">AI Product &amp; Design Leader</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="contact_book_call">Book a call</a>
+            <a class="contact-link" href="mailto:hiring@mayacarroll.com" data-i18n="contact_email">Email</a>
+            <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener" data-i18n="contact_linkedin">LinkedIn ↗</a>
+          </div>
         </div>
       </div>
 
@@ -953,6 +969,7 @@
           loading="lazy"
         />
         <h1 data-i18n="about_h1">Hi, I'm Maya.</h1>
+        <p class="hero-credentials" data-i18n="credentials_line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
       </div>
 
       <div class="hero-content">
@@ -967,12 +984,6 @@
           Florida, I'm also learning Finnish and always open to a good conversation about
           what's next.
         </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="contact_book_call">Book a call</a>
-          <a class="contact-link" href="mailto:hiring@mayacarroll.com" data-i18n="contact_email">Email</a>
-          <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener" data-i18n="contact_linkedin">LinkedIn ↗</a>
-        </div>
-        <p class="hero-credentials" data-i18n="credentials_line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
       </div>
     </section>
   </main>
