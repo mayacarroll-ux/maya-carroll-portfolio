@@ -18,18 +18,41 @@
   </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maya Carroll | AI Product Design & Strategy Leader</title>
+  <title>About Maya | AI Product & Design Leader</title>
   <meta
     name="description"
-    content="Maya Carroll — AI Product Design & Strategy Leader."
+    content="Maya is an AI product and design leader specializing in human-AI interaction, AI agents, product strategy, product management, and user research."
   />
   <meta property="og:type" content="profile" />
-  <meta property="og:title" content="Maya Carroll | AI Product Design & Strategy Leader" />
+  <meta property="og:url" content="https://maya-carroll-portfolio.vercel.app/about.html" />
+  <meta property="og:title" content="About Maya | AI Product & Design Leader" />
   <meta
     property="og:description"
-    content="I turn AI capability into products people trust — 0-to-1 concepts to platforms serving millions."
+    content="Maya is an AI product and design leader specializing in human-AI interaction, AI agents, product strategy, product management, and user research."
   />
+  <meta property="og:image" content="https://maya-carroll-portfolio.vercel.app/about-photo.jpg" />
+  <meta property="og:image:width" content="666" />
+  <meta property="og:image:height" content="1000" />
+  <meta property="og:image:alt" content="Maya, an AI product and design leader." />
   <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/about.html" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Maya Carroll",
+      "url": "https://maya-carroll-portfolio.vercel.app/about.html",
+      "image": "https://maya-carroll-portfolio.vercel.app/about-photo.jpg",
+      "jobTitle": "AI Product & Design Leader",
+      "description": "Maya is an AI product and design leader specializing in human-AI interaction, AI agents, product strategy, product management, and user research.",
+      "email": "mailto:hiring@mayacarroll.com",
+      "sameAs": ["https://www.linkedin.com/in/mayacarroll"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "FL",
+        "addressCountry": "US"
+      }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -153,18 +176,9 @@
       font-size: 1.35rem;
       white-space: nowrap;
     }
-    .site-title-short {
-      display: none;
-    }
     @media (max-width: 599px) {
       #site-title {
         font-size: 1.15rem;
-      }
-      .site-title-full {
-        display: none;
-      }
-      .site-title-short {
-        display: inline;
       }
     }
     #primary-nav {
@@ -484,14 +498,40 @@
       padding: clamp(3rem, 8vw, 5rem) 0 clamp(2.5rem, 6vw, 3.5rem);
     }
     .business-card {
-      max-width: 34rem;
+      max-width: 46rem;
       margin: 0 auto;
       background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: 1.25rem;
       box-shadow: var(--shadow-elevated);
       padding: clamp(2rem, 5vw, 2.75rem);
-      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr 14rem;
+      grid-template-areas:
+        "heading portrait"
+        "text    text";
+      column-gap: clamp(1.5rem, 4vw, 2.5rem);
+      row-gap: 1.5rem;
+      align-items: start;
+    }
+    .card-heading {
+      grid-area: heading;
+    }
+    .card-text {
+      grid-area: text;
+      max-width: 30rem;
+    }
+    .card-portrait {
+      grid-area: portrait;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: 50% 18%;
+      border-radius: 1rem;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-elevated);
+      display: block;
     }
     .business-card h1 {
       font-size: clamp(1.7rem, 4vw, 2.1rem);
@@ -503,10 +543,12 @@
       color: var(--color-accent);
     }
     .hero-pitch {
-      margin: 1rem 0 0;
+      margin: 1.35rem 0 0;
       font-size: 1rem;
       color: var(--color-text-secondary);
-      text-align: left;
+    }
+    .hero-pitch:first-child {
+      margin-top: 0;
     }
     .card-divider {
       height: 1px;
@@ -516,7 +558,7 @@
     .contact-row {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       flex-wrap: wrap;
       gap: 0.6rem 1.25rem;
     }
@@ -535,12 +577,38 @@
       font-size: 0.82rem;
       color: var(--color-text-secondary);
     }
+    @media (max-width: 699px) {
+      .business-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "heading"
+          "portrait"
+          "text";
+        row-gap: 1.25rem;
+      }
+      .card-heading {
+        text-align: center;
+      }
+      .card-portrait {
+        width: 9.5rem;
+        margin: 0 auto;
+      }
+      .card-text {
+        max-width: none;
+      }
+      .contact-row,
+      .credentials-line,
+      .endorsement-tags {
+        justify-content: center;
+        text-align: center;
+      }
+    }
 
     /* ---------- Endorsements ---------- */
     .endorsement-tags {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 0.5rem;
     }
     .endorsement-tags span {
@@ -548,15 +616,11 @@
       font-weight: 600;
       padding: 0.35rem 0.8rem;
       border: 1px solid var(--color-border);
-      background: var(--color-surface);
+      background: var(--color-bg);
       border-radius: 999px;
       color: var(--color-text);
     }
 
-    /* ---------- Page sections ---------- */
-    .page-section {
-      padding: clamp(2.5rem, 6vw, 3.5rem) 0;
-    }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -605,10 +669,7 @@
     <div id="header-primary">
       <a id="brand" href="index.html" aria-label="Maya Carroll — Home">
         <img id="nav-avatar" src="avatar.jpg" alt="" />
-        <span id="site-title">
-          <span class="site-title-full">Maya Carroll</span>
-          <span class="site-title-short">Maya</span>
-        </span>
+        <span id="site-title">Maya Carroll</span>
       </a>
 
       <nav id="primary-nav" aria-label="Primary">
@@ -671,62 +732,66 @@
     <section id="about-hero">
       <div class="container">
         <div class="business-card">
-          <h1>Hi, I'm Maya.</h1>
-          <p class="card-title">AI Product Design &amp; Strategy Leader</p>
-          <p class="hero-pitch">
-            I'm drawn to difficult problems at the intersection of people, technology, and
-            meaningful change. My career has crossed product design, product management, and
-            user research, giving me an unusual perspective on how ideas become products—and
-            how products earn people's trust. I've contributed as a senior IC, lead, principal,
-            manager, and director across B2B SaaS, consumer and enterprise technology, startups,
-            nonprofits, EdTech, and civic tech.
-          </p>
-          <p class="hero-pitch">
-            Today, I focus on AI-native products, human-AI interaction, agents, and workflow
-            automation. I especially love working with engineers: exploring what's technically
-            possible, making thoughtful tradeoffs, and shaping complex systems into experiences
-            that feel clear and useful. I help organizations distinguish genuinely valuable AI
-            opportunities from novelty, then bring design, technology, and product strategy
-            together to make them real. My perspective is grounded in a BFA in Graphic Design,
-            an MS in Information Technology, and continued education in product management and
-            AI.
-          </p>
-          <p class="hero-pitch">
-            I'm a native South Floridian studying Finnish, with a lasting curiosity about how
-            people in different places live, work, and see the world. I value clear thinking,
-            kindness, good conversation, and people who care about the quality and consequences
-            of what they create. If you're working on something useful and ambitious, I'd be
-            glad to hear about it.
-          </p>
-
-          <div class="card-divider"></div>
-
-          <div class="contact-row">
-            <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
-            <a class="contact-link" href="mailto:hiring@mayacarroll.com">Email</a>
-            <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <div class="card-heading">
+            <h1>Hi, I'm Maya.</h1>
+            <p class="card-title">AI Product &amp; Design Leader</p>
           </div>
 
-          <div class="card-divider"></div>
+          <img
+            class="card-portrait"
+            src="about-photo.jpg"
+            alt="Maya, an AI product and design leader."
+            width="666"
+            height="1000"
+          />
 
-          <p class="credentials-line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
+          <div class="card-text">
+            <p class="hero-pitch">
+              I turn complex technology into products people can understand, use, and trust. My
+              background spans product design, product management, and user research—from
+              senior IC to director across SaaS, enterprise, consumer, startup, nonprofit,
+              EdTech, and civic-tech organizations.
+            </p>
+            <p class="hero-pitch">
+              Today, I focus on AI-native products, human-AI interaction, agents, and
+              automation. I especially love working with engineers to explore what's possible,
+              navigate tradeoffs, and make complex systems feel clear and useful. I bring design
+              training, technical fluency, and product thinking, supported by a BFA in Graphic
+              Design and an MS in Information Technology.
+            </p>
+            <p class="hero-pitch">
+              Based in South Florida, I'm curious, collaborative, and currently learning
+              Finnish. I value kindness, clear thinking, good conversation, and people who care
+              about what they create. If you're building something useful and ambitious, I'd
+              love to hear about it.
+            </p>
+
+            <div class="card-divider"></div>
+
+            <div class="contact-row">
+              <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
+              <a class="contact-link" href="mailto:hiring@mayacarroll.com">Email</a>
+              <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+
+            <div class="card-divider"></div>
+
+            <p class="credentials-line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
+
+            <div class="card-divider"></div>
+
+            <div class="endorsement-tags">
+              <span>AI Product Design</span>
+              <span>Product Strategy</span>
+              <span>Generative AI</span>
+              <span>User Research</span>
+              <span>0-to-1 Product Development</span>
+              <span>Cross-Functional Leadership</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
-
-    <section class="page-section">
-      <div class="container">
-        <div class="endorsement-tags">
-          <span>AI Product Design</span>
-          <span>Product Strategy</span>
-          <span>Generative AI</span>
-          <span>User Research</span>
-          <span>0-to-1 Product Development</span>
-          <span>Cross-Functional Leadership</span>
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <footer>
