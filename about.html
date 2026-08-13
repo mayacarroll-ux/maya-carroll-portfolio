@@ -538,10 +538,12 @@
     }
     .hero-banner-overlay .hero-role {
       color: #fff;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
       margin: 0;
-      font-size: 1.1rem;
+      font-size: clamp(2rem, 4.2vw, 3rem);
       font-weight: 700;
+      line-height: 1.02;
+      letter-spacing: -0.04em;
     }
 
     /* ==================== About intro: centered avatar + heading ==================== */
@@ -609,6 +611,9 @@
         justify-content: flex-end;
         padding-bottom: clamp(1.5rem, 6vw, 2.5rem);
         background: linear-gradient(0deg, rgba(7, 11, 24, 0.65) 0%, rgba(7, 11, 24, 0.25) 38%, rgba(7, 11, 24, 0) 60%);
+      }
+      .hero-banner-overlay .hero-role {
+        font-size: 1.7rem;
       }
       .intro-avatar {
         width: 96px;
