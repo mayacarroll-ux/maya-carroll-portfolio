@@ -30,10 +30,10 @@
     property="og:description"
     content="Maya is an AI product and design leader working across product strategy, human-AI interaction, AI agents, automation, product management, and user research."
   />
-  <meta property="og:image" content="https://maya-carroll-portfolio.vercel.app/about-photo.jpg" />
-  <meta property="og:image:width" content="666" />
-  <meta property="og:image:height" content="1000" />
-  <meta property="og:image:alt" content="Maya, an AI product and design leader" />
+  <meta property="og:image" content="https://maya-carroll-portfolio.vercel.app/about-hero.jpg" />
+  <meta property="og:image:width" content="1800" />
+  <meta property="og:image:height" content="900" />
+  <meta property="og:image:alt" content="Maya Carroll, AI product and design leader" />
   <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/about.html" />
   <script type="application/ld+json">
     {
@@ -41,7 +41,7 @@
       "@type": "Person",
       "name": "Maya Carroll",
       "url": "https://maya-carroll-portfolio.vercel.app/about.html",
-      "image": "https://maya-carroll-portfolio.vercel.app/about-photo.jpg",
+      "image": "https://maya-carroll-portfolio.vercel.app/about-hero.jpg",
       "jobTitle": "AI Product & Design Leader",
       "description": "Maya is an AI product and design leader working across product strategy, human-AI interaction, AI agents, automation, product management, and user research.",
       "email": "mailto:hiring@mayacarroll.com",
@@ -494,35 +494,59 @@
       overflow: hidden;
     }
 
-    /* ==================== About hero: split layout ==================== */
+    /* ==================== About hero: full-bleed photo banner ====================
+       Text always sits directly on the photo via a gradient scrim rather
+       than beside it — heading/role overlaid top-left on desktop, the
+       gradient direction flips to top-down on mobile since the taller
+       crop there puts more of the empty wall above the subject rather
+       than to her left. */
     #about-hero {
-      padding: clamp(2.5rem, 6vw, 4rem) 0;
+      padding-bottom: clamp(2.5rem, 6vw, 4rem);
     }
-    .hero-split {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: clamp(2rem, 5vw, 4rem);
-      align-items: center;
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      overflow: hidden;
     }
-    .hero-text {
-      max-width: 34rem;
+    .hero-banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 68% 42%;
+      display: block;
     }
-    .hero-text h1 {
-      font-size: clamp(2.1rem, 4.5vw, 3rem);
+    .hero-banner-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 clamp(1.5rem, 6vw, 4rem);
+      background: linear-gradient(100deg, rgba(7, 11, 24, 0.6) 0%, rgba(7, 11, 24, 0.28) 42%, rgba(7, 11, 24, 0) 62%);
     }
-    .hero-role {
-      margin: 0.5rem 0 1.5rem;
-      font-size: 1.05rem;
+    .hero-banner-overlay h1 {
+      color: #fff;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+    }
+    .hero-banner-overlay .hero-role {
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+      margin: 0.5rem 0 0;
+      font-size: 1.1rem;
       font-weight: 700;
-      color: var(--color-accent);
+    }
+    .hero-content {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: clamp(2rem, 5vw, 3rem) 1.5rem 0;
     }
     .hero-copy {
       margin: 0 0 1.1rem;
       font-size: 1.03rem;
       color: var(--color-text-secondary);
+      text-align: left;
     }
     .hero-copy:last-of-type {
       margin-bottom: 0;
@@ -530,6 +554,7 @@
     .hero-actions {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       flex-wrap: wrap;
       gap: 0.6rem 1.25rem;
       margin: 1.75rem 0 1rem;
@@ -548,36 +573,19 @@
       margin: 0;
       font-size: 0.82rem;
       color: var(--color-text-secondary);
-    }
-    .hero-portrait {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 4 / 5;
-      object-fit: cover;
-      object-position: 50% 18%;
-      border-radius: 1rem;
-      border: 1px solid var(--color-border);
-      box-shadow: var(--shadow-elevated);
-      display: block;
+      text-align: left;
     }
     @media (max-width: 767px) {
-      .hero-split {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        text-align: center;
+      .hero-banner {
+        aspect-ratio: 5 / 6;
       }
-      .hero-text {
-        max-width: none;
+      .hero-banner-img {
+        object-position: 62% 38%;
       }
-      .hero-copy {
-        text-align: left;
-      }
-      .hero-actions {
-        justify-content: center;
-      }
-      .hero-portrait {
-        aspect-ratio: 4 / 3;
-        object-position: 50% 22%;
+      .hero-banner-overlay {
+        justify-content: flex-start;
+        padding-top: clamp(1.5rem, 6vw, 2.5rem);
+        background: linear-gradient(180deg, rgba(7, 11, 24, 0.65) 0%, rgba(7, 11, 24, 0.25) 38%, rgba(7, 11, 24, 0) 60%);
       }
     }
 
@@ -879,36 +887,38 @@
 
   <main>
     <section id="about-hero">
-      <div class="hero-split">
-        <div class="hero-text">
+      <div class="hero-banner">
+        <img
+          class="hero-banner-img"
+          src="about-hero.jpg"
+          alt="Maya Carroll, AI product and design leader"
+          width="1800"
+          height="900"
+        />
+        <div class="hero-banner-overlay">
           <h1 data-i18n="about_h1">Hi, I'm Maya.</h1>
           <p class="hero-role" data-i18n="about_title">AI Product &amp; Design Leader</p>
-          <p class="hero-copy" data-i18n="about_p1">
-            I turn complex technology into clear, useful products people can trust. My
-            background spans product design, product management, and user research—from senior
-            IC to director across startups, SaaS, enterprise, and mission-driven organizations.
-          </p>
-          <p class="hero-copy" data-i18n="about_p2">
-            Today, I focus on AI products, agents, and automation. I love working with
-            engineers to turn ambitious ideas into thoughtful experiences. Based in South
-            Florida, I'm also learning Finnish and always open to a good conversation about
-            what's next.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="contact_book_call">Book a call</a>
-            <a class="contact-link" href="mailto:hiring@mayacarroll.com" data-i18n="contact_email">Email</a>
-            <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener" data-i18n="contact_linkedin">LinkedIn ↗</a>
-          </div>
-          <p class="hero-credentials" data-i18n="credentials_line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
         </div>
+      </div>
 
-        <img
-          class="hero-portrait"
-          src="about-photo.jpg"
-          alt="Maya, an AI product and design leader"
-          width="666"
-          height="1000"
-        />
+      <div class="hero-content">
+        <p class="hero-copy" data-i18n="about_p1">
+          I turn complex technology into clear, useful products people can trust. My
+          background spans product design, product management, and user research—from senior
+          IC to director across startups, SaaS, enterprise, and mission-driven organizations.
+        </p>
+        <p class="hero-copy" data-i18n="about_p2">
+          Today, I focus on AI products, agents, and automation. I love working with
+          engineers to turn ambitious ideas into thoughtful experiences. Based in South
+          Florida, I'm also learning Finnish and always open to a good conversation about
+          what's next.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="contact_book_call">Book a call</a>
+          <a class="contact-link" href="mailto:hiring@mayacarroll.com" data-i18n="contact_email">Email</a>
+          <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener" data-i18n="contact_linkedin">LinkedIn ↗</a>
+        </div>
+        <p class="hero-credentials" data-i18n="credentials_line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
       </div>
     </section>
   </main>
