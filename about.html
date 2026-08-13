@@ -556,6 +556,15 @@
       margin: 0 auto;
       padding: clamp(2rem, 5vw, 3rem) 1.5rem 0;
     }
+    .hero-portrait {
+      float: left;
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0.25rem 1.5rem 1rem 0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
     .hero-copy {
       margin: 0 0 1.1rem;
       font-size: 1.03rem;
@@ -600,6 +609,13 @@
         justify-content: flex-start;
         padding-top: clamp(1.5rem, 6vw, 2.5rem);
         background: linear-gradient(180deg, rgba(7, 11, 24, 0.65) 0%, rgba(7, 11, 24, 0.25) 38%, rgba(7, 11, 24, 0) 60%);
+      }
+      .hero-portrait {
+        float: none;
+        display: block;
+        width: 96px;
+        height: 96px;
+        margin: 0 0 1.1rem;
       }
     }
 
@@ -920,6 +936,14 @@
       </div>
 
       <div class="hero-content">
+        <img
+          class="hero-portrait"
+          src="about-portrait.jpg"
+          alt="Maya Carroll headshot"
+          width="128"
+          height="128"
+          loading="lazy"
+        />
         <p class="hero-copy" data-i18n="about_p1">
           I turn complex technology into clear, useful products people can trust. My
           background spans product design, product management, and user research—from senior
