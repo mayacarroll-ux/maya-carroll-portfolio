@@ -74,6 +74,8 @@
     body {
       margin: 0;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: var(--font-primary);
       font-weight: 400;
       letter-spacing: -0.01em;
@@ -121,6 +123,7 @@
       border-color: var(--color-border);
     }
     main {
+      flex: 1 0 auto;
       max-width: 68rem;
       margin: 0 auto;
       padding: 3rem 1.5rem;
@@ -847,6 +850,18 @@
       white-space: nowrap;
       border: 0;
     }
+
+    footer {
+      text-align: center;
+      padding: 0.85rem 1.5rem 1rem;
+    }
+    footer .copyright {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+      opacity: 0.8;
+      color: var(--color-text-secondary);
+    }
   </style>
 </head>
 <body>
@@ -964,8 +979,13 @@
     <div id="week-grid-wrap" hidden><div id="week-grid"></div></div>
   </main>
 
+  <footer>
+    <p class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</p>
+  </footer>
+
   <script>
     var mainEl = document.querySelector("main");
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
     var accountListEl = document.getElementById("account-list");
     var noAccountsEl = document.getElementById("no-accounts");
     var weekLoadingEl = document.getElementById("week-loading");

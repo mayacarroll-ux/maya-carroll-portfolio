@@ -58,6 +58,8 @@
     body {
       margin: 0;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: var(--font-primary);
       font-weight: 400;
       letter-spacing: -0.01em;
@@ -70,6 +72,7 @@
       outline-offset: 2px;
     }
     main {
+      flex: 1 0 auto;
       max-width: 40rem;
       margin: 0 auto;
       padding: 3rem 1.5rem;
@@ -450,6 +453,18 @@
     body.menu-open {
       overflow: hidden;
     }
+
+    footer {
+      text-align: center;
+      padding: 0.85rem 1.5rem 1rem;
+    }
+    footer .copyright {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+      opacity: 0.8;
+      color: var(--color-text-secondary);
+    }
   </style>
 </head>
 <body>
@@ -523,6 +538,10 @@
     <p><a href="calendar.html">Calendar →</a></p>
   </main>
 
+  <footer>
+    <p class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</p>
+  </footer>
+
   <script>
     var translations = {
       en: {
@@ -564,6 +583,7 @@
     };
 
     var mainEl = document.querySelector("main");
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
 
     // ---------- Theme toggle ----------
     var themeToggle = document.getElementById("theme-toggle");
