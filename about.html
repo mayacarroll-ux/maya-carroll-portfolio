@@ -521,8 +521,13 @@
       grid-area: text;
       max-width: 30rem;
     }
-    .card-portrait {
+    .card-portrait-group {
       grid-area: portrait;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .card-portrait {
       width: 100%;
       height: auto;
       aspect-ratio: 4 / 5;
@@ -532,6 +537,10 @@
       border: 1px solid var(--color-border);
       box-shadow: var(--shadow-elevated);
       display: block;
+    }
+    .card-portrait-secondary {
+      aspect-ratio: 2 / 3;
+      object-position: 50% 12%;
     }
     .business-card h1 {
       font-size: clamp(1.7rem, 4vw, 2.1rem);
@@ -589,7 +598,7 @@
       .card-heading {
         text-align: center;
       }
-      .card-portrait {
+      .card-portrait-group {
         width: 9.5rem;
         margin: 0 auto;
       }
@@ -733,33 +742,42 @@
       <div class="container">
         <div class="business-card">
           <div class="card-heading">
-            <h1>Hi, I'm Maya.</h1>
-            <p class="card-title">AI Product &amp; Design Leader</p>
+            <h1 data-i18n="about_h1">Hi, I'm Maya.</h1>
+            <p class="card-title" data-i18n="about_title">AI Product &amp; Design Leader</p>
           </div>
 
-          <img
-            class="card-portrait"
-            src="about-photo.jpg"
-            alt="Maya, an AI product and design leader."
-            width="666"
-            height="1000"
-          />
+          <div class="card-portrait-group">
+            <img
+              class="card-portrait"
+              src="about-photo.jpg"
+              alt="Maya, an AI product and design leader."
+              width="666"
+              height="1000"
+            />
+            <img
+              class="card-portrait card-portrait-secondary"
+              src="about-photo-2.jpg"
+              alt="Maya seated, smiling."
+              width="666"
+              height="1000"
+            />
+          </div>
 
           <div class="card-text">
-            <p class="hero-pitch">
+            <p class="hero-pitch" data-i18n="about_p1">
               I turn complex technology into products people can understand, use, and trust. My
               background spans product design, product management, and user research—from
               senior IC to director across SaaS, enterprise, consumer, startup, nonprofit,
               EdTech, and civic-tech organizations.
             </p>
-            <p class="hero-pitch">
+            <p class="hero-pitch" data-i18n="about_p2">
               Today, I focus on AI-native products, human-AI interaction, agents, and
               automation. I especially love working with engineers to explore what's possible,
               navigate tradeoffs, and make complex systems feel clear and useful. I bring design
               training, technical fluency, and product thinking, supported by a BFA in Graphic
               Design and an MS in Information Technology.
             </p>
-            <p class="hero-pitch">
+            <p class="hero-pitch" data-i18n="about_p3">
               Based in South Florida, I'm curious, collaborative, and currently learning
               Finnish. I value kindness, clear thinking, good conversation, and people who care
               about what they create. If you're building something useful and ambitious, I'd
@@ -769,24 +787,24 @@
             <div class="card-divider"></div>
 
             <div class="contact-row">
-              <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
-              <a class="contact-link" href="mailto:hiring@mayacarroll.com">Email</a>
-              <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener">LinkedIn ↗</a>
+              <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call" data-i18n="contact_book_call">Book a call</a>
+              <a class="contact-link" href="mailto:hiring@mayacarroll.com" data-i18n="contact_email">Email</a>
+              <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener" data-i18n="contact_linkedin">LinkedIn ↗</a>
             </div>
 
             <div class="card-divider"></div>
 
-            <p class="credentials-line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
+            <p class="credentials-line" data-i18n="credentials_line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
 
             <div class="card-divider"></div>
 
             <div class="endorsement-tags">
-              <span>AI Product Design</span>
-              <span>Product Strategy</span>
-              <span>Generative AI</span>
-              <span>User Research</span>
-              <span>0-to-1 Product Development</span>
-              <span>Cross-Functional Leadership</span>
+              <span data-i18n="skill_design">AI Product Design</span>
+              <span data-i18n="skill_strategy">Product Strategy</span>
+              <span data-i18n="skill_genai">Generative AI</span>
+              <span data-i18n="skill_research">User Research</span>
+              <span data-i18n="skill_0to1">0-to-1 Product Development</span>
+              <span data-i18n="skill_leadership">Cross-Functional Leadership</span>
             </div>
           </div>
         </div>
@@ -812,6 +830,24 @@
         nav_calendar: "Calendar",
         nav_dashboard: "Dashboard",
         nav_signout: "Sign out",
+        about_h1: "Hi, I'm Maya.",
+        about_title: "AI Product & Design Leader",
+        about_p1:
+          "I turn complex technology into products people can understand, use, and trust. My background spans product design, product management, and user research—from senior IC to director across SaaS, enterprise, consumer, startup, nonprofit, EdTech, and civic-tech organizations.",
+        about_p2:
+          "Today, I focus on AI-native products, human-AI interaction, agents, and automation. I especially love working with engineers to explore what's possible, navigate tradeoffs, and make complex systems feel clear and useful. I bring design training, technical fluency, and product thinking, supported by a BFA in Graphic Design and an MS in Information Technology.",
+        about_p3:
+          "Based in South Florida, I'm curious, collaborative, and currently learning Finnish. I value kindness, clear thinking, good conversation, and people who care about what they create. If you're building something useful and ambitious, I'd love to hear about it.",
+        contact_book_call: "Book a call",
+        contact_email: "Email",
+        contact_linkedin: "LinkedIn ↗",
+        credentials_line: "South Florida, USA · U.S. Citizen · Public Trust Clearance",
+        skill_design: "AI Product Design",
+        skill_strategy: "Product Strategy",
+        skill_genai: "Generative AI",
+        skill_research: "User Research",
+        skill_0to1: "0-to-1 Product Development",
+        skill_leadership: "Cross-Functional Leadership",
       },
       es: {
         label: "ES",
@@ -825,6 +861,24 @@
         nav_calendar: "Calendario",
         nav_dashboard: "Panel",
         nav_signout: "Cerrar sesión",
+        about_h1: "Hola, soy Maya.",
+        about_title: "Líder de Producto y Diseño de IA",
+        about_p1:
+          "Convierto tecnología compleja en productos que las personas pueden entender, usar y en los que pueden confiar. Mi trayectoria abarca el diseño de producto, la gestión de producto y la investigación de usuarios, desde colaboradora individual senior hasta directora, en organizaciones de SaaS, empresariales, de consumo, startups, sin fines de lucro, EdTech y tecnología cívica.",
+        about_p2:
+          "Hoy me enfoco en productos nativos de IA, la interacción humano-IA, agentes y automatización. Me encanta especialmente trabajar con ingenieros para explorar lo que es posible, evaluar compensaciones y hacer que los sistemas complejos se sientan claros y útiles. Aporto formación en diseño, fluidez técnica y pensamiento de producto, respaldados por una licenciatura en Diseño Gráfico y una maestría en Tecnología de la Información.",
+        about_p3:
+          "Con base en el sur de Florida, soy curiosa, colaborativa y actualmente estoy aprendiendo finlandés. Valoro la amabilidad, el pensamiento claro, las buenas conversaciones y a las personas que se preocupan por lo que crean. Si estás construyendo algo útil y ambicioso, me encantaría saber más al respecto.",
+        contact_book_call: "Agendar una llamada",
+        contact_email: "Correo",
+        contact_linkedin: "LinkedIn ↗",
+        credentials_line: "Sur de Florida, EE. UU. · Ciudadana estadounidense · Autorización Public Trust",
+        skill_design: "Diseño de Producto de IA",
+        skill_strategy: "Estrategia de Producto",
+        skill_genai: "IA Generativa",
+        skill_research: "Investigación de Usuarios",
+        skill_0to1: "Desarrollo de Producto 0 a 1",
+        skill_leadership: "Liderazgo Multifuncional",
       },
       fi: {
         label: "FI",
@@ -838,6 +892,24 @@
         nav_calendar: "Kalenteri",
         nav_dashboard: "Kojelauta",
         nav_signout: "Kirjaudu ulos",
+        about_h1: "Hei, olen Maya.",
+        about_title: "AI-tuote- ja designjohtaja",
+        about_p1:
+          "Muutan monimutkaisen teknologian tuotteiksi, joita ihmiset ymmärtävät, käyttävät ja joihin he voivat luottaa. Taustani kattaa tuotesuunnittelun, tuotehallinnan ja käyttäjätutkimuksen — vanhemmasta asiantuntijasta johtajaksi SaaS-, yritys-, kuluttaja-, startup-, voittoa tavoittelemattomien, EdTech- ja kansalaisteknologiaorganisaatioiden parissa.",
+        about_p2:
+          "Nykyään keskityn tekoälypohjaisiin tuotteisiin, ihmisen ja tekoälyn väliseen vuorovaikutukseen, agentteihin ja automaatioon. Erityisesti nautin insinöörien kanssa työskentelystä: tutkimme yhdessä, mikä on mahdollista, punnitsemme kompromisseja ja teemme monimutkaisista järjestelmistä selkeitä ja hyödyllisiä. Tuon mukanani muotoilukoulutusta, teknistä osaamista ja tuoteajattelua, joiden tukena on BFA-tutkinto graafisesta suunnittelusta ja maisterin tutkinto tietotekniikasta.",
+        about_p3:
+          "Asun Etelä-Floridassa, olen utelias ja yhteistyöhaluinen, ja opiskelen parhaillaan suomea. Arvostan ystävällisyyttä, selkeää ajattelua, hyviä keskusteluja ja ihmisiä, jotka välittävät siitä, mitä he luovat. Jos rakennat jotain hyödyllistä ja kunnianhimoista, kuulisin siitä mielelläni.",
+        contact_book_call: "Varaa puhelu",
+        contact_email: "Sähköposti",
+        contact_linkedin: "LinkedIn ↗",
+        credentials_line: "Etelä-Florida, Yhdysvallat · Yhdysvaltain kansalainen · Public Trust -turvallisuusselvitys",
+        skill_design: "Tekoälytuotesuunnittelu",
+        skill_strategy: "Tuotestrategia",
+        skill_genai: "Generatiivinen tekoäly",
+        skill_research: "Käyttäjätutkimus",
+        skill_0to1: "0-to-1-tuotekehitys",
+        skill_leadership: "Monialainen johtajuus",
       },
     };
 
