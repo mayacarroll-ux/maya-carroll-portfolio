@@ -480,21 +480,32 @@
     #about-hero {
       padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(2rem, 5vw, 3rem);
     }
-    .hero-grid {
+    .hero-card {
       display: grid;
-      grid-template-columns: 14rem 1fr;
-      gap: clamp(1.5rem, 4vw, 3rem);
-      align-items: center;
+      grid-template-columns: 17rem 1fr;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-elevated);
+    }
+    .hero-photo-panel {
+      position: relative;
+      min-height: 20rem;
     }
     .hero-photo {
-      width: 14rem;
-      aspect-ratio: 4 / 5;
-      height: auto;
-      border-radius: 1.25rem;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      object-position: 50% 22%;
-      border: 3px solid var(--color-accent-3);
-      box-shadow: var(--shadow-elevated);
+      object-position: 50% 20%;
+      filter: saturate(0.9);
+      display: block;
+    }
+    .hero-text {
+      background: var(--color-surface);
+      padding: clamp(1.75rem, 4vw, 2.75rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     #about-hero .eyebrow {
       font-size: 0.72rem;
@@ -575,14 +586,32 @@
     }
 
     @media (max-width: 599px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
+      .hero-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
-        justify-items: center;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
       }
-      .hero-photo {
+      .hero-photo-panel {
+        min-height: 0;
         width: 9.5rem;
         aspect-ratio: 4 / 5;
+        border-radius: 1.25rem;
+        border: 3px solid var(--color-accent-3);
+        box-shadow: var(--shadow-elevated);
+        overflow: hidden;
+      }
+      .hero-photo {
+        filter: none;
+      }
+      .hero-text {
+        background: transparent;
+        padding: 1.5rem 0 0;
+        align-items: center;
       }
       #about-hero .btn-row {
         justify-content: center;
@@ -797,9 +826,11 @@
   <main>
     <section id="about-hero">
       <div class="container">
-        <div class="hero-grid">
-          <img class="hero-photo" src="about-photo.jpg" alt="Maya Carroll" />
-          <div>
+        <div class="hero-card">
+          <div class="hero-photo-panel">
+            <img class="hero-photo" src="about-photo.jpg" alt="Maya Carroll" />
+          </div>
+          <div class="hero-text">
             <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Open to senior AI product roles</p>
             <h1>AI Product Design &amp; Strategy Leader</h1>
             <p class="hero-pitch">
