@@ -476,36 +476,19 @@
       overflow: hidden;
     }
 
-    /* ==================== About hero ==================== */
+    /* ==================== About hero: digital business card ==================== */
     #about-hero {
-      padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(2rem, 5vw, 3rem);
+      padding: clamp(3rem, 8vw, 5rem) 0 clamp(2.5rem, 6vw, 3.5rem);
     }
-    .hero-card {
-      display: grid;
-      grid-template-columns: 17rem 1fr;
-      border-radius: 1.5rem;
-      overflow: hidden;
-      border: 1px solid var(--color-border);
-      box-shadow: var(--shadow-elevated);
-    }
-    .hero-photo-panel {
-      position: relative;
-      min-height: 20rem;
-    }
-    .hero-photo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 50% 20%;
-      filter: saturate(0.9);
-      display: block;
-    }
-    .hero-text {
+    .business-card {
+      max-width: 30rem;
+      margin: 0 auto;
       background: var(--color-surface);
-      padding: clamp(1.75rem, 4vw, 2.75rem);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      border: 1px solid var(--color-border);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow-elevated);
+      padding: clamp(2rem, 5vw, 2.75rem);
+      text-align: center;
     }
     #about-hero .eyebrow {
       font-size: 0.72rem;
@@ -513,9 +496,10 @@
       text-transform: uppercase;
       color: var(--color-accent);
       font-weight: 700;
-      margin: 0 0 0.6rem;
+      margin: 0 0 0.9rem;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
     }
     .status-dot {
@@ -525,54 +509,53 @@
       background: var(--color-accent);
       flex-shrink: 0;
     }
-    @media (max-width: 599px) {
-      #about-hero .eyebrow {
-        justify-content: center;
-      }
+    .business-card h1 {
+      font-size: clamp(1.7rem, 4vw, 2.1rem);
+    }
+    .card-title {
+      margin: 0.35rem 0 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-accent);
     }
     .hero-pitch {
-      margin-top: 1.1rem;
-      font-size: 1.05rem;
+      margin: 1rem 0 0;
+      font-size: 1rem;
       color: var(--color-text-secondary);
-      max-width: 40rem;
     }
-    .linkedin-link {
-      display: inline-block;
-      margin-top: 1rem;
-      font-size: 0.85rem;
+    .card-divider {
+      height: 1px;
+      background: var(--color-border);
+      margin: 1.5rem 0;
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.25rem;
+    }
+    .contact-link {
+      font-size: 0.9rem;
       font-weight: 600;
       color: var(--color-text-secondary);
       text-decoration: none;
     }
-    .linkedin-link:hover,
-    .linkedin-link:focus-visible {
+    .contact-link:hover,
+    .contact-link:focus-visible {
       color: var(--color-accent);
     }
-
-    /* ---------- Quick facts + endorsements ---------- */
-    .fact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.25rem;
-      padding-bottom: 1.75rem;
-      margin-bottom: 1.75rem;
-      border-bottom: 1px solid var(--color-border);
-    }
-    .fact .label {
-      display: block;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    .credentials-line {
+      margin: 0;
+      font-size: 0.82rem;
       color: var(--color-text-secondary);
-      margin-bottom: 0.25rem;
     }
-    .fact .value {
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
+
+    /* ---------- Endorsements ---------- */
     .endorsement-tags {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 0.5rem;
     }
     .endorsement-tags span {
@@ -583,39 +566,6 @@
       background: var(--color-surface);
       border-radius: 999px;
       color: var(--color-text);
-    }
-
-    @media (max-width: 599px) {
-      .hero-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-      }
-      .hero-photo-panel {
-        min-height: 0;
-        width: 9.5rem;
-        aspect-ratio: 4 / 5;
-        border-radius: 1.25rem;
-        border: 3px solid var(--color-accent-3);
-        box-shadow: var(--shadow-elevated);
-        overflow: hidden;
-      }
-      .hero-photo {
-        filter: none;
-      }
-      .hero-text {
-        background: transparent;
-        padding: 1.5rem 0 0;
-        align-items: center;
-      }
-      #about-hero .btn-row {
-        justify-content: center;
-      }
     }
 
     /* ---------- Page sections ---------- */
@@ -683,29 +633,6 @@
       margin: 0;
     }
 
-    /* ---------- Closing CTA ---------- */
-    #about-cta {
-      text-align: center;
-      background: var(--color-surface);
-      border-top: 1px solid var(--color-border);
-      border-bottom: 1px solid var(--color-border);
-      padding: clamp(2.5rem, 6vw, 3.5rem) 0;
-    }
-    #about-cta h2 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    #about-cta p {
-      color: var(--color-text-secondary);
-      margin: 0.6rem 0 1.5rem;
-    }
-    .btn-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.85rem;
-    }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -733,15 +660,6 @@
       color: var(--color-surface);
     }
     .btn-primary:hover {
-      box-shadow: var(--glow-hover);
-    }
-    .btn-secondary {
-      background: var(--color-bg);
-      color: var(--color-text);
-      border-color: var(--color-border);
-    }
-    .btn-secondary:hover {
-      border-color: var(--color-accent);
       box-shadow: var(--glow-hover);
     }
 
@@ -826,42 +744,31 @@
   <main>
     <section id="about-hero">
       <div class="container">
-        <div class="hero-card">
-          <div class="hero-photo-panel">
-            <img class="hero-photo" src="about-photo.jpg" alt="Maya Carroll" />
+        <div class="business-card">
+          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Open to senior AI product roles</p>
+          <h1>Maya Carroll</h1>
+          <p class="card-title">AI Product Design &amp; Strategy Leader</p>
+          <p class="hero-pitch">
+            I turn AI capability into products people trust — 0-to-1 concepts to platforms serving millions.
+          </p>
+
+          <div class="card-divider"></div>
+
+          <div class="contact-row">
+            <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
+            <a class="contact-link" href="mailto:hiring@mayacarroll.com">Email</a>
+            <a class="contact-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener">LinkedIn ↗</a>
           </div>
-          <div class="hero-text">
-            <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Open to senior AI product roles</p>
-            <h1>AI Product Design &amp; Strategy Leader</h1>
-            <p class="hero-pitch">
-              I turn AI capability into products people trust — 0-to-1 concepts to platforms serving millions.
-            </p>
-            <div class="btn-row" style="margin-top: 1.5rem;">
-              <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
-              <a class="btn btn-secondary" href="index.html#work">View my work</a>
-            </div>
-            <a class="linkedin-link" href="https://www.linkedin.com/in/mayacarroll" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
-          </div>
+
+          <div class="card-divider"></div>
+
+          <p class="credentials-line">South Florida, USA · U.S. Citizen · Public Trust Clearance</p>
         </div>
       </div>
     </section>
 
     <section class="page-section">
       <div class="container">
-        <div class="fact-grid">
-          <div class="fact">
-            <span class="label">Location</span>
-            <span class="value">South Florida, USA</span>
-          </div>
-          <div class="fact">
-            <span class="label">Work Authorization</span>
-            <span class="value">U.S. Citizen</span>
-          </div>
-          <div class="fact">
-            <span class="label">Security Clearance</span>
-            <span class="value">Public Trust</span>
-          </div>
-        </div>
         <div class="endorsement-tags">
           <span>AI Product Design</span>
           <span>Product Strategy</span>
@@ -904,14 +811,6 @@
       </div>
     </section>
 
-    <section id="about-cta">
-      <div class="container">
-        <h2>Let's talk AI products.</h2>
-        <div class="btn-row">
-          <a class="btn btn-primary" href="mailto:hiring@mayacarroll.com?subject=Book%20a%20call">Book a call</a>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer>
