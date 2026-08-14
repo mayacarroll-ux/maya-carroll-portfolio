@@ -9,10 +9,85 @@ const { dateInZone } = require("./_day-range");
 const { computeBookableSlots, SLOT_MINUTES, HOME_TIMEZONE } = require("./_availability");
 const { loadBookings, addBookingIfFree, updateBooking, newBookingId } = require("./_bookings");
 const { attemptCreateCalendarEvent } = require("./_calendar-fetch");
+const { sendEmail, OWNER_EMAIL } = require("./_email");
+const { baseUrl } = require("./_base-url");
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RATE_WINDOW_MS = 15 * 60 * 1000;
 const RATE_LIMIT = 3;
+
+function formatSlotTime(iso, timeZone) {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone,
+  }).format(new Date(iso));
+}
+
+// Best-effort — a booking that succeeded shouldn't fail just because
+// Resend isn't configured yet or a send fails, so every call site wraps
+// this in try/catch and swallows errors.
+async function sendBookingEmails(record, status, req) {
+  const miamiTime = formatSlotTime(record.slot.start, HOME_TIMEZONE);
+  const visitorZone = record.requesterTimeZone || HOME_TIMEZONE;
+  const visitorTime = formatSlotTime(record.slot.start, visitorZone);
+  const calendarUrl = `${baseUrl(req)}/calendar.html`;
+
+  const statusLine =
+    status === "confirmed"
+      ? "This call is confirmed — a calendar invite has been sent separately with the full details."
+      : "Maya will confirm this shortly.";
+
+  await sendEmail({
+    to: record.email,
+    subject: status === "confirmed" ? "You're booked with Maya Carroll" : "Your call request with Maya Carroll",
+    text:
+      `Hi ${record.name},\n\n` +
+      `Your call is set for ${visitorTime} (your time).\n\n${statusLine}\n\n` +
+      (record.topic ? `Topic: ${record.topic}\n\n` : "") +
+      `— Maya`,
+    html:
+      `<p>Hi ${escapeHtml(record.name)},</p>` +
+      `<p>Your call is set for <strong>${escapeHtml(visitorTime)}</strong> (your time).</p>` +
+      `<p>${escapeHtml(statusLine)}</p>` +
+      (record.topic ? `<p><strong>Topic:</strong> ${escapeHtml(record.topic)}</p>` : "") +
+      `<p>— Maya</p>`,
+  });
+
+  await sendEmail({
+    to: OWNER_EMAIL,
+    subject: `New booking ${status === "confirmed" ? "(confirmed)" : "request"} from ${record.name}`,
+    text:
+      `${record.name} <${record.email}> requested a call.\n\n` +
+      `When: ${miamiTime} (Miami time)\n` +
+      (record.topic ? `Topic: ${record.topic}\n` : "") +
+      `Status: ${status}\n\n` +
+      (status === "confirmed"
+        ? "A calendar event was created automatically."
+        : `Confirm or decline it here: ${calendarUrl}`),
+    html:
+      `<p><strong>${escapeHtml(record.name)}</strong> &lt;${escapeHtml(record.email)}&gt; requested a call.</p>` +
+      `<p><strong>When:</strong> ${escapeHtml(miamiTime)} (Miami time)</p>` +
+      (record.topic ? `<p><strong>Topic:</strong> ${escapeHtml(record.topic)}</p>` : "") +
+      `<p><strong>Status:</strong> ${escapeHtml(status)}</p>` +
+      (status === "confirmed"
+        ? "<p>A calendar event was created automatically.</p>"
+        : `<p><a href="${calendarUrl}">Confirm or decline it from calendar.html</a>.</p>`),
+  });
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[c]));
+}
 
 function clientIp(req) {
   const fwd = req.headers["x-forwarded-for"];
@@ -138,6 +213,13 @@ module.exports = async (req, res) => {
   } catch (e) {
     // Booking is already saved as "pending" — surfaced on calendar.html
     // for manual handling either way.
+  }
+
+  try {
+    await sendBookingEmails(record, finalStatus, req);
+  } catch (e) {
+    // Email is a best-effort side effect — the booking itself already
+    // succeeded and is either on the calendar or in the pending list.
   }
 
   res.status(200).json({ ok: true, status: finalStatus, slot });
