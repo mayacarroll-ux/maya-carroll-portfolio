@@ -635,8 +635,7 @@
     .booking-more-row {
       margin-top: 0.5rem;
     }
-    #booking-form-wrap h2,
-    #booking-confirmation h2 {
+    #booking-form-wrap h2 {
       margin-bottom: 0.5rem;
     }
     .booking-selected-slot {
@@ -692,9 +691,76 @@
     #booking-submit {
       align-self: flex-start;
     }
-    #booking-confirmation p {
+    .booking-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 1.5rem;
+      transform: translateX(-50%);
+      z-index: 60;
+      width: min(26rem, calc(100vw - 2rem));
+      max-height: calc(100vh - 3rem);
+      overflow-y: auto;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-elevated);
+      padding: 1.5rem 1.5rem 1.25rem;
+      animation: booking-toast-in 0.25s ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .booking-toast {
+        animation: none;
+      }
+    }
+    @keyframes booking-toast-in {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+    .booking-toast h2 {
+      margin: 0 0 0.5rem;
+      padding-right: 1.5rem;
+    }
+    .booking-toast p {
       color: var(--color-text-secondary);
       margin: 0 0 1.25rem;
+    }
+    #booking-toast-close {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.3rem;
+      line-height: 1;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+    }
+    #booking-toast-close:hover,
+    #booking-toast-close:focus-visible {
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    .booking-toast-cal-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .booking-toast-cal-row .btn {
+      font-size: 0.82rem;
+      padding: 0.55rem 0.9rem;
     }
 
     footer {
@@ -1034,13 +1100,20 @@
         </form>
       </div>
 
-      <div id="booking-confirmation" hidden>
-        <h2 id="booking-confirmation-title"></h2>
-        <p id="booking-confirmation-body"></p>
-        <a class="btn" href="index.html" data-i18n="booking_back_home">Back to homepage</a>
-      </div>
     </section>
   </main>
+
+  <div id="booking-toast" class="booking-toast" role="status" aria-live="polite" hidden>
+    <button type="button" id="booking-toast-close" aria-label="Dismiss">&times;</button>
+    <h2 id="booking-confirmation-title"></h2>
+    <p id="booking-confirmation-body"></p>
+    <div class="booking-toast-cal-row">
+      <a class="btn" id="booking-cal-google" target="_blank" rel="noopener" data-i18n="booking_add_google">Add to Google Calendar</a>
+      <a class="btn" id="booking-cal-outlook" target="_blank" rel="noopener" data-i18n="booking_add_outlook">Add to Outlook</a>
+      <button type="button" class="btn" id="booking-cal-ics" data-i18n="booking_add_ics">Download .ics</button>
+    </div>
+    <a class="btn btn-primary" href="index.html" data-i18n="booking_back_home">Back to homepage</a>
+  </div>
 
   <footer id="footer">
     <div id="city-strip" aria-label="Local time and weather">
@@ -1117,6 +1190,9 @@
         booking_pending_body: "Maya will confirm shortly — you'll hear back by email.",
         booking_err_taken: "That time was just taken — pick another below.",
         booking_err_generic: "Something went wrong — please try again.",
+        booking_add_google: "Add to Google Calendar",
+        booking_add_outlook: "Add to Outlook",
+        booking_add_ics: "Download .ics",
       },
       es: {
         label: "ES",
@@ -1162,6 +1238,9 @@
         booking_pending_body: "Maya confirmará en breve — recibirás una respuesta por correo electrónico.",
         booking_err_taken: "Ese horario acaba de reservarse — elige otro a continuación.",
         booking_err_generic: "Algo salió mal — inténtalo de nuevo.",
+        booking_add_google: "Añadir a Google Calendar",
+        booking_add_outlook: "Añadir a Outlook",
+        booking_add_ics: "Descargar .ics",
       },
       fi: {
         label: "FI",
@@ -1207,6 +1286,9 @@
         booking_pending_body: "Maya vahvistaa pian — saat vastauksen sähköpostitse.",
         booking_err_taken: "Tuo aika varattiin juuri — valitse toinen alta.",
         booking_err_generic: "Jokin meni pieleen — yritä uudelleen.",
+        booking_add_google: "Lisää Google-kalenteriin",
+        booking_add_outlook: "Lisää Outlookiin",
+        booking_add_ics: "Lataa .ics-tiedosto",
       },
     };
 
@@ -1442,9 +1524,13 @@
       var form = document.getElementById("booking-form");
       var selectedSlotEl = document.getElementById("booking-selected-slot");
       var changeTimeBtn = document.getElementById("booking-change-time");
-      var confirmationEl = document.getElementById("booking-confirmation");
+      var toastEl = document.getElementById("booking-toast");
+      var toastCloseBtn = document.getElementById("booking-toast-close");
       var confirmationTitle = document.getElementById("booking-confirmation-title");
       var confirmationBody = document.getElementById("booking-confirmation-body");
+      var calGoogleLink = document.getElementById("booking-cal-google");
+      var calOutlookLink = document.getElementById("booking-cal-outlook");
+      var calIcsBtn = document.getElementById("booking-cal-ics");
       var submitBtn = document.getElementById("booking-submit");
       var tzSelect = document.getElementById("booking-tz-select");
 
@@ -1452,6 +1538,7 @@
       var selectedSlot = null;
       var lastSlots = [];
       var lastBookingStatus = null;
+      var confirmedSlot = null;
 
       function detectInitialTz() {
         var saved = localStorage.getItem("bookingTz");
@@ -1614,6 +1701,67 @@
         else renderDayList(lastSlots);
       });
 
+      // ---- Add-to-calendar links (purely client-side — the slot's
+      // start/end are already known from the booking response, no extra
+      // request needed) ----
+      var EVENT_TITLE = "Call with Maya Carroll";
+      var EVENT_DETAILS = "Booked via mayacarroll.com/booking.html";
+
+      function icsDate(iso) {
+        return new Date(iso).toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      }
+
+      function buildCalendarLinks(slot) {
+        var startIso = new Date(slot.start).toISOString();
+        var endIso = new Date(slot.end).toISOString();
+        var google =
+          "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" +
+          encodeURIComponent(EVENT_TITLE) +
+          "&dates=" + icsDate(slot.start) + "/" + icsDate(slot.end) +
+          "&details=" + encodeURIComponent(EVENT_DETAILS);
+        var outlook =
+          "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent" +
+          "&subject=" + encodeURIComponent(EVENT_TITLE) +
+          "&startdt=" + encodeURIComponent(startIso) +
+          "&enddt=" + encodeURIComponent(endIso) +
+          "&body=" + encodeURIComponent(EVENT_DETAILS);
+        return { google: google, outlook: outlook };
+      }
+
+      function downloadIcs(slot) {
+        var uid = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())) + "@mayacarroll.com";
+        var lines = [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//Maya Carroll//Booking//EN",
+          "BEGIN:VEVENT",
+          "UID:" + uid,
+          "DTSTAMP:" + icsDate(new Date().toISOString()),
+          "DTSTART:" + icsDate(slot.start),
+          "DTEND:" + icsDate(slot.end),
+          "SUMMARY:" + EVENT_TITLE,
+          "DESCRIPTION:" + EVENT_DETAILS,
+          "END:VEVENT",
+          "END:VCALENDAR",
+        ];
+        var blob = new Blob([lines.join("\r\n")], { type: "text/calendar" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "call-with-maya.ics";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      calIcsBtn.addEventListener("click", function () {
+        if (confirmedSlot) downloadIcs(confirmedSlot);
+      });
+      toastCloseBtn.addEventListener("click", function () {
+        toastEl.hidden = true;
+      });
+
       function renderConfirmation() {
         if (!lastBookingStatus) return;
         if (lastBookingStatus === "confirmed") {
@@ -1623,6 +1771,11 @@
           confirmationTitle.textContent = t("booking_pending_title");
           confirmationBody.textContent = t("booking_pending_body");
         }
+        if (confirmedSlot) {
+          var links = buildCalendarLinks(confirmedSlot);
+          calGoogleLink.href = links.google;
+          calOutlookLink.href = links.outlook;
+        }
       }
 
       // Re-render whatever's on screen when the site's language toggle
@@ -1630,7 +1783,7 @@
       // static markup, not text (or locale-formatted dates/times) this
       // flow sets dynamically at runtime.
       document.addEventListener("app:languagechange", function () {
-        if (!confirmationEl.hidden) renderConfirmation();
+        if (!toastEl.hidden) renderConfirmation();
         if (selectedSlot) renderSelectedSlotSummary(selectedSlot);
         if (!dayListEl.hidden) renderDayList(lastSlots);
       });
@@ -1678,10 +1831,21 @@
           .then(function (result) {
             submitBtn.disabled = false;
             if (result.ok) {
-              formWrap.hidden = true;
-              confirmationEl.hidden = false;
+              confirmedSlot = selectedSlot;
               lastBookingStatus = result.data.status;
               renderConfirmation();
+              toastEl.hidden = false;
+              // Back to the browsing state underneath the toast — the
+              // visitor may want to book a second time (e.g. for a
+              // colleague) without reloading the page. Drop the
+              // just-booked slot from the cached list first so it
+              // doesn't still show as available.
+              selectedSlot = null;
+              formWrap.hidden = true;
+              lastSlots = lastSlots.filter(function (s) {
+                return !(s.start === confirmedSlot.start && s.end === confirmedSlot.end);
+              });
+              renderDayList(lastSlots);
               return;
             }
             if (result.status === 409) {
