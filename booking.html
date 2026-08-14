@@ -969,23 +969,23 @@
   <main>
     <section id="booking-hero">
       <div class="booking-hero-inner">
-        <h1>Book a call</h1>
-        <p class="booking-intro">
+        <h1 data-i18n="booking_h1">Book a call</h1>
+        <p class="booking-intro" data-i18n="booking_intro">
           Pick a weekday time below. I'll confirm shortly after you request a time.
         </p>
         <div class="tz-switcher">
-          <label for="booking-tz-select">Showing times in</label>
+          <label for="booking-tz-select" data-i18n="booking_tz_label">Showing times in</label>
           <select id="booking-tz-select">
-            <optgroup label="North America">
-              <option value="America/New_York">Eastern Time (ET)</option>
-              <option value="America/Chicago">Central Time (CT)</option>
-              <option value="America/Denver">Mountain Time (MT)</option>
-              <option value="America/Los_Angeles">Pacific Time (PT)</option>
+            <optgroup label="North America" id="booking-tz-group-na">
+              <option value="America/New_York" data-i18n="tz_et">Eastern Time (ET)</option>
+              <option value="America/Chicago" data-i18n="tz_ct">Central Time (CT)</option>
+              <option value="America/Denver" data-i18n="tz_mt">Mountain Time (MT)</option>
+              <option value="America/Los_Angeles" data-i18n="tz_pt">Pacific Time (PT)</option>
             </optgroup>
-            <optgroup label="European Union">
-              <option value="Europe/Lisbon">Western European Time (WET)</option>
-              <option value="Europe/Paris">Central European Time (CET)</option>
-              <option value="Europe/Helsinki">Eastern European Time (EET)</option>
+            <optgroup label="European Union" id="booking-tz-group-eu">
+              <option value="Europe/Lisbon" data-i18n="tz_wet">Western European Time (WET)</option>
+              <option value="Europe/Paris" data-i18n="tz_cet">Central European Time (CET)</option>
+              <option value="Europe/Helsinki" data-i18n="tz_eet">Eastern European Time (EET)</option>
             </optgroup>
           </select>
         </div>
@@ -995,47 +995,49 @@
     <section id="booking-body">
       <div id="booking-status-banner" class="banner" hidden></div>
       <div id="booking-degraded-note" class="degraded-note" hidden>
-        Availability might not be fully up to date right now — if nothing here works,
-        email <a href="mailto:hiring@mayacarroll.com">hiring@mayacarroll.com</a> directly.
+        <span data-i18n="booking_degraded_pre">Availability might not be fully up to date right now — if nothing here works, email</span>
+        <a href="mailto:hiring@mayacarroll.com">hiring@mayacarroll.com</a>
+        <span data-i18n="booking_degraded_post">directly.</span>
       </div>
 
-      <p id="booking-loading" class="empty-state">Loading available times…</p>
+      <p id="booking-loading" class="empty-state" data-i18n="booking_loading">Loading available times…</p>
       <p id="booking-empty" class="empty-state" hidden>
-        No times available right now — email
-        <a href="mailto:hiring@mayacarroll.com">hiring@mayacarroll.com</a> directly and we'll
-        find a time.
+        <span data-i18n="booking_empty_pre">No times available right now — email</span>
+        <a href="mailto:hiring@mayacarroll.com">hiring@mayacarroll.com</a>
+        <span data-i18n="booking_empty_post">directly and we'll find a time.</span>
       </p>
 
       <div id="booking-day-list" hidden></div>
       <div class="booking-more-row">
-        <button type="button" id="booking-show-more" class="btn" hidden>Show more days</button>
+        <button type="button" id="booking-show-more" class="btn" hidden data-i18n="booking_show_more">Show more days</button>
       </div>
 
       <div id="booking-form-wrap" hidden>
-        <h2>Confirm your details</h2>
+        <h2 data-i18n="booking_confirm_heading">Confirm your details</h2>
         <p class="booking-selected-slot" id="booking-selected-slot"></p>
-        <button type="button" id="booking-change-time">Change time</button>
+        <button type="button" id="booking-change-time" data-i18n="booking_change_time">Change time</button>
         <form id="booking-form">
           <label>
-            Name
+            <span data-i18n="booking_name_label">Name</span>
             <input type="text" id="booking-name" name="name" required maxlength="200" autocomplete="name" />
           </label>
           <label>
-            Email
+            <span data-i18n="booking_email_label">Email</span>
             <input type="email" id="booking-email" name="email" required maxlength="320" autocomplete="email" />
           </label>
           <label>
-            What would you like to talk about? <span class="optional">(optional)</span>
+            <span data-i18n="booking_topic_label">What would you like to talk about?</span>
+            <span class="optional" data-i18n="booking_optional">(optional)</span>
             <textarea id="booking-topic" name="topic" maxlength="2000" rows="3"></textarea>
           </label>
-          <button type="submit" class="btn btn-primary" id="booking-submit">Request this time</button>
+          <button type="submit" class="btn btn-primary" id="booking-submit" data-i18n="booking_submit">Request this time</button>
         </form>
       </div>
 
       <div id="booking-confirmation" hidden>
         <h2 id="booking-confirmation-title"></h2>
         <p id="booking-confirmation-body"></p>
-        <a class="btn" href="index.html">Back to homepage</a>
+        <a class="btn" href="index.html" data-i18n="booking_back_home">Back to homepage</a>
       </div>
     </section>
   </main>
@@ -1083,6 +1085,38 @@
         nav_dashboard: "Dashboard",
         nav_signout: "Sign out",
         footer_p1: "From Miami to Helsinki—designing what's next.",
+        booking_h1: "Book a call",
+        booking_intro: "Pick a weekday time below. I'll confirm shortly after you request a time.",
+        booking_tz_label: "Showing times in",
+        tz_group_na: "North America",
+        tz_group_eu: "European Union",
+        tz_et: "Eastern Time (ET)",
+        tz_ct: "Central Time (CT)",
+        tz_mt: "Mountain Time (MT)",
+        tz_pt: "Pacific Time (PT)",
+        tz_wet: "Western European Time (WET)",
+        tz_cet: "Central European Time (CET)",
+        tz_eet: "Eastern European Time (EET)",
+        booking_degraded_pre: "Availability might not be fully up to date right now — if nothing here works, email",
+        booking_degraded_post: "directly.",
+        booking_loading: "Loading available times…",
+        booking_empty_pre: "No times available right now — email",
+        booking_empty_post: "directly and we'll find a time.",
+        booking_show_more: "Show more days",
+        booking_confirm_heading: "Confirm your details",
+        booking_change_time: "Change time",
+        booking_name_label: "Name",
+        booking_email_label: "Email",
+        booking_topic_label: "What would you like to talk about?",
+        booking_optional: "(optional)",
+        booking_submit: "Request this time",
+        booking_back_home: "Back to homepage",
+        booking_confirmed_title: "You're booked!",
+        booking_confirmed_body: "Check your email for a calendar invite with all the details.",
+        booking_pending_title: "Request sent!",
+        booking_pending_body: "Maya will confirm shortly — you'll hear back by email.",
+        booking_err_taken: "That time was just taken — pick another below.",
+        booking_err_generic: "Something went wrong — please try again.",
       },
       es: {
         label: "ES",
@@ -1096,6 +1130,38 @@
         nav_dashboard: "Panel",
         nav_signout: "Cerrar sesión",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
+        booking_h1: "Agendar una llamada",
+        booking_intro: "Elige un horario entre semana a continuación. Confirmaré poco después de que solicites un horario.",
+        booking_tz_label: "Mostrando horarios en",
+        tz_group_na: "Norteamérica",
+        tz_group_eu: "Unión Europea",
+        tz_et: "Hora del Este (ET)",
+        tz_ct: "Hora Central (CT)",
+        tz_mt: "Hora de Montaña (MT)",
+        tz_pt: "Hora del Pacífico (PT)",
+        tz_wet: "Hora de Europa Occidental (WET)",
+        tz_cet: "Hora de Europa Central (CET)",
+        tz_eet: "Hora de Europa Oriental (EET)",
+        booking_degraded_pre: "Es posible que la disponibilidad no esté totalmente actualizada en este momento — si nada aquí funciona, escribe a",
+        booking_degraded_post: "directamente.",
+        booking_loading: "Cargando horarios disponibles…",
+        booking_empty_pre: "No hay horarios disponibles en este momento — escribe a",
+        booking_empty_post: "directamente y buscaremos un horario.",
+        booking_show_more: "Mostrar más días",
+        booking_confirm_heading: "Confirma tus datos",
+        booking_change_time: "Cambiar horario",
+        booking_name_label: "Nombre",
+        booking_email_label: "Correo electrónico",
+        booking_topic_label: "¿De qué te gustaría hablar?",
+        booking_optional: "(opcional)",
+        booking_submit: "Solicitar este horario",
+        booking_back_home: "Volver al inicio",
+        booking_confirmed_title: "¡Reserva confirmada!",
+        booking_confirmed_body: "Revisa tu correo electrónico para ver la invitación al calendario con todos los detalles.",
+        booking_pending_title: "¡Solicitud enviada!",
+        booking_pending_body: "Maya confirmará en breve — recibirás una respuesta por correo electrónico.",
+        booking_err_taken: "Ese horario acaba de reservarse — elige otro a continuación.",
+        booking_err_generic: "Algo salió mal — inténtalo de nuevo.",
       },
       fi: {
         label: "FI",
@@ -1109,6 +1175,38 @@
         nav_dashboard: "Kojelauta",
         nav_signout: "Kirjaudu ulos",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
+        booking_h1: "Varaa puhelu",
+        booking_intro: "Valitse arkipäivän aika alta. Vahvistan pian sen jälkeen, kun pyydät aikaa.",
+        booking_tz_label: "Ajat näytetään aikavyöhykkeellä",
+        tz_group_na: "Pohjois-Amerikka",
+        tz_group_eu: "Euroopan unioni",
+        tz_et: "Itäinen aika (ET)",
+        tz_ct: "Keskinen aika (CT)",
+        tz_mt: "Vuoristoaika (MT)",
+        tz_pt: "Tyynenmeren aika (PT)",
+        tz_wet: "Länsi-Euroopan aika (WET)",
+        tz_cet: "Keski-Euroopan aika (CET)",
+        tz_eet: "Itä-Euroopan aika (EET)",
+        booking_degraded_pre: "Saatavuus ei ehkä ole täysin ajan tasalla juuri nyt — jos mikään tässä ei toimi, lähetä sähköpostia osoitteeseen",
+        booking_degraded_post: "suoraan.",
+        booking_loading: "Ladataan saatavilla olevia aikoja…",
+        booking_empty_pre: "Ei vapaita aikoja juuri nyt — lähetä sähköpostia osoitteeseen",
+        booking_empty_post: "suoraan, niin etsimme sopivan ajan.",
+        booking_show_more: "Näytä lisää päiviä",
+        booking_confirm_heading: "Vahvista tietosi",
+        booking_change_time: "Vaihda aikaa",
+        booking_name_label: "Nimi",
+        booking_email_label: "Sähköposti",
+        booking_topic_label: "Mistä haluaisit puhua?",
+        booking_optional: "(valinnainen)",
+        booking_submit: "Pyydä tätä aikaa",
+        booking_back_home: "Takaisin etusivulle",
+        booking_confirmed_title: "Varaus vahvistettu!",
+        booking_confirmed_body: "Tarkista sähköpostisi kalenterikutsun ja kaikkien tietojen varalta.",
+        booking_pending_title: "Pyyntö lähetetty!",
+        booking_pending_body: "Maya vahvistaa pian — saat vastauksen sähköpostitse.",
+        booking_err_taken: "Tuo aika varattiin juuri — valitse toinen alta.",
+        booking_err_generic: "Jokin meni pieleen — yritä uudelleen.",
       },
     };
 
@@ -1157,6 +1255,12 @@
       });
       toggleLabel.textContent = t.label;
       langToggle.setAttribute("aria-label", "Language: " + t.fullName + ". Choose a different language");
+      // <optgroup label> is an attribute, not textContent, so the generic
+      // [data-i18n] sweep above can't reach it.
+      var tzGroupNa = document.getElementById("booking-tz-group-na");
+      var tzGroupEu = document.getElementById("booking-tz-group-eu");
+      if (tzGroupNa && t.tz_group_na) tzGroupNa.label = t.tz_group_na;
+      if (tzGroupEu && t.tz_group_eu) tzGroupEu.label = t.tz_group_eu;
       document.documentElement.lang = lang;
       langOptions.forEach(function (opt) {
         opt.setAttribute("aria-current", opt.dataset.lang === lang ? "true" : "false");
@@ -1347,6 +1451,7 @@
       var daysWindow = INITIAL_DAYS;
       var selectedSlot = null;
       var lastSlots = [];
+      var lastBookingStatus = null;
 
       function detectInitialTz() {
         var saved = localStorage.getItem("bookingTz");
@@ -1358,6 +1463,16 @@
       var activeTz = detectInitialTz();
       tzSelect.value = activeTz;
 
+      // `translations` and `document.documentElement.lang` are set up by
+      // the shared header script earlier in this same file — reused here
+      // so booking-specific strings set dynamically in JS (confirmation
+      // messages, error banners) track the site's language toggle too.
+      function t(key) {
+        var lang = document.documentElement.lang || "en";
+        var dict = translations[lang] || translations.en;
+        return dict[key] || translations.en[key] || key;
+      }
+
       function showBanner(kind, text) {
         statusBanner.className = "banner " + kind;
         statusBanner.textContent = text;
@@ -1367,8 +1482,17 @@
         statusBanner.hidden = true;
       }
 
+      // Maps the site's EN/ES/FI toggle to a real BCP-47 locale so times
+      // and day headings actually follow the selected language too, not
+      // just the static labels — "undefined" locale would instead follow
+      // the browser's own setting, which can silently disagree with it.
+      var LOCALE_MAP = { en: "en-US", es: "es", fi: "fi" };
+      function currentLocale() {
+        return LOCALE_MAP[document.documentElement.lang] || "en-US";
+      }
+
       function formatTimeInZone(date, tz) {
-        return new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit", timeZone: tz }).format(date);
+        return new Intl.DateTimeFormat(currentLocale(), { hour: "numeric", minute: "2-digit", timeZone: tz }).format(date);
       }
       // A single clearly-labeled reading in the currently selected zone,
       // e.g. "5:30 AM ET" — one unambiguous time per slot instead of a
@@ -1385,7 +1509,7 @@
         }).format(date);
       }
       function formatDayHeading(date) {
-        return new Intl.DateTimeFormat(undefined, {
+        return new Intl.DateTimeFormat(currentLocale(), {
           weekday: "long",
           month: "long",
           day: "numeric",
@@ -1490,6 +1614,27 @@
         else renderDayList(lastSlots);
       });
 
+      function renderConfirmation() {
+        if (!lastBookingStatus) return;
+        if (lastBookingStatus === "confirmed") {
+          confirmationTitle.textContent = t("booking_confirmed_title");
+          confirmationBody.textContent = t("booking_confirmed_body");
+        } else {
+          confirmationTitle.textContent = t("booking_pending_title");
+          confirmationBody.textContent = t("booking_pending_body");
+        }
+      }
+
+      // Re-render whatever's on screen when the site's language toggle
+      // changes — the [data-i18n] sweep in setLanguage() only covers
+      // static markup, not text (or locale-formatted dates/times) this
+      // flow sets dynamically at runtime.
+      document.addEventListener("app:languagechange", function () {
+        if (!confirmationEl.hidden) renderConfirmation();
+        if (selectedSlot) renderSelectedSlotSummary(selectedSlot);
+        if (!dayListEl.hidden) renderDayList(lastSlots);
+      });
+
       function selectSlot(slot) {
         selectedSlot = slot;
         renderSelectedSlotSummary(slot);
@@ -1535,29 +1680,22 @@
             if (result.ok) {
               formWrap.hidden = true;
               confirmationEl.hidden = false;
-              if (result.data.status === "confirmed") {
-                confirmationTitle.textContent = "You're booked!";
-                confirmationBody.textContent =
-                  "Check your email for a calendar invite with all the details.";
-              } else {
-                confirmationTitle.textContent = "Request sent!";
-                confirmationBody.textContent =
-                  "Maya will confirm shortly — you'll hear back by email.";
-              }
+              lastBookingStatus = result.data.status;
+              renderConfirmation();
               return;
             }
             if (result.status === 409) {
-              showBanner("error", "That time was just taken — pick another below.");
+              showBanner("error", t("booking_err_taken"));
               selectedSlot = null;
               formWrap.hidden = true;
               loadSlots();
               return;
             }
-            showBanner("error", (result.data && result.data.error) || "Something went wrong — please try again.");
+            showBanner("error", (result.data && result.data.error) || t("booking_err_generic"));
           })
           .catch(function () {
             submitBtn.disabled = false;
-            showBanner("error", "Something went wrong — please try again.");
+            showBanner("error", t("booking_err_generic"));
           });
       });
 
