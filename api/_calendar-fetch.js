@@ -69,18 +69,28 @@ async function fetchGoogleEvents(accessToken, start, end) {
     orderBy: "startTime",
     maxResults: "250",
   });
+  // Ask the API to only return real schedule events — Google Calendar's
+  // "Working Location" feature (the small all-day "🏠 Home" badge on each
+  // day) comes back as an eventType: "workingLocation" item with an
+  // all-day start/end, and without this filter it was being treated as a
+  // full-day busy block, wiping out every slot on days that had one.
+  params.append("eventTypes", "default");
+  params.append("eventTypes", "focusTime");
+  params.append("eventTypes", "outOfOffice");
   const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?${params}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!res.ok) throw new Error(`Google events responded ${res.status}`);
   const data = await res.json();
-  return (data.items || []).map((item) => ({
-    id: item.id,
-    title: item.summary || "(untitled)",
-    start: item.start.dateTime || item.start.date,
-    end: item.end.dateTime || item.end.date,
-    allDay: Boolean(item.start.date && !item.start.dateTime),
-  }));
+  return (data.items || [])
+    .filter((item) => item.eventType !== "workingLocation")
+    .map((item) => ({
+      id: item.id,
+      title: item.summary || "(untitled)",
+      start: item.start.dateTime || item.start.date,
+      end: item.end.dateTime || item.end.date,
+      allDay: Boolean(item.start.date && !item.start.dateTime),
+    }));
 }
 
 async function fetchMicrosoftEvents(accessToken, start, end) {
@@ -95,13 +105,18 @@ async function fetchMicrosoftEvents(accessToken, start, end) {
   });
   if (!res.ok) throw new Error(`Graph calendarview responded ${res.status}`);
   const data = await res.json();
-  return (data.value || []).map((item) => ({
-    id: item.id,
-    title: item.subject || "(untitled)",
-    start: item.start.dateTime + "Z",
-    end: item.end.dateTime + "Z",
-    allDay: Boolean(item.isAllDay),
-  }));
+  // Mirrors the Google workingLocation exclusion above — Outlook doesn't
+  // have a distinct "working location" event type, but showAs:"free" and
+  // "workingElsewhere" both mean the same thing: not actually busy.
+  return (data.value || [])
+    .filter((item) => item.showAs !== "free" && item.showAs !== "workingElsewhere")
+    .map((item) => ({
+      id: item.id,
+      title: item.subject || "(untitled)",
+      start: item.start.dateTime + "Z",
+      end: item.end.dateTime + "Z",
+      allDay: Boolean(item.isAllDay),
+    }));
 }
 
 // Fetches events across every connected account in parallel, tolerating
