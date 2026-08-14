@@ -947,8 +947,9 @@
       <div class="booking-hero-inner">
         <h1>Book a call</h1>
         <p class="booking-intro">
-          Pick a time below — shown in your local time, alongside the Miami/Helsinki
-          equivalent. I'll confirm shortly after you request a time.
+          Pick a time below — shown in your local time (with a Miami-time reference
+          alongside, since that's where I'm based). I'll confirm shortly after you
+          request a time.
         </p>
       </div>
     </section>
@@ -1273,7 +1274,7 @@
     // ==================== Booking flow ====================
     (function () {
       var MIAMI_TZ = "America/New_York";
-      var HELSINKI_TZ = "Europe/Helsinki";
+      var VISITOR_TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || MIAMI_TZ;
       var INITIAL_DAYS = 14;
       var DAYS_STEP = 14;
       var MAX_DAYS = 60;
@@ -1369,14 +1370,18 @@
 
             var primary = document.createElement("span");
             primary.className = "slot-time-primary";
-            primary.textContent = formatTimeInZone(start, MIAMI_TZ) + " – " + formatTimeInZone(end, MIAMI_TZ);
-
-            var secondary = document.createElement("span");
-            secondary.className = "slot-time-secondary";
-            secondary.textContent = formatTimeInZone(start, HELSINKI_TZ) + " Helsinki";
-
+            primary.textContent = formatTimeInZone(start, VISITOR_TZ) + " – " + formatTimeInZone(end, VISITOR_TZ);
             btn.appendChild(primary);
-            btn.appendChild(secondary);
+
+            // Only show Miami time as a reference when it actually differs
+            // from the visitor's own zone — otherwise it just repeats the
+            // line above.
+            if (VISITOR_TZ !== MIAMI_TZ) {
+              var secondary = document.createElement("span");
+              secondary.className = "slot-time-secondary";
+              secondary.textContent = formatTimeInZone(start, MIAMI_TZ) + " Miami time";
+              btn.appendChild(secondary);
+            }
             btn.addEventListener("click", function () {
               selectSlot(slot);
             });
@@ -1418,15 +1423,16 @@
         selectedSlot = slot;
         var start = new Date(slot.start);
         var end = new Date(slot.end);
-        selectedSlotEl.textContent =
+        var summary =
           formatDayHeading(start) +
           " · " +
-          formatTimeInZone(start, MIAMI_TZ) +
+          formatTimeInZone(start, VISITOR_TZ) +
           " – " +
-          formatTimeInZone(end, MIAMI_TZ) +
-          " (your time: " +
-          formatTimeInZone(start, Intl.DateTimeFormat().resolvedOptions().timeZone) +
-          ")";
+          formatTimeInZone(end, VISITOR_TZ);
+        if (VISITOR_TZ !== MIAMI_TZ) {
+          summary += " (Miami time: " + formatTimeInZone(start, MIAMI_TZ) + ")";
+        }
+        selectedSlotEl.textContent = summary;
         dayListEl.hidden = true;
         showMoreBtn.hidden = true;
         formWrap.hidden = false;
