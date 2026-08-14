@@ -565,12 +565,6 @@
       padding: 0.5rem 0.75rem;
       transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
     }
-    #motion-toggle {
-      justify-content: center;
-      width: 44px;
-      padding: 0;
-      font-size: 1rem;
-    }
     #theme-toggle:hover,
     #motion-toggle:hover,
     #lang-toggle:hover {
@@ -582,7 +576,8 @@
     #lang-toggle:active {
       transform: scale(0.96);
     }
-    #theme-label {
+    #theme-label,
+    #motion-label {
       font-weight: 600;
     }
     button:disabled {
@@ -1133,7 +1128,10 @@
       </div>
 
       <div id="preferences" aria-label="Preferences">
-        <button type="button" id="motion-toggle" aria-label="Pause background animation">⏸</button>
+        <button type="button" id="motion-toggle" aria-label="Pause background animation">
+          <span id="motion-icon" aria-hidden="true">⏸</span>
+          <span id="motion-label">Pause</span>
+        </button>
 
         <button type="button" id="theme-toggle" aria-label="Switch to light theme">
           <span id="theme-icon" aria-hidden="true">🌙</span>

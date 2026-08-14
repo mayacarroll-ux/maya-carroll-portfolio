@@ -1447,10 +1447,13 @@
     // Persistent, visitor-controlled pause — independent of the OS
     // reduced-motion setting, and remembered across visits.
     const pauseBtn = document.getElementById("motion-toggle");
+    const pauseIcon = document.getElementById("motion-icon");
+    const pauseLabel = document.getElementById("motion-label");
     if (pauseBtn) {
       function syncPauseButton() {
         const paused = isExplicitlyPaused();
-        pauseBtn.textContent = paused ? "▶" : "⏸";
+        if (pauseIcon) pauseIcon.textContent = paused ? "▶" : "⏸";
+        if (pauseLabel) pauseLabel.textContent = paused ? "Resume" : "Pause";
         pauseBtn.setAttribute(
           "aria-label",
           paused ? "Resume background animation" : "Pause background animation"
