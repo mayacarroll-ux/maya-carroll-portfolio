@@ -2,6 +2,10 @@
 // against the Microsoft identity platform v2.0 endpoint (works for both
 // personal outlook.com accounts and work/school Microsoft 365 accounts,
 // via the "common" tenant).
+//
+// The scope string here must match the one hardcoded in the token exchange
+// in microsoft-callback.js and the refresh request in _calendar-fetch.js —
+// Microsoft's flows re-state scope explicitly at each step, unlike Google's.
 const crypto = require("crypto");
 const { readSession, setOAuthStateCookie } = require("../_session");
 const { baseUrl } = require("../_base-url");
@@ -28,7 +32,7 @@ module.exports = async (req, res) => {
     redirect_uri: redirectUri,
     response_type: "code",
     response_mode: "query",
-    scope: "offline_access User.Read Calendars.Read",
+    scope: "offline_access User.Read Calendars.Read Calendars.ReadWrite",
     prompt: "select_account",
     state,
   });

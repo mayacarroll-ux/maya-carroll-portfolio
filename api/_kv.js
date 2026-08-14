@@ -52,4 +52,4 @@ async function kvSetJSON(key, value) {
   `;
 }
 
-module.exports = { kvGetJSON, kvSetJSON };
+module.exports = { kvGetJSON, kvSetJSON, getClient, ensureTable };

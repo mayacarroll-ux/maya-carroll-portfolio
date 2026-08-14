@@ -39,7 +39,7 @@ function toPublic(account) {
   };
 }
 
-async function addAccount({ provider, email, accessToken, refreshToken, expiresAt }) {
+async function addAccount({ provider, email, accessToken, refreshToken, expiresAt, scope }) {
   const accounts = await loadAccounts();
   // Reconnecting the same provider+email replaces the old tokens rather
   // than creating a duplicate entry.
@@ -51,6 +51,10 @@ async function addAccount({ provider, email, accessToken, refreshToken, expiresA
     accessToken: encrypt(accessToken),
     refreshToken: refreshToken ? encrypt(refreshToken) : existing ? existing.refreshToken : null,
     expiresAt,
+    // Plaintext, not sensitive — lets attemptCreateCalendarEvent (in
+    // _calendar-fetch.js) know whether this account was ever granted
+    // calendar-write access without an extra API round trip.
+    scope: scope || (existing ? existing.scope : null),
     connectedAt: existing ? existing.connectedAt : Date.now(),
   };
   const next = existing

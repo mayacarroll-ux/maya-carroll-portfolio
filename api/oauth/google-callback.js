@@ -70,6 +70,7 @@ module.exports = async (req, res) => {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: Date.now() + tokens.expires_in * 1000,
+      scope: tokens.scope,
     });
 
     redirectBack("?connected=google");

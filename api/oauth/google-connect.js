@@ -1,9 +1,11 @@
 // GET /api/oauth/google-connect — starts the *full* OAuth Authorization
-// Code flow to request Google Calendar read access. This is deliberately
+// Code flow to request Google Calendar access. This is deliberately
 // separate from the site's login (Google Identity Services token flow):
-// login only proves who you are; this requests an actual API scope
-// (calendar.readonly) plus offline access, which needs a client secret
-// and a real redirect round trip that the lightweight login flow doesn't.
+// login only proves who you are; this requests actual API scopes
+// (calendar.readonly + calendar.events, so booking.html can both read
+// busy time and create confirmed-booking events) plus offline access,
+// which needs a client secret and a real redirect round trip that the
+// lightweight login flow doesn't.
 const crypto = require("crypto");
 const { readSession, setOAuthStateCookie } = require("../_session");
 const { baseUrl } = require("../_base-url");
@@ -29,7 +31,8 @@ module.exports = async (req, res) => {
     client_id: clientId,
     redirect_uri: redirectUri,
     response_type: "code",
-    scope: "openid email https://www.googleapis.com/auth/calendar.readonly",
+    scope:
+      "openid email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events",
     access_type: "offline",
     prompt: "consent select_account",
     state,

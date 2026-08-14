@@ -160,7 +160,7 @@ function hourOffsetFromNow(h, now) {
   return d;
 }
 
-window.MayaRhythm = {
+const MayaRhythm = {
   CITY_ZONES,
   STATES,
   RHYTHM_CONFIG: activeRhythm(),
@@ -176,3 +176,10 @@ window.MayaRhythm = {
   getNextSegment,
   hourOffsetFromNow,
 };
+
+// Isomorphic: the browser gets window.MayaRhythm (unchanged), and Node's
+// serverless functions (api/_availability.js) can require() this file
+// directly so RHYTHM_CONFIG has exactly one source of truth instead of a
+// server-side duplicate.
+if (typeof window !== "undefined") window.MayaRhythm = MayaRhythm;
+if (typeof module !== "undefined" && module.exports) module.exports = MayaRhythm;

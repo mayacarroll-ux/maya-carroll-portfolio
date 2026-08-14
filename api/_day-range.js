@@ -15,15 +15,20 @@ function offsetMinutes(date, timeZone) {
   return h >= 0 ? h * 60 + m : h * 60 - m;
 }
 
-function todayInZone(timeZone) {
+// The "YYYY-MM-DD" calendar date a given instant falls on in `timeZone`.
+function dateInZone(date, timeZone) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).formatToParts(new Date());
+  }).formatToParts(date);
   const get = (type) => parts.find((p) => p.type === type).value;
   return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+function todayInZone(timeZone) {
+  return dateInZone(new Date(), timeZone);
 }
 
 // Doesn't perfectly handle the 23/25-hour DST-transition day itself (the
@@ -50,4 +55,4 @@ function addDays(dateStr, n) {
   return dt.toISOString().slice(0, 10);
 }
 
-module.exports = { dayRangeUtc, todayInZone, addDays };
+module.exports = { dayRangeUtc, todayInZone, dateInZone, addDays };

@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
         code,
         grant_type: "authorization_code",
         redirect_uri: redirectUri,
-        scope: "offline_access User.Read Calendars.Read",
+        scope: "offline_access User.Read Calendars.Read Calendars.ReadWrite",
       }),
     });
     if (!tokenRes.ok) throw new Error(`token exchange responded ${tokenRes.status}`);
@@ -68,6 +68,7 @@ module.exports = async (req, res) => {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: Date.now() + tokens.expires_in * 1000,
+      scope: tokens.scope,
     });
 
     redirectBack("?connected=microsoft");

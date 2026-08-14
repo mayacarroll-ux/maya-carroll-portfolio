@@ -208,6 +208,10 @@
       font-size: 0.78rem;
       color: var(--warning);
     }
+    .account-meta .booking-topic {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
     .agenda {
       list-style: none;
       margin: 0;
@@ -1145,6 +1149,10 @@
 
     <div id="status-banner" hidden></div>
 
+    <h2>Pending bookings</h2>
+    <ul class="account-list" id="pending-bookings-list"></ul>
+    <p class="empty-state" id="no-pending-bookings" hidden>No pending bookings.</p>
+
     <h2>Connected accounts</h2>
     <ul class="account-list" id="account-list"></ul>
     <p class="empty-state" id="no-accounts" hidden>No calendars connected yet.</p>
@@ -1206,6 +1214,8 @@
     document.getElementById("footer-year").textContent = new Date().getFullYear();
     var accountListEl = document.getElementById("account-list");
     var noAccountsEl = document.getElementById("no-accounts");
+    var pendingBookingsListEl = document.getElementById("pending-bookings-list");
+    var noPendingBookingsEl = document.getElementById("no-pending-bookings");
     var weekLoadingEl = document.getElementById("week-loading");
     var weekEmptyEl = document.getElementById("week-empty");
     var weekDaysEl = document.getElementById("week-days");
@@ -1504,6 +1514,104 @@
         li.appendChild(disconnectBtn);
         accountListEl.appendChild(li);
       });
+    }
+
+    function formatSlotRange(slot) {
+      var start = new Date(slot.start);
+      var end = new Date(slot.end);
+      var dateFmt = new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric",
+        timeZone: HOME_TIMEZONE,
+      });
+      var timeFmt = new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+        timeZone: HOME_TIMEZONE,
+      });
+      return dateFmt.format(start) + ", " + timeFmt.format(start) + "–" + timeFmt.format(end);
+    }
+
+    function setBookingStatus(id, status, btns) {
+      btns.forEach(function (b) { b.disabled = true; });
+      fetch("/api/booking-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id, status: status }),
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("request failed");
+          return loadPendingBookings();
+        })
+        .catch(function () {
+          showBanner("error", "Couldn't update that booking — please try again.");
+          btns.forEach(function (b) { b.disabled = false; });
+        });
+    }
+
+    function renderPendingBookings(bookings) {
+      var pending = bookings.filter(function (b) { return b.status === "pending"; });
+      pendingBookingsListEl.innerHTML = "";
+      noPendingBookingsEl.hidden = pending.length > 0;
+      pending.forEach(function (booking) {
+        var li = document.createElement("li");
+
+        var meta = document.createElement("div");
+        meta.className = "account-meta";
+        var whenEl = document.createElement("span");
+        whenEl.className = "provider";
+        whenEl.textContent = formatSlotRange(booking.slot);
+        var nameEl = document.createElement("span");
+        nameEl.className = "email";
+        nameEl.textContent = booking.name + " · " + booking.email;
+        meta.appendChild(whenEl);
+        meta.appendChild(nameEl);
+        if (booking.topic) {
+          var topicEl = document.createElement("span");
+          topicEl.className = "booking-topic";
+          topicEl.textContent = booking.topic;
+          meta.appendChild(topicEl);
+        }
+
+        var actions = document.createElement("div");
+        actions.style.display = "flex";
+        actions.style.gap = "0.5rem";
+
+        var mailLink = document.createElement("a");
+        mailLink.className = "btn";
+        mailLink.href = "mailto:" + encodeURIComponent(booking.email);
+        mailLink.textContent = "Email";
+
+        var confirmBtn = document.createElement("button");
+        confirmBtn.type = "button";
+        confirmBtn.textContent = "Confirm";
+        var declineBtn = document.createElement("button");
+        declineBtn.type = "button";
+        declineBtn.textContent = "Decline";
+
+        confirmBtn.addEventListener("click", function () {
+          setBookingStatus(booking.id, "confirmed", [confirmBtn, declineBtn]);
+        });
+        declineBtn.addEventListener("click", function () {
+          setBookingStatus(booking.id, "declined", [confirmBtn, declineBtn]);
+        });
+
+        actions.appendChild(mailLink);
+        actions.appendChild(confirmBtn);
+        actions.appendChild(declineBtn);
+
+        li.appendChild(meta);
+        li.appendChild(actions);
+        pendingBookingsListEl.appendChild(li);
+      });
+    }
+
+    function loadPendingBookings() {
+      return fetch("/api/pending-bookings")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          renderPendingBookings(data.bookings || []);
+        });
     }
 
     function formatEventTime(iso, allDay) {
@@ -1899,6 +2007,7 @@
         .then(function (data) {
           renderAccounts(data.accounts || []);
         });
+      loadPendingBookings();
       loadWeek(currentAnchor);
     }
 

@@ -1,0 +1,1503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var theme =
+          saved ||
+          (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book a Call | Maya Carroll</title>
+  <meta
+    name="description"
+    content="Book a call with Maya Carroll — pick a time that works, shown in your local time alongside Miami and Helsinki."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maya-carroll-portfolio.vercel.app/booking.html" />
+  <meta property="og:title" content="Book a Call | Maya Carroll" />
+  <meta
+    property="og:description"
+    content="Book a call with Maya Carroll — pick a time that works, shown in your local time alongside Miami and Helsinki."
+  />
+  <meta property="og:image" content="https://maya-carroll-portfolio.vercel.app/about-hero.jpg" />
+  <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/booking.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --font-primary: "Manrope", sans-serif;
+    }
+    :root[data-theme="dark"] {
+      --color-bg: #070b18;
+      --color-surface: #10172a;
+      --color-surface-translucent: rgba(16, 23, 42, 0.74);
+      --color-text: #f7f3ee;
+      --color-text-secondary: #aab4c8;
+      --color-accent: #39e6d0;
+      --color-accent-2: #39e6d0;
+      --color-accent-3: #f4c76b;
+      --color-warning: #ff5c7a;
+      --warning: #f4c76b;
+      --color-border: rgba(247, 243, 238, 0.14);
+      --focus-ring: #39e6d0;
+      --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.55);
+      --glow-hover: 0 0 0 1px rgba(57, 230, 208, 0.4), 0 0 18px rgba(57, 230, 208, 0.28);
+      --status-glow: 0 0 12px rgba(57, 230, 208, 0.22);
+    }
+    :root[data-theme="light"] {
+      --color-bg: #f5f7f6;
+      --color-surface: #ffffff;
+      --color-surface-translucent: rgba(255, 255, 255, 0.78);
+      --color-text: #17211e;
+      --color-text-secondary: #60706a;
+      --color-accent: #1f5a4a;
+      --color-accent-2: #a7d8e5;
+      --color-accent-3: #dce6e2;
+      --color-warning: #c23b52;
+      --warning: #c23b52;
+      --color-border: #dce6e2;
+      --focus-ring: #1f5a4a;
+      --shadow-elevated: 0 12px 32px rgba(23, 33, 30, 0.1);
+      --glow-hover: 0 0 0 1px rgba(31, 90, 74, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
+      --status-glow: none;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-primary);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.55;
+    }
+    :focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+    main {
+      flex: 1 0 auto;
+      padding-bottom: 4rem;
+    }
+    h1, h2, h3 {
+      font-family: var(--font-primary);
+      font-weight: 700;
+      margin: 0;
+    }
+    h1 {
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    h2 {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      letter-spacing: -0.02em;
+    }
+
+    /* ==================== Header (same as index.html/about.html) ====================
+       Kept byte-identical in structure across pages on purpose so it
+       doesn't drift. */
+    #topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+    #header-primary {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 0.85rem 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    #brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: inherit;
+      flex-shrink: 0;
+    }
+    #nav-avatar {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--color-accent-3);
+      flex-shrink: 0;
+    }
+    #site-title {
+      font-family: var(--font-primary);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      line-height: 1;
+      font-size: 1.35rem;
+      white-space: nowrap;
+    }
+    @media (max-width: 599px) {
+      #site-title {
+        font-size: 1.15rem;
+      }
+    }
+    #primary-nav {
+      display: flex;
+      gap: 1.6rem;
+      font-size: 0.9rem;
+      margin-right: auto;
+    }
+    #primary-nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-family: var(--font-primary);
+      font-weight: 600;
+      padding: 0.3rem 0.1rem;
+    }
+    #primary-nav a:hover,
+    #primary-nav a:focus-visible,
+    #primary-nav a[aria-current="page"] {
+      color: var(--color-text);
+    }
+    #account-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-size: 0.8rem;
+    }
+    #account-nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-family: var(--font-primary);
+      font-weight: 600;
+      opacity: 0.75;
+      padding: 0.3rem 0.1rem;
+    }
+    #account-nav a:hover,
+    #account-nav a:focus-visible {
+      opacity: 1;
+      color: var(--color-text);
+    }
+    #preferences {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    button {
+      font-family: var(--font-primary);
+      font-weight: 600;
+    }
+    #theme-toggle,
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+      min-height: 44px;
+      padding: 0.5rem 0.75rem;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    #theme-toggle:hover,
+    #lang-toggle:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+    #theme-toggle:active,
+    #lang-toggle:active {
+      transform: scale(0.96);
+    }
+    #theme-label {
+      font-weight: 600;
+    }
+    #lang-switcher {
+      position: relative;
+    }
+    #lang-toggle .chevron {
+      color: var(--color-text-secondary);
+      font-size: 0.7rem;
+      transition: transform 0.15s ease;
+    }
+    #lang-switcher[data-open="true"] #lang-toggle .chevron {
+      transform: rotate(180deg);
+    }
+    #lang-menu {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      right: 0;
+      min-width: 100%;
+      list-style: none;
+      margin: 0;
+      padding: 0.3rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-top: 2px solid var(--color-accent);
+      border-radius: 8px;
+      box-shadow: var(--shadow-elevated);
+      display: none;
+      flex-direction: column;
+      z-index: 5;
+    }
+    #lang-switcher[data-open="true"] #lang-menu {
+      display: flex;
+    }
+    #lang-menu li button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: inherit;
+      background: transparent;
+      color: var(--color-text);
+      border: none;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      min-height: 40px;
+      transition: background 0.15s ease;
+    }
+    #lang-menu li button:hover {
+      background: var(--color-bg);
+    }
+    #lang-menu li button[aria-current="true"] {
+      background: var(--color-bg);
+      box-shadow: inset 2px 0 0 var(--color-accent);
+    }
+    .flag {
+      font-size: 1.1rem;
+    }
+    .globe {
+      font-size: 1rem;
+    }
+    .menu-heading {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      padding: 0.3rem 0.6rem 0.4rem;
+    }
+    #menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #menu-toggle:hover {
+      border-color: var(--color-accent);
+    }
+    .menu-icon {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 18px;
+    }
+    .menu-icon span {
+      display: block;
+      height: 2px;
+      border-radius: 1px;
+      background: currentColor;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) {
+      opacity: 0;
+    }
+    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .menu-icon span {
+        transition: none;
+      }
+    }
+    @media (max-width: 959px) {
+      #primary-nav,
+      #account-nav,
+      #header-primary > #preferences {
+        display: none;
+      }
+      #menu-toggle {
+        display: flex;
+        margin-left: auto;
+      }
+    }
+    #mobile-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 40;
+    }
+    #mobile-menu-backdrop[hidden] {
+      display: none;
+    }
+    #mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(320px, 85vw);
+      background: var(--color-surface);
+      border-left: 1px solid var(--color-border);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      overflow-y: auto;
+      box-shadow: var(--shadow-elevated);
+    }
+    #mobile-menu[hidden] {
+      display: none;
+    }
+    #mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    #mobile-menu-title {
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+    }
+    #mobile-menu-close {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      line-height: 1;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    #mobile-menu-close:hover {
+      border-color: var(--color-accent);
+    }
+    #mobile-menu-nav-slot #primary-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-size: 1.05rem;
+      margin: 0 0 1.5rem;
+    }
+    #mobile-menu-nav-slot #primary-nav a {
+      padding: 0.8rem 0.2rem;
+      border-bottom: 1px solid var(--color-border);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+    #mobile-menu-account-slot #account-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-size: 1.05rem;
+      margin: 0 0 1.5rem;
+    }
+    #mobile-menu-account-slot #account-nav a {
+      padding: 0.8rem 0.2rem;
+      border-bottom: 1px solid var(--color-border);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      opacity: 0.75;
+    }
+    #mobile-menu-account-slot #account-nav a[hidden] {
+      display: none;
+    }
+    #mobile-menu-prefs .menu-heading {
+      padding: 0 0 0.6rem;
+    }
+    #mobile-menu-prefs-slot #preferences {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.6rem;
+    }
+    #mobile-menu-prefs-slot #theme-toggle,
+    #mobile-menu-prefs-slot #lang-toggle {
+      width: 100%;
+      justify-content: flex-start;
+      font-size: 0.92rem;
+    }
+    #mobile-menu-prefs-slot #lang-menu {
+      position: static;
+      margin-top: 0.4rem;
+      box-shadow: none;
+      display: flex;
+    }
+    #mobile-menu-prefs-slot #lang-switcher[data-open="false"] #lang-menu {
+      display: none;
+    }
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      font-family: var(--font-primary);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: var(--color-surface);
+      color: var(--color-text);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-color: transparent;
+    }
+    :root[data-theme="light"] .btn-primary {
+      color: var(--color-surface);
+      background: #1d4e89;
+    }
+    .btn-primary:hover {
+      box-shadow: var(--glow-hover);
+    }
+    :root[data-theme="light"] .btn-primary:hover {
+      box-shadow: 0 0 0 1px rgba(29, 78, 137, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    /* ==================== Booking page ==================== */
+    #booking-hero {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: clamp(2.5rem, 6vw, 4rem) 1.5rem clamp(1.5rem, 4vw, 2rem);
+    }
+    #booking-hero .booking-hero-inner {
+      max-width: 40rem;
+    }
+    .booking-intro {
+      margin: 0.75rem 0 0;
+      font-size: 1.03rem;
+      color: var(--color-text-secondary);
+    }
+    #booking-body {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 0 1.5rem clamp(2.5rem, 6vw, 4rem);
+    }
+    .banner {
+      margin-bottom: 1.25rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      border: 1px solid var(--color-border);
+    }
+    .banner.success {
+      border-color: var(--color-accent-2);
+      color: var(--color-accent-2);
+    }
+    .banner.error {
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+    .empty-state {
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+    }
+    .empty-state a {
+      color: var(--color-accent);
+    }
+    .degraded-note {
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.6rem 0.8rem;
+      margin-bottom: 1.25rem;
+    }
+    .booking-day-group {
+      margin-bottom: 1.75rem;
+    }
+    .booking-day-group h2 {
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .slot-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .slot-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
+      padding: 0.6rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: var(--font-primary);
+      text-align: left;
+      min-height: 44px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    .slot-btn:hover,
+    .slot-btn:focus-visible {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+    .slot-btn:active {
+      transform: scale(0.97);
+    }
+    .slot-time-primary {
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+    .slot-time-secondary {
+      font-size: 0.76rem;
+      color: var(--color-text-secondary);
+    }
+    .booking-more-row {
+      margin-top: 0.5rem;
+    }
+    #booking-form-wrap h2,
+    #booking-confirmation h2 {
+      margin-bottom: 0.5rem;
+    }
+    .booking-selected-slot {
+      font-weight: 600;
+      margin: 0 0 0.3rem;
+    }
+    #booking-change-time {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    #booking-change-time:hover,
+    #booking-change-time:focus-visible {
+      color: var(--color-accent);
+    }
+    #booking-form {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 28rem;
+    }
+    #booking-form label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    #booking-form .optional {
+      font-weight: 400;
+      color: var(--color-text-secondary);
+    }
+    #booking-form input,
+    #booking-form textarea {
+      font-family: var(--font-primary);
+      font-size: 0.95rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+    }
+    #booking-form textarea {
+      resize: vertical;
+      min-height: 5rem;
+    }
+    #booking-submit {
+      align-self: flex-start;
+    }
+    #booking-confirmation p {
+      color: var(--color-text-secondary);
+      margin: 0 0 1.25rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      padding: 0.85rem 1.5rem 1rem;
+      border-top: 1px solid var(--color-border);
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      background: var(--color-surface-translucent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    footer .copyright {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+      opacity: 0.8;
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+    }
+
+    /* ---------- Footer: shared city-strip (time + weather + currency) ----------
+       Markup/behavior powered by footer-widget.js — kept in sync with
+       index.html's inline copy of the same widget. */
+    #city-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.5rem;
+      padding-bottom: 0.55rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.76rem;
+      color: var(--color-text-secondary);
+      width: 100%;
+      position: relative;
+    }
+    #city-strip::after {
+      content: "";
+      position: absolute;
+      left: -1.5rem;
+      right: -1.5rem;
+      bottom: 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .city-status {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      white-space: nowrap;
+      min-width: 0;
+    }
+    .city-status .city-name {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      color: var(--color-text);
+    }
+    .city-status .sep {
+      opacity: 0.45;
+    }
+    .city-status time {
+      font-variant-numeric: tabular-nums;
+    }
+    #currency-status {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+    #currency-status .currency-icon {
+      font-size: 0.95em;
+    }
+    #currency-rate {
+      font-variant-numeric: tabular-nums;
+      color: var(--color-accent-2-text, var(--color-text-secondary));
+    }
+    :root[data-theme="dark"] #currency-rate {
+      color: var(--color-accent-2);
+      text-shadow: var(--status-glow);
+    }
+    .city-status .weather {
+      display: inline-block;
+      min-width: 2.6em;
+      color: var(--color-accent-2-text, var(--color-text-secondary));
+      white-space: normal;
+    }
+    .city-status .weather-icon {
+      font-size: 0.95em;
+      filter: grayscale(0.15);
+    }
+    .city-status .feels-like {
+      font-size: 0.85em;
+      opacity: 0.7;
+      font-weight: 400;
+    }
+    :root[data-theme="dark"] .city-status .weather {
+      color: var(--color-accent-2);
+      text-shadow: var(--status-glow);
+    }
+    .city-status .weather.is-stale {
+      opacity: 0.65;
+      font-style: italic;
+    }
+    .city-status .weather.is-unavailable {
+      font-style: italic;
+    }
+    .city-status .uv {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32em;
+      font-size: 0.82em;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      white-space: normal;
+    }
+    .city-status .uv-dot {
+      width: 0.55em;
+      height: 0.55em;
+      min-width: 0.55em;
+      border-radius: 50%;
+    }
+    .city-status .uv-moderate .uv-dot {
+      background: #e8c25a;
+    }
+    .city-status .uv-high .uv-dot {
+      background: #ff9d4d;
+    }
+    .city-status .uv-veryhigh .uv-dot {
+      background: #ff5c7a;
+    }
+    .city-status .uv-extreme .uv-dot {
+      background: #b073ff;
+    }
+    .city-status .uv.uv-elevated {
+      font-weight: 700;
+      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
+      border-radius: 999px;
+      padding: 0.05rem 0.55rem 0.05rem 0.4rem;
+    }
+    .severe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3em;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-warning);
+      border: 1px solid var(--color-warning);
+      border-radius: 999px;
+      padding: 0.1rem 0.55rem;
+      white-space: normal;
+    }
+    .severe-badge:empty {
+      display: none;
+      padding: 0;
+      border: 0;
+    }
+    .severe-badge a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .severe-badge a:hover,
+    .severe-badge a:focus-visible {
+      text-decoration: underline;
+    }
+    @media (max-width: 599px) {
+      #city-strip {
+        display: block;
+        position: relative;
+      }
+      #city-strip > * {
+        display: none;
+      }
+      #city-strip > *.is-active {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: city-strip-fade 0.6s ease;
+      }
+      footer {
+        font-size: 0.76rem;
+      }
+      footer p {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.15rem;
+      }
+    }
+    @media (max-width: 599px) and (prefers-reduced-motion: reduce) {
+      #city-strip > *.is-active {
+        animation: none;
+      }
+    }
+    @keyframes city-strip-fade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header id="topbar">
+    <div id="header-primary">
+      <a id="brand" href="index.html" aria-label="Maya Carroll — Home">
+        <img id="nav-avatar" src="avatar.jpg" alt="" />
+        <span id="site-title">Maya Carroll</span>
+      </a>
+
+      <nav id="primary-nav" aria-label="Primary">
+        <a href="about.html" data-i18n="nav_about">About</a>
+        <a href="index.html#work" data-i18n="nav_work">Work</a>
+      </nav>
+
+      <div id="account-nav" aria-label="Account">
+        <a id="nav-signin" href="login.html" data-i18n="nav_signin">Sign in</a>
+        <a class="nav-authed" id="nav-calendar" href="calendar.html" data-i18n="nav_calendar" hidden>Calendar</a>
+        <a class="nav-authed" id="nav-dashboard" href="dashboard.html" data-i18n="nav_dashboard" hidden>Dashboard</a>
+        <a class="nav-authed" id="nav-signout" href="login.html" data-i18n="nav_signout" hidden>Sign out</a>
+      </div>
+
+      <div id="preferences" aria-label="Preferences">
+        <button type="button" id="theme-toggle" aria-label="Switch to light theme">
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+          <span id="theme-label">Dark</span>
+        </button>
+
+        <div id="lang-switcher" data-open="false">
+          <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language: English">
+            <span class="globe" aria-hidden="true">🌐</span>
+            <span id="lang-toggle-label">EN</span>
+            <span class="chevron" aria-hidden="true">▼</span>
+          </button>
+          <ul id="lang-menu" role="listbox" aria-label="Select language">
+            <li class="menu-heading" aria-hidden="true">Language</li>
+            <li role="option"><button type="button" data-lang="en"><span class="flag" aria-hidden="true">🇬🇧</span> English</button></li>
+            <li role="option"><button type="button" data-lang="es"><span class="flag" aria-hidden="true">🇪🇸</span> Español</button></li>
+            <li role="option"><button type="button" data-lang="fi"><span class="flag" aria-hidden="true">🇫🇮</span> Suomi</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <button type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span class="menu-icon" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <div id="mobile-menu-backdrop" hidden></div>
+  <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+    <div id="mobile-menu-header">
+      <span id="mobile-menu-title" data-i18n="menu_title">Menu</span>
+      <button type="button" id="mobile-menu-close" aria-label="Close menu">&times;</button>
+    </div>
+    <div id="mobile-menu-nav-slot" aria-label="Primary"></div>
+    <div id="mobile-menu-account-slot" aria-label="Account"></div>
+    <div id="mobile-menu-prefs">
+      <h3 class="menu-heading" data-i18n="menu_preferences">Preferences</h3>
+      <div id="mobile-menu-prefs-slot"></div>
+    </div>
+  </div>
+
+  <main>
+    <section id="booking-hero">
+      <div class="booking-hero-inner">
+        <h1>Book a call</h1>
+        <p class="booking-intro">
+          Pick a time below — shown in your local time, alongside the Miami/Helsinki
+          equivalent. I'll confirm shortly after you request a time.
+        </p>
+      </div>
+    </section>
+
+    <section id="booking-body">
+      <div id="booking-status-banner" class="banner" hidden></div>
+      <div id="booking-degraded-note" class="degraded-note" hidden>
+        Availability might not be fully up to date right now — if nothing here works,
+        email <a href="mailto:hiring@mayacarroll.com">hiring@mayacarroll.com</a> directly.
+      </div>
+
+      <p id="booking-loading" class="empty-state">Loading available times…</p>
+      <p id="booking-empty" class="empty-state" hidden>
+        No times available right now — email
+        <a href="mailto:hiring@mayacarroll.com">hiring@mayacarroll.com</a> directly and we'll
+        find a time.
+      </p>
+
+      <div id="booking-day-list" hidden></div>
+      <div class="booking-more-row">
+        <button type="button" id="booking-show-more" class="btn" hidden>Show more days</button>
+      </div>
+
+      <div id="booking-form-wrap" hidden>
+        <h2>Confirm your details</h2>
+        <p class="booking-selected-slot" id="booking-selected-slot"></p>
+        <button type="button" id="booking-change-time">Change time</button>
+        <form id="booking-form">
+          <label>
+            Name
+            <input type="text" id="booking-name" name="name" required maxlength="200" autocomplete="name" />
+          </label>
+          <label>
+            Email
+            <input type="email" id="booking-email" name="email" required maxlength="320" autocomplete="email" />
+          </label>
+          <label>
+            What would you like to talk about? <span class="optional">(optional)</span>
+            <textarea id="booking-topic" name="topic" maxlength="2000" rows="3"></textarea>
+          </label>
+          <button type="submit" class="btn btn-primary" id="booking-submit">Request this time</button>
+        </form>
+      </div>
+
+      <div id="booking-confirmation" hidden>
+        <h2 id="booking-confirmation-title"></h2>
+        <p id="booking-confirmation-body"></p>
+        <a class="btn" href="index.html">Back to homepage</a>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer">
+    <div id="city-strip" aria-label="Local time and weather">
+      <div class="city-status" data-city="miami">
+        <span class="city-name">Miami</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-miami">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-miami" class="weather" aria-live="polite">&hellip;</span>
+        <span id="severe-miami" class="severe-badge" aria-live="polite"></span>
+      </div>
+      <div class="city-status" data-city="helsinki">
+        <span class="city-name">Helsinki</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <time id="time-helsinki">&nbsp;</time>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span id="weather-helsinki" class="weather" aria-live="polite">&hellip;</span>
+        <span id="severe-helsinki" class="severe-badge" aria-live="polite"></span>
+      </div>
+      <div id="currency-status" aria-live="polite">
+        <span class="currency-icon" aria-hidden="true">💱</span>
+        <span id="currency-rate">&hellip;</span>
+      </div>
+    </div>
+    <p>
+      <span data-i18n="footer_p1">From Miami to Helsinki—designing what's next.</span>
+      <span class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</span>
+    </p>
+  </footer>
+
+  <script>
+    var translations = {
+      en: {
+        label: "EN",
+        fullName: "English",
+        menu_title: "Menu",
+        menu_preferences: "Preferences",
+        nav_work: "Work",
+        nav_about: "About",
+        nav_signin: "Sign in",
+        nav_calendar: "Calendar",
+        nav_dashboard: "Dashboard",
+        nav_signout: "Sign out",
+        footer_p1: "From Miami to Helsinki—designing what's next.",
+      },
+      es: {
+        label: "ES",
+        fullName: "Español",
+        menu_title: "Menú",
+        menu_preferences: "Preferencias",
+        nav_work: "Trabajo",
+        nav_about: "Acerca de",
+        nav_signin: "Iniciar sesión",
+        nav_calendar: "Calendario",
+        nav_dashboard: "Panel",
+        nav_signout: "Cerrar sesión",
+        footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
+      },
+      fi: {
+        label: "FI",
+        fullName: "Suomi",
+        menu_title: "Valikko",
+        menu_preferences: "Asetukset",
+        nav_work: "Työt",
+        nav_about: "Tietoa",
+        nav_signin: "Kirjaudu sisään",
+        nav_calendar: "Kalenteri",
+        nav_dashboard: "Kojelauta",
+        nav_signout: "Kirjaudu ulos",
+        footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
+      },
+    };
+
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+    // ---------- Theme toggle ----------
+    var themeToggle = document.getElementById("theme-toggle");
+    var themeIcon = document.getElementById("theme-icon");
+    var themeLabel = document.getElementById("theme-label");
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      themeIcon.textContent = theme === "dark" ? "🌙" : "☀️";
+      themeLabel.textContent = theme === "dark" ? "Dark" : "Light";
+      themeToggle.setAttribute(
+        "aria-label",
+        theme === "dark" ? "Theme: Dark. Switch to light theme" : "Theme: Light. Switch to dark theme"
+      );
+    }
+    applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+    themeToggle.addEventListener("click", function () {
+      var current = document.documentElement.getAttribute("data-theme");
+      var next = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      localStorage.setItem("theme", next);
+    });
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
+        if (!localStorage.getItem("theme")) applyTheme(e.matches ? "dark" : "light");
+      });
+    }
+
+    // ---------- Language switcher ----------
+    var switcher = document.getElementById("lang-switcher");
+    var langToggle = document.getElementById("lang-toggle");
+    var toggleLabel = document.getElementById("lang-toggle-label");
+    var langOptions = document.querySelectorAll("#lang-menu button");
+    var i18nEls = document.querySelectorAll("[data-i18n]");
+
+    function setLanguage(lang) {
+      var t = translations[lang];
+      if (!t) return;
+      i18nEls.forEach(function (el) {
+        var key = el.dataset.i18n;
+        if (t[key]) el.textContent = t[key];
+      });
+      toggleLabel.textContent = t.label;
+      langToggle.setAttribute("aria-label", "Language: " + t.fullName + ". Choose a different language");
+      document.documentElement.lang = lang;
+      langOptions.forEach(function (opt) {
+        opt.setAttribute("aria-current", opt.dataset.lang === lang ? "true" : "false");
+      });
+      localStorage.setItem("lang", lang);
+      document.dispatchEvent(new CustomEvent("app:languagechange"));
+    }
+
+    function openLangMenu(open) {
+      switcher.setAttribute("data-open", String(open));
+      langToggle.setAttribute("aria-expanded", String(open));
+    }
+    langToggle.addEventListener("click", function () {
+      openLangMenu(switcher.getAttribute("data-open") !== "true");
+    });
+    langOptions.forEach(function (opt) {
+      opt.addEventListener("click", function () {
+        setLanguage(opt.dataset.lang);
+        openLangMenu(false);
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (!switcher.contains(e.target)) openLangMenu(false);
+    });
+
+    function getDeviceLanguage() {
+      var preferences = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+      var match = preferences.map(function (tag) { return tag.slice(0, 2).toLowerCase(); }).find(function (code) { return translations[code]; });
+      return match || "en";
+    }
+    setLanguage(localStorage.getItem("lang") || getDeviceLanguage());
+
+    // ---------- Header: responsive reparenting + mobile drawer ----------
+    (function () {
+      var topbar = document.getElementById("topbar");
+      var headerPrimary = document.getElementById("header-primary");
+      var nav = document.getElementById("primary-nav");
+      var accountNav = document.getElementById("account-nav");
+      var prefs = document.getElementById("preferences");
+      var menuToggle = document.getElementById("menu-toggle");
+      var backdrop = document.getElementById("mobile-menu-backdrop");
+      var drawer = document.getElementById("mobile-menu");
+      var drawerClose = document.getElementById("mobile-menu-close");
+      var navSlot = document.getElementById("mobile-menu-nav-slot");
+      var accountSlot = document.getElementById("mobile-menu-account-slot");
+      var prefsSlot = document.getElementById("mobile-menu-prefs-slot");
+      var langSwitcher = document.getElementById("lang-switcher");
+      if (!topbar || !headerPrimary || !nav || !menuToggle || !drawer) return;
+
+      var mq = window.matchMedia("(max-width: 959px)");
+      function placeControls(isNarrow) {
+        if (isNarrow) {
+          navSlot.appendChild(nav);
+          accountSlot.appendChild(accountNav);
+          prefsSlot.appendChild(prefs);
+        } else {
+          headerPrimary.insertBefore(nav, menuToggle);
+          headerPrimary.insertBefore(accountNav, menuToggle);
+          headerPrimary.insertBefore(prefs, menuToggle);
+        }
+      }
+      placeControls(mq.matches);
+
+      var lastFocused = null;
+      function trapFocus(e) {
+        if (e.key !== "Tab") return;
+        var focusable = Array.prototype.filter.call(
+          drawer.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'),
+          function (el) { return el.getClientRects().length > 0; }
+        );
+        if (!focusable.length) return;
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+
+      function openDrawer() {
+        lastFocused = document.activeElement;
+        drawer.hidden = false;
+        backdrop.hidden = false;
+        menuToggle.setAttribute("aria-expanded", "true");
+        document.body.classList.add("menu-open");
+        drawerClose.focus();
+        document.addEventListener("keydown", trapFocus);
+      }
+      function closeDrawer() {
+        if (drawer.hidden) return;
+        drawer.hidden = true;
+        backdrop.hidden = true;
+        menuToggle.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("menu-open");
+        document.removeEventListener("keydown", trapFocus);
+        if (lastFocused) lastFocused.focus();
+      }
+
+      menuToggle.addEventListener("click", function () {
+        if (drawer.hidden) openDrawer();
+        else closeDrawer();
+      });
+      drawerClose.addEventListener("click", closeDrawer);
+      backdrop.addEventListener("click", closeDrawer);
+      [navSlot, accountSlot].forEach(function (slot) {
+        slot.addEventListener("click", function (e) {
+          if (e.target.closest("a")) closeDrawer();
+        });
+      });
+      document.addEventListener(
+        "keydown",
+        function (e) {
+          if (e.key !== "Escape" || drawer.hidden) return;
+          if (langSwitcher && langSwitcher.getAttribute("data-open") === "true") return;
+          closeDrawer();
+        },
+        true
+      );
+      mq.addEventListener("change", function (e) {
+        placeControls(e.matches);
+        if (!e.matches) closeDrawer();
+      });
+    })();
+
+    // ---------- Sign-in state ----------
+    (function () {
+      var signinLink = document.getElementById("nav-signin");
+      var authedLinks = document.querySelectorAll(".nav-authed");
+      var signoutLink = document.getElementById("nav-signout");
+      signoutLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        fetch("/api/logout", { method: "POST" }).finally(function () {
+          window.location.href = "login.html";
+        });
+      });
+      fetch("/api/session")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.signedIn) {
+            signinLink.hidden = true;
+            authedLinks.forEach(function (el) { el.hidden = false; });
+          }
+        })
+        .catch(function () {
+          /* api/session unreachable (e.g. static-only local preview) — stay
+             signed-out, same graceful fallback as the other pages. */
+        });
+    })();
+
+    // ==================== Booking flow ====================
+    (function () {
+      var MIAMI_TZ = "America/New_York";
+      var HELSINKI_TZ = "Europe/Helsinki";
+      var INITIAL_DAYS = 14;
+      var DAYS_STEP = 14;
+      var MAX_DAYS = 60;
+
+      var statusBanner = document.getElementById("booking-status-banner");
+      var degradedNote = document.getElementById("booking-degraded-note");
+      var loadingEl = document.getElementById("booking-loading");
+      var emptyEl = document.getElementById("booking-empty");
+      var dayListEl = document.getElementById("booking-day-list");
+      var showMoreBtn = document.getElementById("booking-show-more");
+      var formWrap = document.getElementById("booking-form-wrap");
+      var form = document.getElementById("booking-form");
+      var selectedSlotEl = document.getElementById("booking-selected-slot");
+      var changeTimeBtn = document.getElementById("booking-change-time");
+      var confirmationEl = document.getElementById("booking-confirmation");
+      var confirmationTitle = document.getElementById("booking-confirmation-title");
+      var confirmationBody = document.getElementById("booking-confirmation-body");
+      var submitBtn = document.getElementById("booking-submit");
+
+      var daysWindow = INITIAL_DAYS;
+      var selectedSlot = null;
+
+      function showBanner(kind, text) {
+        statusBanner.className = "banner " + kind;
+        statusBanner.textContent = text;
+        statusBanner.hidden = false;
+      }
+      function hideBanner() {
+        statusBanner.hidden = true;
+      }
+
+      function formatTimeInZone(date, tz) {
+        return new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit", timeZone: tz }).format(date);
+      }
+      function dateKeyInZone(date, tz) {
+        return new Intl.DateTimeFormat("en-CA", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          timeZone: tz,
+        }).format(date);
+      }
+      function formatDayHeading(date) {
+        return new Intl.DateTimeFormat(undefined, {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          timeZone: MIAMI_TZ,
+        }).format(date);
+      }
+
+      function renderDayList(slots) {
+        dayListEl.innerHTML = "";
+        if (slots.length === 0) {
+          dayListEl.hidden = true;
+          emptyEl.hidden = false;
+          showMoreBtn.hidden = true;
+          return;
+        }
+        emptyEl.hidden = true;
+        dayListEl.hidden = false;
+
+        var groups = [];
+        var groupsByKey = {};
+        slots.forEach(function (slot) {
+          var start = new Date(slot.start);
+          var key = dateKeyInZone(start, MIAMI_TZ);
+          if (!groupsByKey[key]) {
+            groupsByKey[key] = { key: key, heading: formatDayHeading(start), slots: [] };
+            groups.push(groupsByKey[key]);
+          }
+          groupsByKey[key].slots.push(slot);
+        });
+
+        groups.forEach(function (group) {
+          var section = document.createElement("div");
+          section.className = "booking-day-group";
+
+          var heading = document.createElement("h2");
+          heading.textContent = group.heading;
+          section.appendChild(heading);
+
+          var grid = document.createElement("div");
+          grid.className = "slot-grid";
+          group.slots.forEach(function (slot) {
+            var start = new Date(slot.start);
+            var end = new Date(slot.end);
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "slot-btn";
+            btn.dataset.start = slot.start;
+            btn.dataset.end = slot.end;
+
+            var primary = document.createElement("span");
+            primary.className = "slot-time-primary";
+            primary.textContent = formatTimeInZone(start, MIAMI_TZ) + " – " + formatTimeInZone(end, MIAMI_TZ);
+
+            var secondary = document.createElement("span");
+            secondary.className = "slot-time-secondary";
+            secondary.textContent = formatTimeInZone(start, HELSINKI_TZ) + " Helsinki";
+
+            btn.appendChild(primary);
+            btn.appendChild(secondary);
+            btn.addEventListener("click", function () {
+              selectSlot(slot);
+            });
+            grid.appendChild(btn);
+          });
+
+          section.appendChild(grid);
+          dayListEl.appendChild(section);
+        });
+
+        showMoreBtn.hidden = daysWindow >= MAX_DAYS;
+      }
+
+      function loadSlots() {
+        loadingEl.hidden = false;
+        return fetch("/api/booking-slots?days=" + daysWindow)
+          .then(function (res) {
+            if (!res.ok) throw new Error("request failed");
+            return res.json();
+          })
+          .then(function (data) {
+            loadingEl.hidden = true;
+            degradedNote.hidden = !data.degraded;
+            renderDayList(data.slots || []);
+          })
+          .catch(function () {
+            loadingEl.hidden = true;
+            dayListEl.hidden = true;
+            emptyEl.hidden = false;
+          });
+      }
+
+      showMoreBtn.addEventListener("click", function () {
+        daysWindow = Math.min(daysWindow + DAYS_STEP, MAX_DAYS);
+        loadSlots();
+      });
+
+      function selectSlot(slot) {
+        selectedSlot = slot;
+        var start = new Date(slot.start);
+        var end = new Date(slot.end);
+        selectedSlotEl.textContent =
+          formatDayHeading(start) +
+          " · " +
+          formatTimeInZone(start, MIAMI_TZ) +
+          " – " +
+          formatTimeInZone(end, MIAMI_TZ) +
+          " (your time: " +
+          formatTimeInZone(start, Intl.DateTimeFormat().resolvedOptions().timeZone) +
+          ")";
+        dayListEl.hidden = true;
+        showMoreBtn.hidden = true;
+        formWrap.hidden = false;
+        document.getElementById("booking-name").focus();
+      }
+
+      changeTimeBtn.addEventListener("click", function () {
+        selectedSlot = null;
+        formWrap.hidden = true;
+        dayListEl.hidden = false;
+        showMoreBtn.hidden = daysWindow >= MAX_DAYS;
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (!selectedSlot) return;
+        hideBanner();
+        submitBtn.disabled = true;
+
+        var payload = {
+          name: document.getElementById("booking-name").value,
+          email: document.getElementById("booking-email").value,
+          topic: document.getElementById("booking-topic").value,
+          slot: selectedSlot,
+          requesterTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        };
+
+        fetch("/api/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+          .then(function (res) {
+            return res.json().then(function (data) {
+              return { ok: res.ok, status: res.status, data: data };
+            });
+          })
+          .then(function (result) {
+            submitBtn.disabled = false;
+            if (result.ok) {
+              formWrap.hidden = true;
+              confirmationEl.hidden = false;
+              if (result.data.status === "confirmed") {
+                confirmationTitle.textContent = "You're booked!";
+                confirmationBody.textContent =
+                  "Check your email for a calendar invite with all the details.";
+              } else {
+                confirmationTitle.textContent = "Request sent!";
+                confirmationBody.textContent =
+                  "Maya will confirm shortly — you'll hear back by email.";
+              }
+              return;
+            }
+            if (result.status === 409) {
+              showBanner("error", "That time was just taken — pick another below.");
+              selectedSlot = null;
+              formWrap.hidden = true;
+              loadSlots();
+              return;
+            }
+            showBanner("error", (result.data && result.data.error) || "Something went wrong — please try again.");
+          })
+          .catch(function () {
+            submitBtn.disabled = false;
+            showBanner("error", "Something went wrong — please try again.");
+          });
+      });
+
+      loadSlots();
+    })();
+  </script>
+  <script src="footer-widget.js"></script>
+</body>
+</html>
