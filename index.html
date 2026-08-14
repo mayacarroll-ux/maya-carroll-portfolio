@@ -277,9 +277,13 @@
     }
     :root[data-theme="light"] .btn-primary {
       color: var(--color-surface);
+      background: #1d4e89;
     }
     .btn-primary:hover {
       box-shadow: var(--glow-hover);
+    }
+    :root[data-theme="light"] .btn-primary:hover {
+      box-shadow: 0 0 0 1px rgba(29, 78, 137, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
     }
     .btn-secondary {
       background: var(--color-surface);
