@@ -529,6 +529,34 @@
       font-size: 1.03rem;
       color: var(--color-text-secondary);
     }
+    .tz-switcher {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.1rem;
+      font-size: 0.88rem;
+    }
+    .tz-switcher label {
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+    #booking-tz-select {
+      font-family: var(--font-primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.5rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      cursor: pointer;
+      min-height: 44px;
+    }
+    #booking-tz-select:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
     #booking-body {
       max-width: 46rem;
       margin: 0 auto;
@@ -603,10 +631,6 @@
     .slot-time-primary {
       font-weight: 700;
       font-size: 0.92rem;
-    }
-    .slot-time-secondary {
-      font-size: 0.76rem;
-      color: var(--color-text-secondary);
     }
     .booking-more-row {
       margin-top: 0.5rem;
@@ -947,10 +971,24 @@
       <div class="booking-hero-inner">
         <h1>Book a call</h1>
         <p class="booking-intro">
-          Pick a time below — shown in your local time (with a Miami-time reference
-          alongside, since that's where I'm based). I'll confirm shortly after you
-          request a time.
+          Pick a weekday time below. I'll confirm shortly after you request a time.
         </p>
+        <div class="tz-switcher">
+          <label for="booking-tz-select">Showing times in</label>
+          <select id="booking-tz-select">
+            <optgroup label="North America">
+              <option value="America/New_York">Eastern Time (ET)</option>
+              <option value="America/Chicago">Central Time (CT)</option>
+              <option value="America/Denver">Mountain Time (MT)</option>
+              <option value="America/Los_Angeles">Pacific Time (PT)</option>
+            </optgroup>
+            <optgroup label="European Union">
+              <option value="Europe/Lisbon">Western European Time (WET)</option>
+              <option value="Europe/Paris">Central European Time (CET)</option>
+              <option value="Europe/Helsinki">Eastern European Time (EET)</option>
+            </optgroup>
+          </select>
+        </div>
       </div>
     </section>
 
@@ -1273,8 +1311,19 @@
 
     // ==================== Booking flow ====================
     (function () {
-      var MIAMI_TZ = "America/New_York";
-      var VISITOR_TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || MIAMI_TZ;
+      // Curated North America + EU zones only, per the switcher below — a
+      // bounded, always-labeled set instead of an arbitrary auto-detected
+      // IANA zone that might render ambiguously.
+      var ZONE_LABELS = {
+        "America/New_York": "ET",
+        "America/Chicago": "CT",
+        "America/Denver": "MT",
+        "America/Los_Angeles": "PT",
+        "Europe/Lisbon": "WET",
+        "Europe/Paris": "CET",
+        "Europe/Helsinki": "EET",
+      };
+      var DEFAULT_TZ = "America/New_York";
       var INITIAL_DAYS = 14;
       var DAYS_STEP = 14;
       var MAX_DAYS = 60;
@@ -1293,9 +1342,21 @@
       var confirmationTitle = document.getElementById("booking-confirmation-title");
       var confirmationBody = document.getElementById("booking-confirmation-body");
       var submitBtn = document.getElementById("booking-submit");
+      var tzSelect = document.getElementById("booking-tz-select");
 
       var daysWindow = INITIAL_DAYS;
       var selectedSlot = null;
+      var lastSlots = [];
+
+      function detectInitialTz() {
+        var saved = localStorage.getItem("bookingTz");
+        if (saved && ZONE_LABELS[saved]) return saved;
+        var detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (detected && ZONE_LABELS[detected]) return detected;
+        return DEFAULT_TZ;
+      }
+      var activeTz = detectInitialTz();
+      tzSelect.value = activeTz;
 
       function showBanner(kind, text) {
         statusBanner.className = "banner " + kind;
@@ -1308,6 +1369,12 @@
 
       function formatTimeInZone(date, tz) {
         return new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit", timeZone: tz }).format(date);
+      }
+      // A single clearly-labeled reading in the currently selected zone,
+      // e.g. "5:30 AM ET" — one unambiguous time per slot instead of a
+      // stacked pair the visitor has to reconcile themselves.
+      function formatSlotTime(date) {
+        return formatTimeInZone(date, activeTz) + " " + ZONE_LABELS[activeTz];
       }
       function dateKeyInZone(date, tz) {
         return new Intl.DateTimeFormat("en-CA", {
@@ -1322,11 +1389,12 @@
           weekday: "long",
           month: "long",
           day: "numeric",
-          timeZone: MIAMI_TZ,
+          timeZone: activeTz,
         }).format(date);
       }
 
       function renderDayList(slots) {
+        lastSlots = slots;
         dayListEl.innerHTML = "";
         if (slots.length === 0) {
           dayListEl.hidden = true;
@@ -1341,7 +1409,7 @@
         var groupsByKey = {};
         slots.forEach(function (slot) {
           var start = new Date(slot.start);
-          var key = dateKeyInZone(start, MIAMI_TZ);
+          var key = dateKeyInZone(start, activeTz);
           if (!groupsByKey[key]) {
             groupsByKey[key] = { key: key, heading: formatDayHeading(start), slots: [] };
             groups.push(groupsByKey[key]);
@@ -1370,18 +1438,9 @@
 
             var primary = document.createElement("span");
             primary.className = "slot-time-primary";
-            primary.textContent = formatTimeInZone(start, VISITOR_TZ) + " – " + formatTimeInZone(end, VISITOR_TZ);
+            primary.textContent = formatSlotTime(start) + " – " + formatTimeInZone(end, activeTz);
             btn.appendChild(primary);
 
-            // Only show Miami time as a reference when it actually differs
-            // from the visitor's own zone — otherwise it just repeats the
-            // line above.
-            if (VISITOR_TZ !== MIAMI_TZ) {
-              var secondary = document.createElement("span");
-              secondary.className = "slot-time-secondary";
-              secondary.textContent = formatTimeInZone(start, MIAMI_TZ) + " Miami time";
-              btn.appendChild(secondary);
-            }
             btn.addEventListener("click", function () {
               selectSlot(slot);
             });
@@ -1419,20 +1478,21 @@
         loadSlots();
       });
 
+      function renderSelectedSlotSummary(slot) {
+        var start = new Date(slot.start);
+        selectedSlotEl.textContent = formatDayHeading(start) + " · " + formatSlotTime(start) + " – " + formatTimeInZone(new Date(slot.end), activeTz);
+      }
+
+      tzSelect.addEventListener("change", function () {
+        activeTz = tzSelect.value;
+        localStorage.setItem("bookingTz", activeTz);
+        if (selectedSlot) renderSelectedSlotSummary(selectedSlot);
+        else renderDayList(lastSlots);
+      });
+
       function selectSlot(slot) {
         selectedSlot = slot;
-        var start = new Date(slot.start);
-        var end = new Date(slot.end);
-        var summary =
-          formatDayHeading(start) +
-          " · " +
-          formatTimeInZone(start, VISITOR_TZ) +
-          " – " +
-          formatTimeInZone(end, VISITOR_TZ);
-        if (VISITOR_TZ !== MIAMI_TZ) {
-          summary += " (Miami time: " + formatTimeInZone(start, MIAMI_TZ) + ")";
-        }
-        selectedSlotEl.textContent = summary;
+        renderSelectedSlotSummary(slot);
         dayListEl.hidden = true;
         showMoreBtn.hidden = true;
         formWrap.hidden = false;
@@ -1457,7 +1517,7 @@
           email: document.getElementById("booking-email").value,
           topic: document.getElementById("booking-topic").value,
           slot: selectedSlot,
-          requesterTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          requesterTimeZone: activeTz,
         };
 
         fetch("/api/bookings", {

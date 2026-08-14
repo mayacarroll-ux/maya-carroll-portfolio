@@ -24,6 +24,14 @@ function sliceIntoSlots(startMs, endMs, slotMs) {
   return slots;
 }
 
+// dateStr is a plain "YYYY-MM-DD" calendar-date label (the same convention
+// _day-range.js's addDays uses) — parsing it at noon UTC keeps the weekday
+// read stable regardless of the reader's own local zone.
+function isWeekendDate(dateStr) {
+  const day = new Date(dateStr + "T12:00:00Z").getUTCDay();
+  return day === 0 || day === 6;
+}
+
 // Builds every candidate slot for one calendar date, handling a focus
 // segment that wraps past midnight (end <= start) by splitting it into
 // tonight's [start, 24) and tomorrow's [0, end) — not exercised by the
@@ -84,7 +92,9 @@ async function computeBookableSlots({
   const slotMs = slotMinutes * 60000;
   let candidates = [];
   for (let i = 0; i < days; i++) {
-    candidates = candidates.concat(candidatesForDate(addDays(startDate, i), timeZone, slotMs));
+    const dateStr = addDays(startDate, i);
+    if (isWeekendDate(dateStr)) continue;
+    candidates = candidates.concat(candidatesForDate(dateStr, timeZone, slotMs));
   }
 
   if (candidates.length === 0) {
