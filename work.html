@@ -569,10 +569,29 @@
       }
     }
     .work-card-thumb {
+      position: relative;
       aspect-ratio: 16 / 10;
       border-bottom: 1px solid var(--color-border);
       overflow: hidden;
       flex-shrink: 0;
+    }
+    /* "For placement only" watermark — see the note at the top of
+       work-data.js. Matches the same stamp on the case-study template. */
+    .fpo-stamp {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--color-warning);
+      background: var(--color-bg);
+      border: 1px solid var(--color-warning);
+      border-radius: 4px;
+      padding: 0.12rem 0.4rem;
+      opacity: 0.85;
+      pointer-events: none;
     }
     .work-card-thumb svg {
       display: block;
@@ -1646,6 +1665,7 @@
           fill: "var(--color-accent-3)", opacity: "0.18",
         }));
         wrap.appendChild(svg);
+        wrap.appendChild(el("span", "fpo-stamp", "FPO"));
         return wrap;
       }
 

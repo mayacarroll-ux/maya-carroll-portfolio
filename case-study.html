@@ -790,29 +790,29 @@
       font-weight: 600;
     }
 
-    /* ==================== Diagram placeholder (consolidated industry component) ==================== */
+    /* ==================== Diagram placeholder (consolidated industry component) ====================
+       The outer card keeps a dashed border — that's the "this whole
+       section is FPO" signal at a glance — while the generated graphic
+       inside it carries its own FPO stamp for when it's viewed alone. */
     .cs-diagram-placeholder {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      text-align: center;
-      padding: 2.25rem 1.25rem;
+      gap: 0.65rem;
+      padding: 0.85rem 0.85rem 1rem;
       border: 1.5px dashed var(--color-border);
       border-radius: 12px;
       background: var(--color-surface);
-      min-height: 140px;
     }
-    .cs-diagram-placeholder .cs-diagram-icon {
-      font-size: 1.5rem;
-      opacity: 0.6;
+    .cs-diagram-placeholder .media-placeholder {
+      border-style: dashed;
     }
     .cs-diagram-placeholder h3 {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
+      padding: 0 0.15rem;
     }
     .cs-diagram-placeholder p {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      padding: 0 0.15rem;
     }
     .cs-industry-grid {
       display: grid;
@@ -908,6 +908,25 @@
       border: 1px solid var(--color-border);
       border-radius: 999px;
       padding: 0.2rem 0.6rem;
+    }
+    /* "For placement only" watermark on every generated graphic — makes it
+       unmistakable that the art (and the content around it) is sample
+       material, not a real screenshot or diagram, even out of context. */
+    .fpo-stamp {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      font-family: var(--font-mono, monospace);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--color-warning);
+      background: var(--color-bg);
+      border: 1px solid var(--color-warning);
+      border-radius: 4px;
+      padding: 0.12rem 0.4rem;
+      opacity: 0.85;
+      pointer-events: none;
     }
 
     /* ==================== CTA ==================== */
@@ -2274,6 +2293,13 @@
       for (var i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
       return hash;
     }
+    // Visible on every generated graphic so FPO (for-placement-only)
+    // content is unmistakable even viewed out of context — see the note
+    // at the top of work-data.js.
+    function fpoStamp() {
+      return el("span", "fpo-stamp", "FPO");
+    }
+
     function renderPlaceholderMedia(seedStr, altText) {
       var wrap = el("div", "media-placeholder");
       wrap.setAttribute("role", "img");
@@ -2299,7 +2325,174 @@
       svg.appendChild(svgEl("rect", { x: 0, y: 0, width: 320, height: 200, fill: "none", stroke: "var(--color-border)", "stroke-width": 1 }));
       wrap.appendChild(svg);
       wrap.appendChild(el("span", "media-placeholder-label", t().cs_draft_placeholder));
+      wrap.appendChild(fpoStamp());
       return wrap;
+    }
+
+    // ---- FPO diagram sketches for the Industry Deep-Dive cluster ----
+    // Four illustrative archetypes, picked per entry via its `visual`
+    // field (work-data.js), so "AI Architecture" and "Permissions Matrix"
+    // read as different kinds of diagrams rather than the same box with
+    // a different label. Each is seeded from the project slug + label, so
+    // it's stable on reload but varies across entries. These are sketches
+    // standing in for a real diagram — not a rendering of the real thing.
+    function diagramShell(seedStr) {
+      var wrap = el("div", "media-placeholder");
+      var seed = seedFromString(seedStr);
+      var svg = svgEl("svg", { viewBox: "0 0 320 160", preserveAspectRatio: "xMidYMid meet" });
+      svg.appendChild(svgEl("rect", { x: 0, y: 0, width: 320, height: 160, fill: "var(--color-bg)" }));
+      return { wrap: wrap, svg: svg, seed: seed };
+    }
+    function finishDiagram(d) {
+      d.svg.appendChild(svgEl("rect", { x: 0, y: 0, width: 320, height: 160, fill: "none", stroke: "var(--color-border)", "stroke-width": 1 }));
+      d.wrap.appendChild(d.svg);
+      d.wrap.appendChild(fpoStamp());
+      return d.wrap;
+    }
+
+    function renderDiagramFlow(seedStr) {
+      var d = diagramShell(seedStr);
+      var seed = d.seed;
+      var nodeCount = 3 + (seed % 2); // 3 or 4 nodes
+      var nodeW = 62, nodeH = 34;
+      var gap = (320 - nodeCount * nodeW) / (nodeCount + 1);
+      var y = 63 + ((seed >>> 4) % 2 === 0 ? 0 : -14);
+      for (var i = 0; i < nodeCount; i++) {
+        var x = gap + i * (nodeW + gap);
+        var isDecision = (seed >>> (i + 2)) % 4 === 0 && i > 0 && i < nodeCount - 1;
+        var ny = y + (i % 2 === 0 ? 0 : 18);
+        if (isDecision) {
+          var cx = x + nodeW / 2, cy = ny + nodeH / 2;
+          d.svg.appendChild(svgEl("polygon", {
+            points: [cx, cy - 22, cx + 32, cy, cx, cy + 22, cx - 32, cy].join(" "),
+            fill: "var(--color-surface)", stroke: "var(--color-accent-3)", "stroke-width": 1.5,
+          }));
+        } else {
+          d.svg.appendChild(svgEl("rect", {
+            x: x, y: ny, width: nodeW, height: nodeH, rx: 6,
+            fill: "var(--color-surface)", stroke: "var(--color-accent)", "stroke-width": 1.5,
+          }));
+        }
+        d.svg.appendChild(svgEl("rect", { x: x + 10, y: ny + 12, width: nodeW - 20, height: 5, rx: 2.5, fill: "var(--color-text-secondary)", opacity: "0.4" }));
+        d.svg.appendChild(svgEl("rect", { x: x + 10, y: ny + 20, width: (nodeW - 20) * 0.6, height: 5, rx: 2.5, fill: "var(--color-text-secondary)", opacity: "0.25" }));
+        if (i < nodeCount - 1) {
+          var nextX = gap + (i + 1) * (nodeW + gap);
+          var nextY = y + ((i + 1) % 2 === 0 ? 0 : 18);
+          var startX = x + nodeW, startY = ny + nodeH / 2;
+          var endX = nextX, endY = nextY + nodeH / 2;
+          d.svg.appendChild(svgEl("path", {
+            d: "M " + startX + " " + startY + " C " + (startX + gap / 2) + " " + startY + ", " + (endX - gap / 2) + " " + endY + ", " + endX + " " + endY,
+            fill: "none", stroke: "var(--color-accent-3)", "stroke-width": 1.5,
+          }));
+          d.svg.appendChild(svgEl("polygon", {
+            points: [endX - 6, endY - 4, endX, endY, endX - 6, endY + 4].join(" "),
+            fill: "var(--color-accent-3)",
+          }));
+        }
+      }
+      return finishDiagram(d);
+    }
+
+    function renderDiagramMatrix(seedStr) {
+      var d = diagramShell(seedStr);
+      var seed = d.seed;
+      var cols = 5, rows = 4;
+      var padL = 46, padT = 18, cellW = (320 - padL - 16) / cols, cellH = (160 - padT - 14) / rows;
+      for (var c = 0; c < cols; c++) {
+        d.svg.appendChild(svgEl("rect", { x: padL + c * cellW + cellW * 0.3, y: 4, width: cellW * 0.4, height: 6, rx: 3, fill: "var(--color-text-secondary)", opacity: "0.35" }));
+      }
+      for (var r = 0; r < rows; r++) {
+        var rowY = padT + r * cellH;
+        d.svg.appendChild(svgEl("rect", { x: 0, y: rowY + cellH * 0.35, width: padL * 0.7, height: 6, rx: 3, fill: "var(--color-text-secondary)", opacity: "0.35" }));
+        for (var cc = 0; cc < cols; cc++) {
+          var cellSeed = (seed >>> (r * cols + cc)) % 5;
+          var fill = "var(--color-surface)";
+          var opacity = "1";
+          if (cellSeed === 0) { fill = "var(--color-accent)"; opacity = "0.85"; }
+          else if (cellSeed === 1) { fill = "var(--color-accent-3)"; opacity = "0.7"; }
+          else if (cellSeed === 2) { fill = "var(--color-text-secondary)"; opacity = "0.18"; }
+          d.svg.appendChild(svgEl("rect", {
+            x: padL + cc * cellW + 2, y: rowY + 2, width: cellW - 4, height: cellH - 4, rx: 4,
+            fill: fill, opacity: opacity, stroke: "var(--color-border)", "stroke-width": 1,
+          }));
+        }
+      }
+      return finishDiagram(d);
+    }
+
+    function renderDiagramNetwork(seedStr) {
+      var d = diagramShell(seedStr);
+      var seed = d.seed;
+      var nodeCount = 6 + (seed % 3);
+      var nodes = [];
+      var cx0 = 160, cy0 = 80, rad = 55;
+      for (var i = 0; i < nodeCount; i++) {
+        var angle = (i / nodeCount) * Math.PI * 2 + (seed % 100) / 100;
+        var jitter = 10 + ((seed >>> (i + 1)) % 14);
+        nodes.push({
+          x: cx0 + Math.cos(angle) * (rad + jitter) * (i === 0 ? 0 : 1),
+          y: cy0 + Math.sin(angle) * (rad + jitter) * 0.72 * (i === 0 ? 0 : 1),
+          r: i === 0 ? 12 : 6 + ((seed >>> (i + 3)) % 4),
+        });
+      }
+      nodes[0].x = cx0; nodes[0].y = cy0;
+      for (var j = 1; j < nodes.length; j++) {
+        d.svg.appendChild(svgEl("line", {
+          x1: nodes[0].x, y1: nodes[0].y, x2: nodes[j].x, y2: nodes[j].y,
+          stroke: "var(--color-border)", "stroke-width": 1.25,
+        }));
+        if ((seed >>> j) % 3 === 0 && j < nodes.length - 1) {
+          d.svg.appendChild(svgEl("line", {
+            x1: nodes[j].x, y1: nodes[j].y, x2: nodes[j + 1].x, y2: nodes[j + 1].y,
+            stroke: "var(--color-border)", "stroke-width": 1,
+          }));
+        }
+      }
+      nodes.forEach(function (n, i) {
+        d.svg.appendChild(svgEl("circle", {
+          cx: n.x, cy: n.y, r: n.r,
+          fill: i === 0 ? "var(--color-accent)" : "var(--color-surface)",
+          stroke: i === 0 ? "var(--color-accent)" : "var(--color-accent-3)",
+          "stroke-width": 1.5,
+        }));
+      });
+      return finishDiagram(d);
+    }
+
+    function renderDiagramChart(seedStr) {
+      var d = diagramShell(seedStr);
+      var seed = d.seed;
+      var barCount = 5;
+      var padL = 22, padB = 20, padT = 14, gap = 14;
+      var chartW = 320 - padL - 16, chartH = 160 - padT - padB;
+      var barW = (chartW - gap * (barCount - 1)) / barCount;
+      d.svg.appendChild(svgEl("line", { x1: padL, y1: padT, x2: padL, y2: padT + chartH, stroke: "var(--color-border)", "stroke-width": 1 }));
+      d.svg.appendChild(svgEl("line", { x1: padL, y1: padT + chartH, x2: 320 - 16, y2: padT + chartH, stroke: "var(--color-border)", "stroke-width": 1 }));
+      for (var i = 0; i < barCount; i++) {
+        var h = chartH * (0.25 + ((seed >>> (i * 3)) % 70) / 100);
+        var x = padL + 8 + i * (barW + gap);
+        var isPeak = h > chartH * 0.75;
+        d.svg.appendChild(svgEl("rect", {
+          x: x, y: padT + chartH - h, width: barW, height: h, rx: 3,
+          fill: isPeak ? "var(--color-accent)" : "var(--color-accent-3)", opacity: isPeak ? "0.9" : "0.55",
+        }));
+      }
+      var lineSeed = seed;
+      var points = [];
+      for (var p = 0; p < barCount; p++) {
+        var xx = padL + 8 + p * (barW + gap) + barW / 2;
+        var yy = padT + chartH - chartH * (0.2 + ((lineSeed >>> (p * 5)) % 60) / 100);
+        points.push(xx + "," + yy);
+      }
+      d.svg.appendChild(svgEl("polyline", { points: points.join(" "), fill: "none", stroke: "var(--color-text-secondary)", "stroke-width": 1.25, "stroke-dasharray": "3 3", opacity: "0.6" }));
+      return finishDiagram(d);
+    }
+
+    function renderDiagramByType(visual, seedStr) {
+      if (visual === "matrix") return renderDiagramMatrix(seedStr);
+      if (visual === "network") return renderDiagramNetwork(seedStr);
+      if (visual === "chart") return renderDiagramChart(seedStr);
+      return renderDiagramFlow(seedStr);
     }
 
     // ---- Section shell: heading + kicker + body container, or nothing if
@@ -2576,7 +2769,7 @@
             return;
           }
           var card = el("div", "cs-diagram-placeholder");
-          card.appendChild(el("span", "cs-diagram-icon", "\ud83d\udcca"));
+          card.appendChild(renderDiagramByType(item.visual, project.slug + ":" + item.label));
           card.appendChild(el("h3", null, item.label));
           card.appendChild(el("p", null, t().cs_placeholder_note));
           grid.appendChild(card);
