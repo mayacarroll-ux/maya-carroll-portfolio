@@ -539,15 +539,12 @@
       margin-bottom: 1.5rem;
     }
     .work-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     }
     .work-card {
       position: relative;
       padding: 0;
       overflow: hidden;
-    }
-    .work-card--featured.work-card--first {
-      grid-column: span 2;
     }
     .work-card-thumb {
       aspect-ratio: 16 / 10;
@@ -610,12 +607,6 @@
       border-radius: 999px;
       padding: 0.15rem 0.6rem;
     }
-    @media (max-width: 959px) {
-      .work-card--featured.work-card--first {
-        grid-column: span 1;
-      }
-    }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -1291,9 +1282,8 @@
         var t = translations[document.documentElement.lang] || translations.en;
         var projects = window.MayaWork.getPublishedWorkProjects();
         grid.textContent = "";
-        projects.forEach(function (project, index) {
+        projects.forEach(function (project) {
           var card = el("article", "card surface work-card");
-          if (project.featured && index === 0) card.classList.add("work-card--featured", "work-card--first");
 
           card.appendChild(renderThumb(project));
 
