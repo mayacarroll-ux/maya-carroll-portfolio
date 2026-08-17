@@ -618,6 +618,32 @@
     .hero-copy:last-of-type {
       margin-bottom: 0;
     }
+    .credentials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.75rem;
+      text-align: left;
+    }
+    .credentials-group h3 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .credentials-group ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+    .credentials-group li {
+      font-size: 0.92rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.3rem;
+    }
+    .credentials-group li:last-child {
+      margin-bottom: 0;
+    }
     .hero-actions {
       display: flex;
       align-items: center;
@@ -1023,6 +1049,25 @@
           Florida, I'm also learning Finnish and always open to a good conversation about
           what's next.
         </p>
+
+        <div class="credentials-grid">
+          <div class="credentials-group">
+            <h3 data-i18n="credentials_education_label">Education</h3>
+            <ul>
+              <li data-i18n="credential_bfa">BFA, Graphic Design</li>
+              <li data-i18n="credential_msit">M.S., Information Technology</li>
+            </ul>
+          </div>
+          <div class="credentials-group">
+            <h3 data-i18n="credentials_certifications_label">Certifications</h3>
+            <ul>
+              <li data-i18n="credential_cspo">Certified Scrum Product Owner (CSPO)</li>
+              <li data-i18n="credential_ai1">Applied AI</li>
+              <li data-i18n="credential_ai2">Vibe Coding with AI</li>
+              <li data-i18n="credential_ai3">Building AI Agents &amp; Workflows</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -1080,6 +1125,14 @@
         contact_email: "Email",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "South Florida, USA · U.S. Citizen · Public Trust Clearance",
+        credentials_education_label: "Education",
+        credential_bfa: "BFA, Graphic Design",
+        credential_msit: "M.S., Information Technology",
+        credentials_certifications_label: "Certifications",
+        credential_cspo: "Certified Scrum Product Owner (CSPO)",
+        credential_ai1: "Applied AI",
+        credential_ai2: "Vibe Coding with AI",
+        credential_ai3: "Building AI Agents & Workflows",
         footer_p1: "From Miami to Helsinki—designing what's next.",
       },
       es: {
@@ -1104,6 +1157,14 @@
         contact_email: "Correo",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sur de Florida, EE. UU. · Ciudadana estadounidense · Autorización Public Trust",
+        credentials_education_label: "Educación",
+        credential_bfa: "Licenciatura en Bellas Artes (BFA), Diseño Gráfico",
+        credential_msit: "Maestría en Ciencias, Tecnología de la Información",
+        credentials_certifications_label: "Certificaciones",
+        credential_cspo: "Certified Scrum Product Owner (CSPO)",
+        credential_ai1: "IA aplicada",
+        credential_ai2: "Vibe Coding con IA",
+        credential_ai3: "Creación de agentes y flujos de trabajo de IA",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
       },
       fi: {
@@ -1128,6 +1189,14 @@
         contact_email: "Sähköposti",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Etelä-Florida, Yhdysvallat · Yhdysvaltain kansalainen · Public Trust -turvallisuusselvitys",
+        credentials_education_label: "Koulutus",
+        credential_bfa: "BFA, graafinen suunnittelu",
+        credential_msit: "Tietotekniikan maisteri (M.S.)",
+        credentials_certifications_label: "Sertifikaatit",
+        credential_cspo: "Certified Scrum Product Owner (CSPO)",
+        credential_ai1: "Sovellettu tekoäly",
+        credential_ai2: "Vibe Coding tekoälyllä",
+        credential_ai3: "Tekoälyagenttien ja työnkulkujen rakentaminen",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
       },
     };
