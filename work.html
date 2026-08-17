@@ -18,8 +18,21 @@
   </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard — Maya Carroll</title>
-  <meta name="robots" content="noindex, nofollow" />
+  <title>Selected Work | Maya Carroll</title>
+  <meta
+    name="description"
+    content="Product design case studies from Maya Carroll, an AI product and design leader working across product strategy, human-AI interaction, and enterprise UX."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maya-carroll-portfolio.vercel.app/work.html" />
+  <meta property="og:title" content="Selected Work | Maya Carroll" />
+  <meta
+    property="og:description"
+    content="Product design case studies from Maya Carroll, an AI product and design leader working across product strategy, human-AI interaction, and enterprise UX."
+  />
+  <link rel="canonical" href="https://maya-carroll-portfolio.vercel.app/work.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
@@ -81,30 +94,27 @@
     }
     main {
       flex: 1 0 auto;
-      max-width: 40rem;
-      margin: 0 auto;
-      padding: 3rem 1.5rem;
+      padding-bottom: 4rem;
     }
-    main[hidden] {
-      display: none;
-    }
-    h1 {
+    h1, h2, h3 {
       font-family: var(--font-primary);
       font-weight: 700;
-      font-size: 1.6rem;
-      margin: 0 0 0.5rem;
+      margin: 0;
     }
-    main p {
-      color: var(--color-text-secondary);
+    h1 {
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    h2 {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      letter-spacing: -0.02em;
     }
 
     /* ==================== Header (same as index.html) ====================
-       Two coordinated levels: #header-primary (brand / nav / preferences /
-       menu button). Below 960px, #primary-nav and #preferences move into
-       the mobile drawer via the same reparenting script used on the
-       homepage — kept byte-identical across pages on purpose so it doesn't
-       drift. No #city-strip and no #motion-toggle here — there's no
-       animated background on this page to pause. */
+       Kept byte-identical in structure across pages on purpose so it
+       doesn't drift. No #city-strip / animated background here — this is
+       a content page, same footprint as dashboard.html/calendar.html. */
     #topbar {
       position: sticky;
       top: 0;
@@ -159,27 +169,49 @@
     #primary-nav a {
       color: var(--color-text-secondary);
       text-decoration: none;
+      font-family: var(--font-primary);
+      font-weight: 600;
       padding: 0.3rem 0.1rem;
     }
     #primary-nav a:hover,
-    #primary-nav a:focus-visible {
+    #primary-nav a:focus-visible,
+    #primary-nav a[aria-current="page"] {
       color: var(--color-text);
     }
-    #primary-nav a.nav-signin {
-      margin-left: 0.4rem;
-      padding-left: 1rem;
-      border-left: 1px solid var(--color-border);
+    #account-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
       font-size: 0.8rem;
+    }
+    #account-nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-family: var(--font-primary);
+      font-weight: 600;
       opacity: 0.75;
+      padding: 0.3rem 0.1rem;
     }
-    #primary-nav a.nav-signin:hover,
-    #primary-nav a.nav-signin:focus-visible {
+    #account-nav a:hover,
+    #account-nav a:focus-visible {
       opacity: 1;
+      color: var(--color-text);
     }
-    #primary-nav a.nav-signin ~ a.nav-signin {
-      margin-left: 0.6rem;
-      padding-left: 0;
-      border-left: none;
+    /* Session-ending action, not a navigation destination like Calendar
+       or Dashboard next to it — a distinct color signals that before the
+       visitor taps it. Specificity has to match (or beat) the mobile
+       drawer's own #account-nav a rule below, or it loses the cascade
+       and silently falls back to the shared secondary-text color. */
+    #account-nav a#nav-signout,
+    #mobile-menu-account-slot #account-nav a#nav-signout {
+      color: var(--color-warning);
+    }
+    #account-nav a#nav-signout:hover,
+    #account-nav a#nav-signout:focus-visible,
+    #mobile-menu-account-slot #account-nav a#nav-signout:hover,
+    #mobile-menu-account-slot #account-nav a#nav-signout:focus-visible {
+      color: var(--color-warning);
+      opacity: 1;
     }
     #preferences {
       display: flex;
@@ -216,12 +248,6 @@
     }
     #theme-label {
       font-weight: 600;
-    }
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
     }
     #lang-switcher {
       position: relative;
@@ -336,6 +362,7 @@
     }
     @media (max-width: 959px) {
       #primary-nav,
+      #account-nav,
       #header-primary > #preferences {
         display: none;
       }
@@ -415,16 +442,26 @@
       display: flex;
       align-items: center;
     }
-    #mobile-menu-nav-slot #primary-nav a[hidden] {
-      display: none;
+    #mobile-menu-account-slot #account-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      font-size: 1.05rem;
+      margin: 0 0 1.5rem;
     }
-    #mobile-menu-nav-slot a.nav-signin {
-      margin-left: 0;
-      padding-left: 0.2rem;
-      border-left: none;
-      border-top: 1px solid var(--color-border);
+    #mobile-menu-account-slot #account-nav a {
+      padding: 0.8rem 0.2rem;
+      border-bottom: 1px solid var(--color-border);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
       opacity: 0.75;
     }
+    #mobile-menu-account-slot #account-nav a[hidden] {
+      display: none;
+    }
+    #mobile-menu-account .menu-heading,
     #mobile-menu-prefs .menu-heading {
       padding: 0 0 0.6rem;
     }
@@ -451,6 +488,166 @@
     }
     body.menu-open {
       overflow: hidden;
+    }
+
+    /* ==================== Work section ==================== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    section {
+      padding: clamp(2.25rem, 5vw, 3.75rem) 0;
+    }
+    .surface {
+      background: var(--color-surface-translucent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .card h3 {
+      color: var(--color-text);
+    }
+    .card p {
+      font-size: 0.92rem;
+    }
+    .work-card .work-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.4rem;
+    }
+    .work-card .work-meta strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    #work h2 {
+      margin-bottom: 1.5rem;
+    }
+    .work-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .work-card {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+    .work-card--featured.work-card--first {
+      grid-column: span 2;
+    }
+    .work-card-thumb {
+      aspect-ratio: 16 / 10;
+      border-bottom: 1px solid var(--color-border);
+      overflow: hidden;
+    }
+    .work-card-thumb svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .work-card-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .work-card-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .work-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+    }
+    .work-card-link {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+    .work-card-link::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+    .work-card-link:hover,
+    .work-card-link:focus-visible {
+      color: var(--color-accent);
+    }
+    .work-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+    .work-tag {
+      font-size: 0.74rem;
+      color: var(--color-text-secondary);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+    }
+    @media (max-width: 959px) {
+      .work-card--featured.work-card--first {
+        grid-column: span 1;
+      }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      font-family: var(--font-primary);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+    :root[data-theme="light"] .btn-primary {
+      color: var(--color-surface);
+      background: #1d4e89;
+    }
+    .btn-primary:hover {
+      box-shadow: var(--glow-hover);
+    }
+    :root[data-theme="light"] .btn-primary:hover {
+      box-shadow: 0 0 0 1px rgba(29, 78, 137, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
     }
 
     footer {
@@ -675,12 +872,16 @@
       </a>
 
       <nav id="primary-nav" aria-label="Primary">
-        <a href="index.html#experience" data-i18n="nav_experience">Experience</a>
+        <a href="about.html" aria-current="page" data-i18n="nav_about">About</a>
         <a href="work.html" data-i18n="nav_work">Work</a>
-        <a class="nav-signin" id="nav-calendar" href="calendar.html" data-i18n="nav_calendar">Calendar</a>
-        <a class="nav-signin" id="nav-dashboard" href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
-        <a class="nav-signin" id="nav-signout" href="login.html" data-i18n="nav_signout">Sign out</a>
       </nav>
+
+      <div id="account-nav" aria-label="Account">
+        <a id="nav-signin" href="login.html" data-i18n="nav_signin">Sign in</a>
+        <a class="nav-authed" id="nav-calendar" href="calendar.html" data-i18n="nav_calendar" hidden>Calendar</a>
+        <a class="nav-authed" id="nav-dashboard" href="dashboard.html" data-i18n="nav_dashboard" hidden>Dashboard</a>
+        <a class="nav-authed" id="nav-signout" href="login.html" data-i18n="nav_signout" hidden>Sign out</a>
+      </div>
 
       <div id="preferences" aria-label="Preferences">
         <button type="button" id="theme-toggle" aria-label="Switch to light theme">
@@ -718,19 +919,23 @@
       <button type="button" id="mobile-menu-close" aria-label="Close menu">&times;</button>
     </div>
     <div id="mobile-menu-nav-slot" aria-label="Primary"></div>
+    <div id="mobile-menu-account">
+      <h3 class="menu-heading" data-i18n="menu_account">Account</h3>
+      <div id="mobile-menu-account-slot" aria-label="Account"></div>
+    </div>
     <div id="mobile-menu-prefs">
       <h3 class="menu-heading" data-i18n="menu_preferences">Preferences</h3>
       <div id="mobile-menu-prefs-slot"></div>
     </div>
   </div>
 
-  <main hidden>
-    <h1>Private dashboard</h1>
-    <p>
-      This space is just for you — signed in and ready for whatever personal
-      organization tools get added here next.
-    </p>
-    <p><a href="calendar.html">Calendar →</a></p>
+  <main>
+    <section id="work">
+      <div class="container">
+        <h2 data-i18n="work_heading">Selected work</h2>
+        <div id="work-grid" class="card-grid work-grid"></div>
+      </div>
+    </section>
   </main>
 
   <footer id="footer">
@@ -762,47 +967,62 @@
     </p>
   </footer>
 
+  <script src="work-data.js"></script>
   <script>
     var translations = {
       en: {
         label: "EN",
         fullName: "English",
         menu_title: "Menu",
+        menu_account: "Account",
         menu_preferences: "Preferences",
         nav_work: "Work",
-        nav_experience: "Experience",
+        nav_about: "About",
+        nav_signin: "Sign in",
         nav_calendar: "Calendar",
         nav_dashboard: "Dashboard",
         nav_signout: "Sign out",
+        work_heading: "Selected work",
+        work_draft_badge: "Draft",
+        work_confidential_badge: "Confidential",
         footer_p1: "From Miami to Helsinki—designing what's next.",
       },
       es: {
         label: "ES",
         fullName: "Español",
         menu_title: "Menú",
+        menu_account: "Cuenta",
         menu_preferences: "Preferencias",
         nav_work: "Trabajo",
-        nav_experience: "Experiencia",
+        nav_about: "Acerca de",
+        nav_signin: "Iniciar sesión",
         nav_calendar: "Calendario",
         nav_dashboard: "Panel",
         nav_signout: "Cerrar sesión",
+        work_heading: "Trabajo seleccionado",
+        work_draft_badge: "Borrador",
+        work_confidential_badge: "Confidencial",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
       },
       fi: {
         label: "FI",
         fullName: "Suomi",
         menu_title: "Valikko",
+        menu_account: "Tili",
         menu_preferences: "Asetukset",
         nav_work: "Työt",
-        nav_experience: "Kokemus",
+        nav_about: "Tietoa",
+        nav_signin: "Kirjaudu sisään",
         nav_calendar: "Kalenteri",
         nav_dashboard: "Kojelauta",
         nav_signout: "Kirjaudu ulos",
+        work_heading: "Valitut työt",
+        work_draft_badge: "Luonnos",
+        work_confidential_badge: "Luottamuksellinen",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
       },
     };
 
-    var mainEl = document.querySelector("main");
     document.getElementById("footer-year").textContent = new Date().getFullYear();
 
     // ---------- Theme toggle ----------
@@ -887,23 +1107,27 @@
       var topbar = document.getElementById("topbar");
       var headerPrimary = document.getElementById("header-primary");
       var nav = document.getElementById("primary-nav");
+      var accountNav = document.getElementById("account-nav");
       var prefs = document.getElementById("preferences");
       var menuToggle = document.getElementById("menu-toggle");
       var backdrop = document.getElementById("mobile-menu-backdrop");
       var drawer = document.getElementById("mobile-menu");
       var drawerClose = document.getElementById("mobile-menu-close");
       var navSlot = document.getElementById("mobile-menu-nav-slot");
+      var accountSlot = document.getElementById("mobile-menu-account-slot");
       var prefsSlot = document.getElementById("mobile-menu-prefs-slot");
       var langSwitcher = document.getElementById("lang-switcher");
-      if (!topbar || !headerPrimary || !nav || !prefs || !menuToggle || !drawer) return;
+      if (!topbar || !headerPrimary || !nav || !menuToggle || !drawer) return;
 
       var mq = window.matchMedia("(max-width: 959px)");
       function placeControls(isNarrow) {
         if (isNarrow) {
           navSlot.appendChild(nav);
+          accountSlot.appendChild(accountNav);
           prefsSlot.appendChild(prefs);
         } else {
           headerPrimary.insertBefore(nav, menuToggle);
+          headerPrimary.insertBefore(accountNav, menuToggle);
           headerPrimary.insertBefore(prefs, menuToggle);
         }
       }
@@ -953,8 +1177,10 @@
       });
       drawerClose.addEventListener("click", closeDrawer);
       backdrop.addEventListener("click", closeDrawer);
-      navSlot.addEventListener("click", function (e) {
-        if (e.target.closest("a")) closeDrawer();
+      [navSlot, accountSlot].forEach(function (slot) {
+        slot.addEventListener("click", function (e) {
+          if (e.target.closest("a")) closeDrawer();
+        });
       });
       document.addEventListener(
         "keydown",
@@ -971,27 +1197,149 @@
       });
     })();
 
-    // ---------- Sign out ----------
-    document.getElementById("nav-signout").addEventListener("click", function (e) {
-      e.preventDefault();
-      fetch("/api/logout", { method: "POST" }).finally(function () {
-        window.location.href = "login.html";
+    // ---------- Sign-in state ----------
+    (function () {
+      var signinLink = document.getElementById("nav-signin");
+      var authedLinks = document.querySelectorAll(".nav-authed");
+      var signoutLink = document.getElementById("nav-signout");
+      signoutLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        fetch("/api/logout", { method: "POST" }).finally(function () {
+          window.location.href = "login.html";
+        });
       });
-    });
+      fetch("/api/session")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.signedIn) {
+            signinLink.hidden = true;
+            authedLinks.forEach(function (el) { el.hidden = false; });
+          }
+        })
+        .catch(function () {
+          /* api/session unreachable (e.g. static-only local preview) — stay
+             signed-out, same graceful fallback as the homepage. */
+        });
+    })();
 
-    // ---------- Auth gate ----------
-    fetch("/api/session")
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (!data.signedIn) {
-          window.location.replace("login.html");
-          return;
+    // ---------- Work section (#work-grid) ----------
+    // Renders from work-data.js's MayaWork.WORK_PROJECTS so this grid and
+    // case-study.html's detail pages never drift out of sync — this is the
+    // one place these cards are built, not hand-authored markup.
+    (function () {
+      var grid = document.getElementById("work-grid");
+      if (!grid || !window.MayaWork) return;
+
+      function el(tag, className, text) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+      }
+
+      var SVG_NS = "http://www.w3.org/2000/svg";
+      function svgEl(tag, attrs) {
+        var node = document.createElementNS(SVG_NS, tag);
+        Object.keys(attrs || {}).forEach(function (key) {
+          node.setAttribute(key, attrs[key]);
+        });
+        return node;
+      }
+      function seedFromString(str) {
+        var hash = 0;
+        var s = String(str || "");
+        for (var i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
+        return hash;
+      }
+      function renderThumb(project) {
+        var wrap = el("div", "work-card-thumb");
+        wrap.setAttribute("role", "img");
+        wrap.setAttribute("aria-label", project.title);
+        if (project.thumbnail && project.thumbnail.src) {
+          var img = document.createElement("img");
+          img.src = project.thumbnail.src;
+          img.alt = "";
+          img.style.width = "100%";
+          img.style.height = "100%";
+          img.style.objectFit = "cover";
+          wrap.appendChild(img);
+          return wrap;
         }
-        mainEl.hidden = false;
-      })
-      .catch(function () {
-        window.location.replace("login.html");
-      });
+        var seed = seedFromString(project.slug);
+        var svg = svgEl("svg", { viewBox: "0 0 320 200", preserveAspectRatio: "xMidYMid slice" });
+        var gradId = "work-grad-" + (seed % 100000);
+        var defs = svgEl("defs", {});
+        var grad = svgEl("linearGradient", { id: gradId, x1: "0%", y1: "0%", x2: "100%", y2: "100%" });
+        grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": "var(--color-surface)" }));
+        grad.appendChild(svgEl("stop", { offset: "100%", "stop-color": "var(--color-bg)" }));
+        defs.appendChild(grad);
+        svg.appendChild(defs);
+        svg.appendChild(svgEl("rect", { x: 0, y: 0, width: 320, height: 200, fill: "url(#" + gradId + ")" }));
+        svg.appendChild(svgEl("circle", {
+          cx: 40 + (seed % 220), cy: 30 + ((seed >>> 4) % 140), r: 40 + ((seed >>> 8) % 60),
+          fill: "var(--color-accent)", opacity: "0.16",
+        }));
+        svg.appendChild(svgEl("circle", {
+          cx: 60 + ((seed >>> 12) % 220), cy: 40 + ((seed >>> 16) % 140), r: 30 + ((seed >>> 20) % 50),
+          fill: "var(--color-accent-3)", opacity: "0.18",
+        }));
+        wrap.appendChild(svg);
+        return wrap;
+      }
+
+      function renderCards() {
+        var t = translations[document.documentElement.lang] || translations.en;
+        var projects = window.MayaWork.getPublishedWorkProjects();
+        grid.textContent = "";
+        projects.forEach(function (project, index) {
+          var card = el("article", "card surface work-card");
+          if (project.featured && index === 0) card.classList.add("work-card--featured", "work-card--first");
+
+          card.appendChild(renderThumb(project));
+
+          var body = el("div", "work-card-body");
+          var badges = el("div", "work-card-badges");
+          if (project.draft) badges.appendChild(el("span", "work-badge", t.work_draft_badge));
+          if (project.confidential) badges.appendChild(el("span", "work-badge", t.work_confidential_badge));
+          if (badges.children.length) body.appendChild(badges);
+
+          var heading = el("h3");
+          var link = document.createElement("a");
+          link.className = "work-card-link";
+          link.href = "/work/" + project.slug;
+          link.textContent = project.title;
+          heading.appendChild(link);
+          body.appendChild(heading);
+
+          body.appendChild(el("p", null, project.summary));
+
+          if (project.role || project.organization) {
+            var meta = el("div", "work-meta");
+            if (project.role) {
+              var roleLine = el("span");
+              roleLine.appendChild(el("strong", null, project.role));
+              meta.appendChild(roleLine);
+            }
+            if (project.organization) meta.appendChild(el("span", null, project.organization));
+            body.appendChild(meta);
+          }
+
+          if (project.tags && project.tags.length) {
+            var tags = el("div", "work-tags");
+            project.tags.forEach(function (tag) {
+              tags.appendChild(el("span", "work-tag", tag));
+            });
+            body.appendChild(tags);
+          }
+
+          card.appendChild(body);
+          grid.appendChild(card);
+        });
+      }
+
+      renderCards();
+      document.addEventListener("app:languagechange", renderCards);
+    })();
   </script>
   <script src="footer-widget.js"></script>
 </body>
