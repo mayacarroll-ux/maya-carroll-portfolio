@@ -80,15 +80,36 @@
       letter-spacing: -0.01em;
       background: var(--color-bg);
       color: var(--color-text);
-      line-height: 1.55;
+      line-height: 1.6;
     }
     :focus-visible {
       outline: 2px solid var(--focus-ring);
       outline-offset: 2px;
     }
+    .skip-link {
+      position: absolute;
+      top: -3rem;
+      left: 1rem;
+      z-index: 100;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: top 0.15s ease;
+    }
+    .skip-link:focus {
+      top: 0.75rem;
+    }
     main {
       flex: 1 0 auto;
       padding-bottom: 4rem;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
     }
     h1, h2, h3 {
       font-family: var(--font-primary);
@@ -97,26 +118,38 @@
     }
     h1 {
       font-size: clamp(1.9rem, 4vw, 2.6rem);
-      line-height: 1.05;
+      line-height: 1.08;
       letter-spacing: -0.03em;
     }
     h2 {
-      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-size: clamp(1.35rem, 2.8vw, 1.7rem);
       letter-spacing: -0.02em;
+    }
+    h3 {
+      font-size: 1.02rem;
     }
     p {
       color: var(--color-text-secondary);
+      margin: 0;
     }
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
+    a {
+      color: inherit;
+    }
+    ul, ol {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      list-style: none;
     }
 
-    /* ==================== Header (same structure as about.html) ====================
-       Root-relative asset/link paths throughout this file — this page is
-       served at /work/:slug via vercel.json's rewrite, so any relative
-       path would resolve against /work/ instead of the site root. */
+    /* ==================== Header (same as index.html) ====================
+       Kept byte-identical in structure across pages on purpose so it
+       doesn't drift. No #city-strip / animated background here — this is
+       a content page, same footprint as about.html/dashboard.html. Root-
+       relative asset/link paths throughout this file — this page is served
+       at /work/:slug via vercel.json's rewrite, so any relative path would
+       resolve against /work/ instead of the site root. */
     #topbar {
       position: sticky;
       top: 0;
@@ -246,6 +279,12 @@
     #theme-label {
       font-weight: 600;
     }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
     #lang-switcher {
       position: relative;
     }
@@ -261,7 +300,9 @@
       position: absolute;
       top: calc(100% + 0.4rem);
       right: 0;
-      min-width: 100%;
+      min-width: 170px;
+      max-height: 60vh;
+      overflow-y: auto;
       list-style: none;
       margin: 0;
       padding: 0.3rem;
@@ -277,42 +318,35 @@
     #lang-switcher[data-open="true"] #lang-menu {
       display: flex;
     }
+    #lang-menu li.menu-heading {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-secondary);
+      padding: 0.4rem 0.6rem 0.2rem;
+    }
     #lang-menu li button {
       width: 100%;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: inherit;
+      font-size: 0.88rem;
       background: transparent;
       color: var(--color-text);
       border: none;
-      border-radius: 5px;
-      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      padding: 0.5rem 0.6rem;
       cursor: pointer;
       text-align: left;
-      white-space: nowrap;
       min-height: 40px;
-      transition: background 0.15s ease;
     }
-    #lang-menu li button:hover {
+    #lang-menu li button:hover,
+    #lang-menu li button:focus-visible {
       background: var(--color-bg);
     }
     #lang-menu li button[aria-current="true"] {
-      background: var(--color-bg);
-      box-shadow: inset 2px 0 0 var(--color-accent);
-    }
-    .flag {
-      font-size: 1.1rem;
-    }
-    .globe {
-      font-size: 1rem;
-    }
-    .menu-heading {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-text-secondary);
-      padding: 0.3rem 0.6rem 0.4rem;
+      color: var(--color-accent);
+      font-weight: 700;
     }
     #menu-toggle {
       display: none;
@@ -320,15 +354,11 @@
       justify-content: center;
       width: 44px;
       height: 44px;
-      flex-shrink: 0;
       background: var(--color-surface);
-      color: var(--color-text);
       border: 1px solid var(--color-border);
       border-radius: 8px;
       cursor: pointer;
-    }
-    #menu-toggle:hover {
-      border-color: var(--color-accent);
+      flex-shrink: 0;
     }
     .menu-icon {
       display: flex;
@@ -339,40 +369,19 @@
     .menu-icon span {
       display: block;
       height: 2px;
-      border-radius: 1px;
-      background: currentColor;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) {
-      transform: translateY(6px) rotate(45deg);
-    }
-    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) {
-      opacity: 0;
-    }
-    #menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) {
-      transform: translateY(-6px) rotate(-45deg);
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .menu-icon span {
-        transition: none;
-      }
+      background: var(--color-text);
+      border-radius: 2px;
     }
     @media (max-width: 959px) {
-      #primary-nav,
-      #account-nav,
-      #header-primary > #preferences {
-        display: none;
-      }
       #menu-toggle {
         display: flex;
-        margin-left: auto;
       }
     }
     #mobile-menu-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.5);
-      z-index: 40;
+      z-index: 29;
     }
     #mobile-menu-backdrop[hidden] {
       display: none;
@@ -382,15 +391,15 @@
       top: 0;
       right: 0;
       bottom: 0;
-      width: min(320px, 85vw);
-      background: var(--color-surface);
+      width: min(340px, 88vw);
+      background: var(--color-bg);
       border-left: 1px solid var(--color-border);
-      z-index: 50;
+      z-index: 30;
+      overflow-y: auto;
+      padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      padding: 1.25rem;
-      overflow-y: auto;
-      box-shadow: var(--shadow-elevated);
+      gap: 1.5rem;
     }
     #mobile-menu[hidden] {
       display: none;
@@ -399,94 +408,522 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1.25rem;
     }
     #mobile-menu-title {
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: 1.1rem;
+    }
+    #mobile-menu-close {
+      background: transparent;
+      border: none;
+      color: var(--color-text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+    }
+    .menu-heading {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-secondary);
+      margin: 0 0 0.6rem;
+    }
+    #mobile-menu-nav-slot a,
+    #mobile-menu-account-slot a {
+      display: block;
+      padding: 0.6rem 0;
+      color: var(--color-text);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid var(--color-border);
+    }
+    #mobile-menu-prefs-slot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    /* ==================== Reading progress ==================== */
+    #cs-progress-track {
+      position: sticky;
+      top: 0;
+      z-index: 19;
+      height: 3px;
+      background: transparent;
+    }
+    #cs-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--color-accent);
+      transition: width 0.1s linear;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #cs-progress-bar {
+        transition: none;
+      }
+    }
+
+    /* ==================== Case-study hero ==================== */
+    .cs-hero {
+      padding: clamp(1.75rem, 5vw, 3rem) 0 clamp(1.5rem, 4vw, 2rem);
+    }
+    .cs-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+    }
+    .cs-back-link:hover,
+    .cs-back-link:focus-visible {
+      color: var(--color-accent);
+    }
+    .cs-hero-top-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .cs-badge,
+    .cs-industry-pill,
+    .cs-reading-time {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 999px;
+      padding: 0.3rem 0.7rem;
+    }
+    .cs-badge {
+      color: var(--color-text-secondary);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+    }
+    .cs-industry-pill {
+      color: var(--color-bg);
+      background: var(--color-accent);
+      border: 1px solid var(--color-accent);
+    }
+    .cs-reading-time {
+      color: var(--color-text-secondary);
+      background: transparent;
+      border: 1px dashed var(--color-border);
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: 600;
+    }
+    .cs-title {
+      margin-bottom: 0.85rem;
+    }
+    .cs-lede {
+      font-size: 1.1rem;
+      color: var(--color-text);
+      max-width: 62ch;
+      margin-bottom: 1.75rem;
+    }
+    .cs-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1.25rem;
+      margin: 0 0 1.75rem;
+      padding: 1.25rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+    }
+    .cs-meta-item dt {
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-text-secondary);
+      margin: 0 0 0.3rem;
     }
-    #mobile-menu-close {
-      width: 44px;
-      height: 44px;
+    .cs-meta-item dd {
+      margin: 0;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .cs-hero-media {
+      margin-bottom: 0.5rem;
+    }
+    .cs-hero-media figcaption {
+      margin-top: 0.6rem;
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      text-align: center;
+    }
+
+    /* ==================== Section rhythm ==================== */
+    .cs-section {
+      padding: clamp(1.75rem, 4vw, 2.5rem) 0;
+      border-top: 1px solid var(--color-border);
+    }
+    .cs-section:first-of-type {
+      border-top: none;
+    }
+    .cs-section h2 {
+      margin-bottom: 0.4rem;
+    }
+    .cs-expandable summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .cs-expandable summary::-webkit-details-marker {
+      display: none;
+    }
+    .cs-expandable summary::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 6px solid var(--color-text-secondary);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      transition: transform 0.15s ease;
+      flex-shrink: 0;
+    }
+    .cs-expandable[open] summary::before {
+      transform: rotate(90deg);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cs-expandable summary::before {
+        transition: none;
+      }
+    }
+    .cs-section-kicker {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+    .cs-section-body {
+      margin-top: 1rem;
+    }
+    .cs-richtext p {
+      font-size: 1rem;
+      white-space: pre-line;
+    }
+
+    /* ==================== My Role ==================== */
+    .cs-role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    .cs-role-item h3 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.4rem;
+    }
+    .cs-role-item ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+    .cs-role-item li,
+    .cs-role-item p {
+      font-size: 0.92rem;
+      color: var(--color-text-secondary);
+      list-style: disc;
+    }
+
+    /* ==================== Metrics grid (Success Metrics / Business Impact) ==================== */
+    .cs-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .cs-metric-tile {
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .cs-metric-value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--color-text);
+    }
+    .cs-metric-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .cs-metric-context {
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ==================== Card grid: constraints / decisions / stakeholders ==================== */
+    .cs-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .cs-info-card {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .cs-info-card h3 {
+      font-size: 1rem;
+    }
+    .cs-info-card p {
+      font-size: 0.92rem;
+    }
+    .cs-decision-card dl {
+      margin: 0.4rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .cs-decision-card dt {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.15rem;
+    }
+    .cs-decision-card dd {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--color-text);
+    }
+    .cs-stakeholder-card {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+    .cs-stakeholder-icon {
+      flex-shrink: 0;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
-      line-height: 1;
-      background: transparent;
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-      color: var(--color-text);
-      cursor: pointer;
-    }
-    #mobile-menu-close:hover {
-      border-color: var(--color-accent);
-    }
-    #mobile-menu-nav-slot #primary-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      font-size: 1.05rem;
-      margin: 0 0 1.5rem;
-    }
-    #mobile-menu-nav-slot #primary-nav a {
-      padding: 0.8rem 0.2rem;
-      border-bottom: 1px solid var(--color-border);
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-    }
-    #mobile-menu-account-slot #account-nav {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-      font-size: 1.05rem;
-      margin: 0 0 1.5rem;
-    }
-    #mobile-menu-account-slot #account-nav a {
-      padding: 0.8rem 0.2rem;
-      border-bottom: 1px solid var(--color-border);
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      opacity: 0.75;
-    }
-    #mobile-menu-account-slot #account-nav a[hidden] {
-      display: none;
-    }
-    #mobile-menu-account .menu-heading,
-    #mobile-menu-prefs .menu-heading {
-      padding: 0 0 0.6rem;
-    }
-    #mobile-menu-prefs-slot #preferences {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.6rem;
-    }
-    #mobile-menu-prefs-slot #theme-toggle,
-    #mobile-menu-prefs-slot #lang-toggle {
-      width: 100%;
-      justify-content: flex-start;
-      font-size: 0.92rem;
-    }
-    #mobile-menu-prefs-slot #lang-menu {
-      position: static;
-      margin-top: 0.4rem;
-      box-shadow: none;
-      display: flex;
-    }
-    #mobile-menu-prefs-slot #lang-switcher[data-open="false"] #lang-menu {
-      display: none;
-    }
-    body.menu-open {
-      overflow: hidden;
+      font-size: 1rem;
     }
 
+    /* ==================== Timeline ==================== */
+    .cs-timeline-list {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-left: 2px solid var(--color-border);
+      padding-left: 1.25rem;
+    }
+    .cs-timeline-step {
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+    .cs-timeline-step:last-child {
+      padding-bottom: 0;
+    }
+    .cs-timeline-step::before {
+      content: "";
+      position: absolute;
+      left: -1.56rem;
+      top: 0.35rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      border: 2px solid var(--color-bg);
+    }
+    .cs-timeline-step h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+    .cs-timeline-step p {
+      font-size: 0.88rem;
+    }
+
+    /* ==================== Design evolution: side-by-side / gallery / before-after ==================== */
+    .cs-sidebyside-grid,
+    .cs-gallery-grid,
+    .cs-beforeafter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    .cs-sidebyside-col {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .cs-sidebyside-col h3 {
+      font-size: 0.88rem;
+      margin-bottom: 0.5rem;
+    }
+    .cs-sidebyside-col p {
+      font-size: 0.92rem;
+    }
+    .cs-beforeafter-col figcaption {
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* ==================== Diagram placeholder (consolidated industry component) ==================== */
+    .cs-diagram-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-align: center;
+      padding: 2.25rem 1.25rem;
+      border: 1.5px dashed var(--color-border);
+      border-radius: 12px;
+      background: var(--color-surface);
+      min-height: 140px;
+    }
+    .cs-diagram-placeholder .cs-diagram-icon {
+      font-size: 1.5rem;
+      opacity: 0.6;
+    }
+    .cs-diagram-placeholder h3 {
+      font-size: 0.95rem;
+    }
+    .cs-diagram-placeholder p {
+      font-size: 0.8rem;
+    }
+    .cs-industry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* ==================== Callout ==================== */
+    .cs-callout {
+      display: flex;
+      gap: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      border-left: 3px solid var(--color-accent);
+      background: var(--color-surface);
+      border-radius: 0 12px 12px 0;
+      margin-top: 1rem;
+    }
+    .cs-callout-icon {
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+    .cs-callout p {
+      font-size: 0.92rem;
+      margin: 0;
+    }
+    .cs-confidentiality-callout {
+      margin: 1.5rem 0 0;
+    }
+
+    /* ==================== Quote ==================== */
+    .cs-quote {
+      margin: 1rem 0 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--color-surface);
+      border-left: 3px solid var(--color-accent-3);
+      border-radius: 0 12px 12px 0;
+    }
+    .cs-quote p {
+      font-size: 1.05rem;
+      color: var(--color-text);
+      font-style: italic;
+      margin: 0 0 0.5rem;
+    }
+    .cs-quote cite {
+      font-size: 0.85rem;
+      font-style: normal;
+      color: var(--color-text-secondary);
+    }
+
+    /* ==================== Lessons / reflection ==================== */
+    .cs-reflection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    .cs-reflection-item h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.4rem;
+    }
+    .cs-reflection-item p {
+      font-size: 0.95rem;
+      color: var(--color-text);
+    }
+
+    /* ==================== Media placeholder (used by gallery/before-after/hero) ==================== */
+    .media-placeholder {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+    .media-placeholder svg {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+    }
+    .media-placeholder-label {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+    }
+
+    /* ==================== CTA ==================== */
+    .cs-cta {
+      text-align: center;
+      padding: clamp(2rem, 5vw, 3rem) 0;
+    }
+    .cs-cta h2 {
+      margin-bottom: 1.25rem;
+    }
+    .cs-cta .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -511,28 +948,21 @@
       color: var(--color-bg);
     }
     :root[data-theme="light"] .btn-primary {
-      color: var(--color-surface);
-      background: #1d4e89;
+      color: #fff;
     }
-    .btn-primary:hover {
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
       box-shadow: var(--glow-hover);
-    }
-    :root[data-theme="light"] .btn-primary:hover {
-      box-shadow: 0 0 0 1px rgba(29, 78, 137, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
     }
     .btn-secondary {
       background: var(--color-surface);
       color: var(--color-text);
       border-color: var(--color-border);
     }
-    .btn-secondary:hover {
+    .btn-secondary:hover,
+    .btn-secondary:focus-visible {
       border-color: var(--color-accent);
       box-shadow: var(--glow-hover);
-    }
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
     }
     .surface {
       background: var(--color-surface-translucent);
@@ -542,603 +972,147 @@
       border-radius: 14px;
     }
 
-    footer {
-      text-align: center;
-      font-size: 0.85rem;
-      padding: 0.85rem 1.5rem 1rem;
-      border-top: 1px solid var(--color-border);
-      position: sticky;
-      bottom: 0;
-      z-index: 10;
-      background: var(--color-surface-translucent);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-    footer .copyright {
-      margin: 0;
-      font-size: 0.75rem;
-      font-weight: 500;
-      opacity: 0.8;
-      color: var(--color-text-secondary);
-      white-space: nowrap;
-    }
-    #city-strip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.4rem 1.5rem;
-      padding-bottom: 0.55rem;
-      margin-bottom: 0.45rem;
-      font-size: 0.76rem;
-      color: var(--color-text-secondary);
-      width: 100%;
-      position: relative;
-    }
-    #city-strip::after {
-      content: "";
-      position: absolute;
-      left: -1.5rem;
-      right: -1.5rem;
-      bottom: 0;
-      border-bottom: 1px solid var(--color-border);
-    }
-    .city-status {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
-      white-space: nowrap;
-      min-width: 0;
-    }
-    .city-status .city-name {
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-size: 0.68rem;
-      color: var(--color-text);
-    }
-    .city-status .sep {
-      opacity: 0.45;
-    }
-    .city-status time {
-      font-variant-numeric: tabular-nums;
-    }
-    #currency-status {
-      display: flex;
-      align-items: baseline;
-      gap: 0.35rem;
-      white-space: nowrap;
-    }
-    #currency-status .currency-icon {
-      font-size: 0.95em;
-    }
-    #currency-rate {
-      font-variant-numeric: tabular-nums;
-      color: var(--color-accent-2-text, var(--color-text-secondary));
-    }
-    :root[data-theme="dark"] #currency-rate {
-      color: var(--color-accent-2);
-      text-shadow: var(--status-glow);
-    }
-    .city-status .weather {
-      display: inline-block;
-      min-width: 2.6em;
-      color: var(--color-accent-2-text, var(--color-text-secondary));
-      white-space: normal;
-    }
-    .city-status .weather-icon {
-      font-size: 0.95em;
-      filter: grayscale(0.15);
-    }
-    .city-status .feels-like {
-      font-size: 0.85em;
-      opacity: 0.7;
-      font-weight: 400;
-    }
-    :root[data-theme="dark"] .city-status .weather {
-      color: var(--color-accent-2);
-      text-shadow: var(--status-glow);
-    }
-    .city-status .weather.is-stale {
-      opacity: 0.65;
-      font-style: italic;
-    }
-    .city-status .weather.is-unavailable {
-      font-style: italic;
-    }
-    .city-status .uv {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.32em;
-      font-size: 0.82em;
-      font-weight: 500;
-      color: var(--color-text-secondary);
-      white-space: normal;
-    }
-    .city-status .uv-dot {
-      width: 0.55em;
-      height: 0.55em;
-      min-width: 0.55em;
-      border-radius: 50%;
-    }
-    .city-status .uv-moderate .uv-dot {
-      background: #e8c25a;
-    }
-    .city-status .uv-high .uv-dot {
-      background: #ff9d4d;
-    }
-    .city-status .uv-veryhigh .uv-dot {
-      background: #ff5c7a;
-    }
-    .city-status .uv-extreme .uv-dot {
-      background: #b073ff;
-    }
-    .city-status .uv.uv-elevated {
-      font-weight: 700;
-      color: var(--color-warning);
-      border: 1px solid var(--color-warning);
-      border-radius: 999px;
-      padding: 0.05rem 0.55rem 0.05rem 0.4rem;
-    }
-    .severe-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3em;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--color-warning);
-      border: 1px solid var(--color-warning);
-      border-radius: 999px;
-      padding: 0.1rem 0.55rem;
-      white-space: normal;
-    }
-    .severe-badge:empty {
-      display: none;
-      padding: 0;
-      border: 0;
-    }
-    .severe-badge a {
-      color: inherit;
-      text-decoration: none;
-    }
-    .severe-badge a:hover,
-    .severe-badge a:focus-visible {
-      text-decoration: underline;
-    }
-    @media (max-width: 599px) {
-      #city-strip {
-        display: block;
-        position: relative;
-      }
-      #city-strip > * {
-        display: none;
-      }
-      #city-strip > *.is-active {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        animation: city-strip-fade 0.6s ease;
-      }
-      footer {
-        font-size: 0.76rem;
-      }
-      footer p {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.15rem;
-      }
-    }
-    @media (max-width: 599px) and (prefers-reduced-motion: reduce) {
-      #city-strip > *.is-active {
-        animation: none;
-      }
-    }
-    @keyframes city-strip-fade {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    /* ==================== Case study — not-found state ==================== */
-    #cs-not-found[hidden],
-    #cs-content[hidden] {
-      display: none;
-    }
-    .cs-not-found-inner {
-      padding: clamp(3rem, 8vw, 5rem) 1.5rem;
-      text-align: center;
-    }
-    .cs-not-found-inner p {
-      max-width: 32rem;
-      margin: 0.75rem auto 1.5rem;
-    }
-
-    /* ==================== Case study — hero ==================== */
-    #cs-hero {
-      padding: clamp(2rem, 5vw, 3rem) 0 clamp(1.5rem, 4vw, 2.5rem);
-    }
-    .cs-back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--color-text-secondary);
-      text-decoration: none;
-      margin-bottom: 1.5rem;
-    }
-    .cs-back-link:hover,
-    .cs-back-link:focus-visible {
-      color: var(--color-accent);
-    }
-    .cs-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 0.9rem;
-    }
-    .cs-badge {
-      display: inline-flex;
-      align-items: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--color-text-secondary);
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 999px;
-      padding: 0.3rem 0.75rem;
-    }
-    #cs-title {
-      margin-bottom: 0.85rem;
-    }
-    .cs-summary {
-      font-size: 1.08rem;
-      max-width: 42rem;
-      margin: 0 0 1.5rem;
-    }
-    .cs-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      margin: 0 0 1.75rem;
-      padding: 0;
-    }
-    .cs-meta-item {
-      min-width: 7rem;
-    }
-    .cs-meta-item dt {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--color-text-secondary);
-      margin-bottom: 0.15rem;
-    }
-    .cs-meta-item dd {
-      margin: 0;
-      font-weight: 600;
-      color: var(--color-text);
-      font-size: 0.92rem;
-    }
-    .cs-hero-media {
-      margin-top: 0.5rem;
-    }
-
-    /* ==================== Case study — placeholder media tile ==================== */
-    .media-placeholder {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--color-border);
-      background: var(--color-surface);
-    }
-    .media-placeholder svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    .media-placeholder .media-placeholder-label {
-      position: absolute;
-      bottom: 0.75rem;
-      left: 0.9rem;
-      font-size: 0.72rem;
-      color: var(--color-text-secondary);
-      background: var(--color-surface-translucent);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid var(--color-border);
-    }
-
-    /* ==================== Case study — content sections ==================== */
-    .cs-section-block {
-      padding: clamp(1.75rem, 4vw, 2.5rem) 0;
-      border-top: 1px solid var(--color-border);
-    }
-    .cs-section-block h2 {
-      margin-bottom: 1rem;
-    }
-    .cs-exec-grid {
+    /* ==================== Prev/Next + Related Work ==================== */
+    .cs-adjacent-nav {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-    }
-    .cs-exec-item h3 {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-text-secondary);
-      margin-bottom: 0.4rem;
-    }
-    .cs-exec-item p {
-      margin: 0;
-      font-size: 0.95rem;
-    }
-    .cs-role-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.25rem;
-    }
-    .cs-role-item h3 {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-text-secondary);
-      margin-bottom: 0.4rem;
-    }
-    .cs-role-item ul {
-      margin: 0;
-      padding-left: 1.1rem;
-    }
-    .cs-role-item li,
-    .cs-role-item p {
-      font-size: 0.92rem;
-      color: var(--color-text-secondary);
-    }
-
-    .cs-section {
-      margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
-    }
-    .cs-section:last-child {
-      margin-bottom: 0;
-    }
-    .cs-section h2 {
-      margin-bottom: 0.85rem;
-    }
-    .cs-richtext p {
-      font-size: 0.98rem;
-      white-space: pre-line;
-    }
-    .cs-sidebyside-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-    }
-    .cs-sidebyside-col {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 12px;
-      padding: 1.25rem;
-    }
-    .cs-sidebyside-col h3 {
-      font-size: 0.85rem;
-      margin-bottom: 0.5rem;
-    }
-    .cs-sidebyside-col p {
-      margin: 0;
-      font-size: 0.92rem;
-    }
-    .cs-findings-list {
-      margin: 0;
-      padding-left: 1.25rem;
-    }
-    .cs-findings-list li {
-      color: var(--color-text-secondary);
-      margin-bottom: 0.5rem;
-      font-size: 0.95rem;
-    }
-    .cs-metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1rem;
-    }
-    .cs-metric-tile {
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-    .cs-metric-value {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--color-text);
-      letter-spacing: -0.02em;
-    }
-    .cs-metric-label {
-      font-size: 0.82rem;
-      color: var(--color-text-secondary);
-    }
-    .cs-metric-context {
-      font-size: 0.76rem;
-      color: var(--color-text-secondary);
-      opacity: 0.85;
-    }
-    .cs-quote {
-      margin: 0;
-      padding: 1.5rem 1.75rem;
-      border-left: 3px solid var(--color-accent);
-      background: var(--color-surface);
-      border-radius: 0 12px 12px 0;
-    }
-    .cs-quote p {
-      margin: 0 0 0.6rem;
-      font-size: 1.05rem;
-      color: var(--color-text);
-      font-style: italic;
-    }
-    .cs-quote cite {
-      font-size: 0.82rem;
-      color: var(--color-text-secondary);
-      font-style: normal;
-    }
-    .cs-decision {
-      padding: 1.5rem;
-    }
-    .cs-decision p {
-      margin: 0 0 0.6rem;
-      font-size: 0.94rem;
-    }
-    .cs-decision p:last-child {
-      margin-bottom: 0;
-    }
-    .cs-decision-context::before {
-      content: "Context: ";
-      font-weight: 700;
-      color: var(--color-text);
-    }
-    .cs-decision-choice::before {
-      content: "Decision: ";
-      font-weight: 700;
-      color: var(--color-text);
-    }
-    .cs-decision-rationale::before {
-      content: "Why: ";
-      font-weight: 700;
-      color: var(--color-text);
-    }
-    .cs-beforeafter-grid,
-    .cs-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-    }
-    .cs-beforeafter-col {
-      margin: 0;
-    }
-    .cs-beforeafter-col figcaption {
-      margin-top: 0.5rem;
-      font-size: 0.85rem;
-      color: var(--color-text-secondary);
-      text-align: center;
-    }
-    .cs-confidential {
-      padding: 1.5rem;
-    }
-    .cs-confidential h2 {
-      font-size: 1.1rem;
-      margin-bottom: 0.6rem;
-    }
-    .cs-confidential p {
-      margin: 0;
-      font-size: 0.92rem;
-    }
-
-    #cs-reflection {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-    }
-    .cs-reflection-item h3 {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-text-secondary);
-      margin-bottom: 0.4rem;
-    }
-    .cs-reflection-item p {
-      margin: 0;
-      font-size: 0.92rem;
-    }
-
-    .cs-cta {
-      text-align: center;
-    }
-    .cs-cta h2 {
-      margin-bottom: 1.25rem;
-    }
-    .cs-cta .btn-row {
-      justify-content: center;
-    }
-
-    .cs-adjacent {
-      display: flex;
-      justify-content: space-between;
-      gap: 1.25rem;
-      padding-top: clamp(1.75rem, 4vw, 2.5rem);
-      flex-wrap: wrap;
+      padding: 2rem 0;
+      border-top: 1px solid var(--color-border);
     }
     .cs-adjacent-link {
-      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 1.25rem;
       text-decoration: none;
-      color: var(--color-text);
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 12px;
-      padding: 1.1rem 1.25rem;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      color: inherit;
     }
-    .cs-adjacent-link:hover,
-    .cs-adjacent-link:focus-visible {
+    .cs-adjacent-link.next {
+      text-align: right;
+      align-items: flex-end;
+    }
+    .cs-adjacent-kicker {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+    }
+    .cs-adjacent-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .cs-adjacent-link:hover .cs-adjacent-title,
+    .cs-adjacent-link:focus-visible .cs-adjacent-title {
+      color: var(--color-accent);
+    }
+    .cs-related-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 0;
+    }
+    .cs-related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .cs-related-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .cs-related-card .cs-industry-pill {
+      align-self: flex-start;
+    }
+    .cs-related-card h3 {
+      font-size: 1rem;
+    }
+    .cs-related-card p {
+      font-size: 0.85rem;
+    }
+    .cs-related-card:hover,
+    .cs-related-card:focus-visible {
       border-color: var(--color-accent);
       box-shadow: var(--glow-hover);
     }
-    .cs-adjacent-link.is-next {
-      text-align: right;
-    }
-    .cs-adjacent-label {
-      display: block;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+
+    /* ==================== Footer (same as index.html) ==================== */
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: 1.5rem 0;
+      text-align: center;
+      font-size: 0.85rem;
       color: var(--color-text-secondary);
-      margin-bottom: 0.3rem;
     }
-    .cs-adjacent-title {
-      display: block;
-      font-weight: 700;
-      font-size: 0.95rem;
+    footer #city-strip {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+    }
+    footer .city-status {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    footer .severe-badge:empty {
+      display: none;
+    }
+    footer #currency-status {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    @media (max-width: 767px) {
+      .cs-adjacent-link.next {
+        text-align: left;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#cs-main-content">Skip to content</a>
+
+  <div id="cs-progress-track" aria-hidden="true">
+    <div id="cs-progress-bar"></div>
+  </div>
+
   <header id="topbar">
     <div id="header-primary">
       <a id="brand" href="/index.html" aria-label="Maya Carroll — Home">
         <img id="nav-avatar" src="/avatar.jpg" alt="" />
         <span id="site-title">Maya Carroll</span>
       </a>
-
       <nav id="primary-nav" aria-label="Primary">
         <a href="/about.html" data-i18n="nav_about">About</a>
         <a href="/work.html" aria-current="page" data-i18n="nav_work">Work</a>
       </nav>
-
       <div id="account-nav" aria-label="Account">
         <a id="nav-signin" href="/login.html" data-i18n="nav_signin">Sign in</a>
         <a class="nav-authed" id="nav-calendar" href="/calendar.html" data-i18n="nav_calendar" hidden>Calendar</a>
         <a class="nav-authed" id="nav-dashboard" href="/dashboard.html" data-i18n="nav_dashboard" hidden>Dashboard</a>
         <a class="nav-authed" id="nav-signout" href="/login.html" data-i18n="nav_signout" hidden>Sign out</a>
       </div>
-
       <div id="preferences" aria-label="Preferences">
         <button type="button" id="theme-toggle" aria-label="Switch to light theme">
           <span id="theme-icon" aria-hidden="true">🌙</span>
           <span id="theme-label">Dark</span>
         </button>
-
         <div id="lang-switcher" data-open="false">
           <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language: English">
-            <span class="globe" aria-hidden="true">🌐</span>
+            <span aria-hidden="true">🌐</span>
             <span id="lang-toggle-label">EN</span>
-            <span class="chevron" aria-hidden="true">▼</span>
+            <span class="chevron" aria-hidden="true">▾</span>
           </button>
           <ul id="lang-menu" role="listbox" aria-label="Select language">
             <li class="menu-heading" aria-hidden="true">Language</li>
@@ -1157,7 +1131,6 @@
           </ul>
         </div>
       </div>
-
       <button type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
         <span class="menu-icon" aria-hidden="true">
           <span></span><span></span><span></span>
@@ -1183,72 +1156,46 @@
     </div>
   </div>
 
-  <main>
-    <div id="cs-not-found" hidden>
-      <div class="container cs-not-found-inner">
-        <h1 data-i18n="cs_not_found_title">Case study not found</h1>
-        <p data-i18n="cs_not_found_body">This project isn't published yet, or the link may be out of date.</p>
-        <a class="btn btn-primary" href="/work.html" data-i18n="cs_back_to_work">Back to all work</a>
+  <main id="cs-main-content">
+    <div id="cs-not-found" class="container" hidden>
+      <div class="cs-hero">
+        <h1 id="cs-not-found-title">Case study not found</h1>
+        <p id="cs-not-found-body" style="margin-top:0.75rem;">This project isn't published yet, or the link may be out of date.</p>
+        <p style="margin-top:1.5rem;">
+          <a class="btn btn-primary" id="cs-not-found-back" href="/work.html" data-i18n="cs_back_to_work">&larr; Back to all work</a>
+        </p>
       </div>
     </div>
 
     <div id="cs-content" hidden>
-      <section id="cs-hero">
-        <div class="container">
+      <div class="container">
+        <div class="cs-hero">
           <a class="cs-back-link" href="/work.html" data-i18n="cs_back_to_work">&larr; Back to all work</a>
-          <div id="cs-badges" class="cs-badges"></div>
-          <h1 id="cs-title"></h1>
-          <p id="cs-summary" class="cs-summary"></p>
-          <dl id="cs-meta" class="cs-meta"></dl>
-          <div id="cs-hero-media" class="cs-hero-media"></div>
+          <div class="cs-hero-top-row" id="cs-hero-badges"></div>
+          <h1 id="cs-title" class="cs-title"></h1>
+          <p id="cs-lede" class="cs-lede"></p>
+          <dl class="cs-meta-grid" id="cs-meta"></dl>
+          <figure class="cs-hero-media" id="cs-hero-media"></figure>
+          <div id="cs-confidentiality-callout"></div>
         </div>
-      </section>
 
-      <section class="cs-section-block">
-        <div class="container">
-          <h2 data-i18n="cs_exec_summary">Executive summary</h2>
-          <div id="cs-exec-summary" class="cs-exec-grid"></div>
-        </div>
-      </section>
+        <div id="cs-body"></div>
 
-      <section class="cs-section-block">
-        <div class="container">
-          <h2 data-i18n="cs_role_constraints">Role &amp; constraints</h2>
-          <div id="cs-role-constraints" class="cs-role-grid"></div>
-        </div>
-      </section>
-
-      <section class="cs-section-block">
-        <div class="container">
-          <div id="cs-sections"></div>
-        </div>
-      </section>
-
-      <section class="cs-section-block" id="cs-impact-block">
-        <div class="container">
-          <h2 data-i18n="cs_impact">Impact</h2>
-          <div id="cs-impact" class="cs-metrics-grid"></div>
-        </div>
-      </section>
-
-      <section class="cs-section-block" id="cs-reflection-block">
-        <div class="container">
-          <h2 data-i18n="cs_reflection">Reflection</h2>
-          <div id="cs-reflection"></div>
-        </div>
-      </section>
-
-      <section class="cs-section-block">
-        <div class="container cs-cta">
+        <div class="cs-cta">
           <h2 data-i18n="cs_cta_heading">Interested in working together?</h2>
           <div class="btn-row">
             <a class="btn btn-primary" href="/booking.html" data-i18n="contact_book_call">Book a call</a>
             <a class="btn btn-secondary" href="mailto:hiring@mayacarroll.com" data-i18n="contact_email">Email</a>
           </div>
         </div>
-      </section>
 
-      <nav id="cs-adjacent" class="cs-adjacent container" aria-label="More work"></nav>
+        <nav class="cs-adjacent-nav" id="cs-adjacent-nav" aria-label="More case studies"></nav>
+      </div>
+
+      <div class="cs-related-section">
+        <h2 data-i18n="cs_related_work_heading">Related Work</h2>
+        <div class="cs-related-grid" id="cs-related-grid"></div>
+      </div>
     </div>
   </main>
 
@@ -1302,42 +1249,55 @@
         cs_back_to_work: "← Back to all work",
         cs_not_found_title: "Case study not found",
         cs_not_found_body: "This project isn't published yet, or the link may be out of date.",
-        cs_exec_summary: "Executive summary",
-        cs_role_constraints: "Role & constraints",
-        cs_impact: "Impact",
-        cs_reflection: "Reflection",
-        cs_cta_heading: "Interested in working together?",
         cs_draft_badge: "Draft",
         cs_confidential_badge: "Confidential",
+        cs_org_label: "Organization",
         cs_role_label: "Role",
+        cs_year_label: "Year",
+        cs_timeline_label: "Timeline",
         cs_team_label: "Team",
         cs_responsibilities_label: "Responsibilities",
         cs_platforms_label: "Platforms",
-        cs_timeline_label: "Timeline",
-        cs_org_label: "Organization",
-        cs_year_label: "Year",
-        cs_problem_label: "Problem",
-        cs_contribution_label: "Contribution",
-        cs_solution_label: "Solution",
-        cs_outcome_label: "Outcome",
-        cs_learned_label: "What I learned",
-        cs_change_label: "What I'd change",
-        cs_next_steps_label: "Next steps",
+        cs_cta_heading: "Interested in working together?",
         cs_previous_project: "Previous project",
         cs_next_project: "Next project",
-        cs_heading_challenge: "Challenge",
-        cs_heading_discovery: "Discovery",
-        cs_heading_strategy: "Strategy",
-        cs_heading_exploration: "Exploration",
-        cs_heading_strategy_exploration: "Strategy & exploration",
-        cs_heading_final_solution: "Final solution",
-        cs_heading_confidentiality: "A note on confidentiality",
+        cs_learned_label: "What I learned",
+        cs_change_label: "What I'd change",
         cs_direction_a: "Direction A",
         cs_direction_b: "Direction B",
         cs_before_label: "Before",
         cs_after_label: "After",
         cs_gallery_image_alt: "Gallery image",
         cs_draft_placeholder: "Draft placeholder",
+        cs_heading_confidentiality: "A note on confidentiality",
+        cs_industry_label: "Industry",
+        cs_project_type_label: "Project type",
+        cs_reading_time: "{min} min read",
+        cs_progress_label: "Reading progress",
+        cs_project_summary_heading: "Project Summary",
+        cs_business_context_heading: "Business Context",
+        cs_why_difficult_heading: "Why This Was Difficult",
+        cs_my_role_heading: "My Role",
+        cs_success_metrics_heading: "Success Metrics",
+        cs_constraints_heading: "Major Constraints",
+        cs_decisions_heading: "Key Decisions",
+        cs_decision_context_label: "Context",
+        cs_decision_choice_label: "Decision",
+        cs_decision_rationale_label: "Rationale",
+        cs_design_evolution_heading: "Design Evolution",
+        cs_final_solution_heading: "Final Solution",
+        cs_business_impact_heading: "Business Impact",
+        cs_lessons_learned_heading: "Lessons Learned",
+        cs_next_opportunities_heading: "Next Opportunities",
+        cs_stakeholders_heading: "Stakeholders",
+        cs_research_highlights_heading: "Research Highlights",
+        cs_industry_deep_dive_heading: "Industry Deep-Dive",
+        cs_placeholder_note: "Placeholder — diagram to be added",
+        cs_related_work_heading: "Related Work",
+        industry_enterprise_ai: "Enterprise / Frontier AI",
+        industry_cybersecurity: "Cybersecurity",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Government · Civic · Health · Insurance",
       },
       es: {
         label: "ES",
@@ -1354,45 +1314,58 @@
         contact_book_call: "Agendar una llamada",
         contact_email: "Correo",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
-        cs_back_to_work: "← Volver a todo el trabajo",
+        cs_back_to_work: "← Volver a todos los trabajos",
         cs_not_found_title: "Estudio de caso no encontrado",
         cs_not_found_body: "Este proyecto aún no está publicado, o el enlace puede estar desactualizado.",
-        cs_exec_summary: "Resumen ejecutivo",
-        cs_role_constraints: "Rol y limitaciones",
-        cs_impact: "Impacto",
-        cs_reflection: "Reflexión",
-        cs_cta_heading: "¿Interesado en trabajar juntos?",
         cs_draft_badge: "Borrador",
         cs_confidential_badge: "Confidencial",
+        cs_org_label: "Organización",
         cs_role_label: "Rol",
+        cs_year_label: "Año",
+        cs_timeline_label: "Cronograma",
         cs_team_label: "Equipo",
         cs_responsibilities_label: "Responsabilidades",
         cs_platforms_label: "Plataformas",
-        cs_timeline_label: "Cronología",
-        cs_org_label: "Organización",
-        cs_year_label: "Año",
-        cs_problem_label: "Problema",
-        cs_contribution_label: "Contribución",
-        cs_solution_label: "Solución",
-        cs_outcome_label: "Resultado",
-        cs_learned_label: "Lo que aprendí",
-        cs_change_label: "Lo que cambiaría",
-        cs_next_steps_label: "Próximos pasos",
+        cs_cta_heading: "¿Interesado en trabajar juntos?",
         cs_previous_project: "Proyecto anterior",
-        cs_next_project: "Siguiente proyecto",
-        cs_heading_challenge: "Desafío",
-        cs_heading_discovery: "Descubrimiento",
-        cs_heading_strategy: "Estrategia",
-        cs_heading_exploration: "Exploración",
-        cs_heading_strategy_exploration: "Estrategia y exploración",
-        cs_heading_final_solution: "Solución final",
-        cs_heading_confidentiality: "Una nota sobre confidencialidad",
+        cs_next_project: "Proyecto siguiente",
+        cs_learned_label: "Lo que aprendí",
+        cs_change_label: "Qué cambiaría",
         cs_direction_a: "Dirección A",
         cs_direction_b: "Dirección B",
         cs_before_label: "Antes",
         cs_after_label: "Después",
         cs_gallery_image_alt: "Imagen de la galería",
         cs_draft_placeholder: "Marcador de posición de borrador",
+        cs_heading_confidentiality: "Una nota sobre confidencialidad",
+        cs_industry_label: "Industria",
+        cs_project_type_label: "Tipo de proyecto",
+        cs_reading_time: "{min} min de lectura",
+        cs_progress_label: "Progreso de lectura",
+        cs_project_summary_heading: "Resumen del proyecto",
+        cs_business_context_heading: "Contexto del negocio",
+        cs_why_difficult_heading: "Por qué fue difícil",
+        cs_my_role_heading: "Mi rol",
+        cs_success_metrics_heading: "Métricas de éxito",
+        cs_constraints_heading: "Principales restricciones",
+        cs_decisions_heading: "Decisiones clave",
+        cs_decision_context_label: "Contexto",
+        cs_decision_choice_label: "Decisión",
+        cs_decision_rationale_label: "Justificación",
+        cs_design_evolution_heading: "Evolución del diseño",
+        cs_final_solution_heading: "Solución final",
+        cs_business_impact_heading: "Impacto en el negocio",
+        cs_lessons_learned_heading: "Lecciones aprendidas",
+        cs_next_opportunities_heading: "Próximas oportunidades",
+        cs_stakeholders_heading: "Partes interesadas",
+        cs_research_highlights_heading: "Hallazgos de investigación",
+        cs_industry_deep_dive_heading: "Análisis del sector",
+        cs_placeholder_note: "Marcador de posición: diagrama pendiente",
+        cs_related_work_heading: "Trabajos relacionados",
+        industry_enterprise_ai: "Empresarial / IA de vanguardia",
+        industry_cybersecurity: "Ciberseguridad",
+        industry_fintech: "FinTech / RegTech / Cumplimiento",
+        industry_government: "Gobierno · Cívico · Salud · Seguros",
       },
       fi: {
         label: "FI",
@@ -1410,44 +1383,57 @@
         contact_email: "Sähköposti",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
         cs_back_to_work: "← Takaisin kaikkiin töihin",
-        cs_not_found_title: "Casea ei löytynyt",
+        cs_not_found_title: "Tapaustutkimusta ei löytynyt",
         cs_not_found_body: "Tätä projektia ei ole vielä julkaistu, tai linkki voi olla vanhentunut.",
-        cs_exec_summary: "Yhteenveto",
-        cs_role_constraints: "Rooli ja rajoitteet",
-        cs_impact: "Vaikutus",
-        cs_reflection: "Pohdinta",
-        cs_cta_heading: "Kiinnostaako yhteistyö?",
         cs_draft_badge: "Luonnos",
         cs_confidential_badge: "Luottamuksellinen",
+        cs_org_label: "Organisaatio",
         cs_role_label: "Rooli",
+        cs_year_label: "Vuosi",
+        cs_timeline_label: "Aikataulu",
         cs_team_label: "Tiimi",
         cs_responsibilities_label: "Vastuualueet",
         cs_platforms_label: "Alustat",
-        cs_timeline_label: "Aikataulu",
-        cs_org_label: "Organisaatio",
-        cs_year_label: "Vuosi",
-        cs_problem_label: "Ongelma",
-        cs_contribution_label: "Panos",
-        cs_solution_label: "Ratkaisu",
-        cs_outcome_label: "Lopputulos",
-        cs_learned_label: "Mitä opin",
-        cs_change_label: "Mitä tekisin toisin",
-        cs_next_steps_label: "Seuraavat askeleet",
+        cs_cta_heading: "Kiinnostaako yhteistyö?",
         cs_previous_project: "Edellinen projekti",
         cs_next_project: "Seuraava projekti",
-        cs_heading_challenge: "Haaste",
-        cs_heading_discovery: "Havainnot",
-        cs_heading_strategy: "Strategia",
-        cs_heading_exploration: "Tutkiminen",
-        cs_heading_strategy_exploration: "Strategia ja tutkiminen",
-        cs_heading_final_solution: "Lopullinen ratkaisu",
-        cs_heading_confidentiality: "Huomio luottamuksellisuudesta",
+        cs_learned_label: "Mitä opin",
+        cs_change_label: "Mitä muuttaisin",
         cs_direction_a: "Suunta A",
         cs_direction_b: "Suunta B",
         cs_before_label: "Ennen",
         cs_after_label: "Jälkeen",
         cs_gallery_image_alt: "Galleriakuva",
         cs_draft_placeholder: "Luonnoksen paikkamerkki",
+        cs_heading_confidentiality: "Huomio luottamuksellisuudesta",
+        cs_industry_label: "Toimiala",
+        cs_project_type_label: "Projektityyppi",
+        cs_reading_time: "{min} min lukuaika",
+        cs_progress_label: "Lukemisen eteneminen",
+        cs_project_summary_heading: "Projektin yhteenveto",
+        cs_business_context_heading: "Liiketoimintakonteksti",
+        cs_why_difficult_heading: "Miksi tämä oli vaikeaa",
+        cs_my_role_heading: "Roolini",
+        cs_success_metrics_heading: "Onnistumismittarit",
+        cs_constraints_heading: "Keskeiset rajoitteet",
+        cs_decisions_heading: "Keskeiset päätökset",
+        cs_decision_context_label: "Konteksti",
+        cs_decision_choice_label: "Päätös",
+        cs_decision_rationale_label: "Perustelu",
+        cs_design_evolution_heading: "Suunnittelun kehitys",
+        cs_final_solution_heading: "Lopullinen ratkaisu",
+        cs_business_impact_heading: "Liiketoimintavaikutus",
+        cs_lessons_learned_heading: "Opitut asiat",
+        cs_next_opportunities_heading: "Seuraavat mahdollisuudet",
+        cs_stakeholders_heading: "Sidosryhmät",
+        cs_research_highlights_heading: "Tutkimuksen keskeiset havainnot",
+        cs_industry_deep_dive_heading: "Toimialan syventävä katsaus",
+        cs_placeholder_note: "Paikkamerkki — kaavio lisätään myöhemmin",
+        cs_related_work_heading: "Aiheeseen liittyvät työt",
+        industry_enterprise_ai: "Yritys / Huippuluokan tekoäly",
+        industry_cybersecurity: "Kyberturvallisuus",
+        industry_fintech: "FinTech / RegTech / Säännöstenmukaisuus",
+        industry_government: "Julkishallinto · Kansalaispalvelut · Terveys · Vakuutus",
       },
       fr: {
         label: "FR",
@@ -1467,42 +1453,55 @@
         cs_back_to_work: "← Retour à tous les travaux",
         cs_not_found_title: "Étude de cas introuvable",
         cs_not_found_body: "Ce projet n'est pas encore publié, ou le lien est peut-être obsolète.",
-        cs_exec_summary: "Résumé exécutif",
-        cs_role_constraints: "Rôle et contraintes",
-        cs_impact: "Impact",
-        cs_reflection: "Réflexion",
-        cs_cta_heading: "Intéressé(e) à collaborer ?",
         cs_draft_badge: "Brouillon",
         cs_confidential_badge: "Confidentiel",
+        cs_org_label: "Organisation",
         cs_role_label: "Rôle",
+        cs_year_label: "Année",
+        cs_timeline_label: "Échéancier",
         cs_team_label: "Équipe",
         cs_responsibilities_label: "Responsabilités",
         cs_platforms_label: "Plateformes",
-        cs_timeline_label: "Échéancier",
-        cs_org_label: "Organisation",
-        cs_year_label: "Année",
-        cs_problem_label: "Problème",
-        cs_contribution_label: "Contribution",
-        cs_solution_label: "Solution",
-        cs_outcome_label: "Résultat",
-        cs_learned_label: "Ce que j'ai appris",
-        cs_change_label: "Ce que je changerais",
-        cs_next_steps_label: "Prochaines étapes",
+        cs_cta_heading: "Intéressé(e) à collaborer ?",
         cs_previous_project: "Projet précédent",
         cs_next_project: "Projet suivant",
-        cs_heading_challenge: "Défi",
-        cs_heading_discovery: "Découverte",
-        cs_heading_strategy: "Stratégie",
-        cs_heading_exploration: "Exploration",
-        cs_heading_strategy_exploration: "Stratégie et exploration",
-        cs_heading_final_solution: "Solution finale",
-        cs_heading_confidentiality: "Une note sur la confidentialité",
+        cs_learned_label: "Ce que j'ai appris",
+        cs_change_label: "Ce que je changerais",
         cs_direction_a: "Direction A",
         cs_direction_b: "Direction B",
         cs_before_label: "Avant",
         cs_after_label: "Après",
         cs_gallery_image_alt: "Image de la galerie",
         cs_draft_placeholder: "Espace réservé au brouillon",
+        cs_heading_confidentiality: "Une note sur la confidentialité",
+        cs_industry_label: "Secteur",
+        cs_project_type_label: "Type de projet",
+        cs_reading_time: "{min} min de lecture",
+        cs_progress_label: "Progression de lecture",
+        cs_project_summary_heading: "Résumé du projet",
+        cs_business_context_heading: "Contexte métier",
+        cs_why_difficult_heading: "Pourquoi c'était difficile",
+        cs_my_role_heading: "Mon rôle",
+        cs_success_metrics_heading: "Indicateurs de réussite",
+        cs_constraints_heading: "Contraintes majeures",
+        cs_decisions_heading: "Décisions clés",
+        cs_decision_context_label: "Contexte",
+        cs_decision_choice_label: "Décision",
+        cs_decision_rationale_label: "Justification",
+        cs_design_evolution_heading: "Évolution du design",
+        cs_final_solution_heading: "Solution finale",
+        cs_business_impact_heading: "Impact business",
+        cs_lessons_learned_heading: "Leçons apprises",
+        cs_next_opportunities_heading: "Prochaines opportunités",
+        cs_stakeholders_heading: "Parties prenantes",
+        cs_research_highlights_heading: "Points clés de la recherche",
+        cs_industry_deep_dive_heading: "Focus sectoriel",
+        cs_placeholder_note: "Espace réservé — schéma à ajouter",
+        cs_related_work_heading: "Travaux similaires",
+        industry_enterprise_ai: "Entreprise / IA de pointe",
+        industry_cybersecurity: "Cybersécurité",
+        industry_fintech: "FinTech / RegTech / Conformité",
+        industry_government: "Gouvernement · Civique · Santé · Assurance",
       },
       de: {
         label: "DE",
@@ -1521,43 +1520,56 @@
         footer_p1: "Von Miami nach Helsinki – das Nächste gestalten.",
         cs_back_to_work: "← Zurück zu allen Arbeiten",
         cs_not_found_title: "Fallstudie nicht gefunden",
-        cs_not_found_body: "Dieses Projekt ist noch nicht veröffentlicht, oder der Link ist nicht mehr aktuell.",
-        cs_exec_summary: "Zusammenfassung",
-        cs_role_constraints: "Rolle & Rahmenbedingungen",
-        cs_impact: "Wirkung",
-        cs_reflection: "Reflexion",
-        cs_cta_heading: "Interesse an einer Zusammenarbeit?",
+        cs_not_found_body: "Dieses Projekt ist noch nicht veröffentlicht, oder der Link ist veraltet.",
         cs_draft_badge: "Entwurf",
         cs_confidential_badge: "Vertraulich",
+        cs_org_label: "Organisation",
         cs_role_label: "Rolle",
+        cs_year_label: "Jahr",
+        cs_timeline_label: "Zeitraum",
         cs_team_label: "Team",
         cs_responsibilities_label: "Verantwortlichkeiten",
         cs_platforms_label: "Plattformen",
-        cs_timeline_label: "Zeitrahmen",
-        cs_org_label: "Organisation",
-        cs_year_label: "Jahr",
-        cs_problem_label: "Problem",
-        cs_contribution_label: "Beitrag",
-        cs_solution_label: "Lösung",
-        cs_outcome_label: "Ergebnis",
-        cs_learned_label: "Was ich gelernt habe",
-        cs_change_label: "Was ich ändern würde",
-        cs_next_steps_label: "Nächste Schritte",
+        cs_cta_heading: "Interesse an einer Zusammenarbeit?",
         cs_previous_project: "Vorheriges Projekt",
         cs_next_project: "Nächstes Projekt",
-        cs_heading_challenge: "Herausforderung",
-        cs_heading_discovery: "Entdeckung",
-        cs_heading_strategy: "Strategie",
-        cs_heading_exploration: "Exploration",
-        cs_heading_strategy_exploration: "Strategie & Exploration",
-        cs_heading_final_solution: "Endgültige Lösung",
-        cs_heading_confidentiality: "Ein Hinweis zur Vertraulichkeit",
+        cs_learned_label: "Was ich gelernt habe",
+        cs_change_label: "Was ich ändern würde",
         cs_direction_a: "Richtung A",
         cs_direction_b: "Richtung B",
         cs_before_label: "Vorher",
         cs_after_label: "Nachher",
         cs_gallery_image_alt: "Galeriebild",
         cs_draft_placeholder: "Entwurfsplatzhalter",
+        cs_heading_confidentiality: "Ein Hinweis zur Vertraulichkeit",
+        cs_industry_label: "Branche",
+        cs_project_type_label: "Projektart",
+        cs_reading_time: "{min} Min. Lesezeit",
+        cs_progress_label: "Lesefortschritt",
+        cs_project_summary_heading: "Projektübersicht",
+        cs_business_context_heading: "Geschäftlicher Kontext",
+        cs_why_difficult_heading: "Warum das schwierig war",
+        cs_my_role_heading: "Meine Rolle",
+        cs_success_metrics_heading: "Erfolgskennzahlen",
+        cs_constraints_heading: "Wesentliche Einschränkungen",
+        cs_decisions_heading: "Wichtige Entscheidungen",
+        cs_decision_context_label: "Kontext",
+        cs_decision_choice_label: "Entscheidung",
+        cs_decision_rationale_label: "Begründung",
+        cs_design_evolution_heading: "Design-Entwicklung",
+        cs_final_solution_heading: "Endgültige Lösung",
+        cs_business_impact_heading: "Geschäftlicher Einfluss",
+        cs_lessons_learned_heading: "Erkenntnisse",
+        cs_next_opportunities_heading: "Nächste Möglichkeiten",
+        cs_stakeholders_heading: "Stakeholder",
+        cs_research_highlights_heading: "Forschungserkenntnisse",
+        cs_industry_deep_dive_heading: "Branchenvertiefung",
+        cs_placeholder_note: "Platzhalter — Diagramm folgt",
+        cs_related_work_heading: "Verwandte Arbeiten",
+        industry_enterprise_ai: "Enterprise / Frontier-KI",
+        industry_cybersecurity: "Cybersicherheit",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Behörden · Bürgerdienste · Gesundheit · Versicherung",
       },
       it: {
         label: "IT",
@@ -1576,43 +1588,56 @@
         footer_p1: "Da Miami a Helsinki: progettando il prossimo passo.",
         cs_back_to_work: "← Torna a tutti i lavori",
         cs_not_found_title: "Caso studio non trovato",
-        cs_not_found_body: "Questo progetto non è ancora stato pubblicato, oppure il link potrebbe non essere più valido.",
-        cs_exec_summary: "Riepilogo esecutivo",
-        cs_role_constraints: "Ruolo e vincoli",
-        cs_impact: "Impatto",
-        cs_reflection: "Riflessione",
-        cs_cta_heading: "Interessato a collaborare?",
+        cs_not_found_body: "Questo progetto non è ancora pubblicato, oppure il link potrebbe non essere aggiornato.",
         cs_draft_badge: "Bozza",
         cs_confidential_badge: "Riservato",
+        cs_org_label: "Organizzazione",
         cs_role_label: "Ruolo",
+        cs_year_label: "Anno",
+        cs_timeline_label: "Tempistica",
         cs_team_label: "Team",
         cs_responsibilities_label: "Responsabilità",
         cs_platforms_label: "Piattaforme",
-        cs_timeline_label: "Tempistiche",
-        cs_org_label: "Organizzazione",
-        cs_year_label: "Anno",
-        cs_problem_label: "Problema",
-        cs_contribution_label: "Contributo",
-        cs_solution_label: "Soluzione",
-        cs_outcome_label: "Risultato",
-        cs_learned_label: "Cosa ho imparato",
-        cs_change_label: "Cosa cambierei",
-        cs_next_steps_label: "Prossimi passi",
+        cs_cta_heading: "Interessato a collaborare?",
         cs_previous_project: "Progetto precedente",
         cs_next_project: "Progetto successivo",
-        cs_heading_challenge: "Sfida",
-        cs_heading_discovery: "Scoperta",
-        cs_heading_strategy: "Strategia",
-        cs_heading_exploration: "Esplorazione",
-        cs_heading_strategy_exploration: "Strategia ed esplorazione",
-        cs_heading_final_solution: "Soluzione finale",
-        cs_heading_confidentiality: "Una nota sulla riservatezza",
+        cs_learned_label: "Cosa ho imparato",
+        cs_change_label: "Cosa cambierei",
         cs_direction_a: "Direzione A",
         cs_direction_b: "Direzione B",
         cs_before_label: "Prima",
         cs_after_label: "Dopo",
         cs_gallery_image_alt: "Immagine della galleria",
         cs_draft_placeholder: "Segnaposto bozza",
+        cs_heading_confidentiality: "Una nota sulla riservatezza",
+        cs_industry_label: "Settore",
+        cs_project_type_label: "Tipo di progetto",
+        cs_reading_time: "{min} min di lettura",
+        cs_progress_label: "Avanzamento lettura",
+        cs_project_summary_heading: "Riepilogo del progetto",
+        cs_business_context_heading: "Contesto aziendale",
+        cs_why_difficult_heading: "Perché è stato difficile",
+        cs_my_role_heading: "Il mio ruolo",
+        cs_success_metrics_heading: "Metriche di successo",
+        cs_constraints_heading: "Vincoli principali",
+        cs_decisions_heading: "Decisioni chiave",
+        cs_decision_context_label: "Contesto",
+        cs_decision_choice_label: "Decisione",
+        cs_decision_rationale_label: "Motivazione",
+        cs_design_evolution_heading: "Evoluzione del design",
+        cs_final_solution_heading: "Soluzione finale",
+        cs_business_impact_heading: "Impatto sul business",
+        cs_lessons_learned_heading: "Lezioni apprese",
+        cs_next_opportunities_heading: "Prossime opportunità",
+        cs_stakeholders_heading: "Stakeholder",
+        cs_research_highlights_heading: "Punti salienti della ricerca",
+        cs_industry_deep_dive_heading: "Approfondimento di settore",
+        cs_placeholder_note: "Segnaposto — diagramma da aggiungere",
+        cs_related_work_heading: "Lavori correlati",
+        industry_enterprise_ai: "Enterprise / IA di frontiera",
+        industry_cybersecurity: "Cybersicurezza",
+        industry_fintech: "FinTech / RegTech / Conformità",
+        industry_government: "Governo · Civico · Sanità · Assicurazioni",
       },
       pt: {
         label: "PT",
@@ -1632,42 +1657,55 @@
         cs_back_to_work: "← Voltar a todos os trabalhos",
         cs_not_found_title: "Estudo de caso não encontrado",
         cs_not_found_body: "Este projeto ainda não foi publicado, ou o link pode estar desatualizado.",
-        cs_exec_summary: "Resumo executivo",
-        cs_role_constraints: "Função e restrições",
-        cs_impact: "Impacto",
-        cs_reflection: "Reflexão",
-        cs_cta_heading: "Interessado em trabalhar juntos?",
         cs_draft_badge: "Rascunho",
         cs_confidential_badge: "Confidencial",
+        cs_org_label: "Organização",
         cs_role_label: "Função",
-        cs_team_label: "Equipa",
+        cs_year_label: "Ano",
+        cs_timeline_label: "Cronograma",
+        cs_team_label: "Equipe",
         cs_responsibilities_label: "Responsabilidades",
         cs_platforms_label: "Plataformas",
-        cs_timeline_label: "Cronograma",
-        cs_org_label: "Organização",
-        cs_year_label: "Ano",
-        cs_problem_label: "Problema",
-        cs_contribution_label: "Contribuição",
-        cs_solution_label: "Solução",
-        cs_outcome_label: "Resultado",
-        cs_learned_label: "O que aprendi",
-        cs_change_label: "O que mudaria",
-        cs_next_steps_label: "Próximos passos",
+        cs_cta_heading: "Interessado em colaborar?",
         cs_previous_project: "Projeto anterior",
         cs_next_project: "Próximo projeto",
-        cs_heading_challenge: "Desafio",
-        cs_heading_discovery: "Descoberta",
-        cs_heading_strategy: "Estratégia",
-        cs_heading_exploration: "Exploração",
-        cs_heading_strategy_exploration: "Estratégia e exploração",
-        cs_heading_final_solution: "Solução final",
-        cs_heading_confidentiality: "Uma nota sobre confidencialidade",
+        cs_learned_label: "O que aprendi",
+        cs_change_label: "O que eu mudaria",
         cs_direction_a: "Direção A",
         cs_direction_b: "Direção B",
         cs_before_label: "Antes",
         cs_after_label: "Depois",
         cs_gallery_image_alt: "Imagem da galeria",
         cs_draft_placeholder: "Espaço reservado do rascunho",
+        cs_heading_confidentiality: "Uma nota sobre confidencialidade",
+        cs_industry_label: "Setor",
+        cs_project_type_label: "Tipo de projeto",
+        cs_reading_time: "{min} min de leitura",
+        cs_progress_label: "Progresso da leitura",
+        cs_project_summary_heading: "Resumo do projeto",
+        cs_business_context_heading: "Contexto do negócio",
+        cs_why_difficult_heading: "Por que isso foi difícil",
+        cs_my_role_heading: "Minha função",
+        cs_success_metrics_heading: "Métricas de sucesso",
+        cs_constraints_heading: "Principais restrições",
+        cs_decisions_heading: "Decisões-chave",
+        cs_decision_context_label: "Contexto",
+        cs_decision_choice_label: "Decisão",
+        cs_decision_rationale_label: "Justificativa",
+        cs_design_evolution_heading: "Evolução do design",
+        cs_final_solution_heading: "Solução final",
+        cs_business_impact_heading: "Impacto no negócio",
+        cs_lessons_learned_heading: "Lições aprendidas",
+        cs_next_opportunities_heading: "Próximas oportunidades",
+        cs_stakeholders_heading: "Partes interessadas",
+        cs_research_highlights_heading: "Destaques da pesquisa",
+        cs_industry_deep_dive_heading: "Aprofundamento do setor",
+        cs_placeholder_note: "Espaço reservado — diagrama a adicionar",
+        cs_related_work_heading: "Trabalhos relacionados",
+        industry_enterprise_ai: "Enterprise / IA de fronteira",
+        industry_cybersecurity: "Cibersegurança",
+        industry_fintech: "FinTech / RegTech / Conformidade",
+        industry_government: "Governo · Cívico · Saúde · Seguros",
       },
       nl: {
         label: "NL",
@@ -1687,42 +1725,55 @@
         cs_back_to_work: "← Terug naar al het werk",
         cs_not_found_title: "Casestudy niet gevonden",
         cs_not_found_body: "Dit project is nog niet gepubliceerd, of de link is verouderd.",
-        cs_exec_summary: "Samenvatting",
-        cs_role_constraints: "Rol & randvoorwaarden",
-        cs_impact: "Impact",
-        cs_reflection: "Reflectie",
-        cs_cta_heading: "Interesse in samenwerken?",
         cs_draft_badge: "Concept",
         cs_confidential_badge: "Vertrouwelijk",
+        cs_org_label: "Organisatie",
         cs_role_label: "Rol",
+        cs_year_label: "Jaar",
+        cs_timeline_label: "Tijdlijn",
         cs_team_label: "Team",
         cs_responsibilities_label: "Verantwoordelijkheden",
         cs_platforms_label: "Platforms",
-        cs_timeline_label: "Tijdlijn",
-        cs_org_label: "Organisatie",
-        cs_year_label: "Jaar",
-        cs_problem_label: "Probleem",
-        cs_contribution_label: "Bijdrage",
-        cs_solution_label: "Oplossing",
-        cs_outcome_label: "Resultaat",
-        cs_learned_label: "Wat ik heb geleerd",
-        cs_change_label: "Wat ik zou veranderen",
-        cs_next_steps_label: "Volgende stappen",
+        cs_cta_heading: "Interesse in samenwerken?",
         cs_previous_project: "Vorig project",
         cs_next_project: "Volgend project",
-        cs_heading_challenge: "Uitdaging",
-        cs_heading_discovery: "Ontdekking",
-        cs_heading_strategy: "Strategie",
-        cs_heading_exploration: "Verkenning",
-        cs_heading_strategy_exploration: "Strategie en verkenning",
-        cs_heading_final_solution: "Uiteindelijke oplossing",
-        cs_heading_confidentiality: "Een opmerking over vertrouwelijkheid",
+        cs_learned_label: "Wat ik heb geleerd",
+        cs_change_label: "Wat ik zou veranderen",
         cs_direction_a: "Richting A",
         cs_direction_b: "Richting B",
         cs_before_label: "Voor",
         cs_after_label: "Na",
         cs_gallery_image_alt: "Galerijafbeelding",
         cs_draft_placeholder: "Conceptplaceholder",
+        cs_heading_confidentiality: "Een opmerking over vertrouwelijkheid",
+        cs_industry_label: "Sector",
+        cs_project_type_label: "Projecttype",
+        cs_reading_time: "{min} min leestijd",
+        cs_progress_label: "Leesvoortgang",
+        cs_project_summary_heading: "Projectsamenvatting",
+        cs_business_context_heading: "Bedrijfscontext",
+        cs_why_difficult_heading: "Waarom dit lastig was",
+        cs_my_role_heading: "Mijn rol",
+        cs_success_metrics_heading: "Succesindicatoren",
+        cs_constraints_heading: "Belangrijkste beperkingen",
+        cs_decisions_heading: "Belangrijke beslissingen",
+        cs_decision_context_label: "Context",
+        cs_decision_choice_label: "Beslissing",
+        cs_decision_rationale_label: "Onderbouwing",
+        cs_design_evolution_heading: "Ontwerpevolutie",
+        cs_final_solution_heading: "Uiteindelijke oplossing",
+        cs_business_impact_heading: "Bedrijfsimpact",
+        cs_lessons_learned_heading: "Geleerde lessen",
+        cs_next_opportunities_heading: "Volgende kansen",
+        cs_stakeholders_heading: "Belanghebbenden",
+        cs_research_highlights_heading: "Onderzoekshoogtepunten",
+        cs_industry_deep_dive_heading: "Sectorverdieping",
+        cs_placeholder_note: "Placeholder — diagram volgt nog",
+        cs_related_work_heading: "Gerelateerd werk",
+        industry_enterprise_ai: "Enterprise / Frontier AI",
+        industry_cybersecurity: "Cyberbeveiliging",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Overheid · Publieke diensten · Zorg · Verzekeringen",
       },
       pl: {
         label: "PL",
@@ -1741,43 +1792,56 @@
         footer_p1: "Z Miami do Helsinek — projektując to, co dalej.",
         cs_back_to_work: "← Powrót do wszystkich prac",
         cs_not_found_title: "Nie znaleziono studium przypadku",
-        cs_not_found_body: "Ten projekt nie został jeszcze opublikowany lub link może być nieaktualny.",
-        cs_exec_summary: "Podsumowanie",
-        cs_role_constraints: "Rola i ograniczenia",
-        cs_impact: "Wpływ",
-        cs_reflection: "Refleksja",
-        cs_cta_heading: "Zainteresowany/a współpracą?",
+        cs_not_found_body: "Ten projekt nie został jeszcze opublikowany, albo link jest nieaktualny.",
         cs_draft_badge: "Wersja robocza",
         cs_confidential_badge: "Poufne",
+        cs_org_label: "Organizacja",
         cs_role_label: "Rola",
+        cs_year_label: "Rok",
+        cs_timeline_label: "Harmonogram",
         cs_team_label: "Zespół",
         cs_responsibilities_label: "Obowiązki",
         cs_platforms_label: "Platformy",
-        cs_timeline_label: "Harmonogram",
-        cs_org_label: "Organizacja",
-        cs_year_label: "Rok",
-        cs_problem_label: "Problem",
-        cs_contribution_label: "Wkład",
-        cs_solution_label: "Rozwiązanie",
-        cs_outcome_label: "Wynik",
-        cs_learned_label: "Czego się nauczyłam",
-        cs_change_label: "Co bym zmieniła",
-        cs_next_steps_label: "Kolejne kroki",
+        cs_cta_heading: "Zainteresowany/a współpracą?",
         cs_previous_project: "Poprzedni projekt",
         cs_next_project: "Następny projekt",
-        cs_heading_challenge: "Wyzwanie",
-        cs_heading_discovery: "Odkrycie",
-        cs_heading_strategy: "Strategia",
-        cs_heading_exploration: "Eksploracja",
-        cs_heading_strategy_exploration: "Strategia i eksploracja",
-        cs_heading_final_solution: "Ostateczne rozwiązanie",
-        cs_heading_confidentiality: "Uwaga o poufności",
+        cs_learned_label: "Czego się nauczyłam",
+        cs_change_label: "Co bym zmieniła",
         cs_direction_a: "Kierunek A",
         cs_direction_b: "Kierunek B",
         cs_before_label: "Przed",
         cs_after_label: "Po",
         cs_gallery_image_alt: "Zdjęcie z galerii",
         cs_draft_placeholder: "Zastępczy obraz wersji roboczej",
+        cs_heading_confidentiality: "Uwaga o poufności",
+        cs_industry_label: "Branża",
+        cs_project_type_label: "Typ projektu",
+        cs_reading_time: "{min} min czytania",
+        cs_progress_label: "Postęp czytania",
+        cs_project_summary_heading: "Podsumowanie projektu",
+        cs_business_context_heading: "Kontekst biznesowy",
+        cs_why_difficult_heading: "Dlaczego to było trudne",
+        cs_my_role_heading: "Moja rola",
+        cs_success_metrics_heading: "Miary sukcesu",
+        cs_constraints_heading: "Główne ograniczenia",
+        cs_decisions_heading: "Kluczowe decyzje",
+        cs_decision_context_label: "Kontekst",
+        cs_decision_choice_label: "Decyzja",
+        cs_decision_rationale_label: "Uzasadnienie",
+        cs_design_evolution_heading: "Ewolucja projektu",
+        cs_final_solution_heading: "Ostateczne rozwiązanie",
+        cs_business_impact_heading: "Wpływ biznesowy",
+        cs_lessons_learned_heading: "Wnioski",
+        cs_next_opportunities_heading: "Kolejne możliwości",
+        cs_stakeholders_heading: "Interesariusze",
+        cs_research_highlights_heading: "Najważniejsze wnioski z badań",
+        cs_industry_deep_dive_heading: "Pogłębiona analiza branży",
+        cs_placeholder_note: "Zastępnik — diagram do dodania",
+        cs_related_work_heading: "Powiązane prace",
+        industry_enterprise_ai: "Enterprise / Zaawansowana AI",
+        industry_cybersecurity: "Cyberbezpieczeństwo",
+        industry_fintech: "FinTech / RegTech / Zgodność",
+        industry_government: "Administracja publiczna · Usługi obywatelskie · Zdrowie · Ubezpieczenia",
       },
       sv: {
         label: "SV",
@@ -1796,43 +1860,56 @@
         footer_p1: "Från Miami till Helsingfors – designar det som kommer härnäst.",
         cs_back_to_work: "← Tillbaka till allt arbete",
         cs_not_found_title: "Fallstudien hittades inte",
-        cs_not_found_body: "Det här projektet är inte publicerat än, eller så kan länken vara inaktuell.",
-        cs_exec_summary: "Sammanfattning",
-        cs_role_constraints: "Roll & förutsättningar",
-        cs_impact: "Effekt",
-        cs_reflection: "Reflektion",
-        cs_cta_heading: "Intresserad av att samarbeta?",
+        cs_not_found_body: "Det här projektet är inte publicerat än, eller så är länken inaktuell.",
         cs_draft_badge: "Utkast",
         cs_confidential_badge: "Konfidentiellt",
+        cs_org_label: "Organisation",
         cs_role_label: "Roll",
+        cs_year_label: "År",
+        cs_timeline_label: "Tidslinje",
         cs_team_label: "Team",
         cs_responsibilities_label: "Ansvarsområden",
         cs_platforms_label: "Plattformar",
-        cs_timeline_label: "Tidslinje",
-        cs_org_label: "Organisation",
-        cs_year_label: "År",
-        cs_problem_label: "Problem",
-        cs_contribution_label: "Bidrag",
-        cs_solution_label: "Lösning",
-        cs_outcome_label: "Resultat",
-        cs_learned_label: "Vad jag lärde mig",
-        cs_change_label: "Vad jag skulle ändra",
-        cs_next_steps_label: "Nästa steg",
+        cs_cta_heading: "Intresserad av att samarbeta?",
         cs_previous_project: "Föregående projekt",
         cs_next_project: "Nästa projekt",
-        cs_heading_challenge: "Utmaning",
-        cs_heading_discovery: "Upptäckt",
-        cs_heading_strategy: "Strategi",
-        cs_heading_exploration: "Utforskning",
-        cs_heading_strategy_exploration: "Strategi och utforskning",
-        cs_heading_final_solution: "Slutlig lösning",
-        cs_heading_confidentiality: "En anteckning om sekretess",
+        cs_learned_label: "Vad jag lärde mig",
+        cs_change_label: "Vad jag skulle ändra",
         cs_direction_a: "Riktning A",
         cs_direction_b: "Riktning B",
         cs_before_label: "Före",
         cs_after_label: "Efter",
         cs_gallery_image_alt: "Gallerbild",
         cs_draft_placeholder: "Utkastsplatshållare",
+        cs_heading_confidentiality: "En anteckning om sekretess",
+        cs_industry_label: "Bransch",
+        cs_project_type_label: "Projekttyp",
+        cs_reading_time: "{min} min lästid",
+        cs_progress_label: "Läsförlopp",
+        cs_project_summary_heading: "Projektöversikt",
+        cs_business_context_heading: "Affärskontext",
+        cs_why_difficult_heading: "Varför detta var svårt",
+        cs_my_role_heading: "Min roll",
+        cs_success_metrics_heading: "Framgångsmått",
+        cs_constraints_heading: "Viktiga begränsningar",
+        cs_decisions_heading: "Viktiga beslut",
+        cs_decision_context_label: "Kontext",
+        cs_decision_choice_label: "Beslut",
+        cs_decision_rationale_label: "Motivering",
+        cs_design_evolution_heading: "Designens utveckling",
+        cs_final_solution_heading: "Slutlig lösning",
+        cs_business_impact_heading: "Affärspåverkan",
+        cs_lessons_learned_heading: "Lärdomar",
+        cs_next_opportunities_heading: "Kommande möjligheter",
+        cs_stakeholders_heading: "Intressenter",
+        cs_research_highlights_heading: "Forskningshöjdpunkter",
+        cs_industry_deep_dive_heading: "Bransch fördjupning",
+        cs_placeholder_note: "Platshållare — diagram tillkommer",
+        cs_related_work_heading: "Relaterat arbete",
+        industry_enterprise_ai: "Enterprise / Frontier-AI",
+        industry_cybersecurity: "Cybersäkerhet",
+        industry_fintech: "FinTech / RegTech / Regelefterlevnad",
+        industry_government: "Myndighet · Medborgartjänster · Vård · Försäkring",
       },
       da: {
         label: "DA",
@@ -1851,43 +1928,56 @@
         footer_p1: "Fra Miami til Helsinki – designer det, der kommer næst.",
         cs_back_to_work: "← Tilbage til alt arbejde",
         cs_not_found_title: "Casestudie ikke fundet",
-        cs_not_found_body: "Dette projekt er endnu ikke offentliggjort, eller linket kan være forældet.",
-        cs_exec_summary: "Sammenfatning",
-        cs_role_constraints: "Rolle & rammer",
-        cs_impact: "Effekt",
-        cs_reflection: "Refleksion",
-        cs_cta_heading: "Interesseret i at samarbejde?",
+        cs_not_found_body: "Dette projekt er ikke udgivet endnu, eller linket er måske forældet.",
         cs_draft_badge: "Kladde",
         cs_confidential_badge: "Fortroligt",
+        cs_org_label: "Organisation",
         cs_role_label: "Rolle",
+        cs_year_label: "År",
+        cs_timeline_label: "Tidslinje",
         cs_team_label: "Team",
         cs_responsibilities_label: "Ansvarsområder",
         cs_platforms_label: "Platforme",
-        cs_timeline_label: "Tidslinje",
-        cs_org_label: "Organisation",
-        cs_year_label: "År",
-        cs_problem_label: "Problem",
-        cs_contribution_label: "Bidrag",
-        cs_solution_label: "Løsning",
-        cs_outcome_label: "Resultat",
-        cs_learned_label: "Hvad jeg lærte",
-        cs_change_label: "Hvad jeg ville ændre",
-        cs_next_steps_label: "Næste skridt",
+        cs_cta_heading: "Interesseret i at samarbejde?",
         cs_previous_project: "Forrige projekt",
         cs_next_project: "Næste projekt",
-        cs_heading_challenge: "Udfordring",
-        cs_heading_discovery: "Opdagelse",
-        cs_heading_strategy: "Strategi",
-        cs_heading_exploration: "Udforskning",
-        cs_heading_strategy_exploration: "Strategi og udforskning",
-        cs_heading_final_solution: "Endelig løsning",
-        cs_heading_confidentiality: "En bemærkning om fortrolighed",
+        cs_learned_label: "Hvad jeg lærte",
+        cs_change_label: "Hvad jeg ville ændre",
         cs_direction_a: "Retning A",
         cs_direction_b: "Retning B",
         cs_before_label: "Før",
         cs_after_label: "Efter",
         cs_gallery_image_alt: "Gallerbillede",
         cs_draft_placeholder: "Kladdepladsholder",
+        cs_heading_confidentiality: "En bemærkning om fortrolighed",
+        cs_industry_label: "Branche",
+        cs_project_type_label: "Projekttype",
+        cs_reading_time: "{min} min læsetid",
+        cs_progress_label: "Læsefremskridt",
+        cs_project_summary_heading: "Projektresumé",
+        cs_business_context_heading: "Forretningskontekst",
+        cs_why_difficult_heading: "Hvorfor det var svært",
+        cs_my_role_heading: "Min rolle",
+        cs_success_metrics_heading: "Succesmål",
+        cs_constraints_heading: "Store begrænsninger",
+        cs_decisions_heading: "Vigtige beslutninger",
+        cs_decision_context_label: "Kontekst",
+        cs_decision_choice_label: "Beslutning",
+        cs_decision_rationale_label: "Begrundelse",
+        cs_design_evolution_heading: "Designudvikling",
+        cs_final_solution_heading: "Endelig løsning",
+        cs_business_impact_heading: "Forretningspåvirkning",
+        cs_lessons_learned_heading: "Læringspunkter",
+        cs_next_opportunities_heading: "Kommende muligheder",
+        cs_stakeholders_heading: "Interessenter",
+        cs_research_highlights_heading: "Forskningshøjdepunkter",
+        cs_industry_deep_dive_heading: "Branchefordybelse",
+        cs_placeholder_note: "Pladsholder — diagram tilføjes senere",
+        cs_related_work_heading: "Relateret arbejde",
+        industry_enterprise_ai: "Enterprise / Frontier-AI",
+        industry_cybersecurity: "Cybersikkerhed",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Myndighed · Borgerservice · Sundhed · Forsikring",
       },
       no: {
         label: "NO",
@@ -1907,42 +1997,55 @@
         cs_back_to_work: "← Tilbake til alt arbeid",
         cs_not_found_title: "Fant ikke saken",
         cs_not_found_body: "Dette prosjektet er ikke publisert ennå, eller lenken kan være utdatert.",
-        cs_exec_summary: "Sammendrag",
-        cs_role_constraints: "Rolle og rammer",
-        cs_impact: "Effekt",
-        cs_reflection: "Refleksjon",
-        cs_cta_heading: "Interessert i å samarbeide?",
         cs_draft_badge: "Utkast",
         cs_confidential_badge: "Konfidensielt",
+        cs_org_label: "Organisasjon",
         cs_role_label: "Rolle",
+        cs_year_label: "År",
+        cs_timeline_label: "Tidslinje",
         cs_team_label: "Team",
         cs_responsibilities_label: "Ansvarsområder",
         cs_platforms_label: "Plattformer",
-        cs_timeline_label: "Tidslinje",
-        cs_org_label: "Organisasjon",
-        cs_year_label: "År",
-        cs_problem_label: "Problem",
-        cs_contribution_label: "Bidrag",
-        cs_solution_label: "Løsning",
-        cs_outcome_label: "Resultat",
-        cs_learned_label: "Hva jeg lærte",
-        cs_change_label: "Hva jeg ville endret",
-        cs_next_steps_label: "Neste steg",
+        cs_cta_heading: "Interessert i å samarbeide?",
         cs_previous_project: "Forrige prosjekt",
         cs_next_project: "Neste prosjekt",
-        cs_heading_challenge: "Utfordring",
-        cs_heading_discovery: "Oppdagelse",
-        cs_heading_strategy: "Strategi",
-        cs_heading_exploration: "Utforskning",
-        cs_heading_strategy_exploration: "Strategi og utforskning",
-        cs_heading_final_solution: "Endelig løsning",
-        cs_heading_confidentiality: "En merknad om konfidensialitet",
+        cs_learned_label: "Hva jeg lærte",
+        cs_change_label: "Hva jeg ville endret",
         cs_direction_a: "Retning A",
         cs_direction_b: "Retning B",
         cs_before_label: "Før",
         cs_after_label: "Etter",
         cs_gallery_image_alt: "Galleribilde",
         cs_draft_placeholder: "Utkastplassholder",
+        cs_heading_confidentiality: "En merknad om konfidensialitet",
+        cs_industry_label: "Bransje",
+        cs_project_type_label: "Prosjekttype",
+        cs_reading_time: "{min} min lesetid",
+        cs_progress_label: "Lesefremdrift",
+        cs_project_summary_heading: "Prosjektsammendrag",
+        cs_business_context_heading: "Forretningskontekst",
+        cs_why_difficult_heading: "Hvorfor dette var vanskelig",
+        cs_my_role_heading: "Min rolle",
+        cs_success_metrics_heading: "Suksessmål",
+        cs_constraints_heading: "Store begrensninger",
+        cs_decisions_heading: "Viktige beslutninger",
+        cs_decision_context_label: "Kontekst",
+        cs_decision_choice_label: "Beslutning",
+        cs_decision_rationale_label: "Begrunnelse",
+        cs_design_evolution_heading: "Designutvikling",
+        cs_final_solution_heading: "Endelig løsning",
+        cs_business_impact_heading: "Forretningseffekt",
+        cs_lessons_learned_heading: "Læringspunkter",
+        cs_next_opportunities_heading: "Neste muligheter",
+        cs_stakeholders_heading: "Interessenter",
+        cs_research_highlights_heading: "Forskningshøydepunkter",
+        cs_industry_deep_dive_heading: "Bransjefordypning",
+        cs_placeholder_note: "Plassholder — diagram kommer senere",
+        cs_related_work_heading: "Relatert arbeid",
+        industry_enterprise_ai: "Enterprise / Frontier-AI",
+        industry_cybersecurity: "Cybersikkerhet",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Myndighet · Innbyggertjenester · Helse · Forsikring",
       },
     };
 
@@ -1955,7 +2058,7 @@
 
     function applyTheme(theme) {
       document.documentElement.setAttribute("data-theme", theme);
-      themeIcon.textContent = theme === "dark" ? "🌙" : "☀️";
+      themeIcon.textContent = theme === "dark" ? "\ud83c\udf19" : "\u2600\ufe0f";
       themeLabel.textContent = theme === "dark" ? "Dark" : "Light";
       themeToggle.setAttribute(
         "aria-label",
@@ -1980,11 +2083,12 @@
     var langToggle = document.getElementById("lang-toggle");
     var toggleLabel = document.getElementById("lang-toggle-label");
     var langOptions = document.querySelectorAll("#lang-menu button");
+    var i18nEls = document.querySelectorAll("[data-i18n]");
 
     function setLanguage(lang) {
       var t = translations[lang];
       if (!t) return;
-      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      i18nEls.forEach(function (el) {
         var key = el.dataset.i18n;
         if (t[key]) el.textContent = t[key];
       });
@@ -2139,20 +2243,24 @@
         })
         .catch(function () {
           /* api/session unreachable (e.g. static-only local preview) — stay
-             signed-out, same graceful fallback as about.html. */
+             signed-out, same graceful fallback as the homepage. */
         });
     })();
 
-    // ==================== Case study rendering ====================
-    var SVG_NS = "http://www.w3.org/2000/svg";
+    // =====================================================================
+    // Case-study rendering
+    // =====================================================================
 
+    function t() {
+      return translations[document.documentElement.lang] || translations.en;
+    }
     function el(tag, className, text) {
       var node = document.createElement(tag);
       if (className) node.className = className;
       if (text != null) node.textContent = text;
       return node;
     }
-
+    var SVG_NS = "http://www.w3.org/2000/svg";
     function svgEl(tag, attrs) {
       var node = document.createElementNS(SVG_NS, tag);
       Object.keys(attrs || {}).forEach(function (key) {
@@ -2160,193 +2268,346 @@
       });
       return node;
     }
-
     function seedFromString(str) {
       var hash = 0;
       var s = String(str || "");
-      for (var i = 0; i < s.length; i++) {
-        hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
-      }
+      for (var i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
       return hash;
     }
-
-    // Deterministic abstract placeholder tile — used whenever a project has
-    // no real thumbnail/hero image yet, so nothing fabricated ever ships as
-    // a stand-in screenshot. Built entirely from the site's own theme
-    // tokens so it always matches light/dark theme.
-    // Section headings, direction labels, and before/after captions come
-    // from work-data.js as literal English strings shared across every
-    // project's narrative arc (Challenge → Discovery → Strategy →
-    // Exploration → Final solution). They read as generic template labels,
-    // not bespoke per-project copy, so map the known ones onto the site's
-    // translation keys instead of leaving them stuck in English — unknown
-    // strings pass through untouched for genuinely custom future headings.
-    var KNOWN_TEXT_KEYS = {
-      "Challenge": "cs_heading_challenge",
-      "Discovery": "cs_heading_discovery",
-      "Strategy": "cs_heading_strategy",
-      "Exploration": "cs_heading_exploration",
-      "Strategy & exploration": "cs_heading_strategy_exploration",
-      "Final solution": "cs_heading_final_solution",
-      "A note on confidentiality": "cs_heading_confidentiality",
-      "Direction A": "cs_direction_a",
-      "Direction B": "cs_direction_b",
-      "Before": "cs_before_label",
-      "After": "cs_after_label",
-    };
-    function translateKnownText(text) {
-      var t = translations[document.documentElement.lang] || translations.en;
-      var key = KNOWN_TEXT_KEYS[text];
-      return key && t[key] ? t[key] : text;
-    }
-
     function renderPlaceholderMedia(seedStr, altText) {
-      var t = translations[document.documentElement.lang] || translations.en;
       var wrap = el("div", "media-placeholder");
       wrap.setAttribute("role", "img");
-      wrap.setAttribute("aria-label", altText || t.cs_draft_placeholder);
+      wrap.setAttribute("aria-label", altText || t().cs_draft_placeholder);
       var seed = seedFromString(seedStr);
       var svg = svgEl("svg", { viewBox: "0 0 320 200", preserveAspectRatio: "xMidYMid slice" });
       var gradId = "cs-grad-" + (seed % 100000);
       var defs = svgEl("defs", {});
       var grad = svgEl("linearGradient", { id: gradId, x1: "0%", y1: "0%", x2: "100%", y2: "100%" });
-      var stop1 = svgEl("stop", { offset: "0%", "stop-color": "var(--color-surface)" });
-      var stop2 = svgEl("stop", { offset: "100%", "stop-color": "var(--color-bg)" });
-      grad.appendChild(stop1);
-      grad.appendChild(stop2);
+      grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": "var(--color-surface)" }));
+      grad.appendChild(svgEl("stop", { offset: "100%", "stop-color": "var(--color-bg)" }));
       defs.appendChild(grad);
       svg.appendChild(defs);
       svg.appendChild(svgEl("rect", { x: 0, y: 0, width: 320, height: 200, fill: "url(#" + gradId + ")" }));
-
-      var cx1 = 40 + (seed % 220);
-      var cy1 = 30 + ((seed >>> 4) % 140);
-      var r1 = 40 + ((seed >>> 8) % 60);
-      svg.appendChild(svgEl("circle", { cx: cx1, cy: cy1, r: r1, fill: "var(--color-accent)", opacity: "0.16" }));
-
-      var cx2 = 60 + ((seed >>> 12) % 220);
-      var cy2 = 40 + ((seed >>> 16) % 140);
-      var r2 = 30 + ((seed >>> 20) % 50);
-      svg.appendChild(svgEl("circle", { cx: cx2, cy: cy2, r: r2, fill: "var(--color-accent-3)", opacity: "0.18" }));
-
-      svg.appendChild(svgEl("rect", {
-        x: 0, y: 0, width: 320, height: 200, fill: "none",
-        stroke: "var(--color-border)", "stroke-width": 1,
+      svg.appendChild(svgEl("circle", {
+        cx: 40 + (seed % 220), cy: 30 + ((seed >>> 4) % 140), r: 40 + ((seed >>> 8) % 60),
+        fill: "var(--color-accent)", opacity: "0.16",
       }));
+      svg.appendChild(svgEl("circle", {
+        cx: 60 + ((seed >>> 12) % 220), cy: 40 + ((seed >>> 16) % 140), r: 30 + ((seed >>> 20) % 50),
+        fill: "var(--color-accent-3)", opacity: "0.18",
+      }));
+      svg.appendChild(svgEl("rect", { x: 0, y: 0, width: 320, height: 200, fill: "none", stroke: "var(--color-border)", "stroke-width": 1 }));
       wrap.appendChild(svg);
-      wrap.appendChild(el("span", "media-placeholder-label", t.cs_draft_placeholder));
+      wrap.appendChild(el("span", "media-placeholder-label", t().cs_draft_placeholder));
       return wrap;
     }
 
-    var SECTION_RENDERERS = {
-      richText: function (section) {
-        var wrap = el("div", "cs-section cs-richtext");
-        if (section.heading) wrap.appendChild(el("h2", null, translateKnownText(section.heading)));
-        wrap.appendChild(el("p", null, section.body || ""));
-        return wrap;
-      },
-      sideBySide: function (section) {
-        var wrap = el("div", "cs-section cs-sidebyside");
-        if (section.heading) wrap.appendChild(el("h2", null, translateKnownText(section.heading)));
-        var grid = el("div", "cs-sidebyside-grid");
-        [section.left, section.right].forEach(function (side) {
-          if (!side) return;
-          var col = el("div", "cs-sidebyside-col");
-          col.appendChild(el("h3", null, translateKnownText(side.label || "")));
-          col.appendChild(el("p", null, side.body || ""));
-          grid.appendChild(col);
-        });
-        wrap.appendChild(grid);
-        return wrap;
-      },
-      keyFindings: function (section) {
-        var wrap = el("div", "cs-section cs-findings");
-        if (section.heading) wrap.appendChild(el("h2", null, translateKnownText(section.heading)));
-        var list = el("ul", "cs-findings-list");
-        (section.findings || []).forEach(function (f) {
-          list.appendChild(el("li", null, f));
-        });
-        wrap.appendChild(list);
-        return wrap;
-      },
-      metrics: function (section) {
-        var wrap = el("div", "cs-section cs-metrics");
-        if (section.heading) wrap.appendChild(el("h2", null, translateKnownText(section.heading)));
+    // ---- Section shell: heading + kicker + body container, or nothing if
+    // the section has no content. Every narrative-spine block goes through
+    // this so hiding an empty section is automatic, not something each
+    // project has to opt into. ----
+    function section(headingKey, buildBody) {
+      var body = document.createElement("div");
+      var hasContent = buildBody(body);
+      if (!hasContent || !body.hasChildNodes()) return null;
+      var wrap = el("section", "cs-section");
+      var h2 = el("h2", null, t()[headingKey] || headingKey);
+      wrap.appendChild(h2);
+      body.className = "cs-section-body";
+      wrap.appendChild(body);
+      return wrap;
+    }
+
+    function richTextSection(headingKey, text) {
+      return section(headingKey, function (body) {
+        if (!text) return false;
+        body.className = "cs-richtext";
+        body.appendChild(el("p", null, text));
+        return true;
+      });
+    }
+
+    function metricsGridSection(headingKey, metrics) {
+      return section(headingKey, function (body) {
+        if (!metrics || !metrics.length) return false;
         var grid = el("div", "cs-metrics-grid");
-        (section.metrics || []).forEach(function (m) {
+        metrics.forEach(function (m) {
           var tile = el("div", "cs-metric-tile surface");
           tile.appendChild(el("span", "cs-metric-value", m.value || ""));
           tile.appendChild(el("span", "cs-metric-label", m.label || ""));
+          if (m.context) tile.appendChild(el("span", "cs-metric-context", m.context));
           grid.appendChild(tile);
         });
-        wrap.appendChild(grid);
-        return wrap;
-      },
-      quote: function (section) {
-        var wrap = el("blockquote", "cs-section cs-quote");
-        wrap.appendChild(el("p", null, section.quote || ""));
-        if (section.attribution) wrap.appendChild(el("cite", null, section.attribution));
-        return wrap;
-      },
-      decision: function (section) {
-        var wrap = el("div", "cs-section cs-decision surface");
-        if (section.heading) wrap.appendChild(el("h2", null, translateKnownText(section.heading)));
-        wrap.appendChild(el("p", "cs-decision-context", section.context || ""));
-        wrap.appendChild(el("p", "cs-decision-choice", section.decision || ""));
-        wrap.appendChild(el("p", "cs-decision-rationale", section.rationale || ""));
-        return wrap;
-      },
-      beforeAfter: function (section) {
-        var wrap = el("div", "cs-section cs-beforeafter");
-        if (section.heading) wrap.appendChild(el("h2", null, translateKnownText(section.heading)));
-        var grid = el("div", "cs-beforeafter-grid");
-        ["before", "after"].forEach(function (key) {
-          var item = section[key];
-          if (!item) return;
-          var col = document.createElement("figure");
-          col.className = "cs-beforeafter-col";
-          col.appendChild(renderPlaceholderMedia((section.heading || "") + key, item.alt || key));
-          col.appendChild(el("figcaption", null, translateKnownText(item.caption || (key === "before" ? "Before" : "After"))));
-          grid.appendChild(col);
-        });
-        wrap.appendChild(grid);
-        return wrap;
-      },
-      gallery: function (section) {
-        var t = translations[document.documentElement.lang] || translations.en;
-        var wrap = el("div", "cs-section cs-gallery");
-        if (section.heading) wrap.appendChild(el("h2", null, translateKnownText(section.heading)));
-        var grid = el("div", "cs-gallery-grid");
-        (section.items || []).forEach(function (item, i) {
-          grid.appendChild(renderPlaceholderMedia((section.heading || "") + i, item.alt || t.cs_gallery_image_alt));
-        });
-        wrap.appendChild(grid);
-        return wrap;
-      },
-      confidentialSummary: function (section) {
-        var t = translations[document.documentElement.lang] || translations.en;
-        var wrap = el("div", "cs-section cs-confidential surface");
-        wrap.appendChild(el("h2", null, section.heading ? translateKnownText(section.heading) : t.cs_heading_confidentiality));
-        wrap.appendChild(el("p", null, section.note || ""));
-        return wrap;
-      },
-    };
+        body.appendChild(grid);
+        return true;
+      });
+    }
 
-    function renderSections(project, container) {
-      container.textContent = "";
-      (project.sections || []).forEach(function (section) {
-        var renderer = SECTION_RENDERERS[section.type];
-        if (!renderer) return;
-        container.appendChild(renderer(section));
+    function cardListSection(headingKey, items, kind) {
+      return section(headingKey, function (body) {
+        if (!items || !items.length) return false;
+        var grid = el("div", "cs-card-grid");
+        items.forEach(function (item) {
+          var card;
+          if (kind === "decision") {
+            card = el("article", "cs-info-card cs-decision-card surface");
+            card.appendChild(el("h3", null, item.title || ""));
+            var dl = document.createElement("dl");
+            [["cs_decision_context_label", item.context], ["cs_decision_choice_label", item.decision], ["cs_decision_rationale_label", item.rationale]].forEach(function (pair) {
+              if (!pair[1]) return;
+              var dt = el("dt", null, t()[pair[0]]);
+              var dd = el("dd", null, pair[1]);
+              dl.appendChild(dt);
+              dl.appendChild(dd);
+            });
+            card.appendChild(dl);
+          } else if (kind === "stakeholder") {
+            card = el("article", "cs-info-card cs-stakeholder-card surface");
+            card.appendChild(el("span", "cs-stakeholder-icon", "\ud83e\uddd1\u200d\ud83d\udcbc"));
+            var textWrap = document.createElement("div");
+            textWrap.appendChild(el("h3", null, item.role || ""));
+            if (item.note) textWrap.appendChild(el("p", null, item.note));
+            card.appendChild(textWrap);
+          } else {
+            card = el("article", "cs-info-card surface");
+            card.appendChild(el("h3", null, item.title || ""));
+            if (item.body) card.appendChild(el("p", null, item.body));
+          }
+          grid.appendChild(card);
+        });
+        body.appendChild(grid);
+        return true;
+      });
+    }
+
+    function timelineSection(headingKey, steps) {
+      return section(headingKey, function (body) {
+        if (!steps || !steps.length) return false;
+        var list = el("div", "cs-timeline-list");
+        steps.forEach(function (s) {
+          var step = el("div", "cs-timeline-step");
+          step.appendChild(el("h3", null, s.stage || ""));
+          if (s.note) step.appendChild(el("p", null, s.note));
+          list.appendChild(step);
+        });
+        body.appendChild(list);
+        return true;
+      });
+    }
+
+    function keyFindingsSection(headingKey, findings) {
+      return section(headingKey, function (body) {
+        if (!findings || !findings.length) return false;
+        var list = document.createElement("ul");
+        list.className = "cs-role-item";
+        findings.forEach(function (f) { list.appendChild(el("li", null, f)); });
+        body.appendChild(list);
+        return true;
+      });
+    }
+
+    function myRoleSection(project) {
+      return section("cs_my_role_heading", function (body) {
+        var hasAny = project.myRoleSummary || (project.team && project.team.length) ||
+          (project.responsibilities && project.responsibilities.length) || (project.platforms && project.platforms.length);
+        if (!hasAny) return false;
+        if (project.myRoleSummary) body.appendChild(el("p", null, project.myRoleSummary));
+        var grid = el("div", "cs-role-grid");
+        if (project.team && project.team.length) {
+          var teamItem = el("div", "cs-role-item");
+          teamItem.appendChild(el("h3", null, t().cs_team_label));
+          teamItem.appendChild(el("p", null, project.team.join(", ")));
+          grid.appendChild(teamItem);
+        }
+        if (project.responsibilities && project.responsibilities.length) {
+          var respItem = el("div", "cs-role-item");
+          respItem.appendChild(el("h3", null, t().cs_responsibilities_label));
+          var list = document.createElement("ul");
+          project.responsibilities.forEach(function (r) { list.appendChild(el("li", null, r)); });
+          respItem.appendChild(list);
+          grid.appendChild(respItem);
+        }
+        if (project.platforms && project.platforms.length) {
+          var platItem = el("div", "cs-role-item");
+          platItem.appendChild(el("h3", null, t().cs_platforms_label));
+          platItem.appendChild(el("p", null, project.platforms.join(", ")));
+          grid.appendChild(platItem);
+        }
+        if (grid.hasChildNodes()) body.appendChild(grid);
+        return true;
+      });
+    }
+
+    function designEvolutionSection(project) {
+      return section("cs_design_evolution_heading", function (body) {
+        var evo = project.designEvolution;
+        if (!evo) return false;
+        if (evo.type === "sideBySide") {
+          var grid = el("div", "cs-sidebyside-grid");
+          [evo.left, evo.right].forEach(function (side) {
+            if (!side) return;
+            var col = el("div", "cs-sidebyside-col");
+            col.appendChild(el("h3", null, side.label || ""));
+            col.appendChild(el("p", null, side.body || ""));
+            grid.appendChild(col);
+          });
+          body.appendChild(grid);
+          return true;
+        }
+        if (evo.type === "gallery") {
+          var ggrid = el("div", "cs-gallery-grid");
+          (evo.items || []).forEach(function (item, i) {
+            ggrid.appendChild(renderPlaceholderMedia("evo" + i, item.alt || t().cs_gallery_image_alt));
+          });
+          body.appendChild(ggrid);
+          return true;
+        }
+        if (evo.type === "beforeAfter") {
+          var bgrid = el("div", "cs-beforeafter-grid");
+          ["before", "after"].forEach(function (key) {
+            var item = evo[key];
+            if (!item) return;
+            var fig = document.createElement("figure");
+            fig.className = "cs-beforeafter-col";
+            fig.appendChild(renderPlaceholderMedia("evo" + key, item.alt || key));
+            fig.appendChild(el("figcaption", null, key === "before" ? t().cs_before_label : t().cs_after_label));
+            bgrid.appendChild(fig);
+          });
+          body.appendChild(bgrid);
+          return true;
+        }
+        return false;
+      });
+    }
+
+    function finalSolutionSection(project) {
+      return section("cs_final_solution_heading", function (body) {
+        var fs = project.finalSolution;
+        if (!fs || !fs.body) return false;
+        body.className = "cs-richtext";
+        body.appendChild(el("p", null, fs.body));
+        return true;
+      });
+    }
+
+    function lessonsLearnedSection(project) {
+      return section("cs_lessons_learned_heading", function (body) {
+        if (!project.lessonsLearned && !project.wouldChangeNextTime) return false;
+        var grid = el("div", "cs-reflection-grid");
+        if (project.lessonsLearned) {
+          var a = el("div", "cs-reflection-item");
+          a.appendChild(el("h3", null, t().cs_learned_label));
+          a.appendChild(el("p", null, project.lessonsLearned));
+          grid.appendChild(a);
+        }
+        if (project.wouldChangeNextTime) {
+          var b = el("div", "cs-reflection-item");
+          b.appendChild(el("h3", null, t().cs_change_label));
+          b.appendChild(el("p", null, project.wouldChangeNextTime));
+          grid.appendChild(b);
+        }
+        body.appendChild(grid);
+        return true;
+      });
+    }
+
+    function quoteSection(project) {
+      if (!project.quote || !project.quote.quote) return null;
+      var wrap = el("blockquote", "cs-quote");
+      wrap.appendChild(el("p", null, project.quote.quote));
+      if (project.quote.attribution) wrap.appendChild(el("cite", null, project.quote.attribution));
+      var section = el("div", "cs-section");
+      section.appendChild(wrap);
+      return section;
+    }
+
+    // ---- Industry-specific placeholder cluster: one component, many
+    // labels. `type` selects diagramPlaceholder (default) / timeline /
+    // callout so the same data-driven mechanism can show a little variety
+    // without becoming a bespoke widget per industry. ----
+    // ---- Expandable Details: a native <details>/<summary> wrapper for the
+    // most optional/supplementary content on the page. Open by default so
+    // it doesn't hide information from screen readers or search, but lets
+    // anyone collapse it — and gives a future project with a long
+    // industry-section list somewhere to go without dominating the page. ----
+    function expandableSection(headingKey, buildBody) {
+      var body = document.createElement("div");
+      var hasContent = buildBody(body);
+      if (!hasContent || !body.hasChildNodes()) return null;
+      var wrap = document.createElement("details");
+      wrap.className = "cs-section cs-expandable";
+      wrap.open = true;
+      var summary = document.createElement("summary");
+      summary.appendChild(el("h2", null, t()[headingKey] || headingKey));
+      wrap.appendChild(summary);
+      body.className = "cs-section-body";
+      wrap.appendChild(body);
+      return wrap;
+    }
+
+    function industrySectionsBlock(project) {
+      return expandableSection("cs_industry_deep_dive_heading", function (body) {
+        var items = project.industrySections;
+        if (!items || !items.length) return false;
+        var grid = el("div", "cs-industry-grid");
+        items.forEach(function (item) {
+          if (item.type === "timeline") {
+            var tlWrap = el("div", "cs-info-card surface");
+            tlWrap.appendChild(el("h3", null, item.label));
+            var list = el("div", "cs-timeline-list");
+            (item.steps || []).forEach(function (s) {
+              var step = el("div", "cs-timeline-step");
+              step.appendChild(el("h3", null, s.stage || ""));
+              if (s.note) step.appendChild(el("p", null, s.note));
+              list.appendChild(step);
+            });
+            tlWrap.appendChild(list);
+            grid.appendChild(tlWrap);
+            return;
+          }
+          if (item.type === "callout") {
+            var cWrap = el("div", "cs-callout surface");
+            cWrap.appendChild(el("span", "cs-callout-icon", "\u2139\ufe0f"));
+            var inner = document.createElement("div");
+            inner.appendChild(el("h3", null, item.label));
+            inner.appendChild(el("p", null, item.body || t().cs_placeholder_note));
+            cWrap.appendChild(inner);
+            grid.appendChild(cWrap);
+            return;
+          }
+          var card = el("div", "cs-diagram-placeholder");
+          card.appendChild(el("span", "cs-diagram-icon", "\ud83d\udcca"));
+          card.appendChild(el("h3", null, item.label));
+          card.appendChild(el("p", null, t().cs_placeholder_note));
+          grid.appendChild(card);
+        });
+        body.appendChild(grid);
+        return true;
       });
     }
 
     function metaItem(dl, labelKey, value) {
       if (!value) return;
-      var t = translations[document.documentElement.lang] || translations.en;
       var item = el("div", "cs-meta-item");
-      item.appendChild(el("dt", null, t[labelKey] || labelKey));
+      item.appendChild(el("dt", null, t()[labelKey] || labelKey));
       item.appendChild(el("dd", null, value));
       dl.appendChild(item);
+    }
+
+    // ---- Reading time: an honest word count of whatever's actually in
+    // the record right now (placeholder brackets included), not a fixed
+    // or invented number — it becomes accurate automatically once real
+    // content replaces the placeholders. ----
+    function estimateReadingMinutes(project) {
+      var parts = [
+        project.projectSummary, project.businessContext, project.whyDifficult, project.myRoleSummary,
+        project.finalSolution && project.finalSolution.body, project.lessonsLearned, project.wouldChangeNextTime, project.nextOpportunities,
+      ];
+      (project.constraints || []).forEach(function (c) { parts.push(c.title, c.body); });
+      (project.keyDecisions || []).forEach(function (d) { parts.push(d.title, d.context, d.decision, d.rationale); });
+      (project.researchHighlights || []).forEach(function (f) { parts.push(f); });
+      var words = parts.filter(Boolean).join(" ").trim().split(/\s+/).filter(Boolean).length;
+      return Math.max(1, Math.round(words / 200));
     }
 
     function renderNotFound() {
@@ -2356,16 +2617,25 @@
       robots.name = "robots";
       robots.content = "noindex";
       document.head.appendChild(robots);
-      document.title = (translations[document.documentElement.lang] || translations.en).cs_not_found_title + " | Maya Carroll";
+      document.title = t().cs_not_found_title + " | Maya Carroll";
+    }
+
+    function relatedCard(project) {
+      var a = document.createElement("a");
+      a.className = "cs-related-card surface";
+      a.href = "/work/" + project.slug;
+      var pill = el("span", "cs-industry-pill", window.MayaWork.INDUSTRY_LABELS[project.industry] || project.industry);
+      a.appendChild(pill);
+      a.appendChild(el("h3", null, project.title));
+      if (project.cardOutcome) a.appendChild(el("p", null, project.cardOutcome));
+      return a;
     }
 
     function renderProject(project) {
       document.getElementById("cs-not-found").hidden = true;
       var content = document.getElementById("cs-content");
       content.hidden = false;
-      var t = translations[document.documentElement.lang] || translations.en;
 
-      // ---- SEO ----
       var url = "https://maya-carroll-portfolio.vercel.app/work/" + project.slug;
       document.title = project.title + " | Maya Carroll";
       document.getElementById("cs-meta-description").setAttribute("content", project.summary || "");
@@ -2374,21 +2644,27 @@
       document.getElementById("cs-og-description").setAttribute("content", project.summary || "");
       document.getElementById("cs-canonical").setAttribute("href", url);
 
-      // ---- Badges ----
-      var badges = document.getElementById("cs-badges");
-      badges.textContent = "";
-      if (project.draft) badges.appendChild(el("span", "cs-badge", t.cs_draft_badge));
-      if (project.confidential) badges.appendChild(el("span", "cs-badge", t.cs_confidential_badge));
+      // ---- Hero top row: badges + industry pill + reading time ----
+      var badgeRow = document.getElementById("cs-hero-badges");
+      badgeRow.textContent = "";
+      if (project.draft) badgeRow.appendChild(el("span", "cs-badge", t().cs_draft_badge));
+      if (project.confidential) badgeRow.appendChild(el("span", "cs-badge", t().cs_confidential_badge));
+      var industryLabel = window.MayaWork.INDUSTRY_LABELS[project.industry] || project.industry;
+      if (industryLabel) badgeRow.appendChild(el("span", "cs-industry-pill", industryLabel));
+      var mins = estimateReadingMinutes(project);
+      badgeRow.appendChild(el("span", "cs-reading-time", t().cs_reading_time.replace("{min}", mins)));
 
-      // ---- Hero ----
       document.getElementById("cs-title").textContent = project.title;
-      document.getElementById("cs-summary").textContent = project.summary || "";
+      document.getElementById("cs-lede").textContent = project.summary || "";
+
       var meta = document.getElementById("cs-meta");
       meta.textContent = "";
+      metaItem(meta, "cs_project_type_label", project.projectType);
       metaItem(meta, "cs_org_label", project.organization);
       metaItem(meta, "cs_role_label", project.role);
       metaItem(meta, "cs_year_label", project.year);
       metaItem(meta, "cs_timeline_label", project.timeline);
+
       var heroMediaWrap = document.getElementById("cs-hero-media");
       heroMediaWrap.textContent = "";
       if (project.heroMedia && project.heroMedia.src) {
@@ -2396,121 +2672,106 @@
         img.src = project.heroMedia.src;
         img.alt = project.heroMedia.alt || "";
         img.style.width = "100%";
-        img.style.borderRadius = "14px";
+        img.style.borderRadius = "12px";
         img.style.border = "1px solid var(--color-border)";
         heroMediaWrap.appendChild(img);
       } else {
         heroMediaWrap.appendChild(renderPlaceholderMedia(project.slug + "-hero", project.title));
       }
 
-      // ---- Executive summary ----
-      var exec = document.getElementById("cs-exec-summary");
-      exec.textContent = "";
-      var execFields = [
-        ["cs_problem_label", project.executiveSummary && project.executiveSummary.problem],
-        ["cs_contribution_label", project.executiveSummary && project.executiveSummary.contribution],
-        ["cs_solution_label", project.executiveSummary && project.executiveSummary.solution],
-        ["cs_outcome_label", project.executiveSummary && project.executiveSummary.outcome],
-      ];
-      execFields.forEach(function (pair) {
-        if (!pair[1]) return;
-        var item = el("div", "cs-exec-item");
-        item.appendChild(el("h3", null, t[pair[0]]));
-        item.appendChild(el("p", null, pair[1]));
-        exec.appendChild(item);
+      var confCallout = document.getElementById("cs-confidentiality-callout");
+      confCallout.textContent = "";
+      if (project.confidential && project.confidentialityNote) {
+        var callout = el("div", "cs-callout cs-confidentiality-callout surface");
+        callout.appendChild(el("span", "cs-callout-icon", "\ud83d\udd12"));
+        var innerWrap = document.createElement("div");
+        innerWrap.appendChild(el("h3", null, t().cs_heading_confidentiality));
+        innerWrap.appendChild(el("p", null, project.confidentialityNote));
+        callout.appendChild(innerWrap);
+        confCallout.appendChild(callout);
+      }
+
+      // ---- Fixed narrative spine — every project goes through the same
+      // pipeline in the same order; each block hides itself if the project
+      // has no data for it. ----
+      var body = document.getElementById("cs-body");
+      body.textContent = "";
+      [
+        richTextSection("cs_project_summary_heading", project.projectSummary),
+        richTextSection("cs_business_context_heading", project.businessContext),
+        richTextSection("cs_why_difficult_heading", project.whyDifficult),
+        keyFindingsSection("cs_research_highlights_heading", project.researchHighlights),
+        myRoleSection(project),
+        cardListSection("cs_stakeholders_heading", project.stakeholders, "stakeholder"),
+        metricsGridSection("cs_success_metrics_heading", project.successMetrics),
+        cardListSection("cs_constraints_heading", project.constraints, "constraint"),
+        cardListSection("cs_decisions_heading", project.keyDecisions, "decision"),
+        designEvolutionSection(project),
+        finalSolutionSection(project),
+        quoteSection(project),
+        metricsGridSection("cs_business_impact_heading", project.businessImpact),
+        lessonsLearnedSection(project),
+        richTextSection("cs_next_opportunities_heading", project.nextOpportunities),
+        industrySectionsBlock(project),
+      ].forEach(function (node) {
+        if (node) body.appendChild(node);
       });
 
-      // ---- Role & constraints ----
-      var roleGrid = document.getElementById("cs-role-constraints");
-      roleGrid.textContent = "";
-      if (project.team && project.team.length) {
-        var teamItem = el("div", "cs-role-item");
-        teamItem.appendChild(el("h3", null, t.cs_team_label));
-        teamItem.appendChild(el("p", null, project.team.join(", ")));
-        roleGrid.appendChild(teamItem);
-      }
-      if (project.responsibilities && project.responsibilities.length) {
-        var respItem = el("div", "cs-role-item");
-        respItem.appendChild(el("h3", null, t.cs_responsibilities_label));
-        var list = document.createElement("ul");
-        project.responsibilities.forEach(function (r) {
-          list.appendChild(el("li", null, r));
-        });
-        respItem.appendChild(list);
-        roleGrid.appendChild(respItem);
-      }
-      if (project.platforms && project.platforms.length) {
-        var platItem = el("div", "cs-role-item");
-        platItem.appendChild(el("h3", null, t.cs_platforms_label));
-        platItem.appendChild(el("p", null, project.platforms.join(", ")));
-        roleGrid.appendChild(platItem);
-      }
-
-      // ---- Ordered narrative sections ----
-      renderSections(project, document.getElementById("cs-sections"));
-
-      // ---- Impact ----
-      var impactBlock = document.getElementById("cs-impact-block");
-      var impact = document.getElementById("cs-impact");
-      impact.textContent = "";
-      if (project.impactHighlights && project.impactHighlights.length) {
-        impactBlock.hidden = false;
-        project.impactHighlights.forEach(function (h) {
-          var tile = el("div", "cs-metric-tile surface");
-          tile.appendChild(el("span", "cs-metric-value", h.value || ""));
-          tile.appendChild(el("span", "cs-metric-label", h.label || ""));
-          if (h.context) tile.appendChild(el("span", "cs-metric-context", h.context));
-          impact.appendChild(tile);
-        });
-      } else {
-        impactBlock.hidden = true;
-      }
-
-      // ---- Reflection ----
-      var reflectionBlock = document.getElementById("cs-reflection-block");
-      var reflection = document.getElementById("cs-reflection");
-      reflection.textContent = "";
-      var r = project.reflection || {};
-      var reflectionFields = [
-        ["cs_learned_label", r.learned],
-        ["cs_change_label", r.changeNextTime],
-        ["cs_next_steps_label", r.nextSteps],
-      ];
-      var hasReflection = reflectionFields.some(function (pair) { return !!pair[1]; });
-      reflectionBlock.hidden = !hasReflection;
-      reflectionFields.forEach(function (pair) {
-        if (!pair[1]) return;
-        var item = el("div", "cs-reflection-item");
-        item.appendChild(el("h3", null, t[pair[0]]));
-        item.appendChild(el("p", null, pair[1]));
-        reflection.appendChild(item);
-      });
-
-      // ---- Prev/next ----
-      var adjacentNav = document.getElementById("cs-adjacent");
-      adjacentNav.textContent = "";
+      // ---- Prev / next ----
       var adjacent = window.MayaWork.getAdjacentWorkProjects(project.slug);
+      var nav = document.getElementById("cs-adjacent-nav");
+      nav.textContent = "";
       if (adjacent.prev) {
         var prevLink = document.createElement("a");
-        prevLink.className = "cs-adjacent-link is-prev";
+        prevLink.className = "cs-adjacent-link prev";
         prevLink.href = "/work/" + adjacent.prev.slug;
-        prevLink.appendChild(el("span", "cs-adjacent-label", t.cs_previous_project));
-        prevLink.appendChild(el("span", "cs-adjacent-title", adjacent.prev.title));
-        adjacentNav.appendChild(prevLink);
+        prevLink.appendChild(el("span", "cs-adjacent-kicker", t().cs_previous_project));
+        prevLink.appendChild(el("span", "cs-adjacent-title", "\u2190 " + adjacent.prev.title));
+        nav.appendChild(prevLink);
       } else {
-        adjacentNav.appendChild(document.createElement("span"));
+        nav.appendChild(document.createElement("span"));
       }
       if (adjacent.next) {
         var nextLink = document.createElement("a");
-        nextLink.className = "cs-adjacent-link is-next";
+        nextLink.className = "cs-adjacent-link next";
         nextLink.href = "/work/" + adjacent.next.slug;
-        nextLink.appendChild(el("span", "cs-adjacent-label", t.cs_next_project));
-        nextLink.appendChild(el("span", "cs-adjacent-title", adjacent.next.title));
-        adjacentNav.appendChild(nextLink);
+        nextLink.appendChild(el("span", "cs-adjacent-kicker", t().cs_next_project));
+        nextLink.appendChild(el("span", "cs-adjacent-title", adjacent.next.title + " \u2192"));
+        nav.appendChild(nextLink);
       }
+
+      // ---- Related work ----
+      var relatedGrid = document.getElementById("cs-related-grid");
+      relatedGrid.textContent = "";
+      window.MayaWork.getRelatedWorkProjects(project.slug, 3).forEach(function (p) {
+        relatedGrid.appendChild(relatedCard(p));
+      });
     }
 
-    (function bootstrap() {
+    // ---- Reading progress bar ----
+    (function () {
+      var bar = document.getElementById("cs-progress-bar");
+      var track = document.getElementById("cs-progress-track");
+      if (!bar || !track) return;
+      track.setAttribute("role", "progressbar");
+      track.setAttribute("aria-valuemin", "0");
+      track.setAttribute("aria-valuemax", "100");
+      function update() {
+        var doc = document.documentElement;
+        var scrollable = doc.scrollHeight - doc.clientHeight;
+        var pct = scrollable > 0 ? Math.min(100, Math.max(0, (doc.scrollTop / scrollable) * 100)) : 0;
+        bar.style.width = pct + "%";
+        track.setAttribute("aria-valuenow", String(Math.round(pct)));
+      }
+      track.setAttribute("aria-label", t().cs_progress_label);
+      document.addEventListener("app:languagechange", function () {
+        track.setAttribute("aria-label", t().cs_progress_label);
+      });
+      document.addEventListener("scroll", update, { passive: true });
+      update();
+    })();
+
+    (function () {
       if (!window.MayaWork) {
         renderNotFound();
         return;

@@ -536,7 +536,11 @@
       font-weight: 600;
     }
     #work h2 {
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    #work-subhead {
+      max-width: 46ch;
+      margin: 0 0 1.75rem;
     }
     .work-grid {
       grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
@@ -545,40 +549,90 @@
       position: relative;
       padding: 0;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+    .work-card:hover,
+    .work-card:focus-within {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+      transform: translateY(-2px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .work-card {
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      }
+      .work-card:hover,
+      .work-card:focus-within {
+        transform: none;
+      }
     }
     .work-card-thumb {
       aspect-ratio: 16 / 10;
       border-bottom: 1px solid var(--color-border);
       overflow: hidden;
+      flex-shrink: 0;
     }
     .work-card-thumb svg {
       display: block;
       width: 100%;
       height: 100%;
+      transition: transform 0.3s ease;
+    }
+    .work-card:hover .work-card-thumb svg {
+      transform: scale(1.04);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .work-card-thumb svg {
+        transition: none;
+      }
+      .work-card:hover .work-card-thumb svg {
+        transform: none;
+      }
     }
     .work-card-body {
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.9rem;
+      flex: 1;
+    }
+    .work-card-toprow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
     }
     .work-card-badges {
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
     }
-    .work-badge {
+    .work-badge,
+    .industry-pill {
       display: inline-flex;
       align-items: center;
       font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+    }
+    .work-badge {
       color: var(--color-text-secondary);
       background: var(--color-bg);
       border: 1px solid var(--color-border);
-      border-radius: 999px;
-      padding: 0.2rem 0.6rem;
+    }
+    .industry-pill {
+      color: var(--color-bg);
+      background: var(--color-accent);
+    }
+    .work-card-heading-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
     }
     .work-card-link {
       color: var(--color-text);
@@ -593,6 +647,55 @@
     .work-card-link:focus-visible {
       color: var(--color-accent);
     }
+    .work-card-type {
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+    .work-card-signals {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0.85rem 0.95rem;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+    }
+    .work-card-signals div {
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+    }
+    .work-card-signals dt {
+      flex-shrink: 0;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-accent);
+      width: 5.5rem;
+    }
+    .work-card-signals dd {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+    .work-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-top: auto;
+      padding-top: 0.2rem;
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+    }
+    .work-card-role {
+      font-weight: 600;
+      color: var(--color-text);
+    }
     .work-tags {
       display: flex;
       flex-wrap: wrap;
@@ -606,6 +709,15 @@
       border: 1px solid var(--color-border);
       border-radius: 999px;
       padding: 0.15rem 0.6rem;
+    }
+    @media (max-width: 599px) {
+      .work-card-signals dt {
+        width: auto;
+      }
+      .work-card-signals div {
+        flex-direction: column;
+        gap: 0.1rem;
+      }
     }
     .btn {
       display: inline-flex;
@@ -933,6 +1045,7 @@
     <section id="work">
       <div class="container">
         <h2 data-i18n="work_heading">Selected work</h2>
+        <p id="work-subhead" data-i18n="work_subhead">Four case studies spanning enterprise AI, cybersecurity, fintech, and government.</p>
         <div id="work-grid" class="card-grid work-grid"></div>
       </div>
     </section>
@@ -986,6 +1099,14 @@
         work_draft_badge: "Draft",
         work_confidential_badge: "Confidential",
         footer_p1: "From Miami to Helsinki—designing what's next.",
+        work_challenge_label: "Challenge",
+        work_outcome_label: "Outcome",
+        work_project_type_label: "Project type",
+        industry_enterprise_ai: "Enterprise / Frontier AI",
+        industry_cybersecurity: "Cybersecurity",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Government · Civic · Health · Insurance",
+        work_subhead: "Four case studies spanning enterprise AI, cybersecurity, fintech, and government.",
       },
       es: {
         label: "ES",
@@ -1003,6 +1124,14 @@
         work_draft_badge: "Borrador",
         work_confidential_badge: "Confidencial",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
+        work_challenge_label: "Desafío",
+        work_outcome_label: "Resultado",
+        work_project_type_label: "Tipo de proyecto",
+        industry_enterprise_ai: "Empresarial / IA de vanguardia",
+        industry_cybersecurity: "Ciberseguridad",
+        industry_fintech: "FinTech / RegTech / Cumplimiento",
+        industry_government: "Gobierno · Cívico · Salud · Seguros",
+        work_subhead: "Cuatro estudios de caso que abarcan IA empresarial, ciberseguridad, fintech y gobierno.",
       },
       fi: {
         label: "FI",
@@ -1020,6 +1149,14 @@
         work_draft_badge: "Luonnos",
         work_confidential_badge: "Luottamuksellinen",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
+        work_challenge_label: "Haaste",
+        work_outcome_label: "Tulos",
+        work_project_type_label: "Projektityyppi",
+        industry_enterprise_ai: "Yritys / Huippuluokan tekoäly",
+        industry_cybersecurity: "Kyberturvallisuus",
+        industry_fintech: "FinTech / RegTech / Säännöstenmukaisuus",
+        industry_government: "Julkishallinto · Kansalaispalvelut · Terveys · Vakuutus",
+        work_subhead: "Neljä tapaustutkimusta yritys-tekoälystä, kyberturvallisuudesta, fintechistä ja julkishallinnosta.",
       },
       fr: {
         label: "FR",
@@ -1037,6 +1174,14 @@
         work_draft_badge: "Brouillon",
         work_confidential_badge: "Confidentiel",
         footer_p1: "De Miami à Helsinki : concevoir ce qui vient ensuite.",
+        work_challenge_label: "Défi",
+        work_outcome_label: "Résultat",
+        work_project_type_label: "Type de projet",
+        industry_enterprise_ai: "Entreprise / IA de pointe",
+        industry_cybersecurity: "Cybersécurité",
+        industry_fintech: "FinTech / RegTech / Conformité",
+        industry_government: "Gouvernement · Civique · Santé · Assurance",
+        work_subhead: "Quatre études de cas couvrant l'IA d'entreprise, la cybersécurité, la fintech et le secteur public.",
       },
       de: {
         label: "DE",
@@ -1054,6 +1199,14 @@
         work_draft_badge: "Entwurf",
         work_confidential_badge: "Vertraulich",
         footer_p1: "Von Miami nach Helsinki – das Nächste gestalten.",
+        work_challenge_label: "Herausforderung",
+        work_outcome_label: "Ergebnis",
+        work_project_type_label: "Projektart",
+        industry_enterprise_ai: "Enterprise / Frontier-KI",
+        industry_cybersecurity: "Cybersicherheit",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Behörden · Bürgerdienste · Gesundheit · Versicherung",
+        work_subhead: "Vier Fallstudien aus Enterprise-KI, Cybersicherheit, FinTech und dem öffentlichen Sektor.",
       },
       it: {
         label: "IT",
@@ -1071,6 +1224,14 @@
         work_draft_badge: "Bozza",
         work_confidential_badge: "Riservato",
         footer_p1: "Da Miami a Helsinki: progettando il prossimo passo.",
+        work_challenge_label: "Sfida",
+        work_outcome_label: "Risultato",
+        work_project_type_label: "Tipo di progetto",
+        industry_enterprise_ai: "Enterprise / IA di frontiera",
+        industry_cybersecurity: "Cybersicurezza",
+        industry_fintech: "FinTech / RegTech / Conformità",
+        industry_government: "Governo · Civico · Sanità · Assicurazioni",
+        work_subhead: "Quattro casi studio che spaziano tra IA enterprise, cybersicurezza, fintech e pubblica amministrazione.",
       },
       pt: {
         label: "PT",
@@ -1088,6 +1249,14 @@
         work_draft_badge: "Rascunho",
         work_confidential_badge: "Confidencial",
         footer_p1: "De Miami a Helsinki — projetando o que vem a seguir.",
+        work_challenge_label: "Desafio",
+        work_outcome_label: "Resultado",
+        work_project_type_label: "Tipo de projeto",
+        industry_enterprise_ai: "Enterprise / IA de fronteira",
+        industry_cybersecurity: "Cibersegurança",
+        industry_fintech: "FinTech / RegTech / Conformidade",
+        industry_government: "Governo · Cívico · Saúde · Seguros",
+        work_subhead: "Quatro estudos de caso que abrangem IA empresarial, cibersegurança, fintech e governo.",
       },
       nl: {
         label: "NL",
@@ -1105,6 +1274,14 @@
         work_draft_badge: "Concept",
         work_confidential_badge: "Vertrouwelijk",
         footer_p1: "Van Miami naar Helsinki — het volgende ontwerpen.",
+        work_challenge_label: "Uitdaging",
+        work_outcome_label: "Resultaat",
+        work_project_type_label: "Projecttype",
+        industry_enterprise_ai: "Enterprise / Frontier AI",
+        industry_cybersecurity: "Cyberbeveiliging",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Overheid · Publieke diensten · Zorg · Verzekeringen",
+        work_subhead: "Vier casestudy's over enterprise AI, cyberbeveiliging, fintech en overheid.",
       },
       pl: {
         label: "PL",
@@ -1122,6 +1299,14 @@
         work_draft_badge: "Wersja robocza",
         work_confidential_badge: "Poufne",
         footer_p1: "Z Miami do Helsinek — projektując to, co dalej.",
+        work_challenge_label: "Wyzwanie",
+        work_outcome_label: "Wynik",
+        work_project_type_label: "Typ projektu",
+        industry_enterprise_ai: "Enterprise / Zaawansowana AI",
+        industry_cybersecurity: "Cyberbezpieczeństwo",
+        industry_fintech: "FinTech / RegTech / Zgodność",
+        industry_government: "Administracja publiczna · Usługi obywatelskie · Zdrowie · Ubezpieczenia",
+        work_subhead: "Cztery studia przypadków obejmujące AI dla biznesu, cyberbezpieczeństwo, fintech i administrację publiczną.",
       },
       sv: {
         label: "SV",
@@ -1139,6 +1324,14 @@
         work_draft_badge: "Utkast",
         work_confidential_badge: "Konfidentiellt",
         footer_p1: "Från Miami till Helsingfors – designar det som kommer härnäst.",
+        work_challenge_label: "Utmaning",
+        work_outcome_label: "Resultat",
+        work_project_type_label: "Projekttyp",
+        industry_enterprise_ai: "Enterprise / Frontier-AI",
+        industry_cybersecurity: "Cybersäkerhet",
+        industry_fintech: "FinTech / RegTech / Regelefterlevnad",
+        industry_government: "Myndighet · Medborgartjänster · Vård · Försäkring",
+        work_subhead: "Fyra fallstudier inom enterprise-AI, cybersäkerhet, fintech och myndigheter.",
       },
       da: {
         label: "DA",
@@ -1156,6 +1349,14 @@
         work_draft_badge: "Kladde",
         work_confidential_badge: "Fortroligt",
         footer_p1: "Fra Miami til Helsinki – designer det, der kommer næst.",
+        work_challenge_label: "Udfordring",
+        work_outcome_label: "Resultat",
+        work_project_type_label: "Projekttype",
+        industry_enterprise_ai: "Enterprise / Frontier-AI",
+        industry_cybersecurity: "Cybersikkerhed",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Myndighed · Borgerservice · Sundhed · Forsikring",
+        work_subhead: "Fire casestudier inden for enterprise-AI, cybersikkerhed, fintech og myndigheder.",
       },
       no: {
         label: "NO",
@@ -1173,6 +1374,14 @@
         work_draft_badge: "Utkast",
         work_confidential_badge: "Konfidensielt",
         footer_p1: "Fra Miami til Helsingfors – designer det som kommer neste.",
+        work_challenge_label: "Utfordring",
+        work_outcome_label: "Resultat",
+        work_project_type_label: "Prosjekttype",
+        industry_enterprise_ai: "Enterprise / Frontier-AI",
+        industry_cybersecurity: "Cybersikkerhet",
+        industry_fintech: "FinTech / RegTech / Compliance",
+        industry_government: "Myndighet · Innbyggertjenester · Helse · Forsikring",
+        work_subhead: "Fire caser innen enterprise-AI, cybersikkerhet, fintech og offentlig sektor.",
       },
     };
 
@@ -1440,48 +1649,69 @@
         return wrap;
       }
 
+      // Card content is deliberately limited to the five signals a
+      // recruiter needs in a 30-second scan — Industry, Project type,
+      // Role, Primary challenge, Key outcome — per the brief. The
+      // generic one-sentence summary and tag chips that used to sit here
+      // said less in more space, so they were dropped from the card (the
+      // full summary/tags still live on the detail page).
+      var INDUSTRY_I18N_KEYS = {
+        "enterprise-ai": "industry_enterprise_ai",
+        "cybersecurity": "industry_cybersecurity",
+        "fintech": "industry_fintech",
+        "government": "industry_government",
+      };
+
       function renderCards() {
         var t = translations[document.documentElement.lang] || translations.en;
         var projects = window.MayaWork.getPublishedWorkProjects();
         grid.textContent = "";
         projects.forEach(function (project) {
           var card = el("article", "card surface work-card");
-
           card.appendChild(renderThumb(project));
 
           var body = el("div", "work-card-body");
-          var badges = el("div", "work-card-badges");
-          if (project.draft) badges.appendChild(el("span", "work-badge", t.work_draft_badge));
-          if (project.confidential) badges.appendChild(el("span", "work-badge", t.work_confidential_badge));
-          if (badges.children.length) body.appendChild(badges);
 
+          var topRow = el("div", "work-card-toprow");
+          var industryKey = INDUSTRY_I18N_KEYS[project.industry];
+          if (industryKey) topRow.appendChild(el("span", "industry-pill", t[industryKey] || project.industry));
+          if (project.draft) topRow.appendChild(el("span", "work-badge", t.work_draft_badge));
+          if (project.confidential) topRow.appendChild(el("span", "work-badge", t.work_confidential_badge));
+          body.appendChild(topRow);
+
+          var headingGroup = el("div", "work-card-heading-group");
           var heading = el("h3");
           var link = document.createElement("a");
           link.className = "work-card-link";
           link.href = "/work/" + project.slug;
           link.textContent = project.title;
           heading.appendChild(link);
-          body.appendChild(heading);
+          headingGroup.appendChild(heading);
+          if (project.projectType) headingGroup.appendChild(el("p", "work-card-type", project.projectType));
+          body.appendChild(headingGroup);
 
-          body.appendChild(el("p", null, project.summary));
-
-          if (project.role || project.organization) {
-            var meta = el("div", "work-meta");
-            if (project.role) {
-              var roleLine = el("span");
-              roleLine.appendChild(el("strong", null, project.role));
-              meta.appendChild(roleLine);
+          if (project.cardChallenge || project.cardOutcome) {
+            var signals = document.createElement("dl");
+            signals.className = "work-card-signals";
+            if (project.cardChallenge) {
+              var challengeRow = el("div");
+              challengeRow.appendChild(el("dt", null, t.work_challenge_label));
+              challengeRow.appendChild(el("dd", null, project.cardChallenge));
+              signals.appendChild(challengeRow);
             }
-            if (project.organization) meta.appendChild(el("span", null, project.organization));
-            body.appendChild(meta);
+            if (project.cardOutcome) {
+              var outcomeRow = el("div");
+              outcomeRow.appendChild(el("dt", null, t.work_outcome_label));
+              outcomeRow.appendChild(el("dd", null, project.cardOutcome));
+              signals.appendChild(outcomeRow);
+            }
+            body.appendChild(signals);
           }
 
-          if (project.tags && project.tags.length) {
-            var tags = el("div", "work-tags");
-            project.tags.forEach(function (tag) {
-              tags.appendChild(el("span", "work-tag", tag));
-            });
-            body.appendChild(tags);
+          if (project.role) {
+            var footer = el("div", "work-card-footer");
+            footer.appendChild(el("span", "work-card-role", project.role));
+            body.appendChild(footer);
           }
 
           card.appendChild(body);
