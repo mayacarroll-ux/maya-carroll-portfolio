@@ -618,6 +618,31 @@
     .hero-copy:last-of-type {
       margin-bottom: 0;
     }
+    .skills-block {
+      margin-top: 1.75rem;
+      text-align: left;
+    }
+    .skills-block h3 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.6rem;
+    }
+    .skills-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .skill-pill {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+    }
     .credentials-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1068,6 +1093,19 @@
             </ul>
           </div>
         </div>
+
+        <div class="skills-block">
+          <h3 data-i18n="skills_label">Skills</h3>
+          <div class="skills-pills">
+            <span class="skill-pill" data-i18n="skill_product_strategy">Product Strategy</span>
+            <span class="skill-pill" data-i18n="skill_product_design">Product Design</span>
+            <span class="skill-pill" data-i18n="skill_product_management">Product Management</span>
+            <span class="skill-pill" data-i18n="skill_user_research">User Research</span>
+            <span class="skill-pill" data-i18n="skill_human_ai">Human-AI Interaction</span>
+            <span class="skill-pill" data-i18n="skill_ai_agents">AI Agents &amp; Automation</span>
+            <span class="skill-pill" data-i18n="skill_enterprise_ux">Enterprise UX</span>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -1125,6 +1163,14 @@
         contact_email: "Email",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "South Florida, USA · U.S. Citizen · Public Trust Clearance",
+        skills_label: "Skills",
+        skill_product_strategy: "Product Strategy",
+        skill_product_design: "Product Design",
+        skill_product_management: "Product Management",
+        skill_user_research: "User Research",
+        skill_human_ai: "Human-AI Interaction",
+        skill_ai_agents: "AI Agents & Automation",
+        skill_enterprise_ux: "Enterprise UX",
         credentials_education_label: "Education",
         credential_bfa: "BFA, Graphic Design",
         credential_msit: "M.S., Information Technology",
@@ -1157,6 +1203,14 @@
         contact_email: "Correo",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sur de Florida, EE. UU. · Ciudadana estadounidense · Autorización Public Trust",
+        skills_label: "Habilidades",
+        skill_product_strategy: "Estrategia de producto",
+        skill_product_design: "Diseño de producto",
+        skill_product_management: "Gestión de producto",
+        skill_user_research: "Investigación de usuarios",
+        skill_human_ai: "Interacción humano-IA",
+        skill_ai_agents: "Agentes de IA y automatización",
+        skill_enterprise_ux: "UX empresarial",
         credentials_education_label: "Educación",
         credential_bfa: "Licenciatura en Bellas Artes (BFA), Diseño Gráfico",
         credential_msit: "Maestría en Ciencias, Tecnología de la Información",
@@ -1189,6 +1243,14 @@
         contact_email: "Sähköposti",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Etelä-Florida, Yhdysvallat · Yhdysvaltain kansalainen · Public Trust -turvallisuusselvitys",
+        skills_label: "Taidot",
+        skill_product_strategy: "Tuotestrategia",
+        skill_product_design: "Tuotesuunnittelu",
+        skill_product_management: "Tuotehallinta",
+        skill_user_research: "Käyttäjätutkimus",
+        skill_human_ai: "Ihmisen ja tekoälyn vuorovaikutus",
+        skill_ai_agents: "Tekoälyagentit ja automaatio",
+        skill_enterprise_ux: "Yritys-UX",
         credentials_education_label: "Koulutus",
         credential_bfa: "BFA, graafinen suunnittelu",
         credential_msit: "Tietotekniikan maisteri (M.S.)",
