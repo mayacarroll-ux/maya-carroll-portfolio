@@ -667,17 +667,44 @@
       overflow: hidden;
       min-width: 0;
     }
+    /* Skeleton-loading shimmer — the standard motion language for this
+       exact visual style, so the covers read as "live" without inventing
+       a different animation idiom. Staggered per bar via an inline
+       animation-delay set in JS (see renderThumb's uiBar calls) so a
+       whole card doesn't flash in lockstep. */
+    @keyframes ui-shimmer {
+      0% { background-position: -150% 0; }
+      100% { background-position: 250% 0; }
+    }
+    @keyframes ui-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.82); }
+    }
     .ui-bar {
       height: 5px;
       border-radius: 2.5px;
-      background: var(--color-text-secondary);
       opacity: 0.28;
+      background-image: linear-gradient(
+        90deg,
+        var(--color-text-secondary) 0%,
+        var(--color-text-secondary) 42%,
+        var(--color-accent) 50%,
+        var(--color-text-secondary) 58%,
+        var(--color-text-secondary) 100%
+      );
+      background-size: 250% 100%;
+      animation: ui-shimmer 2.6s ease-in-out infinite;
     }
     .ui-bar.dim { opacity: 0.15; }
-    .ui-bar.accent { background: var(--color-accent); opacity: 0.85; }
+    .ui-bar.accent { background: var(--color-accent); background-image: none; opacity: 0.85; animation: none; }
     .ui-bar.w20 { width: 20%; } .ui-bar.w30 { width: 30%; } .ui-bar.w40 { width: 40%; }
     .ui-bar.w50 { width: 50%; } .ui-bar.w60 { width: 60%; } .ui-bar.w70 { width: 70%; }
     .ui-bar.w80 { width: 80%; } .ui-bar.w90 { width: 90%; }
+    @media (prefers-reduced-motion: reduce) {
+      .ui-bar, .ui-row-badge.sev-high, .ui-row-severity-bar.sev-high {
+        animation: none !important;
+      }
+    }
 
     .ui-row {
       display: flex;
@@ -695,7 +722,7 @@
       height: 7px;
       border-radius: 50%;
     }
-    .ui-row-badge.sev-high { background: var(--color-warning); }
+    .ui-row-badge.sev-high { background: var(--color-warning); animation: ui-pulse 1.6s ease-in-out infinite; }
     .ui-row-badge.sev-med { background: var(--color-accent-3); }
     .ui-row-badge.sev-low { background: var(--color-text-secondary); opacity: 0.4; }
     .ui-row-severity-bar {
@@ -703,6 +730,9 @@
       width: 3px;
       align-self: stretch;
       border-radius: 2px;
+    }
+    .ui-row-severity-bar.sev-high {
+      animation: ui-pulse 1.6s ease-in-out infinite;
     }
     .ui-row-lines {
       flex: 1;
@@ -1870,8 +1900,10 @@
       // ---- FPO product-screen mockups for card covers — see the matching
       // functions in case-study.html for the full comment. Kept identical
       // here so a card's cover always matches its detail page's hero. ----
-      function uiBar(cls) {
-        return el("div", "ui-bar " + cls);
+      function uiBar(cls, delayIndex) {
+        var bar = el("div", "ui-bar " + cls);
+        if (delayIndex != null) bar.style.animationDelay = (delayIndex * 0.12) + "s";
+        return bar;
       }
       function mockupChrome(urlText) {
         var wrap = el("div", "ui-mockup");
@@ -1905,8 +1937,8 @@
           var row = el("div", "ui-row");
           row.appendChild(el("span", "ui-row-badge " + tier));
           var lines = el("div", "ui-row-lines");
-          lines.appendChild(uiBar("w" + (60 + ((seed >>> i) % 3) * 10)));
-          lines.appendChild(uiBar("w40 dim"));
+          lines.appendChild(uiBar("w" + (60 + ((seed >>> i) % 3) * 10), i * 2));
+          lines.appendChild(uiBar("w40 dim", i * 2 + 1));
           row.appendChild(lines);
           row.appendChild(el("span", "ui-pill", labels[tier]));
           main.appendChild(row);
@@ -1924,15 +1956,15 @@
         var tiers = ranked
           ? ["sev-high", "sev-high", "sev-med", "sev-low", "sev-low"]
           : ["sev-med", "sev-med", "sev-med", "sev-med", "sev-med"];
-        tiers.forEach(function (tier) {
+        tiers.forEach(function (tier, i) {
           var row = el("div", "ui-row");
           row.style.padding = "5px 8px";
-          var bar = el("span", "ui-row-severity-bar");
+          var bar = el("span", "ui-row-severity-bar" + (tier === "sev-high" ? " sev-high" : ""));
           bar.style.background = tier === "sev-high" ? "var(--color-warning)" : tier === "sev-med" ? "var(--color-accent-3)" : "var(--color-border)";
           row.appendChild(bar);
           var lines = el("div", "ui-row-lines");
           var w = ranked ? (tier === "sev-high" ? "w80" : tier === "sev-med" ? "w60" : "w40 dim") : "w60";
-          lines.appendChild(uiBar(w));
+          lines.appendChild(uiBar(w, i));
           row.appendChild(lines);
           main.appendChild(row);
         });
@@ -1951,18 +1983,19 @@
         [1.4, 1, 0.9, 1.1].forEach(function (flex) {
           var c = el("div", "ui-table-cell");
           c.style.flex = flex;
-          c.appendChild(uiBar("w60 dim"));
+          c.appendChild(uiBar("w60 dim", 0));
           header.appendChild(c);
         });
         table.appendChild(header);
         for (var i = 0; i < 4; i++) {
           var row = el("div", "ui-table-row");
-          var c1 = el("div", "ui-table-cell"); c1.style.flex = "1.4"; c1.appendChild(uiBar("w80"));
-          var c2 = el("div", "ui-table-cell"); c2.style.flex = "1"; c2.appendChild(uiBar("w60 dim"));
+          var d = (i + 1) * 2;
+          var c1 = el("div", "ui-table-cell"); c1.style.flex = "1.4"; c1.appendChild(uiBar("w80", d));
+          var c2 = el("div", "ui-table-cell"); c2.style.flex = "1"; c2.appendChild(uiBar("w60 dim", d + 1));
           var c3 = el("div", "ui-table-cell"); c3.style.flex = "0.9";
           var ok = (seed >>> i) % 2 === 0;
           c3.appendChild(el("span", "ui-status-pill " + (ok ? "ok" : "warn"), ok ? "CURRENT" : "REVIEW"));
-          var c4 = el("div", "ui-table-cell"); c4.style.flex = "1.1"; c4.appendChild(uiBar("w50 dim"));
+          var c4 = el("div", "ui-table-cell"); c4.style.flex = "1.1"; c4.appendChild(uiBar("w50 dim", d + 2));
           row.appendChild(c1); row.appendChild(c2); row.appendChild(c3); row.appendChild(c4);
           table.appendChild(row);
         }
@@ -1979,9 +2012,9 @@
         for (var i = 0; i < 4; i++) steps.appendChild(el("div", "ui-progress-step" + (i < 3 ? " done" : "")));
         card.appendChild(steps);
         card.appendChild(uiBar("w50 accent"));
-        ["w90", "w70"].forEach(function (w) {
+        ["w90", "w70"].forEach(function (w, i) {
           var field = el("div", "ui-field");
-          field.appendChild(uiBar(w + " dim"));
+          field.appendChild(uiBar(w + " dim", i));
           field.appendChild(el("div", "ui-field-input"));
           card.appendChild(field);
         });
