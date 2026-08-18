@@ -593,6 +593,240 @@
       opacity: 0.85;
       pointer-events: none;
     }
+
+    /* ==================== UI mockups (FPO card covers) ====================
+       Same skeleton-screen system as the case-study template — real chrome
+       and layout, gray bars standing in for actual text/data — so each
+       card's cover matches its detail page's hero image. See work-data.js
+       for the note on why these are code-built rather than generated. */
+    .work-card-thumb .ui-mockup {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg);
+    }
+    .ui-mockup-topbar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 10px;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+    .ui-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+    .ui-mockup-url {
+      margin-left: 6px;
+      font-size: 8px;
+      font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+      color: var(--color-text-secondary);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 2px 8px;
+    }
+    .ui-mockup-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    .ui-sidebar {
+      width: 16%;
+      min-width: 28px;
+      background: var(--color-surface);
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 7px;
+      flex-shrink: 0;
+    }
+    .ui-sidebar-item {
+      height: 7px;
+      border-radius: 3px;
+      background: var(--color-text-secondary);
+      opacity: 0.22;
+    }
+    .ui-sidebar-item.active {
+      background: var(--color-accent);
+      opacity: 0.9;
+    }
+    .ui-main {
+      flex: 1;
+      padding: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .ui-bar {
+      height: 5px;
+      border-radius: 2.5px;
+      background: var(--color-text-secondary);
+      opacity: 0.28;
+    }
+    .ui-bar.dim { opacity: 0.15; }
+    .ui-bar.accent { background: var(--color-accent); opacity: 0.85; }
+    .ui-bar.w20 { width: 20%; } .ui-bar.w30 { width: 30%; } .ui-bar.w40 { width: 40%; }
+    .ui-bar.w50 { width: 50%; } .ui-bar.w60 { width: 60%; } .ui-bar.w70 { width: 70%; }
+    .ui-bar.w80 { width: 80%; } .ui-bar.w90 { width: 90%; }
+
+    .ui-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+    .ui-row-badge {
+      flex-shrink: 0;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    .ui-row-badge.sev-high { background: var(--color-warning); }
+    .ui-row-badge.sev-med { background: var(--color-accent-3); }
+    .ui-row-badge.sev-low { background: var(--color-text-secondary); opacity: 0.4; }
+    .ui-row-severity-bar {
+      flex-shrink: 0;
+      width: 3px;
+      align-self: stretch;
+      border-radius: 2px;
+    }
+    .ui-row-lines {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .ui-pill {
+      flex-shrink: 0;
+      font-size: 6.5px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+    }
+
+    .ui-table {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--color-border);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .ui-table-header, .ui-table-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 8px;
+    }
+    .ui-table-header { background: var(--color-surface); }
+    .ui-table-row { background: var(--color-bg); }
+    .ui-table-cell { min-width: 0; }
+    .ui-status-pill {
+      font-size: 6.5px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      padding: 2px 6px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+    .ui-status-pill.ok { background: rgba(63, 107, 76, 0.16); color: var(--color-accent); border: 1px solid var(--color-accent); }
+    .ui-status-pill.warn { background: rgba(255, 92, 122, 0.14); color: var(--color-warning); border: 1px solid var(--color-warning); }
+
+    .ui-form-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+    .ui-form-card {
+      width: 80%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .ui-progress-steps {
+      display: flex;
+      gap: 4px;
+    }
+    .ui-progress-step {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--color-text-secondary);
+      opacity: 0.2;
+    }
+    .ui-progress-step.done { background: var(--color-accent); opacity: 0.9; }
+    .ui-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .ui-field-input {
+      height: 15px;
+      border-radius: 4px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+    }
+    .ui-btn {
+      align-self: flex-start;
+      margin-top: 3px;
+      height: 15px;
+      width: 56px;
+      border-radius: 4px;
+      background: var(--color-accent);
+      opacity: 0.9;
+    }
+
+    .ui-chaos-wrap {
+      flex: 1;
+      position: relative;
+      padding: 8px;
+    }
+    .ui-chaos-sheet {
+      position: absolute;
+      width: 44%;
+      height: 50%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      box-shadow: var(--shadow-elevated);
+      padding: 5px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 2px;
+    }
+    .ui-chaos-cell {
+      background: var(--color-text-secondary);
+      opacity: 0.1;
+      border-radius: 1px;
+    }
+
     .work-card-thumb svg {
       display: block;
       width: 100%;
@@ -1632,6 +1866,164 @@
         for (var i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
         return hash;
       }
+
+      // ---- FPO product-screen mockups for card covers — see the matching
+      // functions in case-study.html for the full comment. Kept identical
+      // here so a card's cover always matches its detail page's hero. ----
+      function uiBar(cls) {
+        return el("div", "ui-bar " + cls);
+      }
+      function mockupChrome(urlText) {
+        var wrap = el("div", "ui-mockup");
+        var topbar = el("div", "ui-mockup-topbar");
+        ["#ff5f57", "#febc2e", "#28c840"].forEach(function (c) {
+          var dot = el("span", "ui-dot");
+          dot.style.background = c;
+          topbar.appendChild(dot);
+        });
+        topbar.appendChild(el("span", "ui-mockup-url", urlText));
+        wrap.appendChild(topbar);
+        return wrap;
+      }
+      function mockupSidebar(activeIndex) {
+        var sb = el("div", "ui-sidebar");
+        for (var i = 0; i < 5; i++) {
+          sb.appendChild(el("div", "ui-sidebar-item" + (i === activeIndex ? " active" : "")));
+        }
+        return sb;
+      }
+      function renderQueueDashboard(seedStr, urlText) {
+        var seed = seedFromString(seedStr);
+        var wrap = mockupChrome(urlText);
+        var body = el("div", "ui-mockup-body");
+        body.appendChild(mockupSidebar(1));
+        var main = el("div", "ui-main");
+        var tiers = ["sev-high", "sev-med", "sev-low"];
+        var labels = { "sev-high": "HIGH", "sev-med": "MED", "sev-low": "LOW" };
+        for (var i = 0; i < 5; i++) {
+          var tier = tiers[(seed >>> (i * 2)) % 3];
+          var row = el("div", "ui-row");
+          row.appendChild(el("span", "ui-row-badge " + tier));
+          var lines = el("div", "ui-row-lines");
+          lines.appendChild(uiBar("w" + (60 + ((seed >>> i) % 3) * 10)));
+          lines.appendChild(uiBar("w40 dim"));
+          row.appendChild(lines);
+          row.appendChild(el("span", "ui-pill", labels[tier]));
+          main.appendChild(row);
+        }
+        body.appendChild(main);
+        wrap.appendChild(body);
+        return wrap;
+      }
+      function renderAlertDashboard(seedStr, urlText, ranked) {
+        var seed = seedFromString(seedStr);
+        var wrap = mockupChrome(urlText);
+        var body = el("div", "ui-mockup-body");
+        body.appendChild(mockupSidebar(0));
+        var main = el("div", "ui-main");
+        var tiers = ranked
+          ? ["sev-high", "sev-high", "sev-med", "sev-low", "sev-low"]
+          : ["sev-med", "sev-med", "sev-med", "sev-med", "sev-med"];
+        tiers.forEach(function (tier) {
+          var row = el("div", "ui-row");
+          row.style.padding = "5px 8px";
+          var bar = el("span", "ui-row-severity-bar");
+          bar.style.background = tier === "sev-high" ? "var(--color-warning)" : tier === "sev-med" ? "var(--color-accent-3)" : "var(--color-border)";
+          row.appendChild(bar);
+          var lines = el("div", "ui-row-lines");
+          var w = ranked ? (tier === "sev-high" ? "w80" : tier === "sev-med" ? "w60" : "w40 dim") : "w60";
+          lines.appendChild(uiBar(w));
+          row.appendChild(lines);
+          main.appendChild(row);
+        });
+        body.appendChild(main);
+        wrap.appendChild(body);
+        return wrap;
+      }
+      function renderTableTracker(seedStr, urlText) {
+        var seed = seedFromString(seedStr);
+        var wrap = mockupChrome(urlText);
+        var body = el("div", "ui-mockup-body");
+        body.appendChild(mockupSidebar(2));
+        var main = el("div", "ui-main");
+        var table = el("div", "ui-table");
+        var header = el("div", "ui-table-header");
+        [1.4, 1, 0.9, 1.1].forEach(function (flex) {
+          var c = el("div", "ui-table-cell");
+          c.style.flex = flex;
+          c.appendChild(uiBar("w60 dim"));
+          header.appendChild(c);
+        });
+        table.appendChild(header);
+        for (var i = 0; i < 4; i++) {
+          var row = el("div", "ui-table-row");
+          var c1 = el("div", "ui-table-cell"); c1.style.flex = "1.4"; c1.appendChild(uiBar("w80"));
+          var c2 = el("div", "ui-table-cell"); c2.style.flex = "1"; c2.appendChild(uiBar("w60 dim"));
+          var c3 = el("div", "ui-table-cell"); c3.style.flex = "0.9";
+          var ok = (seed >>> i) % 2 === 0;
+          c3.appendChild(el("span", "ui-status-pill " + (ok ? "ok" : "warn"), ok ? "CURRENT" : "REVIEW"));
+          var c4 = el("div", "ui-table-cell"); c4.style.flex = "1.1"; c4.appendChild(uiBar("w50 dim"));
+          row.appendChild(c1); row.appendChild(c2); row.appendChild(c3); row.appendChild(c4);
+          table.appendChild(row);
+        }
+        main.appendChild(table);
+        body.appendChild(main);
+        wrap.appendChild(body);
+        return wrap;
+      }
+      function renderGuidedForm(seedStr, urlText) {
+        var wrap = mockupChrome(urlText);
+        var formWrap = el("div", "ui-form-wrap");
+        var card = el("div", "ui-form-card");
+        var steps = el("div", "ui-progress-steps");
+        for (var i = 0; i < 4; i++) steps.appendChild(el("div", "ui-progress-step" + (i < 3 ? " done" : "")));
+        card.appendChild(steps);
+        card.appendChild(uiBar("w50 accent"));
+        ["w90", "w70"].forEach(function (w) {
+          var field = el("div", "ui-field");
+          field.appendChild(uiBar(w + " dim"));
+          field.appendChild(el("div", "ui-field-input"));
+          card.appendChild(field);
+        });
+        card.appendChild(el("div", "ui-btn"));
+        formWrap.appendChild(card);
+        wrap.appendChild(formWrap);
+        return wrap;
+      }
+      function renderSpreadsheetChaos(seedStr, urlText) {
+        var seed = seedFromString(seedStr);
+        var wrap = mockupChrome(urlText);
+        var chaosWrap = el("div", "ui-chaos-wrap");
+        var positions = [
+          { top: "2%", left: "1%", rot: -6 },
+          { top: "32%", left: "40%", rot: 4 },
+          { top: "6%", left: "54%", rot: -3 },
+          { top: "44%", left: "5%", rot: 5 },
+        ];
+        positions.forEach(function (pos, i) {
+          var sheet = el("div", "ui-chaos-sheet");
+          sheet.style.top = pos.top;
+          sheet.style.left = pos.left;
+          sheet.style.transform = "rotate(" + pos.rot + "deg)";
+          for (var c = 0; c < 20; c++) {
+            var cell = el("div", "ui-chaos-cell");
+            if ((seed >>> (c + i)) % 5 === 0) cell.style.opacity = "0.35";
+            sheet.appendChild(cell);
+          }
+          chaosWrap.appendChild(sheet);
+        });
+        wrap.appendChild(chaosWrap);
+        return wrap;
+      }
+      var UI_MOCKUP_RENDERERS = {
+        "queue-dashboard": function (seed, url) { return renderQueueDashboard(seed, url); },
+        "alert-dashboard-flat": function (seed, url) { return renderAlertDashboard(seed, url, false); },
+        "alert-dashboard-ranked": function (seed, url) { return renderAlertDashboard(seed, url, true); },
+        "table-tracker": function (seed, url) { return renderTableTracker(seed, url); },
+        "guided-form": function (seed, url) { return renderGuidedForm(seed, url); },
+        "spreadsheet-chaos": function (seed, url) { return renderSpreadsheetChaos(seed, url); },
+      };
+
       function renderThumb(project) {
         var wrap = el("div", "work-card-thumb");
         wrap.setAttribute("role", "img");
@@ -1644,6 +2036,15 @@
           img.style.height = "100%";
           img.style.objectFit = "cover";
           wrap.appendChild(img);
+          return wrap;
+        }
+        // Cover matches the mockup shown as the hero image on the project's
+        // own case-study page (heroMockup in work-data.js) — same visual
+        // language start to finish, not a generic thumbnail.
+        var mockupRenderer = project.heroMockup && UI_MOCKUP_RENDERERS[project.heroMockup];
+        if (mockupRenderer) {
+          wrap.appendChild(mockupRenderer(project.slug + "-cover", "app.internal"));
+          wrap.appendChild(el("span", "fpo-stamp", "FPO"));
           return wrap;
         }
         var seed = seedFromString(project.slug);
