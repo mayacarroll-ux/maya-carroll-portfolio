@@ -77,14 +77,14 @@
       --color-surface-translucent: rgba(255, 255, 255, 0.78);
       --color-text: #17211e;
       --color-text-secondary: #60706a;
-      --color-accent: #1f5a4a; /* pine */
+      --color-accent: #1d4e89; /* dark blue */
       --color-accent-2: #a7d8e5; /* ice — decorative only, not for text */
       --color-accent-3: #dce6e2; /* frost — decorative only */
       --color-warning: #c23b52; /* reserved for genuine alerts (severe weather, elevated UV), never buttons/links */
       --color-border: #dce6e2;
-      --focus-ring: #1f5a4a;
+      --focus-ring: #1d4e89;
       --shadow-elevated: 0 12px 32px rgba(23, 33, 30, 0.1);
-      --glow-hover: 0 0 0 1px rgba(31, 90, 74, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
+      --glow-hover: 0 0 0 1px rgba(29, 78, 137, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
       --status-glow: none;
       /* Body-clock states — quiet Nordic tones */
       --state-rest: #b9c9cd;
@@ -275,15 +275,8 @@
       background: var(--color-accent);
       color: var(--color-bg);
     }
-    :root[data-theme="light"] .btn-primary {
-      color: var(--color-surface);
-      background: #1d4e89;
-    }
     .btn-primary:hover {
       box-shadow: var(--glow-hover);
-    }
-    :root[data-theme="light"] .btn-primary:hover {
-      box-shadow: 0 0 0 1px rgba(29, 78, 137, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
     }
     .btn-secondary {
       background: var(--color-surface);
