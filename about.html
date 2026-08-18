@@ -716,6 +716,20 @@
       color: var(--color-text);
       font-weight: 600;
     }
+    /* Same quiet tier as Credentials right above it — personal, not
+       core value proposition — so it reuses .credentials-line styling
+       with a smaller gap rather than starting a new major section. */
+    .languages-block {
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+    .languages-block h3 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.6rem;
+    }
     .hero-actions {
       display: flex;
       align-items: center;
@@ -1171,6 +1185,20 @@
             <span data-i18n="credential_ai3">Building AI Agents &amp; Workflows</span>
           </p>
         </div>
+
+        <div class="languages-block">
+          <h3 data-i18n="languages_label">Languages</h3>
+          <p class="credentials-line">
+            <strong data-i18n="languages_native_label">Native</strong> &mdash;
+            <span data-i18n="language_english">English</span>
+          </p>
+          <p class="credentials-line">
+            <strong data-i18n="languages_studying_label">Currently Studying</strong> &mdash;
+            <span data-i18n="language_french">French</span> &middot;
+            <span data-i18n="language_spanish">Spanish</span> &middot;
+            <span data-i18n="language_nordic">Nordic Languages</span>
+          </p>
+        </div>
       </div>
     </section>
   </main>
@@ -1251,6 +1279,13 @@
         credential_ai1: "Applied AI",
         credential_ai2: "Vibe Coding with AI",
         credential_ai3: "Building AI Agents & Workflows",
+        languages_label: "Languages",
+        languages_native_label: "Native",
+        languages_studying_label: "Currently Studying",
+        language_english: "English",
+        language_french: "French",
+        language_spanish: "Spanish",
+        language_nordic: "Nordic Languages",
         footer_p1: "From Miami to Helsinki—designing what's next.",
       },
       es: {
@@ -1298,6 +1333,13 @@
         credential_ai1: "IA aplicada",
         credential_ai2: "Vibe Coding con IA",
         credential_ai3: "Creación de agentes y flujos de trabajo de IA",
+        languages_label: "Idiomas",
+        languages_native_label: "Nativo",
+        languages_studying_label: "Actualmente estudiando",
+        language_english: "Inglés",
+        language_french: "Francés",
+        language_spanish: "Español",
+        language_nordic: "Idiomas nórdicos",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
       },
       fi: {
@@ -1345,6 +1387,13 @@
         credential_ai1: "Sovellettu tekoäly",
         credential_ai2: "Vibe Coding tekoälyllä",
         credential_ai3: "Tekoälyagenttien ja työnkulkujen rakentaminen",
+        languages_label: "Kielet",
+        languages_native_label: "Äidinkieli",
+        languages_studying_label: "Opiskelen parhaillaan",
+        language_english: "Englanti",
+        language_french: "Ranska",
+        language_spanish: "Espanja",
+        language_nordic: "Pohjoismaiset kielet",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
       },
       fr: {
@@ -1392,6 +1441,13 @@
         credential_ai1: "IA appliquée",
         credential_ai2: "Vibe Coding avec l'IA",
         credential_ai3: "Créer des agents et des flux de travail IA",
+        languages_label: "Langues",
+        languages_native_label: "Langue maternelle",
+        languages_studying_label: "En cours d'apprentissage",
+        language_english: "Anglais",
+        language_french: "Français",
+        language_spanish: "Espagnol",
+        language_nordic: "Langues nordiques",
         footer_p1: "De Miami à Helsinki : concevoir ce qui vient ensuite.",
       },
       de: {
@@ -1439,6 +1495,13 @@
         credential_ai1: "Angewandte KI",
         credential_ai2: "Vibe Coding mit KI",
         credential_ai3: "Aufbau von KI-Agenten & Workflows",
+        languages_label: "Sprachen",
+        languages_native_label: "Muttersprache",
+        languages_studying_label: "Derzeit am Lernen",
+        language_english: "Englisch",
+        language_french: "Französisch",
+        language_spanish: "Spanisch",
+        language_nordic: "Nordische Sprachen",
         footer_p1: "Von Miami nach Helsinki – das Nächste gestalten.",
       },
       it: {
@@ -1486,6 +1549,13 @@
         credential_ai1: "IA applicata",
         credential_ai2: "Vibe Coding con l'IA",
         credential_ai3: "Costruire agenti e flussi di lavoro IA",
+        languages_label: "Lingue",
+        languages_native_label: "Madrelingua",
+        languages_studying_label: "Attualmente in studio",
+        language_english: "Inglese",
+        language_french: "Francese",
+        language_spanish: "Spagnolo",
+        language_nordic: "Lingue nordiche",
         footer_p1: "Da Miami a Helsinki: progettando il prossimo passo.",
       },
       pt: {
@@ -1533,6 +1603,13 @@
         credential_ai1: "IA aplicada",
         credential_ai2: "Vibe Coding com IA",
         credential_ai3: "Construção de agentes e fluxos de trabalho de IA",
+        languages_label: "Idiomas",
+        languages_native_label: "Nativo",
+        languages_studying_label: "Atualmente estudando",
+        language_english: "Inglês",
+        language_french: "Francês",
+        language_spanish: "Espanhol",
+        language_nordic: "Línguas nórdicas",
         footer_p1: "De Miami a Helsinki — projetando o que vem a seguir.",
       },
       nl: {
@@ -1580,6 +1657,13 @@
         credential_ai1: "Toegepaste AI",
         credential_ai2: "Vibe Coding met AI",
         credential_ai3: "AI-agents en workflows bouwen",
+        languages_label: "Talen",
+        languages_native_label: "Moedertaal",
+        languages_studying_label: "Momenteel aan het leren",
+        language_english: "Engels",
+        language_french: "Frans",
+        language_spanish: "Spaans",
+        language_nordic: "Noordse talen",
         footer_p1: "Van Miami naar Helsinki — het volgende ontwerpen.",
       },
       pl: {
@@ -1627,6 +1711,13 @@
         credential_ai1: "Stosowana AI",
         credential_ai2: "Vibe Coding z AI",
         credential_ai3: "Budowanie agentów i przepływów pracy AI",
+        languages_label: "Języki",
+        languages_native_label: "Ojczysty",
+        languages_studying_label: "Obecnie się uczę",
+        language_english: "Angielski",
+        language_french: "Francuski",
+        language_spanish: "Hiszpański",
+        language_nordic: "Języki nordyckie",
         footer_p1: "Z Miami do Helsinek — projektując to, co dalej.",
       },
       sv: {
@@ -1674,6 +1765,13 @@
         credential_ai1: "Tillämpad AI",
         credential_ai2: "Vibe Coding med AI",
         credential_ai3: "Att bygga AI-agenter och arbetsflöden",
+        languages_label: "Språk",
+        languages_native_label: "Modersmål",
+        languages_studying_label: "Studerar för närvarande",
+        language_english: "Engelska",
+        language_french: "Franska",
+        language_spanish: "Spanska",
+        language_nordic: "Nordiska språk",
         footer_p1: "Från Miami till Helsingfors – designar det som kommer härnäst.",
       },
       da: {
@@ -1721,6 +1819,13 @@
         credential_ai1: "Anvendt AI",
         credential_ai2: "Vibe Coding med AI",
         credential_ai3: "Opbygning af AI-agenter og workflows",
+        languages_label: "Sprog",
+        languages_native_label: "Modersmål",
+        languages_studying_label: "Lærer i øjeblikket",
+        language_english: "Engelsk",
+        language_french: "Fransk",
+        language_spanish: "Spansk",
+        language_nordic: "Nordiske sprog",
         footer_p1: "Fra Miami til Helsinki – designer det, der kommer næst.",
       },
       no: {
@@ -1768,6 +1873,13 @@
         credential_ai1: "Anvendt AI",
         credential_ai2: "Vibe Coding med AI",
         credential_ai3: "Bygge AI-agenter og arbeidsflyter",
+        languages_label: "Språk",
+        languages_native_label: "Morsmål",
+        languages_studying_label: "Lærer for tiden",
+        language_english: "Engelsk",
+        language_french: "Fransk",
+        language_spanish: "Spansk",
+        language_nordic: "Nordiske språk",
         footer_p1: "Fra Miami til Helsingfors – designer det som kommer neste.",
       },
     };
