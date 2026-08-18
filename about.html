@@ -706,12 +706,22 @@
       color: var(--color-text-secondary);
       line-height: 1.6;
     }
-    .clients-list {
-      margin: 0;
-      font-size: 0.92rem;
-      font-weight: 500;
+    /* Wordmark grid, not a sentence — each name gets equal visual weight
+       and its own space, closer to a Stripe/Linear customer strip than
+       a dense run-on line. No borders, no cards, no logos (none exist
+       in the repo for these organizations, and none were downloaded or
+       invented per instruction) — typography carries the credibility. */
+    .clients-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem 2rem;
+      align-items: baseline;
+    }
+    .client-name {
+      font-size: 0.95rem;
+      font-weight: 600;
       color: var(--color-text);
-      line-height: 1.7;
+      letter-spacing: -0.01em;
     }
     /* Consolidated Technical Fluency. The capability groups (Languages &
        Frameworks, Development) are bold plain text with no icon — it
@@ -1309,15 +1319,22 @@
         </div>
 
         <div class="clients-block">
-          <h3 data-i18n="clients_label">Selected Clients &amp; Organizations</h3>
+          <h3 data-i18n="clients_label">Selected Organizations</h3>
           <p class="clients-intro" data-i18n="clients_intro">
-            From Fortune 500 companies and federal agencies to high-growth SaaS and mission-driven
-            organizations.
+            Partnering with Fortune 500 companies, federal agencies, enterprise SaaS, and
+            mission-driven organizations.
           </p>
-          <p class="clients-list">
-            U.S. Department of Veterans Affairs &middot; Citrix &middot; UserTesting &middot; Kandji &middot;
-            TradeStation &middot; Office Depot &middot; BriteCore &middot; Buildertrend &middot; Junior Achievement USA
-          </p>
+          <div class="clients-grid">
+            <span class="client-name">U.S. Department of Veterans Affairs</span>
+            <span class="client-name">Citrix</span>
+            <span class="client-name">UserTesting</span>
+            <span class="client-name">Office Depot</span>
+            <span class="client-name">TradeStation</span>
+            <span class="client-name">Kandji</span>
+            <span class="client-name">BriteCore</span>
+            <span class="client-name">Buildertrend</span>
+            <span class="client-name">Junior Achievement USA</span>
+          </div>
         </div>
 
         <div class="fluency-block">
@@ -1479,8 +1496,8 @@
         leadership_role: "UI/UX Design Mentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Mentored 60+ aspiring product designers through 1:1 coaching, UX research guidance, portfolio reviews, and design critiques. Helped evaluate talent and identify top candidates for hiring.",
-        clients_label: "Selected Clients & Organizations",
-        clients_intro: "From Fortune 500 companies and federal agencies to high-growth SaaS and mission-driven organizations.",
+        clients_label: "Selected Organizations",
+        clients_intro: "Partnering with Fortune 500 companies, federal agencies, enterprise SaaS, and mission-driven organizations.",
         skills_label: "Practice Areas",
         fluency_label: "Technical Fluency",
         fluency_group_languages: "Languages & Frameworks",
@@ -1554,8 +1571,8 @@
         leadership_role: "Mentora de Diseño UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Mentoricé a más de 60 aspirantes a diseñadores de producto mediante coaching individual, orientación en investigación UX, revisiones de portafolio y críticas de diseño. Ayudé a evaluar talento e identificar a los mejores candidatos para contratación.",
-        clients_label: "Clientes y organizaciones destacadas",
-        clients_intro: "Desde empresas Fortune 500 y agencias federales hasta SaaS de alto crecimiento y organizaciones con una misión clara.",
+        clients_label: "Organizaciones seleccionadas",
+        clients_intro: "Colaborando con empresas Fortune 500, agencias federales, SaaS empresarial y organizaciones con una misión clara.",
         skills_label: "Áreas de especialización",
         fluency_label: "Fluidez técnica",
         fluency_group_languages: "Lenguajes y frameworks",
@@ -1629,8 +1646,8 @@
         leadership_role: "UI/UX-suunnittelun mentori",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Ohjasin yli 60:tä tulevaa tuotesuunnittelijaa henkilökohtaisen valmennuksen, UX-tutkimusohjauksen, portfolioarviointien ja design-kritiikkien kautta. Autoin arvioimaan osaamista ja tunnistamaan parhaat ehdokkaat rekrytointiin.",
-        clients_label: "Valitut asiakkaat ja organisaatiot",
-        clients_intro: "Fortune 500 -yrityksistä ja liittovaltion virastoista nopeasti kasvaviin SaaS-yrityksiin ja missiovetoisiin organisaatioihin.",
+        clients_label: "Valitut organisaatiot",
+        clients_intro: "Yhteistyössä Fortune 500 -yritysten, liittovaltion virastojen, yritystason SaaS-yritysten ja missiovetoisten organisaatioiden kanssa.",
         skills_label: "Osaamisalueet",
         fluency_label: "Tekninen osaaminen",
         fluency_group_languages: "Kielet ja kehykset",
@@ -1704,8 +1721,8 @@
         leadership_role: "Mentore en design UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Mentorat de plus de 60 designers produit en devenir via du coaching individuel, un accompagnement en recherche UX, des revues de portfolio et des critiques de design. Contribution à l'évaluation des talents et à l'identification des meilleurs candidats à l'embauche.",
-        clients_label: "Clients et organisations sélectionnés",
-        clients_intro: "Des entreprises du Fortune 500 et agences fédérales aux SaaS à forte croissance et organisations à mission.",
+        clients_label: "Organisations sélectionnées",
+        clients_intro: "En partenariat avec des entreprises du Fortune 500, des agences fédérales, des SaaS d'entreprise et des organisations à mission.",
         skills_label: "Domaines d'expertise",
         fluency_label: "Compétences techniques",
         fluency_group_languages: "Langages et frameworks",
@@ -1779,8 +1796,8 @@
         leadership_role: "UI/UX-Design-Mentorin",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Habe über 60 angehende Produktdesignerinnen und -designer durch 1:1-Coaching, UX-Forschungsberatung, Portfolio-Reviews und Design-Critiques begleitet. Half bei der Talentbewertung und der Identifikation von Top-Kandidat:innen für Einstellungen.",
-        clients_label: "Ausgewählte Kunden & Organisationen",
-        clients_intro: "Von Fortune-500-Unternehmen und Bundesbehörden bis zu wachstumsstarken SaaS- und missionsgetriebenen Organisationen.",
+        clients_label: "Ausgewählte Organisationen",
+        clients_intro: "In Zusammenarbeit mit Fortune-500-Unternehmen, Bundesbehörden, Enterprise-SaaS und missionsgetriebenen Organisationen.",
         skills_label: "Kompetenzbereiche",
         fluency_label: "Technische Kompetenz",
         fluency_group_languages: "Sprachen & Frameworks",
@@ -1854,8 +1871,8 @@
         leadership_role: "Mentore di Design UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Ho fatto da mentore a oltre 60 aspiranti product designer attraverso coaching individuale, guida nella ricerca UX, revisioni di portfolio e critiche di design. Ho contribuito a valutare i talenti e a identificare i migliori candidati per le assunzioni.",
-        clients_label: "Clienti e organizzazioni selezionate",
-        clients_intro: "Da aziende Fortune 500 e agenzie federali a SaaS ad alta crescita e organizzazioni orientate a una missione.",
+        clients_label: "Organizzazioni selezionate",
+        clients_intro: "In collaborazione con aziende Fortune 500, agenzie federali, SaaS enterprise e organizzazioni orientate a una missione.",
         skills_label: "Aree di competenza",
         fluency_label: "Competenza tecnica",
         fluency_group_languages: "Linguaggi e framework",
@@ -1929,8 +1946,8 @@
         leadership_role: "Mentora de Design UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Fui mentora de mais de 60 aspirantes a product designers por meio de coaching individual, orientação em pesquisa UX, revisões de portfólio e críticas de design. Ajudei a avaliar talentos e identificar os melhores candidatos para contratação.",
-        clients_label: "Clientes e organizações selecionadas",
-        clients_intro: "De empresas Fortune 500 e agências federais a SaaS de alto crescimento e organizações com propósito.",
+        clients_label: "Organizações selecionadas",
+        clients_intro: "Em parceria com empresas Fortune 500, agências federais, SaaS empresarial e organizações com propósito.",
         skills_label: "Áreas de atuação",
         fluency_label: "Fluência técnica",
         fluency_group_languages: "Linguagens e frameworks",
@@ -2004,8 +2021,8 @@
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Begeleidde 60+ aankomende productdesigners via 1-op-1-coaching, UX-onderzoeksbegeleiding, portfolioreviews en designcritiques. Hielp bij het beoordelen van talent en het identificeren van de beste kandidaten voor aanwerving.",
-        clients_label: "Geselecteerde klanten & organisaties",
-        clients_intro: "Van Fortune 500-bedrijven en federale overheidsinstanties tot snelgroeiende SaaS- en missiegedreven organisaties.",
+        clients_label: "Geselecteerde organisaties",
+        clients_intro: "In samenwerking met Fortune 500-bedrijven, federale overheidsinstanties, enterprise SaaS en missiegedreven organisaties.",
         skills_label: "Expertisegebieden",
         fluency_label: "Technische vaardigheid",
         fluency_group_languages: "Talen & frameworks",
@@ -2079,8 +2096,8 @@
         leadership_role: "Mentorka projektowania UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Mentorowałam ponad 60 przyszłych projektantów produktu poprzez coaching indywidualny, wsparcie w badaniach UX, przeglądy portfolio i krytyki designu. Pomagałam oceniać talenty i identyfikować najlepszych kandydatów do zatrudnienia.",
-        clients_label: "Wybrani klienci i organizacje",
-        clients_intro: "Od firm z listy Fortune 500 i agencji federalnych po szybko rozwijające się SaaS i organizacje misyjne.",
+        clients_label: "Wybrane organizacje",
+        clients_intro: "Współpraca z firmami z listy Fortune 500, agencjami federalnymi, korporacyjnym SaaS i organizacjami misyjnymi.",
         skills_label: "Obszary kompetencji",
         fluency_label: "Kompetencje techniczne",
         fluency_group_languages: "Języki i frameworki",
@@ -2154,8 +2171,8 @@
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Handledde 60+ blivande produktdesigner genom individuell coachning, UX-forskningsvägledning, portföljgranskningar och designgranskningar. Hjälpte till att utvärdera talang och identifiera de bästa kandidaterna för anställning.",
-        clients_label: "Utvalda kunder & organisationer",
-        clients_intro: "Från Fortune 500-bolag och federala myndigheter till snabbväxande SaaS- och missionsdrivna organisationer.",
+        clients_label: "Utvalda organisationer",
+        clients_intro: "I samarbete med Fortune 500-bolag, federala myndigheter, enterprise-SaaS och missionsdrivna organisationer.",
         skills_label: "Kompetensområden",
         fluency_label: "Teknisk kompetens",
         fluency_group_languages: "Språk & ramverk",
@@ -2229,8 +2246,8 @@
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Var mentor for 60+ kommende produktdesignere gennem 1:1-coaching, UX-researchvejledning, porteføljegennemgange og designkritikker. Hjalp med at evaluere talent og identificere de bedste kandidater til ansættelse.",
-        clients_label: "Udvalgte kunder & organisationer",
-        clients_intro: "Fra Fortune 500-virksomheder og føderale myndigheder til hurtigtvoksende SaaS- og missionsdrevne organisationer.",
+        clients_label: "Udvalgte organisationer",
+        clients_intro: "I samarbejde med Fortune 500-virksomheder, føderale myndigheder, enterprise-SaaS og missionsdrevne organisationer.",
         skills_label: "Kompetenceområder",
         fluency_label: "Teknisk kompetence",
         fluency_group_languages: "Sprog & frameworks",
@@ -2304,8 +2321,8 @@
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_copy: "Veiledet 60+ kommende produktdesignere gjennom 1:1-coaching, UX-forskningsveiledning, porteføljegjennomganger og designkritikker. Bidro til å vurdere talent og identifisere de beste kandidatene for ansettelse.",
-        clients_label: "Utvalgte kunder & organisasjoner",
-        clients_intro: "Fra Fortune 500-selskaper og føderale etater til raskt voksende SaaS- og misjonsdrevne organisasjoner.",
+        clients_label: "Utvalgte organisasjoner",
+        clients_intro: "I samarbeid med Fortune 500-selskaper, føderale etater, enterprise-SaaS og misjonsdrevne organisasjoner.",
         skills_label: "Kompetanseområder",
         fluency_label: "Teknisk kompetanse",
         fluency_group_languages: "Språk & rammeverk",
