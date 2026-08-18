@@ -66,6 +66,7 @@ var WORK_PROJECTS = [
       "Company name, real screenshots, and case data are withheld under NDA. Layouts and copy shown are recreated to illustrate the approach without exposing proprietary UI.",
     thumbnail: null,
     heroMedia: null,
+    heroMockup: "queue-dashboard",
 
     projectSummary:
       "An AI agent that reads incoming support cases, classifies their urgency and required expertise, and routes them to the right team — with a human able to review, override, or approve every recommendation before it takes effect. Built for a support organization handling 15,000+ cases a week.",
@@ -168,6 +169,7 @@ var WORK_PROJECTS = [
     confidentialityNote: "",
     thumbnail: null,
     heroMedia: null,
+    heroMockup: "alert-dashboard-ranked",
 
     projectSummary:
       "A unified security operations dashboard that pulls alerts from five previously separate monitoring tools into a single, risk-ranked queue — built for a 24/7 SOC team handling an average of 4,000 alerts a day, the vast majority of them noise.",
@@ -208,8 +210,8 @@ var WORK_PROJECTS = [
     designEvolution: {
       type: "gallery",
       items: [
-        { alt: "Early exploration: a single unified feed sorted purely by timestamp" },
-        { alt: "Later exploration: risk-ranked queue with severity-based visual weight" },
+        { alt: "Early exploration: a single unified feed sorted purely by timestamp", mockup: "alert-dashboard-flat" },
+        { alt: "Later exploration: risk-ranked queue with severity-based visual weight", mockup: "alert-dashboard-ranked" },
       ],
     },
     finalSolution: {
@@ -270,6 +272,7 @@ var WORK_PROJECTS = [
     confidentialityNote: "",
     thumbnail: null,
     heroMedia: null,
+    heroMockup: "table-tracker",
 
     projectSummary:
       "A compliance workflow platform that gives a mid-size bank's compliance team one system of record for every regulatory obligation, its owner, its evidence, and its audit trail — replacing a patchwork of over 40 spreadsheets maintained across four teams.",
@@ -303,8 +306,8 @@ var WORK_PROJECTS = [
 
     designEvolution: {
       type: "beforeAfter",
-      before: { alt: "Compliance tracking spread across 40+ spreadsheets with no shared ownership view", caption: "Before" },
-      after: { alt: "Single obligation-tracking system with owner, status, and evidence in one record", caption: "After" },
+      before: { alt: "Compliance tracking spread across 40+ spreadsheets with no shared ownership view", caption: "Before", mockup: "spreadsheet-chaos" },
+      after: { alt: "Single obligation-tracking system with owner, status, and evidence in one record", caption: "After", mockup: "table-tracker" },
     },
     finalSolution: {
       body: "The platform gives every regulatory obligation a single record: owner, status, linked evidence, and a full immutable history. A dedicated audit-export view lets internal and external auditors review a point-in-time snapshot without needing raw system access.",
@@ -365,6 +368,7 @@ var WORK_PROJECTS = [
     confidentialityNote: "",
     thumbnail: null,
     heroMedia: null,
+    heroMockup: "guided-form",
 
     projectSummary:
       "A redesigned public benefits application that replaced a 45-minute, paper-modeled digital form with a 12-minute guided experience — built for a resident population where nearly a third does not speak English as a first language and a meaningful share apply from a phone.",
