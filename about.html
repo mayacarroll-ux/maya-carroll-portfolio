@@ -609,13 +609,7 @@
       margin: 0 auto;
       padding: clamp(1.5rem, 4vw, 2rem) 1.5rem 0;
     }
-    /* Reading measure stays capped even though the page container now
-       matches work.html's 1100px — full-width prose lines (~150+
-       characters) hurt readability. Scannable content (pills, tool
-       lists, industry/credential lines) isn't capped since it wraps
-       rather than reads line-by-line. */
     .hero-copy {
-      max-width: 46rem;
       margin: 0 0 0.9rem;
       font-size: 0.98rem;
       color: var(--color-text-secondary);
@@ -625,7 +619,6 @@
       margin-bottom: 0;
     }
     .about-focus {
-      max-width: 46rem;
       margin: 0 0 1.25rem;
       font-size: 1.05rem;
       font-weight: 700;
