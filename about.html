@@ -634,6 +634,13 @@
       border-color: var(--color-accent);
       color: var(--color-accent);
     }
+    /* Matches .btn-primary's light-theme blue rather than the teal
+       --color-accent, which reads too green against this palette. */
+    :root[data-theme="light"] .jump-nav-links a:hover,
+    :root[data-theme="light"] .jump-nav-links a:focus-visible {
+      border-color: #1d4e89;
+      color: #1d4e89;
+    }
     .hero-content {
       max-width: 1100px;
       margin: 0 auto;
