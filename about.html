@@ -609,26 +609,42 @@
     .jump-nav {
       max-width: 1100px;
       margin: 1.5rem auto 0;
-      padding: 0 1.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.35rem 0.9rem;
-      font-size: 0.85rem;
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
     }
     .jump-nav-label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--color-text-secondary);
       font-weight: 600;
     }
-    .jump-nav a {
-      color: var(--color-text-secondary);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
+    .jump-nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
     }
-    .jump-nav a:hover,
-    .jump-nav a:focus-visible {
+    .jump-nav-links a {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-decoration: none;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      transition: border-color 0.18s ease, color 0.18s ease;
+    }
+    .jump-nav-links a:hover,
+    .jump-nav-links a:focus-visible {
+      border-color: var(--color-accent);
       color: var(--color-accent);
-      border-bottom-color: currentColor;
     }
     .hero-content {
       max-width: 1100px;
@@ -1328,15 +1344,17 @@
       </div>
 
       <nav class="jump-nav" aria-label="Page sections">
-        <span class="jump-nav-label" data-i18n="jump_nav_label">Jump to</span>
-        <a href="#practice-areas" data-i18n="skills_label">Practice Areas</a>
-        <a href="#collaboration-delivery" data-i18n="collab_label">Collaboration &amp; Delivery</a>
-        <a href="#leadership-impact" data-i18n="leadership_label">Leadership &amp; Impact</a>
-        <a href="#selected-organizations" data-i18n="clients_label">Selected Organizations</a>
-        <a href="#technical-fluency" data-i18n="fluency_label">Technical Fluency</a>
-        <a href="#industry-experience" data-i18n="industries_label">Industry Experience</a>
-        <a href="#education" data-i18n="credentials_label">Education &amp; Professional Development</a>
-        <a href="#languages" data-i18n="languages_label">Languages</a>
+        <span class="jump-nav-label" data-i18n="jump_nav_label">Jump to a section</span>
+        <div class="jump-nav-links">
+          <a href="#practice-areas" data-i18n="skills_label">Practice Areas</a>
+          <a href="#collaboration-delivery" data-i18n="collab_label">Collaboration &amp; Delivery</a>
+          <a href="#leadership-impact" data-i18n="leadership_label">Leadership &amp; Impact</a>
+          <a href="#selected-organizations" data-i18n="clients_label">Selected Organizations</a>
+          <a href="#technical-fluency" data-i18n="fluency_label">Technical Fluency</a>
+          <a href="#industry-experience" data-i18n="industries_label">Industry Experience</a>
+          <a href="#education" data-i18n="credentials_label">Education &amp; Professional Development</a>
+          <a href="#languages" data-i18n="languages_label">Languages</a>
+        </div>
       </nav>
 
       <div class="hero-content">
@@ -1643,7 +1661,7 @@
         leadership_copy: "Mentored 60+ designers through 1:1 coaching, UX research guidance, portfolio reviews, and design critiques. Helped evaluate talent and identify top candidates for hiring.",
         clients_label: "Selected Organizations",
         clients_intro: "From Fortune 500 companies and federal agencies to high-growth SaaS and mission-driven organizations.",
-        jump_nav_label: "Jump to",
+        jump_nav_label: "Jump to a section",
         skills_label: "Practice Areas",
         skills_note: "Experience designing to WCAG AA and AAA standards across enterprise and government products.",
         fluency_label: "Technical Fluency",
@@ -1731,7 +1749,7 @@
         leadership_copy: "Mentoricé a más de 60 diseñadores mediante coaching individual, orientación en investigación UX, revisiones de portafolio y críticas de diseño. Ayudé a evaluar talento e identificar a los mejores candidatos para contratación.",
         clients_label: "Organizaciones seleccionadas",
         clients_intro: "Desde empresas Fortune 500 y agencias federales hasta SaaS de alto crecimiento y organizaciones con una misión clara.",
-        jump_nav_label: "Ir a",
+        jump_nav_label: "Ir a una sección",
         skills_label: "Áreas de especialización",
         skills_note: "Experiencia diseñando conforme a los estándares WCAG AA y AAA en productos empresariales y gubernamentales.",
         fluency_label: "Fluidez técnica",
@@ -1819,7 +1837,7 @@
         leadership_copy: "Ohjasin yli 60 suunnittelijaa henkilökohtaisen valmennuksen, UX-tutkimusohjauksen, portfolioarviointien ja design-kritiikkien kautta. Autoin arvioimaan osaamista ja tunnistamaan parhaat ehdokkaat rekrytointiin.",
         clients_label: "Valitut organisaatiot",
         clients_intro: "Fortune 500 -yrityksistä ja liittovaltion virastoista nopeasti kasvaviin SaaS-yrityksiin ja missiovetoisiin organisaatioihin.",
-        jump_nav_label: "Siirry",
+        jump_nav_label: "Siirry osioon",
         skills_label: "Osaamisalueet",
         skills_note: "Kokemusta WCAG AA- ja AAA-standardien mukaisesta suunnittelusta yritys- ja julkishallinnon tuotteissa.",
         fluency_label: "Tekninen osaaminen",
@@ -1907,7 +1925,7 @@
         leadership_copy: "Mentorat de plus de 60 designers via du coaching individuel, un accompagnement en recherche UX, des revues de portfolio et des critiques de design. Contribution à l'évaluation des talents et à l'identification des meilleurs candidats à l'embauche.",
         clients_label: "Organisations sélectionnées",
         clients_intro: "Des entreprises du Fortune 500 et agences fédérales aux SaaS à forte croissance et organisations à mission.",
-        jump_nav_label: "Aller à",
+        jump_nav_label: "Aller à une section",
         skills_label: "Domaines d'expertise",
         skills_note: "Expérience de conception conforme aux normes WCAG AA et AAA sur des produits d'entreprise et gouvernementaux.",
         fluency_label: "Compétences techniques",
@@ -1995,7 +2013,7 @@
         leadership_copy: "Habe über 60 Designerinnen und Designer durch 1:1-Coaching, UX-Forschungsberatung, Portfolio-Reviews und Design-Critiques begleitet. Half bei der Talentbewertung und der Identifikation von Top-Kandidat:innen für Einstellungen.",
         clients_label: "Ausgewählte Organisationen",
         clients_intro: "Von Fortune-500-Unternehmen und Bundesbehörden bis zu wachstumsstarken SaaS- und missionsgetriebenen Organisationen.",
-        jump_nav_label: "Springe zu",
+        jump_nav_label: "Zu einem Abschnitt springen",
         skills_label: "Kompetenzbereiche",
         skills_note: "Erfahrung im Design nach WCAG-AA- und -AAA-Standards für Unternehmens- und Behördenprodukte.",
         fluency_label: "Technische Kompetenz",
@@ -2083,7 +2101,7 @@
         leadership_copy: "Ho fatto da mentore a oltre 60 designer attraverso coaching individuale, guida nella ricerca UX, revisioni di portfolio e critiche di design. Ho contribuito a valutare i talenti e a identificare i migliori candidati per le assunzioni.",
         clients_label: "Organizzazioni selezionate",
         clients_intro: "Da aziende Fortune 500 e agenzie federali a SaaS ad alta crescita e organizzazioni orientate a una missione.",
-        jump_nav_label: "Vai a",
+        jump_nav_label: "Vai a una sezione",
         skills_label: "Aree di competenza",
         skills_note: "Esperienza nella progettazione secondo gli standard WCAG AA e AAA su prodotti enterprise e governativi.",
         fluency_label: "Competenza tecnica",
@@ -2171,7 +2189,7 @@
         leadership_copy: "Fui mentora de mais de 60 designers por meio de coaching individual, orientação em pesquisa UX, revisões de portfólio e críticas de design. Ajudei a avaliar talentos e identificar os melhores candidatos para contratação.",
         clients_label: "Organizações selecionadas",
         clients_intro: "De empresas Fortune 500 e agências federais a SaaS de alto crescimento e organizações com propósito.",
-        jump_nav_label: "Ir para",
+        jump_nav_label: "Ir para uma seção",
         skills_label: "Áreas de atuação",
         skills_note: "Experiência em design seguindo os padrões WCAG AA e AAA em produtos corporativos e governamentais.",
         fluency_label: "Fluência técnica",
@@ -2259,7 +2277,7 @@
         leadership_copy: "Begeleidde 60+ designers via 1-op-1-coaching, UX-onderzoeksbegeleiding, portfolioreviews en designcritiques. Hielp bij het beoordelen van talent en het identificeren van de beste kandidaten voor aanwerving.",
         clients_label: "Geselecteerde organisaties",
         clients_intro: "Van Fortune 500-bedrijven en federale overheidsinstanties tot snelgroeiende SaaS- en missiegedreven organisaties.",
-        jump_nav_label: "Ga naar",
+        jump_nav_label: "Ga naar een sectie",
         skills_label: "Expertisegebieden",
         skills_note: "Ervaring met ontwerpen volgens WCAG AA- en AAA-normen voor enterprise- en overheidsproducten.",
         fluency_label: "Technische vaardigheid",
@@ -2347,7 +2365,7 @@
         leadership_copy: "Mentorowałam ponad 60 projektantów poprzez coaching indywidualny, wsparcie w badaniach UX, przeglądy portfolio i krytyki designu. Pomagałam oceniać talenty i identyfikować najlepszych kandydatów do zatrudnienia.",
         clients_label: "Wybrane organizacje",
         clients_intro: "Od firm z listy Fortune 500 i agencji federalnych po szybko rozwijające się SaaS i organizacje misyjne.",
-        jump_nav_label: "Przejdź do",
+        jump_nav_label: "Przejdź do sekcji",
         skills_label: "Obszary kompetencji",
         skills_note: "Doświadczenie w projektowaniu zgodnym ze standardami WCAG AA i AAA w produktach korporacyjnych i rządowych.",
         fluency_label: "Kompetencje techniczne",
@@ -2435,7 +2453,7 @@
         leadership_copy: "Handledde 60+ designer genom individuell coachning, UX-forskningsvägledning, portföljgranskningar och designgranskningar. Hjälpte till att utvärdera talang och identifiera de bästa kandidaterna för anställning.",
         clients_label: "Utvalda organisationer",
         clients_intro: "Från Fortune 500-bolag och federala myndigheter till snabbväxande SaaS- och missionsdrivna organisationer.",
-        jump_nav_label: "Hoppa till",
+        jump_nav_label: "Hoppa till ett avsnitt",
         skills_label: "Kompetensområden",
         skills_note: "Erfarenhet av att designa enligt WCAG AA- och AAA-standarder för enterprise- och myndighetsprodukter.",
         fluency_label: "Teknisk kompetens",
@@ -2523,7 +2541,7 @@
         leadership_copy: "Var mentor for 60+ designere gennem 1:1-coaching, UX-researchvejledning, porteføljegennemgange og designkritikker. Hjalp med at evaluere talent og identificere de bedste kandidater til ansættelse.",
         clients_label: "Udvalgte organisationer",
         clients_intro: "Fra Fortune 500-virksomheder og føderale myndigheder til hurtigtvoksende SaaS- og missionsdrevne organisationer.",
-        jump_nav_label: "Gå til",
+        jump_nav_label: "Gå til et afsnit",
         skills_label: "Kompetenceområder",
         skills_note: "Erfaring med at designe efter WCAG AA- og AAA-standarder til enterprise- og myndighedsprodukter.",
         fluency_label: "Teknisk kompetence",
@@ -2611,7 +2629,7 @@
         leadership_copy: "Veiledet 60+ designere gjennom 1:1-coaching, UX-forskningsveiledning, porteføljegjennomganger og designkritikker. Bidro til å vurdere talent og identifisere de beste kandidatene for ansettelse.",
         clients_label: "Utvalgte organisasjoner",
         clients_intro: "Fra Fortune 500-selskaper og føderale etater til raskt voksende SaaS- og misjonsdrevne organisasjoner.",
-        jump_nav_label: "Gå til",
+        jump_nav_label: "Gå til en seksjon",
         skills_label: "Kompetanseområder",
         skills_note: "Erfaring med å designe etter WCAG AA- og AAA-standarder for enterprise- og myndighetsprodukter.",
         fluency_label: "Teknisk kompetanse",
