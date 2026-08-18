@@ -659,7 +659,7 @@
        separate, scannable groups rather than blurring into one list. */
     .industries-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
       gap: 0.6rem;
     }
     .industry-card {
@@ -667,6 +667,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      line-height: 1.25;
       font-size: 0.85rem;
       font-weight: 600;
       color: var(--color-text);
@@ -1132,11 +1133,26 @@
         <div class="industries-block">
           <h3 data-i18n="industries_label">Industries</h3>
           <div class="industries-grid">
-            <span class="industry-card">EdTech</span>
-            <span class="industry-card">FinTech</span>
-            <span class="industry-card">B2B SaaS</span>
-            <span class="industry-card">Civic Tech</span>
-            <span class="industry-card">eCommerce</span>
+            <span class="industry-card">AI &amp; Emerging Tech</span>
+            <span class="industry-card">Enterprise Software</span>
+            <span class="industry-card">Cybersecurity</span>
+            <span class="industry-card">Financial Services</span>
+            <span class="industry-card">Government</span>
+            <span class="industry-card">Healthcare</span>
+            <span class="industry-card">Education</span>
+            <span class="industry-card">Commerce</span>
+            <span class="industry-card">Data &amp; Analytics</span>
+            <span class="industry-card">Cloud &amp; Infrastructure</span>
+            <span class="industry-card">Manufacturing</span>
+            <span class="industry-card">Transportation</span>
+            <span class="industry-card">Energy</span>
+            <span class="industry-card">Real Estate</span>
+            <span class="industry-card">Media</span>
+            <span class="industry-card">Consumer</span>
+            <span class="industry-card">Telecommunications</span>
+            <span class="industry-card">Agriculture</span>
+            <span class="industry-card">Nonprofit</span>
+            <span class="industry-card">Legal &amp; Professional Services</span>
           </div>
         </div>
 
