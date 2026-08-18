@@ -678,6 +678,22 @@
       color: var(--color-text-secondary);
       margin-bottom: 0.9rem;
     }
+    /* Three concise sub-sections rather than cards — typography and
+       spacing carry the hierarchy (no borders/containers per entry). */
+    .leadership-entry {
+      margin-bottom: 1.5rem;
+    }
+    .leadership-entry:last-child {
+      margin-bottom: 0;
+    }
+    .leadership-entry h4 {
+      margin: 0 0 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+    }
     .leadership-role {
       margin: 0 0 0.15rem;
       font-size: 1rem;
@@ -1308,14 +1324,38 @@
         </div>
 
         <div class="leadership-block">
-          <h3 data-i18n="leadership_label">Leadership &amp; Mentorship</h3>
-          <p class="leadership-role" data-i18n="leadership_role">UI/UX Design Mentor</p>
-          <p class="leadership-org" data-i18n="leadership_org">Springboard &middot; 2020&ndash;2024</p>
-          <p class="hero-copy" data-i18n="leadership_copy">
-            Mentored 60+ aspiring product designers through 1:1 coaching, UX research guidance,
-            portfolio reviews, and design critiques. Helped evaluate talent and identify top
-            candidates for hiring.
-          </p>
+          <h3 data-i18n="leadership_label">Leadership &amp; Impact</h3>
+
+          <div class="leadership-entry">
+            <h4 data-i18n="leadership_design_label">Design Leadership</h4>
+            <p class="hero-copy" data-i18n="leadership_design_copy">
+              Served in leadership roles including Director, Manager, Principal, and Lead Product
+              Designer, guiding product strategy, cross-functional collaboration, and design
+              execution across enterprise, government, and startup environments.
+            </p>
+          </div>
+
+          <div class="leadership-entry">
+            <h4 data-i18n="leadership_founder_label">Entrepreneurship</h4>
+            <p class="leadership-role" data-i18n="leadership_founder_role">Founder</p>
+            <p class="leadership-org" data-i18n="leadership_founder_org">Sterling Reeves</p>
+            <p class="hero-copy" data-i18n="leadership_founder_copy">
+              Founded Sterling Reeves, a product design microservices studio focused on helping
+              organizations solve complex product challenges through UX strategy, product design,
+              research, and AI-enabled workflows.
+            </p>
+          </div>
+
+          <div class="leadership-entry">
+            <h4 data-i18n="leadership_mentor_label">Mentorship</h4>
+            <p class="leadership-role" data-i18n="leadership_role">UI/UX Design Mentor</p>
+            <p class="leadership-org" data-i18n="leadership_org">Springboard &middot; 2020&ndash;2024</p>
+            <p class="hero-copy" data-i18n="leadership_copy">
+              Mentored 60+ designers through 1:1 coaching, UX research guidance, portfolio
+              reviews, and design critiques. Helped evaluate talent and identify top candidates
+              for hiring.
+            </p>
+          </div>
         </div>
 
         <div class="clients-block">
@@ -1492,10 +1532,17 @@
         collab_label: "Collaboration & Delivery",
         collab_p1: "I thrive in collaborative, cross-functional product organizations where design, product, engineering, research, and business stakeholders work together from discovery through delivery. Throughout my career, I've partnered within Product Engineering Triads, Agile Scrum teams, Kanban workflows, SAFe environments, and cross-functional squads to deliver user-centered, business-focused solutions.",
         collab_p2: "Whether leading discovery workshops, facilitating design critiques, aligning stakeholders, or rapidly prototyping ideas, I value transparency, shared ownership, and continuous iteration. My approach is pragmatic and evidence-driven—balancing user needs, business objectives, and technical constraints to help teams move from ambiguity to confident product decisions.",
-        leadership_label: "Leadership & Mentorship",
+        leadership_label: "Leadership & Impact",
+        leadership_design_label: "Design Leadership",
+        leadership_design_copy: "Served in leadership roles including Director, Manager, Principal, and Lead Product Designer, guiding product strategy, cross-functional collaboration, and design execution across enterprise, government, and startup environments.",
         leadership_role: "UI/UX Design Mentor",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Mentored 60+ aspiring product designers through 1:1 coaching, UX research guidance, portfolio reviews, and design critiques. Helped evaluate talent and identify top candidates for hiring.",
+        leadership_founder_label: "Entrepreneurship",
+        leadership_founder_role: "Founder",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Founded Sterling Reeves, a product design microservices studio focused on helping organizations solve complex product challenges through UX strategy, product design, research, and AI-enabled workflows.",
+        leadership_mentor_label: "Mentorship",
+        leadership_copy: "Mentored 60+ designers through 1:1 coaching, UX research guidance, portfolio reviews, and design critiques. Helped evaluate talent and identify top candidates for hiring.",
         clients_label: "Selected Organizations",
         clients_intro: "Partnering with Fortune 500 companies, federal agencies, enterprise SaaS, and mission-driven organizations.",
         skills_label: "Practice Areas",
@@ -1567,10 +1614,17 @@
         collab_label: "Colaboración y entrega",
         collab_p1: "Prospero en organizaciones de producto colaborativas y multifuncionales, donde diseño, producto, ingeniería, investigación y stakeholders de negocio trabajan juntos desde el descubrimiento hasta la entrega. A lo largo de mi carrera, he colaborado en tríadas de producto e ingeniería, equipos Scrum ágiles, flujos Kanban, entornos SAFe y squads multifuncionales para entregar soluciones centradas en el usuario y orientadas al negocio.",
         collab_p2: "Ya sea liderando talleres de descubrimiento, facilitando críticas de diseño, alineando a los stakeholders o prototipando ideas rápidamente, valoro la transparencia, la propiedad compartida y la iteración continua. Mi enfoque es pragmático y basado en evidencia, equilibrando las necesidades del usuario, los objetivos de negocio y las limitaciones técnicas para ayudar a los equipos a pasar de la ambigüedad a decisiones de producto seguras.",
-        leadership_label: "Liderazgo y mentoría",
+        leadership_label: "Liderazgo e impacto",
+        leadership_design_label: "Liderazgo de diseño",
+        leadership_design_copy: "Ocupé puestos de liderazgo, incluyendo Directora, Gerente, Principal y Diseñadora de Producto Líder, guiando la estrategia de producto, la colaboración multifuncional y la ejecución del diseño en entornos empresariales, gubernamentales y de startups.",
         leadership_role: "Mentora de Diseño UI/UX",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Mentoricé a más de 60 aspirantes a diseñadores de producto mediante coaching individual, orientación en investigación UX, revisiones de portafolio y críticas de diseño. Ayudé a evaluar talento e identificar a los mejores candidatos para contratación.",
+        leadership_founder_label: "Emprendimiento",
+        leadership_founder_role: "Fundadora",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Fundé Sterling Reeves, un estudio de microservicios de diseño de producto centrado en ayudar a las organizaciones a resolver desafíos de producto complejos mediante estrategia UX, diseño de producto, investigación y flujos de trabajo habilitados por IA.",
+        leadership_mentor_label: "Mentoría",
+        leadership_copy: "Mentoricé a más de 60 diseñadores mediante coaching individual, orientación en investigación UX, revisiones de portafolio y críticas de diseño. Ayudé a evaluar talento e identificar a los mejores candidatos para contratación.",
         clients_label: "Organizaciones seleccionadas",
         clients_intro: "Colaborando con empresas Fortune 500, agencias federales, SaaS empresarial y organizaciones con una misión clara.",
         skills_label: "Áreas de especialización",
@@ -1642,10 +1696,17 @@
         collab_label: "Yhteistyö ja toimitus",
         collab_p1: "Viihdyn yhteistyöhön perustuvissa, monialaisissa tuoteorganisaatioissa, joissa design, tuote, insinöörityö, tutkimus ja liiketoiminnan sidosryhmät työskentelevät yhdessä ideoinnista toimitukseen. Urani aikana olen työskennellyt tuote- ja insinööritriadien, ketterien Scrum-tiimien, Kanban-työnkulkujen, SAFe-ympäristöjen ja monialaisten tiimien parissa toimittaakseni käyttäjäkeskeisiä, liiketoimintalähtöisiä ratkaisuja.",
         collab_p2: "Johdinpa sitten löytämistyöpajoja, fasilitoin design-kritiikkejä, sovitan yhteen sidosryhmiä tai prototyypitän ideoita nopeasti, arvostan avoimuutta, jaettua omistajuutta ja jatkuvaa iterointia. Lähestymistapani on käytännönläheinen ja näyttöön perustuva — tasapainotan käyttäjien tarpeita, liiketoiminnan tavoitteita ja teknisiä rajoitteita auttaakseni tiimejä siirtymään epävarmuudesta luottavaisiin tuotepäätöksiin.",
-        leadership_label: "Johtajuus ja mentorointi",
+        leadership_label: "Johtajuus ja vaikutus",
+        leadership_design_label: "Designjohtajuus",
+        leadership_design_copy: "Toiminut johtotehtävissä, kuten Director, Manager, Principal ja Lead Product Designer, ohjaten tuotestrategiaa, monialaista yhteistyötä ja designin toteutusta yritys-, julkishallinto- ja startup-ympäristöissä.",
         leadership_role: "UI/UX-suunnittelun mentori",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Ohjasin yli 60:tä tulevaa tuotesuunnittelijaa henkilökohtaisen valmennuksen, UX-tutkimusohjauksen, portfolioarviointien ja design-kritiikkien kautta. Autoin arvioimaan osaamista ja tunnistamaan parhaat ehdokkaat rekrytointiin.",
+        leadership_founder_label: "Yrittäjyys",
+        leadership_founder_role: "Perustaja",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Perustin Sterling Reevesin, tuotesuunnittelun mikropalvelustudion, joka auttaa organisaatioita ratkaisemaan monimutkaisia tuotehaasteita UX-strategian, tuotesuunnittelun, tutkimuksen ja tekoälyavusteisten työnkulkujen avulla.",
+        leadership_mentor_label: "Mentorointi",
+        leadership_copy: "Ohjasin yli 60 suunnittelijaa henkilökohtaisen valmennuksen, UX-tutkimusohjauksen, portfolioarviointien ja design-kritiikkien kautta. Autoin arvioimaan osaamista ja tunnistamaan parhaat ehdokkaat rekrytointiin.",
         clients_label: "Valitut organisaatiot",
         clients_intro: "Yhteistyössä Fortune 500 -yritysten, liittovaltion virastojen, yritystason SaaS-yritysten ja missiovetoisten organisaatioiden kanssa.",
         skills_label: "Osaamisalueet",
@@ -1717,10 +1778,17 @@
         collab_label: "Collaboration et livraison",
         collab_p1: "Je m'épanouis dans des organisations produit collaboratives et transverses, où design, produit, ingénierie, recherche et parties prenantes métier travaillent ensemble de la découverte à la livraison. Tout au long de ma carrière, j'ai collaboré au sein de triades produit-ingénierie, d'équipes Agile Scrum, de flux Kanban, d'environnements SAFe et d'équipes transverses pour livrer des solutions centrées utilisateur et orientées business.",
         collab_p2: "Qu'il s'agisse d'animer des ateliers de découverte, de faciliter des critiques de design, d'aligner les parties prenantes ou de prototyper rapidement des idées, je valorise la transparence, la responsabilité partagée et l'itération continue. Mon approche est pragmatique et fondée sur les données — je concilie besoins utilisateurs, objectifs business et contraintes techniques pour aider les équipes à passer de l'ambiguïté à des décisions produit confiantes.",
-        leadership_label: "Leadership et mentorat",
+        leadership_label: "Leadership et impact",
+        leadership_design_label: "Leadership design",
+        leadership_design_copy: "A occupé des postes de direction, notamment Director, Manager, Principal et Lead Product Designer, pilotant la stratégie produit, la collaboration transverse et l'exécution du design dans des environnements d'entreprise, gouvernementaux et de startups.",
         leadership_role: "Mentore en design UI/UX",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Mentorat de plus de 60 designers produit en devenir via du coaching individuel, un accompagnement en recherche UX, des revues de portfolio et des critiques de design. Contribution à l'évaluation des talents et à l'identification des meilleurs candidats à l'embauche.",
+        leadership_founder_label: "Entrepreneuriat",
+        leadership_founder_role: "Fondatrice",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "A fondé Sterling Reeves, un studio de microservices de design produit dédié à aider les organisations à résoudre des défis produit complexes grâce à la stratégie UX, au design produit, à la recherche et à des workflows assistés par IA.",
+        leadership_mentor_label: "Mentorat",
+        leadership_copy: "Mentorat de plus de 60 designers via du coaching individuel, un accompagnement en recherche UX, des revues de portfolio et des critiques de design. Contribution à l'évaluation des talents et à l'identification des meilleurs candidats à l'embauche.",
         clients_label: "Organisations sélectionnées",
         clients_intro: "En partenariat avec des entreprises du Fortune 500, des agences fédérales, des SaaS d'entreprise et des organisations à mission.",
         skills_label: "Domaines d'expertise",
@@ -1792,10 +1860,17 @@
         collab_label: "Zusammenarbeit & Delivery",
         collab_p1: "Ich blühe in kollaborativen, funktionsübergreifenden Produktorganisationen auf, in denen Design, Produkt, Engineering, Forschung und Business-Stakeholder von der Entdeckung bis zur Auslieferung zusammenarbeiten. Im Laufe meiner Karriere habe ich in Product-Engineering-Triaden, agilen Scrum-Teams, Kanban-Workflows, SAFe-Umgebungen und funktionsübergreifenden Squads mitgewirkt, um nutzerzentrierte, geschäftsorientierte Lösungen zu liefern.",
         collab_p2: "Ob ich Discovery-Workshops leite, Design-Critiques moderiere, Stakeholder abstimme oder Ideen schnell prototype — ich schätze Transparenz, geteilte Verantwortung und kontinuierliche Iteration. Mein Ansatz ist pragmatisch und evidenzbasiert: Ich balanciere Nutzerbedürfnisse, Geschäftsziele und technische Grenzen, um Teams von Unklarheit zu sicheren Produktentscheidungen zu führen.",
-        leadership_label: "Führung & Mentoring",
+        leadership_label: "Führung & Wirkung",
+        leadership_design_label: "Design-Führung",
+        leadership_design_copy: "War in Führungspositionen tätig, darunter Director, Manager, Principal und Lead Product Designer, und steuerte Produktstrategie, funktionsübergreifende Zusammenarbeit und Design-Umsetzung in Unternehmens-, Behörden- und Startup-Umgebungen.",
         leadership_role: "UI/UX-Design-Mentorin",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Habe über 60 angehende Produktdesignerinnen und -designer durch 1:1-Coaching, UX-Forschungsberatung, Portfolio-Reviews und Design-Critiques begleitet. Half bei der Talentbewertung und der Identifikation von Top-Kandidat:innen für Einstellungen.",
+        leadership_founder_label: "Unternehmertum",
+        leadership_founder_role: "Gründerin",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Gründete Sterling Reeves, ein Product-Design-Microservices-Studio, das Organisationen dabei unterstützt, komplexe Produktherausforderungen durch UX-Strategie, Produktdesign, Forschung und KI-gestützte Workflows zu lösen.",
+        leadership_mentor_label: "Mentoring",
+        leadership_copy: "Habe über 60 Designerinnen und Designer durch 1:1-Coaching, UX-Forschungsberatung, Portfolio-Reviews und Design-Critiques begleitet. Half bei der Talentbewertung und der Identifikation von Top-Kandidat:innen für Einstellungen.",
         clients_label: "Ausgewählte Organisationen",
         clients_intro: "In Zusammenarbeit mit Fortune-500-Unternehmen, Bundesbehörden, Enterprise-SaaS und missionsgetriebenen Organisationen.",
         skills_label: "Kompetenzbereiche",
@@ -1867,10 +1942,17 @@
         collab_label: "Collaborazione e delivery",
         collab_p1: "Do il meglio in organizzazioni di prodotto collaborative e multidisciplinari, dove design, prodotto, ingegneria, ricerca e stakeholder di business lavorano insieme dalla scoperta alla consegna. Nel corso della mia carriera ho collaborato all'interno di triadi prodotto-ingegneria, team Agile Scrum, flussi Kanban, ambienti SAFe e squad multidisciplinari per realizzare soluzioni centrate sull'utente e orientate al business.",
         collab_p2: "Che si tratti di guidare workshop di discovery, facilitare critiche di design, allineare gli stakeholder o prototipare rapidamente idee, valorizzo la trasparenza, la responsabilità condivisa e l'iterazione continua. Il mio approccio è pragmatico e basato sui dati: bilancio le esigenze degli utenti, gli obiettivi di business e i vincoli tecnici per aiutare i team a passare dall'ambiguità a decisioni di prodotto sicure.",
-        leadership_label: "Leadership e mentorship",
+        leadership_label: "Leadership e impatto",
+        leadership_design_label: "Leadership di design",
+        leadership_design_copy: "Ha ricoperto ruoli di leadership, tra cui Director, Manager, Principal e Lead Product Designer, guidando la strategia di prodotto, la collaborazione multidisciplinare e l'esecuzione del design in contesti aziendali, governativi e startup.",
         leadership_role: "Mentore di Design UI/UX",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Ho fatto da mentore a oltre 60 aspiranti product designer attraverso coaching individuale, guida nella ricerca UX, revisioni di portfolio e critiche di design. Ho contribuito a valutare i talenti e a identificare i migliori candidati per le assunzioni.",
+        leadership_founder_label: "Imprenditorialità",
+        leadership_founder_role: "Fondatrice",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Ha fondato Sterling Reeves, uno studio di microservizi di design di prodotto dedicato ad aiutare le organizzazioni a risolvere sfide di prodotto complesse attraverso strategia UX, design di prodotto, ricerca e flussi di lavoro potenziati dall'IA.",
+        leadership_mentor_label: "Mentorship",
+        leadership_copy: "Ho fatto da mentore a oltre 60 designer attraverso coaching individuale, guida nella ricerca UX, revisioni di portfolio e critiche di design. Ho contribuito a valutare i talenti e a identificare i migliori candidati per le assunzioni.",
         clients_label: "Organizzazioni selezionate",
         clients_intro: "In collaborazione con aziende Fortune 500, agenzie federali, SaaS enterprise e organizzazioni orientate a una missione.",
         skills_label: "Aree di competenza",
@@ -1942,10 +2024,17 @@
         collab_label: "Colaboração e entrega",
         collab_p1: "Prospero em organizações de produto colaborativas e multifuncionais, onde design, produto, engenharia, pesquisa e stakeholders de negócio trabalham juntos da descoberta à entrega. Ao longo da minha carreira, colaborei em tríades de produto e engenharia, equipes Scrum ágeis, fluxos Kanban, ambientes SAFe e squads multifuncionais para entregar soluções centradas no usuário e focadas no negócio.",
         collab_p2: "Seja liderando workshops de descoberta, facilitando críticas de design, alinhando stakeholders ou prototipando ideias rapidamente, valorizo a transparência, a responsabilidade compartilhada e a iteração contínua. Minha abordagem é pragmática e baseada em evidências — equilibrando necessidades do usuário, objetivos de negócio e restrições técnicas para ajudar as equipes a passar da ambiguidade a decisões de produto confiantes.",
-        leadership_label: "Liderança e mentoria",
+        leadership_label: "Liderança e impacto",
+        leadership_design_label: "Liderança de design",
+        leadership_design_copy: "Atuou em cargos de liderança, incluindo Director, Manager, Principal e Lead Product Designer, orientando estratégia de produto, colaboração multifuncional e execução de design em ambientes corporativos, governamentais e de startups.",
         leadership_role: "Mentora de Design UI/UX",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Fui mentora de mais de 60 aspirantes a product designers por meio de coaching individual, orientação em pesquisa UX, revisões de portfólio e críticas de design. Ajudei a avaliar talentos e identificar os melhores candidatos para contratação.",
+        leadership_founder_label: "Empreendedorismo",
+        leadership_founder_role: "Fundadora",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Fundou a Sterling Reeves, um estúdio de microsserviços de design de produto focado em ajudar organizações a resolver desafios complexos de produto por meio de estratégia de UX, design de produto, pesquisa e fluxos de trabalho habilitados por IA.",
+        leadership_mentor_label: "Mentoria",
+        leadership_copy: "Fui mentora de mais de 60 designers por meio de coaching individual, orientação em pesquisa UX, revisões de portfólio e críticas de design. Ajudei a avaliar talentos e identificar os melhores candidatos para contratação.",
         clients_label: "Organizações selecionadas",
         clients_intro: "Em parceria com empresas Fortune 500, agências federais, SaaS empresarial e organizações com propósito.",
         skills_label: "Áreas de atuação",
@@ -2017,10 +2106,17 @@
         collab_label: "Samenwerking & delivery",
         collab_p1: "Ik floreer in samenwerkende, cross-functionele productorganisaties waarin design, product, engineering, research en business-stakeholders van discovery tot delivery samenwerken. Tijdens mijn carrière heb ik samengewerkt binnen product-engineering-triades, Agile Scrum-teams, Kanban-workflows, SAFe-omgevingen en cross-functionele squads om gebruikersgerichte, business-gerichte oplossingen te leveren.",
         collab_p2: "Of ik nu discovery-workshops leid, designcritiques faciliteer, stakeholders afstem of snel ideeën prototype — ik hecht waarde aan transparantie, gedeeld eigenaarschap en continue iteratie. Mijn aanpak is pragmatisch en op bewijs gebaseerd, waarbij ik gebruikersbehoeften, businessdoelen en technische beperkingen afweeg om teams te helpen van onzekerheid naar zelfverzekerde productbeslissingen te bewegen.",
-        leadership_label: "Leiderschap & mentorschap",
+        leadership_label: "Leiderschap & impact",
+        leadership_design_label: "Designleiderschap",
+        leadership_design_copy: "Vervulde leiderschapsrollen waaronder Director, Manager, Principal en Lead Product Designer, en stuurde productstrategie, cross-functionele samenwerking en designuitvoering aan binnen enterprise-, overheids- en startupomgevingen.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Begeleidde 60+ aankomende productdesigners via 1-op-1-coaching, UX-onderzoeksbegeleiding, portfolioreviews en designcritiques. Hielp bij het beoordelen van talent en het identificeren van de beste kandidaten voor aanwerving.",
+        leadership_founder_label: "Ondernemerschap",
+        leadership_founder_role: "Oprichter",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Richtte Sterling Reeves op, een product design microservices-studio die organisaties helpt complexe productuitdagingen op te lossen via UX-strategie, productdesign, onderzoek en AI-ondersteunde workflows.",
+        leadership_mentor_label: "Mentorschap",
+        leadership_copy: "Begeleidde 60+ designers via 1-op-1-coaching, UX-onderzoeksbegeleiding, portfolioreviews en designcritiques. Hielp bij het beoordelen van talent en het identificeren van de beste kandidaten voor aanwerving.",
         clients_label: "Geselecteerde organisaties",
         clients_intro: "In samenwerking met Fortune 500-bedrijven, federale overheidsinstanties, enterprise SaaS en missiegedreven organisaties.",
         skills_label: "Expertisegebieden",
@@ -2092,10 +2188,17 @@
         collab_label: "Współpraca i dostarczanie",
         collab_p1: "Najlepiej odnajduję się w opartych na współpracy, wielofunkcyjnych organizacjach produktowych, w których design, produkt, inżynieria, badania i interesariusze biznesowi pracują razem od odkrywania po dostarczenie. W trakcie kariery współpracowałam w triadach produkt-inżynieria, zespołach Agile Scrum, przepływach Kanban, środowiskach SAFe i wielofunkcyjnych zespołach, dostarczając rozwiązania skoncentrowane na użytkowniku i zorientowane na biznes.",
         collab_p2: "Niezależnie od tego, czy prowadzę warsztaty odkrywcze, facylituję krytyki designu, uzgadniam interesariuszy, czy szybko prototypuję pomysły, cenię przejrzystość, wspólną odpowiedzialność i ciągłą iterację. Moje podejście jest pragmatyczne i oparte na dowodach — równoważę potrzeby użytkowników, cele biznesowe i ograniczenia techniczne, aby pomóc zespołom przejść od niejasności do pewnych decyzji produktowych.",
-        leadership_label: "Przywództwo i mentoring",
+        leadership_label: "Przywództwo i wpływ",
+        leadership_design_label: "Przywództwo w designie",
+        leadership_design_copy: "Pełniła role przywódcze, w tym Director, Manager, Principal i Lead Product Designer, kierując strategią produktu, współpracą wielofunkcyjną i realizacją designu w środowiskach korporacyjnych, rządowych i startupowych.",
         leadership_role: "Mentorka projektowania UI/UX",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Mentorowałam ponad 60 przyszłych projektantów produktu poprzez coaching indywidualny, wsparcie w badaniach UX, przeglądy portfolio i krytyki designu. Pomagałam oceniać talenty i identyfikować najlepszych kandydatów do zatrudnienia.",
+        leadership_founder_label: "Przedsiębiorczość",
+        leadership_founder_role: "Założycielka",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Założyła Sterling Reeves, studio mikrousług projektowania produktu, które pomaga organizacjom rozwiązywać złożone wyzwania produktowe poprzez strategię UX, projektowanie produktu, badania i przepływy pracy wspierane przez AI.",
+        leadership_mentor_label: "Mentoring",
+        leadership_copy: "Mentorowałam ponad 60 projektantów poprzez coaching indywidualny, wsparcie w badaniach UX, przeglądy portfolio i krytyki designu. Pomagałam oceniać talenty i identyfikować najlepszych kandydatów do zatrudnienia.",
         clients_label: "Wybrane organizacje",
         clients_intro: "Współpraca z firmami z listy Fortune 500, agencjami federalnymi, korporacyjnym SaaS i organizacjami misyjnymi.",
         skills_label: "Obszary kompetencji",
@@ -2167,10 +2270,17 @@
         collab_label: "Samarbete & leverans",
         collab_p1: "Jag trivs i samarbetsinriktade, tvärfunktionella produktorganisationer där design, produkt, utveckling, forskning och affärsintressenter arbetar tillsammans från upptäckt till leverans. Under min karriär har jag samarbetat inom produkt-utvecklingstriader, agila Scrum-team, Kanban-flöden, SAFe-miljöer och tvärfunktionella team för att leverera användarcentrerade, affärsfokuserade lösningar.",
         collab_p2: "Oavsett om jag leder upptäcktsworkshops, faciliterar designgranskningar, samordnar intressenter eller snabbt prototypar idéer, värdesätter jag transparens, delat ägarskap och ständig iteration. Mitt tillvägagångssätt är pragmatiskt och evidensbaserat — jag balanserar användarbehov, affärsmål och tekniska begränsningar för att hjälpa team att gå från oklarhet till självsäkra produktbeslut.",
-        leadership_label: "Ledarskap & mentorskap",
+        leadership_label: "Ledarskap & genomslag",
+        leadership_design_label: "Designledarskap",
+        leadership_design_copy: "Har innehaft ledarroller som Director, Manager, Principal och Lead Product Designer, och styrt produktstrategi, tvärfunktionellt samarbete och designexekvering inom enterprise-, myndighets- och startupmiljöer.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Handledde 60+ blivande produktdesigner genom individuell coachning, UX-forskningsvägledning, portföljgranskningar och designgranskningar. Hjälpte till att utvärdera talang och identifiera de bästa kandidaterna för anställning.",
+        leadership_founder_label: "Entreprenörskap",
+        leadership_founder_role: "Grundare",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Grundade Sterling Reeves, en produktdesign-mikrotjänststudio inriktad på att hjälpa organisationer lösa komplexa produktutmaningar genom UX-strategi, produktdesign, forskning och AI-stödda arbetsflöden.",
+        leadership_mentor_label: "Mentorskap",
+        leadership_copy: "Handledde 60+ designer genom individuell coachning, UX-forskningsvägledning, portföljgranskningar och designgranskningar. Hjälpte till att utvärdera talang och identifiera de bästa kandidaterna för anställning.",
         clients_label: "Utvalda organisationer",
         clients_intro: "I samarbete med Fortune 500-bolag, federala myndigheter, enterprise-SaaS och missionsdrivna organisationer.",
         skills_label: "Kompetensområden",
@@ -2242,10 +2352,17 @@
         collab_label: "Samarbejde & levering",
         collab_p1: "Jeg trives i samarbejdsorienterede, tværfunktionelle produktorganisationer, hvor design, produkt, engineering, research og forretningsinteressenter arbejder sammen fra discovery til levering. Gennem min karriere har jeg samarbejdet i produkt-engineering-triader, agile Scrum-teams, Kanban-workflows, SAFe-miljøer og tværfunktionelle teams for at levere brugercentrerede, forretningsfokuserede løsninger.",
         collab_p2: "Uanset om jeg leder discovery-workshops, faciliterer designkritikker, afstemmer interessenter eller hurtigt prototyper idéer, værdsætter jeg gennemsigtighed, fælles ejerskab og løbende iteration. Min tilgang er pragmatisk og evidensbaseret — jeg balancerer brugerbehov, forretningsmål og tekniske begrænsninger for at hjælpe teams med at gå fra usikkerhed til sikre produktbeslutninger.",
-        leadership_label: "Ledelse & mentorordning",
+        leadership_label: "Ledelse & gennemslagskraft",
+        leadership_design_label: "Designledelse",
+        leadership_design_copy: "Har bestridt lederroller som Director, Manager, Principal og Lead Product Designer og styret produktstrategi, tværfunktionelt samarbejde og designeksekvering i enterprise-, myndigheds- og startupmiljøer.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Var mentor for 60+ kommende produktdesignere gennem 1:1-coaching, UX-researchvejledning, porteføljegennemgange og designkritikker. Hjalp med at evaluere talent og identificere de bedste kandidater til ansættelse.",
+        leadership_founder_label: "Iværksætteri",
+        leadership_founder_role: "Grundlægger",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Grundlagde Sterling Reeves, et produktdesign-mikroservicestudie med fokus på at hjælpe organisationer med at løse komplekse produktudfordringer gennem UX-strategi, produktdesign, research og AI-understøttede workflows.",
+        leadership_mentor_label: "Mentorordning",
+        leadership_copy: "Var mentor for 60+ designere gennem 1:1-coaching, UX-researchvejledning, porteføljegennemgange og designkritikker. Hjalp med at evaluere talent og identificere de bedste kandidater til ansættelse.",
         clients_label: "Udvalgte organisationer",
         clients_intro: "I samarbejde med Fortune 500-virksomheder, føderale myndigheder, enterprise-SaaS og missionsdrevne organisationer.",
         skills_label: "Kompetenceområder",
@@ -2317,10 +2434,17 @@
         collab_label: "Samarbeid & levering",
         collab_p1: "Jeg trives i samarbeidsorienterte, tverrfunksjonelle produktorganisasjoner der design, produkt, engineering, forskning og forretningsinteressenter jobber sammen fra discovery til levering. Gjennom karrieren har jeg samarbeidet i produkt-engineering-triader, agile Scrum-team, Kanban-arbeidsflyter, SAFe-miljøer og tverrfunksjonelle team for å levere brukersentrerte, forretningsfokuserte løsninger.",
         collab_p2: "Enten jeg leder discovery-workshops, fasiliterer designkritikker, samordner interessenter eller raskt prototyper idéer, verdsetter jeg åpenhet, delt eierskap og kontinuerlig iterasjon. Tilnærmingen min er pragmatisk og evidensbasert — jeg balanserer brukerbehov, forretningsmål og tekniske begrensninger for å hjelpe team med å gå fra usikkerhet til trygge produktbeslutninger.",
-        leadership_label: "Ledelse & mentorskap",
+        leadership_label: "Ledelse & gjennomslagskraft",
+        leadership_design_label: "Designledelse",
+        leadership_design_copy: "Har hatt lederroller som Director, Manager, Principal og Lead Product Designer, og styrt produktstrategi, tverrfunksjonelt samarbeid og designutførelse i enterprise-, myndighets- og startupmiljøer.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
-        leadership_copy: "Veiledet 60+ kommende produktdesignere gjennom 1:1-coaching, UX-forskningsveiledning, porteføljegjennomganger og designkritikker. Bidro til å vurdere talent og identifisere de beste kandidatene for ansettelse.",
+        leadership_founder_label: "Entreprenørskap",
+        leadership_founder_role: "Grunnlegger",
+        leadership_founder_org: "Sterling Reeves",
+        leadership_founder_copy: "Grunnla Sterling Reeves, et produktdesign-mikrotjenestestudio med fokus på å hjelpe organisasjoner med å løse komplekse produktutfordringer gjennom UX-strategi, produktdesign, forskning og AI-støttede arbeidsflyter.",
+        leadership_mentor_label: "Mentorskap",
+        leadership_copy: "Veiledet 60+ designere gjennom 1:1-coaching, UX-forskningsveiledning, porteføljegjennomganger og designkritikker. Bidro til å vurdere talent og identifisere de beste kandidatene for ansettelse.",
         clients_label: "Utvalgte organisasjoner",
         clients_intro: "I samarbeid med Fortune 500-selskaper, føderale etater, enterprise-SaaS og misjonsdrevne organisasjoner.",
         skills_label: "Kompetanseområder",
