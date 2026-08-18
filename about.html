@@ -590,7 +590,7 @@
 
     /* ==================== About intro: centered avatar + heading ==================== */
     .intro-header {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: clamp(2rem, 5vw, 3rem) 1.5rem 0;
       text-align: center;
@@ -607,7 +607,7 @@
     /* Quiet text links, not pills/tabs — utility for a long mobile
        scroll, not a second nav bar competing with the header. */
     .jump-nav {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 1.5rem auto 0;
       padding: 0 1.5rem;
       text-align: center;
@@ -642,7 +642,7 @@
       color: #1d4e89;
     }
     .hero-content {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: clamp(1.5rem, 4vw, 2rem) 1.5rem 0;
     }
@@ -676,6 +676,42 @@
       color: var(--color-text);
       letter-spacing: -0.01em;
     }
+    /* Compact, factual proof strip — breadth/tenure/seniority evidence
+       between the bio and Practice Areas. Numbers stay small and
+       understated rather than reading as a marketing stat block. */
+    .proof-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.75rem;
+      max-width: 42rem;
+      margin: 1.75rem 0 0;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--color-border);
+    }
+    .proof-metric {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+    }
+    .proof-metric strong {
+      color: var(--color-text);
+      font-weight: 700;
+      margin-right: 0.3em;
+    }
+    .credentials-line.accessibility-proof {
+      max-width: 42rem;
+      margin-top: 0.85rem;
+    }
+    /* Standalone scannable metadata line (job titles, methodologies) —
+       distinct from .credentials-line's label/value pairing since these
+       have no separate label, just the evidence itself. */
+    .proof-line {
+      margin: 0 0 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      letter-spacing: 0.01em;
+    }
     /* Cards are used selectively now, not on every block — Practice
        Areas, Technical Fluency, Credentials, and (with a distinct
        treatment) Leadership keep the surface/border/radius language
@@ -705,12 +741,26 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.9rem;
     }
+    /* Explicit column counts rather than pure auto-fit — at the wider
+       1200px feature width, auto-fit's minmax would drift to an
+       unbalanced 5+3 split. A deliberate 4x2 (2x4 on tablet, 1 column
+       on mobile) keeps the grid feeling composed, not organic. */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.25rem 1rem;
+      grid-template-columns: 1fr;
+      gap: 1.5rem 1.5rem;
+    }
+    @media (min-width: 480px) {
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 900px) {
+      .skills-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
     .skill-item {
       display: flex;
@@ -718,14 +768,14 @@
       gap: 0.75rem;
     }
     .skill-icon {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       flex-shrink: 0;
       color: var(--color-text-secondary);
     }
     .skill-item span {
-      font-size: 0.92rem;
-      font-weight: 600;
+      font-size: 0.94rem;
+      font-weight: 700;
       color: var(--color-text);
     }
     .collab-block {
@@ -758,10 +808,16 @@
       color: var(--color-text-secondary);
       margin-bottom: 1.25rem;
     }
-    /* Three genuinely distinct sub-sections — a divider and looser
-       spacing between them, rather than uniform margin-only stacking,
-       so Design Leadership / Entrepreneurship / Mentorship each read
-       as their own moment instead of one continuous block. */
+    /* Three genuinely distinct leadership modes — organizational
+       leadership, entrepreneurship, people development. Stacked with
+       horizontal dividers on mobile/tablet; a real 3-column grid with
+       vertical dividers on desktop, so all three read at a glance as
+       parallel, comparable tracks rather than one continuous scroll. */
+    .leadership-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
     .leadership-entry {
       padding-bottom: 1.75rem;
       margin-bottom: 1.75rem;
@@ -771,6 +827,21 @@
       padding-bottom: 0;
       margin-bottom: 0;
       border-bottom: none;
+    }
+    @media (min-width: 900px) {
+      .leadership-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0 2.5rem;
+      }
+      .leadership-entry {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
+      }
+      .leadership-entry + .leadership-entry {
+        border-left: 1px solid var(--color-border);
+        padding-left: 2.5rem;
+      }
     }
     .leadership-entry h4 {
       margin: 0 0 0.6rem;
@@ -799,7 +870,7 @@
     .clients-hero {
       margin-top: 4.5rem;
       margin-bottom: 0.5rem;
-      padding: 2rem 0;
+      padding: clamp(2.5rem, 5vw, 3.5rem) 0;
       text-align: center;
       border-top: 1px solid var(--color-border);
       border-bottom: 1px solid var(--color-border);
@@ -810,11 +881,11 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
     }
     .clients-intro {
       max-width: 34rem;
-      margin: 0 auto 2rem;
+      margin: 0 auto 2.5rem;
       font-size: 0.95rem;
       color: var(--color-text-secondary);
       line-height: 1.6;
@@ -823,11 +894,11 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1.1rem 2.75rem;
+      gap: 1.4rem 3rem;
       align-items: baseline;
     }
     .client-name {
-      font-size: 1.15rem;
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
       font-weight: 600;
       color: var(--color-text);
       letter-spacing: -0.01em;
@@ -853,10 +924,23 @@
       color: var(--color-text-secondary);
       margin-bottom: 1.25rem;
     }
+    /* Explicit column counts (not auto-fit) so the seven groups read as
+       a deliberate matrix — 1 / 2 / 3 columns — rather than reflowing
+       organically at odd widths. */
     .fluency-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      grid-template-columns: 1fr;
       gap: 1.75rem 2rem;
+    }
+    @media (min-width: 640px) {
+      .fluency-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 980px) {
+      .fluency-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
     .fluency-capabilities {
       margin: 0;
@@ -887,6 +971,16 @@
     }
     .industries-group:last-child {
       margin-bottom: 0;
+    }
+    /* AI & Enterprise and Regulated are the strongest hiring signal on
+       the page — placed side by side on desktop so both are visible at
+       a glance, rather than stacked under each other like a list. */
+    @media (min-width: 700px) {
+      .industries-groups-primary {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.1rem 3rem;
+      }
     }
     .industries-group h4 {
       margin: 0 0 0.4rem;
@@ -1065,10 +1159,17 @@
       box-shadow: 0 0 0 1px rgba(29, 78, 137, 0.25), 0 6px 20px rgba(23, 33, 30, 0.1);
     }
 
+    /* Kept position:sticky — footer-widget.js measures footerEl.offsetHeight
+       to pad main's bottom so the sticky bar never overlaps the last
+       section, and that logic is shared across every page. Removing the
+       stickiness here would need a page-specific rework of shared JS, out
+       of scope for an About-page-only pass — so the fix is a substantially
+       slimmer bar instead (see #city-strip below), which directly reduces
+       how much it competes with the hero while staying JS-compatible. */
     footer {
       text-align: center;
       font-size: 0.85rem;
-      padding: 0.85rem 1.5rem 1rem;
+      padding: 0.55rem 1.5rem 0.65rem;
       border-top: 1px solid var(--color-border);
       position: sticky;
       bottom: 0;
@@ -1089,7 +1190,7 @@
     #back-to-top {
       position: fixed;
       right: 1.5rem;
-      bottom: 5.5rem;
+      bottom: 4.5rem;
       width: 48px;
       height: 48px;
       display: flex;
@@ -1130,10 +1231,10 @@
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.4rem 1.5rem;
-      padding-bottom: 0.55rem;
-      margin-bottom: 0.45rem;
-      font-size: 0.76rem;
+      gap: 0.3rem 1.25rem;
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.72rem;
       color: var(--color-text-secondary);
       width: 100%;
       position: relative;
@@ -1441,13 +1542,23 @@
         <div class="about-card">
           <p class="about-focus" data-i18n="about_focus">
             I solve complex product problems in regulated and enterprise environments—turning
-            ambitious technology into products people trust.
+            ambitious technology into accessible, trustworthy products people can use with
+            confidence.
           </p>
           <p class="hero-copy">
             <strong class="copy-lead" data-i18n="about_p1_lead">My background spans product design, product management, and user research</strong><span data-i18n="about_p1_rest"> — from senior IC to director, across startups, SaaS, enterprise, and mission-driven organizations.</span>
           </p>
           <p class="hero-copy">
             <strong class="copy-lead" data-i18n="about_p2_lead">Today, I focus on AI products, agents, and automation</strong><span data-i18n="about_p2_rest"> — partnering closely with engineering to turn ambitious ideas into thoughtful, trustworthy experiences.</span>
+          </p>
+          <div class="proof-metrics" aria-label="Career highlights">
+            <span class="proof-metric"><strong>15+</strong> <span data-i18n="metric_years_label">Years</span></span>
+            <span class="proof-metric"><strong>20+</strong> <span data-i18n="metric_industries_label">Industries</span></span>
+            <span class="proof-metric"><strong>60+</strong> <span data-i18n="metric_mentees_label">Designers Mentored</span></span>
+            <span class="proof-metric" data-i18n="metric_career_path">Director → Founder</span>
+          </div>
+          <p class="credentials-line accessibility-proof">
+            <strong data-i18n="accessibility_label">Accessibility</strong> &mdash; WCAG AA &middot; WCAG AAA
           </p>
         </div>
 
@@ -1528,10 +1639,9 @@
           <p class="hero-copy" data-i18n="collab_p1">
             I thrive in collaborative, cross-functional product organizations where design, product,
             engineering, research, and business stakeholders work together from discovery through
-            delivery. Throughout my career, I've partnered within Product Engineering Triads, Agile
-            Scrum teams, Kanban workflows, SAFe environments, and cross-functional squads to deliver
-            user-centered, business-focused solutions.
+            delivery — consistently shipping user-centered, business-focused solutions.
           </p>
+          <p class="proof-line" data-i18n="delivery_models">Product Engineering Triads · Agile Scrum · Kanban · SAFe</p>
           <p class="hero-copy" data-i18n="collab_p2">
             Whether leading discovery workshops, facilitating design critiques, aligning stakeholders,
             or rapidly prototyping ideas, I value transparency, shared ownership, and continuous
@@ -1544,35 +1654,36 @@
         <div class="section-card leadership-block leadership-featured" id="leadership-impact">
           <h3 data-i18n="leadership_label">Leadership &amp; Impact</h3>
 
-          <div class="leadership-entry">
-            <h4 data-i18n="leadership_design_label">Design Leadership</h4>
-            <p class="hero-copy" data-i18n="leadership_design_copy">
-              Served in leadership roles including Director, Manager, Principal, and Lead Product
-              Designer, guiding product strategy, cross-functional collaboration, and accessible
-              design execution across enterprise, government, and startup environments.
-            </p>
-          </div>
+          <div class="leadership-grid">
+            <div class="leadership-entry">
+              <h4 data-i18n="leadership_design_label">Design Leadership</h4>
+              <p class="proof-line" data-i18n="leadership_design_roles">Director · Manager · Principal · Lead Product Designer</p>
+              <p class="hero-copy" data-i18n="leadership_design_copy">
+                Served in leadership roles guiding product strategy, cross-functional
+                collaboration, design execution, and accessible product development across
+                enterprise, government, and startup environments.
+              </p>
+            </div>
 
-          <div class="leadership-entry">
-            <h4 data-i18n="leadership_founder_label">Entrepreneurship</h4>
-            <p class="leadership-role" data-i18n="leadership_founder_role">Founder</p>
-            <p class="leadership-org" data-i18n="leadership_founder_org">Sterling Reeves</p>
-            <p class="hero-copy" data-i18n="leadership_founder_copy">
-              Founded Sterling Reeves, a product design microservices studio focused on solving
-              complex product challenges through UX strategy, product design, research, and
-              AI-enabled workflows.
-            </p>
-          </div>
+            <div class="leadership-entry">
+              <h4 data-i18n="leadership_founder_label">Entrepreneurship</h4>
+              <p class="leadership-role" data-i18n="leadership_founder_role">Founder</p>
+              <p class="leadership-org" data-i18n="leadership_founder_org">Sterling Reeves</p>
+              <p class="hero-copy" data-i18n="leadership_founder_copy">
+                Founded Sterling Reeves, a product design microservices studio focused on UX
+                strategy, product design, research, and AI-enabled workflows.
+              </p>
+            </div>
 
-          <div class="leadership-entry">
-            <h4 data-i18n="leadership_mentor_label">Mentorship</h4>
-            <p class="leadership-role" data-i18n="leadership_role">UI/UX Design Mentor</p>
-            <p class="leadership-org" data-i18n="leadership_org">Springboard &middot; 2020&ndash;2024</p>
-            <p class="hero-copy" data-i18n="leadership_copy">
-              Mentored 60+ designers through 1:1 coaching, UX research guidance, portfolio
-              reviews, and design critiques. Helped evaluate talent and identify top candidates
-              for hiring.
-            </p>
+            <div class="leadership-entry">
+              <h4 data-i18n="leadership_mentor_label">Mentorship</h4>
+              <p class="leadership-role" data-i18n="leadership_role">60+ Designers Mentored</p>
+              <p class="leadership-org" data-i18n="leadership_org">Springboard &middot; 2020&ndash;2024</p>
+              <p class="hero-copy" data-i18n="leadership_copy">
+                Mentored designers through 1:1 coaching, UX research guidance, portfolio
+                reviews, design critiques, and hiring evaluation.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -1670,13 +1781,15 @@
 
         <div class="industries-block" id="industry-experience">
           <h3 data-i18n="industries_label">Industry Experience</h3>
-          <div class="industries-group">
-            <h4 data-i18n="industries_group_ai_enterprise">AI &amp; Enterprise</h4>
-            <p class="industries-primary">AI &amp; Emerging Tech &middot; Enterprise Software</p>
-          </div>
-          <div class="industries-group">
-            <h4 data-i18n="industries_group_regulated">Regulated</h4>
-            <p class="industries-primary">Cybersecurity &middot; Government &middot; Healthcare &middot; Financial Services</p>
+          <div class="industries-groups-primary">
+            <div class="industries-group">
+              <h4 data-i18n="industries_group_ai_enterprise">AI &amp; Enterprise</h4>
+              <p class="industries-primary">AI &amp; Emerging Tech &middot; Enterprise Software</p>
+            </div>
+            <div class="industries-group">
+              <h4 data-i18n="industries_group_regulated">Regulated</h4>
+              <p class="industries-primary">Cybersecurity &middot; Government &middot; Healthcare &middot; Financial Services</p>
+            </div>
           </div>
           <div class="industries-group industries-group-secondary">
             <h4 data-i18n="industries_group_additional">Additional Domains</h4>
@@ -1780,7 +1893,12 @@
         about_h1: "Hi, I'm Maya.",
         about_title: "AI Product & Design Leader",
         about_focus:
-          "I solve complex product problems in regulated and enterprise environments — turning ambitious technology into products people trust.",
+          "I solve complex product problems in regulated and enterprise environments — turning ambitious technology into accessible, trustworthy products people can use with confidence.",
+        accessibility_label: "Accessibility",
+        metric_years_label: "Years",
+        metric_industries_label: "Industries",
+        metric_mentees_label: "Designers Mentored",
+        metric_career_path: "Director → Founder",
         about_p1_lead: "My background spans product design, product management, and user research",
         about_p1_rest: " — from senior IC to director, across startups, SaaS, enterprise, and mission-driven organizations.",
         about_p2_lead: "Today, I focus on AI products, agents, and automation",
@@ -1790,19 +1908,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "South Florida, USA · U.S. Citizen · Public Trust Clearance",
         collab_label: "Collaboration & Delivery",
-        collab_p1: "I thrive in collaborative, cross-functional product organizations where design, product, engineering, research, and business stakeholders work together from discovery through delivery. Throughout my career, I've partnered within Product Engineering Triads, Agile Scrum teams, Kanban workflows, SAFe environments, and cross-functional squads to deliver user-centered, business-focused solutions.",
+        collab_p1: "I thrive in collaborative, cross-functional product organizations where design, product, engineering, research, and business stakeholders work together from discovery through delivery — consistently shipping user-centered, business-focused solutions.",
+        delivery_models: "Product Engineering Triads · Agile Scrum · Kanban · SAFe",
         collab_p2: "Whether leading discovery workshops, facilitating design critiques, aligning stakeholders, or rapidly prototyping ideas, I value transparency, shared ownership, and continuous iteration. My approach is pragmatic and evidence-driven—balancing user needs, business objectives, and technical constraints to help teams move from ambiguity to confident product decisions.",
         leadership_label: "Leadership & Impact",
         leadership_design_label: "Design Leadership",
-        leadership_design_copy: "Served in leadership roles including Director, Manager, Principal, and Lead Product Designer, guiding product strategy, cross-functional collaboration, and accessible design execution across enterprise, government, and startup environments.",
-        leadership_role: "UI/UX Design Mentor",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Served in leadership roles guiding product strategy, cross-functional collaboration, design execution, and accessible product development across enterprise, government, and startup environments.",
+        leadership_role: "60+ Designers Mentored",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entrepreneurship",
         leadership_founder_role: "Founder",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Founded Sterling Reeves, a product design microservices studio focused on solving complex product challenges through UX strategy, product design, research, and AI-enabled workflows.",
+        leadership_founder_copy: "Founded Sterling Reeves, a product design microservices studio focused on UX strategy, product design, research, and AI-enabled workflows.",
         leadership_mentor_label: "Mentorship",
-        leadership_copy: "Mentored 60+ designers through 1:1 coaching, UX research guidance, portfolio reviews, and design critiques. Helped evaluate talent and identify top candidates for hiring.",
+        leadership_copy: "Mentored designers through 1:1 coaching, UX research guidance, portfolio reviews, design critiques, and hiring evaluation.",
         clients_label: "Selected Organizations",
         clients_intro: "From Fortune 500 companies and federal agencies to high-growth SaaS and mission-driven organizations.",
         skills_label: "Practice Areas",
@@ -1867,7 +1987,12 @@
         about_h1: "Hola, soy Maya.",
         about_title: "Líder de Producto y Diseño de IA",
         about_focus:
-          "Resuelvo problemas de producto complejos en entornos regulados y empresariales, convirtiendo tecnología ambiciosa en productos en los que las personas confían.",
+          "Resuelvo problemas de producto complejos en entornos regulados y empresariales, convirtiendo tecnología ambiciosa en productos accesibles y confiables que las personas pueden usar con seguridad.",
+        accessibility_label: "Accesibilidad",
+        metric_years_label: "Años",
+        metric_industries_label: "Industrias",
+        metric_mentees_label: "Diseñadores mentorizados",
+        metric_career_path: "Directora → Fundadora",
         about_p1_lead: "Mi trayectoria abarca el diseño de producto, la gestión de producto y la investigación de usuarios",
         about_p1_rest: " — desde colaboradora individual senior hasta directora, en startups, empresas SaaS, grandes organizaciones y entidades con una misión clara.",
         about_p2_lead: "Hoy me enfoco en productos de IA, agentes y automatización",
@@ -1877,19 +2002,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sur de Florida, EE. UU. · Ciudadana estadounidense · Autorización Public Trust",
         collab_label: "Colaboración y entrega",
-        collab_p1: "Prospero en organizaciones de producto colaborativas y multifuncionales, donde diseño, producto, ingeniería, investigación y stakeholders de negocio trabajan juntos desde el descubrimiento hasta la entrega. A lo largo de mi carrera, he colaborado en tríadas de producto e ingeniería, equipos Scrum ágiles, flujos Kanban, entornos SAFe y squads multifuncionales para entregar soluciones centradas en el usuario y orientadas al negocio.",
+        collab_p1: "Prospero en organizaciones de producto colaborativas y multifuncionales, donde diseño, producto, ingeniería, investigación y stakeholders de negocio trabajan juntos desde el descubrimiento hasta la entrega, ofreciendo de forma constante soluciones centradas en el usuario y orientadas al negocio.",
+        delivery_models: "Tríadas de Producto e Ingeniería · Agile Scrum · Kanban · SAFe",
         collab_p2: "Ya sea liderando talleres de descubrimiento, facilitando críticas de diseño, alineando a los stakeholders o prototipando ideas rápidamente, valoro la transparencia, la propiedad compartida y la iteración continua. Mi enfoque es pragmático y basado en evidencia, equilibrando las necesidades del usuario, los objetivos de negocio y las limitaciones técnicas para ayudar a los equipos a pasar de la ambigüedad a decisiones de producto seguras.",
         leadership_label: "Liderazgo e impacto",
         leadership_design_label: "Liderazgo de diseño",
-        leadership_design_copy: "Ocupé puestos de liderazgo, incluyendo Directora, Gerente, Principal y Diseñadora de Producto Líder, guiando la estrategia de producto, la colaboración multifuncional y la ejecución accesible del diseño en entornos empresariales, gubernamentales y de startups.",
-        leadership_role: "Mentora de Diseño UI/UX",
+        leadership_design_roles: "Directora · Gerente · Principal · Diseñadora de Producto Líder",
+        leadership_design_copy: "Ocupé puestos de liderazgo, guiando la estrategia de producto, la colaboración multifuncional, la ejecución del diseño y el desarrollo de producto accesible en entornos empresariales, gubernamentales y de startups.",
+        leadership_role: "60+ diseñadores mentorizados",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Emprendimiento",
         leadership_founder_role: "Fundadora",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Fundé Sterling Reeves, un estudio de microservicios de diseño de producto centrado en resolver desafíos de producto complejos mediante estrategia UX, diseño de producto, investigación y flujos de trabajo habilitados por IA.",
+        leadership_founder_copy: "Fundé Sterling Reeves, un estudio de microservicios de diseño de producto centrado en estrategia UX, diseño de producto, investigación y flujos de trabajo habilitados por IA.",
         leadership_mentor_label: "Mentoría",
-        leadership_copy: "Mentoricé a más de 60 diseñadores mediante coaching individual, orientación en investigación UX, revisiones de portafolio y críticas de diseño. Ayudé a evaluar talento e identificar a los mejores candidatos para contratación.",
+        leadership_copy: "Mentoricé a diseñadores mediante coaching individual, orientación en investigación UX, revisiones de portafolio, críticas de diseño y evaluación de candidatos.",
         clients_label: "Organizaciones seleccionadas",
         clients_intro: "Desde empresas Fortune 500 y agencias federales hasta SaaS de alto crecimiento y organizaciones con una misión clara.",
         skills_label: "Áreas de especialización",
@@ -1954,7 +2081,12 @@
         about_h1: "Hei, olen Maya.",
         about_title: "AI-tuote- ja designjohtaja",
         about_focus:
-          "Ratkaisen monimutkaisia tuoteongelmia säännellyissä ja yritysympäristöissä — muutan kunnianhimoisen teknologian tuotteiksi, joihin ihmiset luottavat.",
+          "Ratkaisen monimutkaisia tuoteongelmia säännellyissä ja yritysympäristöissä — muutan kunnianhimoisen teknologian saavutettaviksi, luotettaviksi tuotteiksi, joita ihmiset voivat käyttää luottavaisin mielin.",
+        accessibility_label: "Saavutettavuus",
+        metric_years_label: "Vuotta",
+        metric_industries_label: "Toimialaa",
+        metric_mentees_label: "Mentoroitua suunnittelijaa",
+        metric_career_path: "Director → Perustaja",
         about_p1_lead: "Taustani kattaa tuotesuunnittelun, tuotehallinnan ja käyttäjätutkimuksen",
         about_p1_rest: " — vanhemmasta asiantuntijasta johtajaksi startupeissa, SaaS-yrityksissä, suurissa organisaatioissa ja missiovetoisissa organisaatioissa.",
         about_p2_lead: "Nykyään keskityn tekoälytuotteisiin, agentteihin ja automaatioon",
@@ -1964,19 +2096,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Etelä-Florida, Yhdysvallat · Yhdysvaltain kansalainen · Public Trust -turvallisuusselvitys",
         collab_label: "Yhteistyö ja toimitus",
-        collab_p1: "Viihdyn yhteistyöhön perustuvissa, monialaisissa tuoteorganisaatioissa, joissa design, tuote, insinöörityö, tutkimus ja liiketoiminnan sidosryhmät työskentelevät yhdessä ideoinnista toimitukseen. Urani aikana olen työskennellyt tuote- ja insinööritriadien, ketterien Scrum-tiimien, Kanban-työnkulkujen, SAFe-ympäristöjen ja monialaisten tiimien parissa toimittaakseni käyttäjäkeskeisiä, liiketoimintalähtöisiä ratkaisuja.",
+        collab_p1: "Viihdyn yhteistyöhön perustuvissa, monialaisissa tuoteorganisaatioissa, joissa design, tuote, insinöörityö, tutkimus ja liiketoiminnan sidosryhmät työskentelevät yhdessä ideoinnista toimitukseen — ja tuotan johdonmukaisesti käyttäjäkeskeisiä, liiketoimintalähtöisiä ratkaisuja.",
+        delivery_models: "Tuote- ja insinööritriadit · Agile Scrum · Kanban · SAFe",
         collab_p2: "Johdinpa sitten löytämistyöpajoja, fasilitoin design-kritiikkejä, sovitan yhteen sidosryhmiä tai prototyypitän ideoita nopeasti, arvostan avoimuutta, jaettua omistajuutta ja jatkuvaa iterointia. Lähestymistapani on käytännönläheinen ja näyttöön perustuva — tasapainotan käyttäjien tarpeita, liiketoiminnan tavoitteita ja teknisiä rajoitteita auttaakseni tiimejä siirtymään epävarmuudesta luottavaisiin tuotepäätöksiin.",
         leadership_label: "Johtajuus ja vaikutus",
         leadership_design_label: "Designjohtajuus",
-        leadership_design_copy: "Toiminut johtotehtävissä, kuten Director, Manager, Principal ja Lead Product Designer, ohjaten tuotestrategiaa, monialaista yhteistyötä ja saavutettavan designin toteutusta yritys-, julkishallinto- ja startup-ympäristöissä.",
-        leadership_role: "UI/UX-suunnittelun mentori",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Toiminut johtotehtävissä, ohjaten tuotestrategiaa, monialaista yhteistyötä, designin toteutusta ja saavutettavaa tuotekehitystä yritys-, julkishallinto- ja startup-ympäristöissä.",
+        leadership_role: "60+ mentoroitua suunnittelijaa",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Yrittäjyys",
         leadership_founder_role: "Perustaja",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Perustin Sterling Reevesin, tuotesuunnittelun mikropalvelustudion, joka keskittyy monimutkaisten tuotehaasteiden ratkaisemiseen UX-strategian, tuotesuunnittelun, tutkimuksen ja tekoälyavusteisten työnkulkujen avulla.",
+        leadership_founder_copy: "Perustin Sterling Reevesin, tuotesuunnittelun mikropalvelustudion, joka keskittyy UX-strategiaan, tuotesuunnitteluun, tutkimukseen ja tekoälyavusteisiin työnkulkuihin.",
         leadership_mentor_label: "Mentorointi",
-        leadership_copy: "Ohjasin yli 60 suunnittelijaa henkilökohtaisen valmennuksen, UX-tutkimusohjauksen, portfolioarviointien ja design-kritiikkien kautta. Autoin arvioimaan osaamista ja tunnistamaan parhaat ehdokkaat rekrytointiin.",
+        leadership_copy: "Ohjasin suunnittelijoita henkilökohtaisen valmennuksen, UX-tutkimusohjauksen, portfolioarviointien, design-kritiikkien ja rekrytointiarvioinnin kautta.",
         clients_label: "Valitut organisaatiot",
         clients_intro: "Fortune 500 -yrityksistä ja liittovaltion virastoista nopeasti kasvaviin SaaS-yrityksiin ja missiovetoisiin organisaatioihin.",
         skills_label: "Osaamisalueet",
@@ -2041,7 +2175,12 @@
         about_h1: "Bonjour, je suis Maya.",
         about_title: "Responsable Produit & Design IA",
         about_focus:
-          "Je résous des problèmes produit complexes dans des environnements réglementés et grandes entreprises — je transforme des technologies ambitieuses en produits fiables.",
+          "Je résous des problèmes produit complexes dans des environnements réglementés et grandes entreprises — je transforme des technologies ambitieuses en produits accessibles et fiables que chacun peut utiliser en toute confiance.",
+        accessibility_label: "Accessibilité",
+        metric_years_label: "Ans",
+        metric_industries_label: "Secteurs",
+        metric_mentees_label: "Designers mentorés",
+        metric_career_path: "Director → Fondatrice",
         about_p1_lead: "Mon parcours couvre le design produit, la gestion produit et la recherche utilisateur",
         about_p1_rest: " — d'IC senior à directrice, au sein de startups, d'entreprises SaaS, de grandes organisations et d'organisations à mission.",
         about_p2_lead: "Aujourd'hui, je me concentre sur les produits IA, les agents et l'automatisation",
@@ -2051,19 +2190,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sud de la Floride, États-Unis · Citoyenne américaine · Habilitation Public Trust",
         collab_label: "Collaboration et livraison",
-        collab_p1: "Je m'épanouis dans des organisations produit collaboratives et transverses, où design, produit, ingénierie, recherche et parties prenantes métier travaillent ensemble de la découverte à la livraison. Tout au long de ma carrière, j'ai collaboré au sein de triades produit-ingénierie, d'équipes Agile Scrum, de flux Kanban, d'environnements SAFe et d'équipes transverses pour livrer des solutions centrées utilisateur et orientées business.",
+        collab_p1: "Je m'épanouis dans des organisations produit collaboratives et transverses, où design, produit, ingénierie, recherche et parties prenantes métier travaillent ensemble de la découverte à la livraison, livrant systématiquement des solutions centrées utilisateur et orientées business.",
+        delivery_models: "Triades Produit-Ingénierie · Agile Scrum · Kanban · SAFe",
         collab_p2: "Qu'il s'agisse d'animer des ateliers de découverte, de faciliter des critiques de design, d'aligner les parties prenantes ou de prototyper rapidement des idées, je valorise la transparence, la responsabilité partagée et l'itération continue. Mon approche est pragmatique et fondée sur les données — je concilie besoins utilisateurs, objectifs business et contraintes techniques pour aider les équipes à passer de l'ambiguïté à des décisions produit confiantes.",
         leadership_label: "Leadership et impact",
         leadership_design_label: "Leadership design",
-        leadership_design_copy: "A occupé des postes de direction, notamment Director, Manager, Principal et Lead Product Designer, pilotant la stratégie produit, la collaboration transverse et l'exécution accessible du design dans des environnements d'entreprise, gouvernementaux et de startups.",
-        leadership_role: "Mentore en design UI/UX",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "A occupé des postes de direction, pilotant la stratégie produit, la collaboration transverse, l'exécution du design et le développement de produits accessibles dans des environnements d'entreprise, gouvernementaux et de startups.",
+        leadership_role: "60+ designers mentorés",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entrepreneuriat",
         leadership_founder_role: "Fondatrice",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "A fondé Sterling Reeves, un studio de microservices de design produit dédié à la résolution de défis produit complexes grâce à la stratégie UX, au design produit, à la recherche et à des workflows assistés par IA.",
+        leadership_founder_copy: "A fondé Sterling Reeves, un studio de microservices de design produit centré sur la stratégie UX, le design produit, la recherche et des workflows assistés par IA.",
         leadership_mentor_label: "Mentorat",
-        leadership_copy: "Mentorat de plus de 60 designers via du coaching individuel, un accompagnement en recherche UX, des revues de portfolio et des critiques de design. Contribution à l'évaluation des talents et à l'identification des meilleurs candidats à l'embauche.",
+        leadership_copy: "Mentorat de designers via du coaching individuel, un accompagnement en recherche UX, des revues de portfolio, des critiques de design et l'évaluation des candidats.",
         clients_label: "Organisations sélectionnées",
         clients_intro: "Des entreprises du Fortune 500 et agences fédérales aux SaaS à forte croissance et organisations à mission.",
         skills_label: "Domaines d'expertise",
@@ -2128,7 +2269,12 @@
         about_h1: "Hallo, ich bin Maya.",
         about_title: "KI-Produkt- & Designleiterin",
         about_focus:
-          "Ich löse komplexe Produktprobleme in regulierten und unternehmensweiten Umgebungen — und mache aus ambitionierter Technologie Produkte, denen Menschen vertrauen.",
+          "Ich löse komplexe Produktprobleme in regulierten und unternehmensweiten Umgebungen — und mache aus ambitionierter Technologie barrierefreie, vertrauenswürdige Produkte, die Menschen mit Zuversicht nutzen können.",
+        accessibility_label: "Barrierefreiheit",
+        metric_years_label: "Jahre",
+        metric_industries_label: "Branchen",
+        metric_mentees_label: "Begleitete Designer:innen",
+        metric_career_path: "Director → Gründerin",
         about_p1_lead: "Mein Werdegang umfasst Produktdesign, Produktmanagement und Nutzerforschung",
         about_p1_rest: " — von Senior IC bis Director, in Startups, SaaS-Unternehmen, Großunternehmen und missionsgetriebenen Organisationen.",
         about_p2_lead: "Heute konzentriere ich mich auf KI-Produkte, Agenten und Automatisierung",
@@ -2138,19 +2284,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Südflorida, USA · US-Staatsbürgerin · Public-Trust-Sicherheitsfreigabe",
         collab_label: "Zusammenarbeit & Delivery",
-        collab_p1: "Ich blühe in kollaborativen, funktionsübergreifenden Produktorganisationen auf, in denen Design, Produkt, Engineering, Forschung und Business-Stakeholder von der Entdeckung bis zur Auslieferung zusammenarbeiten. Im Laufe meiner Karriere habe ich in Product-Engineering-Triaden, agilen Scrum-Teams, Kanban-Workflows, SAFe-Umgebungen und funktionsübergreifenden Squads mitgewirkt, um nutzerzentrierte, geschäftsorientierte Lösungen zu liefern.",
+        collab_p1: "Ich blühe in kollaborativen, funktionsübergreifenden Produktorganisationen auf, in denen Design, Produkt, Engineering, Forschung und Business-Stakeholder von der Entdeckung bis zur Auslieferung zusammenarbeiten — und liefere dabei durchgängig nutzerzentrierte, geschäftsorientierte Lösungen.",
+        delivery_models: "Product-Engineering-Triaden · Agile Scrum · Kanban · SAFe",
         collab_p2: "Ob ich Discovery-Workshops leite, Design-Critiques moderiere, Stakeholder abstimme oder Ideen schnell prototype — ich schätze Transparenz, geteilte Verantwortung und kontinuierliche Iteration. Mein Ansatz ist pragmatisch und evidenzbasiert: Ich balanciere Nutzerbedürfnisse, Geschäftsziele und technische Grenzen, um Teams von Unklarheit zu sicheren Produktentscheidungen zu führen.",
         leadership_label: "Führung & Wirkung",
         leadership_design_label: "Design-Führung",
-        leadership_design_copy: "War in Führungspositionen tätig, darunter Director, Manager, Principal und Lead Product Designer, und steuerte Produktstrategie, funktionsübergreifende Zusammenarbeit und barrierefreie Design-Umsetzung in Unternehmens-, Behörden- und Startup-Umgebungen.",
-        leadership_role: "UI/UX-Design-Mentorin",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "War in Führungspositionen tätig und steuerte Produktstrategie, funktionsübergreifende Zusammenarbeit, Design-Umsetzung und barrierefreie Produktentwicklung in Unternehmens-, Behörden- und Startup-Umgebungen.",
+        leadership_role: "60+ begleitete Designer:innen",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Unternehmertum",
         leadership_founder_role: "Gründerin",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Gründete Sterling Reeves, ein Product-Design-Microservices-Studio mit Fokus auf die Lösung komplexer Produktherausforderungen durch UX-Strategie, Produktdesign, Forschung und KI-gestützte Workflows.",
+        leadership_founder_copy: "Gründete Sterling Reeves, ein Product-Design-Microservices-Studio mit Fokus auf UX-Strategie, Produktdesign, Forschung und KI-gestützte Workflows.",
         leadership_mentor_label: "Mentoring",
-        leadership_copy: "Habe über 60 Designerinnen und Designer durch 1:1-Coaching, UX-Forschungsberatung, Portfolio-Reviews und Design-Critiques begleitet. Half bei der Talentbewertung und der Identifikation von Top-Kandidat:innen für Einstellungen.",
+        leadership_copy: "Begleitete Designerinnen und Designer durch 1:1-Coaching, UX-Forschungsberatung, Portfolio-Reviews, Design-Critiques und die Bewertung von Kandidat:innen.",
         clients_label: "Ausgewählte Organisationen",
         clients_intro: "Von Fortune-500-Unternehmen und Bundesbehörden bis zu wachstumsstarken SaaS- und missionsgetriebenen Organisationen.",
         skills_label: "Kompetenzbereiche",
@@ -2215,7 +2363,12 @@
         about_h1: "Ciao, sono Maya.",
         about_title: "Leader di Prodotto e Design IA",
         about_focus:
-          "Risolvo problemi di prodotto complessi in ambienti regolamentati e aziendali — trasformando tecnologie ambiziose in prodotti di cui le persone si fidano.",
+          "Risolvo problemi di prodotto complessi in ambienti regolamentati e aziendali — trasformando tecnologie ambiziose in prodotti accessibili e affidabili che le persone possono usare con fiducia.",
+        accessibility_label: "Accessibilità",
+        metric_years_label: "Anni",
+        metric_industries_label: "Settori",
+        metric_mentees_label: "Designer mentorati",
+        metric_career_path: "Director → Fondatrice",
         about_p1_lead: "Il mio percorso spazia tra design di prodotto, product management e ricerca utenti",
         about_p1_rest: " — da IC senior a director, in startup, aziende SaaS, grandi organizzazioni e organizzazioni orientate a una missione.",
         about_p2_lead: "Oggi mi concentro su prodotti IA, agenti e automazione",
@@ -2225,19 +2378,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Florida del Sud, USA · Cittadina statunitense · Nulla osta Public Trust",
         collab_label: "Collaborazione e delivery",
-        collab_p1: "Do il meglio in organizzazioni di prodotto collaborative e multidisciplinari, dove design, prodotto, ingegneria, ricerca e stakeholder di business lavorano insieme dalla scoperta alla consegna. Nel corso della mia carriera ho collaborato all'interno di triadi prodotto-ingegneria, team Agile Scrum, flussi Kanban, ambienti SAFe e squad multidisciplinari per realizzare soluzioni centrate sull'utente e orientate al business.",
+        collab_p1: "Do il meglio in organizzazioni di prodotto collaborative e multidisciplinari, dove design, prodotto, ingegneria, ricerca e stakeholder di business lavorano insieme dalla scoperta alla consegna, offrendo costantemente soluzioni centrate sull'utente e orientate al business.",
+        delivery_models: "Triadi Prodotto-Ingegneria · Agile Scrum · Kanban · SAFe",
         collab_p2: "Che si tratti di guidare workshop di discovery, facilitare critiche di design, allineare gli stakeholder o prototipare rapidamente idee, valorizzo la trasparenza, la responsabilità condivisa e l'iterazione continua. Il mio approccio è pragmatico e basato sui dati: bilancio le esigenze degli utenti, gli obiettivi di business e i vincoli tecnici per aiutare i team a passare dall'ambiguità a decisioni di prodotto sicure.",
         leadership_label: "Leadership e impatto",
         leadership_design_label: "Leadership di design",
-        leadership_design_copy: "Ha ricoperto ruoli di leadership, tra cui Director, Manager, Principal e Lead Product Designer, guidando la strategia di prodotto, la collaborazione multidisciplinare e l'esecuzione accessibile del design in contesti aziendali, governativi e startup.",
-        leadership_role: "Mentore di Design UI/UX",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Ha ricoperto ruoli di leadership, guidando la strategia di prodotto, la collaborazione multidisciplinare, l'esecuzione del design e lo sviluppo di prodotti accessibili in contesti aziendali, governativi e startup.",
+        leadership_role: "60+ designer mentorati",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Imprenditorialità",
         leadership_founder_role: "Fondatrice",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Ha fondato Sterling Reeves, uno studio di microservizi di design di prodotto dedicato a risolvere sfide di prodotto complesse attraverso strategia UX, design di prodotto, ricerca e flussi di lavoro potenziati dall'IA.",
+        leadership_founder_copy: "Ha fondato Sterling Reeves, uno studio di microservizi di design di prodotto incentrato su strategia UX, design di prodotto, ricerca e flussi di lavoro potenziati dall'IA.",
         leadership_mentor_label: "Mentorship",
-        leadership_copy: "Ho fatto da mentore a oltre 60 designer attraverso coaching individuale, guida nella ricerca UX, revisioni di portfolio e critiche di design. Ho contribuito a valutare i talenti e a identificare i migliori candidati per le assunzioni.",
+        leadership_copy: "Ho fatto da mentore a designer attraverso coaching individuale, guida nella ricerca UX, revisioni di portfolio, critiche di design e valutazione dei candidati.",
         clients_label: "Organizzazioni selezionate",
         clients_intro: "Da aziende Fortune 500 e agenzie federali a SaaS ad alta crescita e organizzazioni orientate a una missione.",
         skills_label: "Aree di competenza",
@@ -2302,7 +2457,12 @@
         about_h1: "Olá, eu sou a Maya.",
         about_title: "Líder de Produto e Design de IA",
         about_focus:
-          "Resolvo problemas complexos de produto em ambientes regulados e corporativos — transformando tecnologia ambiciosa em produtos em que as pessoas confiam.",
+          "Resolvo problemas complexos de produto em ambientes regulados e corporativos — transformando tecnologia ambiciosa em produtos acessíveis e confiáveis que as pessoas podem usar com confiança.",
+        accessibility_label: "Acessibilidade",
+        metric_years_label: "Anos",
+        metric_industries_label: "Setores",
+        metric_mentees_label: "Designers mentorados",
+        metric_career_path: "Director → Fundadora",
         about_p1_lead: "Minha trajetória abrange design de produto, gestão de produto e pesquisa de usuários",
         about_p1_rest: " — de IC sênior a diretora, em startups, empresas SaaS, grandes organizações e organizações com propósito.",
         about_p2_lead: "Hoje, meu foco está em produtos de IA, agentes e automação",
@@ -2312,19 +2472,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sul da Flórida, EUA · Cidadã americana · Credencial Public Trust",
         collab_label: "Colaboração e entrega",
-        collab_p1: "Prospero em organizações de produto colaborativas e multifuncionais, onde design, produto, engenharia, pesquisa e stakeholders de negócio trabalham juntos da descoberta à entrega. Ao longo da minha carreira, colaborei em tríades de produto e engenharia, equipes Scrum ágeis, fluxos Kanban, ambientes SAFe e squads multifuncionais para entregar soluções centradas no usuário e focadas no negócio.",
+        collab_p1: "Prospero em organizações de produto colaborativas e multifuncionais, onde design, produto, engenharia, pesquisa e stakeholders de negócio trabalham juntos da descoberta à entrega, entregando de forma consistente soluções centradas no usuário e focadas no negócio.",
+        delivery_models: "Tríades de Produto e Engenharia · Agile Scrum · Kanban · SAFe",
         collab_p2: "Seja liderando workshops de descoberta, facilitando críticas de design, alinhando stakeholders ou prototipando ideias rapidamente, valorizo a transparência, a responsabilidade compartilhada e a iteração contínua. Minha abordagem é pragmática e baseada em evidências — equilibrando necessidades do usuário, objetivos de negócio e restrições técnicas para ajudar as equipes a passar da ambiguidade a decisões de produto confiantes.",
         leadership_label: "Liderança e impacto",
         leadership_design_label: "Liderança de design",
-        leadership_design_copy: "Atuou em cargos de liderança, incluindo Director, Manager, Principal e Lead Product Designer, orientando estratégia de produto, colaboração multifuncional e execução de design acessível em ambientes corporativos, governamentais e de startups.",
-        leadership_role: "Mentora de Design UI/UX",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Atuou em cargos de liderança, orientando estratégia de produto, colaboração multifuncional, execução de design e desenvolvimento de produto acessível em ambientes corporativos, governamentais e de startups.",
+        leadership_role: "60+ designers mentorados",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Empreendedorismo",
         leadership_founder_role: "Fundadora",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Fundou a Sterling Reeves, um estúdio de microsserviços de design de produto focado em resolver desafios complexos de produto por meio de estratégia de UX, design de produto, pesquisa e fluxos de trabalho habilitados por IA.",
+        leadership_founder_copy: "Fundou a Sterling Reeves, um estúdio de microsserviços de design de produto focado em estratégia de UX, design de produto, pesquisa e fluxos de trabalho habilitados por IA.",
         leadership_mentor_label: "Mentoria",
-        leadership_copy: "Fui mentora de mais de 60 designers por meio de coaching individual, orientação em pesquisa UX, revisões de portfólio e críticas de design. Ajudei a avaliar talentos e identificar os melhores candidatos para contratação.",
+        leadership_copy: "Fui mentora de designers por meio de coaching individual, orientação em pesquisa UX, revisões de portfólio, críticas de design e avaliação de candidatos.",
         clients_label: "Organizações selecionadas",
         clients_intro: "De empresas Fortune 500 e agências federais a SaaS de alto crescimento e organizações com propósito.",
         skills_label: "Áreas de atuação",
@@ -2389,7 +2551,12 @@
         about_h1: "Hoi, ik ben Maya.",
         about_title: "AI Product- en Designleider",
         about_focus:
-          "Ik los complexe productvraagstukken op in gereguleerde en zakelijke omgevingen — en maak van ambitieuze technologie producten die mensen vertrouwen.",
+          "Ik los complexe productvraagstukken op in gereguleerde en zakelijke omgevingen — en maak van ambitieuze technologie toegankelijke, betrouwbare producten die mensen met vertrouwen kunnen gebruiken.",
+        accessibility_label: "Toegankelijkheid",
+        metric_years_label: "Jaar",
+        metric_industries_label: "Sectoren",
+        metric_mentees_label: "Begeleide designers",
+        metric_career_path: "Director → Oprichter",
         about_p1_lead: "Mijn achtergrond omvat productdesign, productmanagement en gebruikersonderzoek",
         about_p1_rest: " — van senior IC tot director, bij startups, SaaS-bedrijven, grote organisaties en missiegedreven organisaties.",
         about_p2_lead: "Vandaag richt ik me op AI-producten, agents en automatisering",
@@ -2399,19 +2566,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Zuid-Florida, VS · Amerikaans staatsburger · Public Trust-veiligheidsmachtiging",
         collab_label: "Samenwerking & delivery",
-        collab_p1: "Ik floreer in samenwerkende, cross-functionele productorganisaties waarin design, product, engineering, research en business-stakeholders van discovery tot delivery samenwerken. Tijdens mijn carrière heb ik samengewerkt binnen product-engineering-triades, Agile Scrum-teams, Kanban-workflows, SAFe-omgevingen en cross-functionele squads om gebruikersgerichte, business-gerichte oplossingen te leveren.",
+        collab_p1: "Ik floreer in samenwerkende, cross-functionele productorganisaties waarin design, product, engineering, research en business-stakeholders van discovery tot delivery samenwerken, en lever daarbij consequent gebruikersgerichte, business-gerichte oplossingen.",
+        delivery_models: "Product-Engineering-Triades · Agile Scrum · Kanban · SAFe",
         collab_p2: "Of ik nu discovery-workshops leid, designcritiques faciliteer, stakeholders afstem of snel ideeën prototype — ik hecht waarde aan transparantie, gedeeld eigenaarschap en continue iteratie. Mijn aanpak is pragmatisch en op bewijs gebaseerd, waarbij ik gebruikersbehoeften, businessdoelen en technische beperkingen afweeg om teams te helpen van onzekerheid naar zelfverzekerde productbeslissingen te bewegen.",
         leadership_label: "Leiderschap & impact",
         leadership_design_label: "Designleiderschap",
-        leadership_design_copy: "Vervulde leiderschapsrollen waaronder Director, Manager, Principal en Lead Product Designer, en stuurde productstrategie, cross-functionele samenwerking en toegankelijke designuitvoering aan binnen enterprise-, overheids- en startupomgevingen.",
-        leadership_role: "UI/UX-designmentor",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Vervulde leiderschapsrollen en stuurde productstrategie, cross-functionele samenwerking, designuitvoering en toegankelijke productontwikkeling aan binnen enterprise-, overheids- en startupomgevingen.",
+        leadership_role: "60+ begeleide designers",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Ondernemerschap",
         leadership_founder_role: "Oprichter",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Richtte Sterling Reeves op, een product design microservices-studio gericht op het oplossen van complexe productuitdagingen via UX-strategie, productdesign, onderzoek en AI-ondersteunde workflows.",
+        leadership_founder_copy: "Richtte Sterling Reeves op, een product design microservices-studio gericht op UX-strategie, productdesign, onderzoek en AI-ondersteunde workflows.",
         leadership_mentor_label: "Mentorschap",
-        leadership_copy: "Begeleidde 60+ designers via 1-op-1-coaching, UX-onderzoeksbegeleiding, portfolioreviews en designcritiques. Hielp bij het beoordelen van talent en het identificeren van de beste kandidaten voor aanwerving.",
+        leadership_copy: "Begeleidde designers via 1-op-1-coaching, UX-onderzoeksbegeleiding, portfolioreviews, designcritiques en kandidaatbeoordeling.",
         clients_label: "Geselecteerde organisaties",
         clients_intro: "Van Fortune 500-bedrijven en federale overheidsinstanties tot snelgroeiende SaaS- en missiegedreven organisaties.",
         skills_label: "Expertisegebieden",
@@ -2476,7 +2645,12 @@
         about_h1: "Cześć, jestem Maya.",
         about_title: "Liderka Produktu i Designu AI",
         about_focus:
-          "Rozwiązuję złożone problemy produktowe w regulowanych środowiskach korporacyjnych — zamieniając ambitną technologię w produkty, którym ludzie ufają.",
+          "Rozwiązuję złożone problemy produktowe w regulowanych środowiskach korporacyjnych — zamieniając ambitną technologię w dostępne, godne zaufania produkty, z których ludzie mogą korzystać z pewnością.",
+        accessibility_label: "Dostępność",
+        metric_years_label: "Lat",
+        metric_industries_label: "Branż",
+        metric_mentees_label: "Zmentorowanych projektantów",
+        metric_career_path: "Director → Założycielka",
         about_p1_lead: "Moje doświadczenie obejmuje projektowanie produktu, zarządzanie produktem i badania użytkowników",
         about_p1_rest: " — od starszego specjalisty po dyrektora, w startupach, firmach SaaS, dużych organizacjach i organizacjach misyjnych.",
         about_p2_lead: "Obecnie koncentruję się na produktach AI, agentach i automatyzacji",
@@ -2486,19 +2660,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Południowa Floryda, USA · Obywatelka USA · Poświadczenie Public Trust",
         collab_label: "Współpraca i dostarczanie",
-        collab_p1: "Najlepiej odnajduję się w opartych na współpracy, wielofunkcyjnych organizacjach produktowych, w których design, produkt, inżynieria, badania i interesariusze biznesowi pracują razem od odkrywania po dostarczenie. W trakcie kariery współpracowałam w triadach produkt-inżynieria, zespołach Agile Scrum, przepływach Kanban, środowiskach SAFe i wielofunkcyjnych zespołach, dostarczając rozwiązania skoncentrowane na użytkowniku i zorientowane na biznes.",
+        collab_p1: "Najlepiej odnajduję się w opartych na współpracy, wielofunkcyjnych organizacjach produktowych, w których design, produkt, inżynieria, badania i interesariusze biznesowi pracują razem od odkrywania po dostarczenie, konsekwentnie dostarczając rozwiązania skoncentrowane na użytkowniku i zorientowane na biznes.",
+        delivery_models: "Triady Produkt-Inżynieria · Agile Scrum · Kanban · SAFe",
         collab_p2: "Niezależnie od tego, czy prowadzę warsztaty odkrywcze, facylituję krytyki designu, uzgadniam interesariuszy, czy szybko prototypuję pomysły, cenię przejrzystość, wspólną odpowiedzialność i ciągłą iterację. Moje podejście jest pragmatyczne i oparte na dowodach — równoważę potrzeby użytkowników, cele biznesowe i ograniczenia techniczne, aby pomóc zespołom przejść od niejasności do pewnych decyzji produktowych.",
         leadership_label: "Przywództwo i wpływ",
         leadership_design_label: "Przywództwo w designie",
-        leadership_design_copy: "Pełniła role przywódcze, w tym Director, Manager, Principal i Lead Product Designer, kierując strategią produktu, współpracą wielofunkcyjną i realizacją dostępnego designu w środowiskach korporacyjnych, rządowych i startupowych.",
-        leadership_role: "Mentorka projektowania UI/UX",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Pełniła role przywódcze, kierując strategią produktu, współpracą wielofunkcyjną, realizacją designu i rozwojem dostępnych produktów w środowiskach korporacyjnych, rządowych i startupowych.",
+        leadership_role: "60+ zmentorowanych projektantów",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Przedsiębiorczość",
         leadership_founder_role: "Założycielka",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Założyła Sterling Reeves, studio mikrousług projektowania produktu skupione na rozwiązywaniu złożonych wyzwań produktowych poprzez strategię UX, projektowanie produktu, badania i przepływy pracy wspierane przez AI.",
+        leadership_founder_copy: "Założyła Sterling Reeves, studio mikrousług projektowania produktu skoncentrowane na strategii UX, projektowaniu produktu, badaniach i przepływach pracy wspieranych przez AI.",
         leadership_mentor_label: "Mentoring",
-        leadership_copy: "Mentorowałam ponad 60 projektantów poprzez coaching indywidualny, wsparcie w badaniach UX, przeglądy portfolio i krytyki designu. Pomagałam oceniać talenty i identyfikować najlepszych kandydatów do zatrudnienia.",
+        leadership_copy: "Mentorowałam projektantów poprzez coaching indywidualny, wsparcie w badaniach UX, przeglądy portfolio, krytyki designu i ocenę kandydatów.",
         clients_label: "Wybrane organizacje",
         clients_intro: "Od firm z listy Fortune 500 i agencji federalnych po szybko rozwijające się SaaS i organizacje misyjne.",
         skills_label: "Obszary kompetencji",
@@ -2563,7 +2739,12 @@
         about_h1: "Hej, jag är Maya.",
         about_title: "AI-produkt- och designledare",
         about_focus:
-          "Jag löser komplexa produktproblem i reglerade och företagsmiljöer — och omvandlar ambitiös teknik till produkter som människor litar på.",
+          "Jag löser komplexa produktproblem i reglerade och företagsmiljöer — och omvandlar ambitiös teknik till tillgängliga, pålitliga produkter som människor kan använda med trygghet.",
+        accessibility_label: "Tillgänglighet",
+        metric_years_label: "År",
+        metric_industries_label: "Branscher",
+        metric_mentees_label: "Handledda designer",
+        metric_career_path: "Director → Grundare",
         about_p1_lead: "Min bakgrund spänner över produktdesign, produktledning och användarforskning",
         about_p1_rest: " — från senior IC till director, inom startups, SaaS-bolag, stora organisationer och missionsdrivna organisationer.",
         about_p2_lead: "Idag fokuserar jag på AI-produkter, agenter och automation",
@@ -2573,19 +2754,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Södra Florida, USA · Amerikansk medborgare · Public Trust-säkerhetsgodkännande",
         collab_label: "Samarbete & leverans",
-        collab_p1: "Jag trivs i samarbetsinriktade, tvärfunktionella produktorganisationer där design, produkt, utveckling, forskning och affärsintressenter arbetar tillsammans från upptäckt till leverans. Under min karriär har jag samarbetat inom produkt-utvecklingstriader, agila Scrum-team, Kanban-flöden, SAFe-miljöer och tvärfunktionella team för att leverera användarcentrerade, affärsfokuserade lösningar.",
+        collab_p1: "Jag trivs i samarbetsinriktade, tvärfunktionella produktorganisationer där design, produkt, utveckling, forskning och affärsintressenter arbetar tillsammans från upptäckt till leverans, och levererar konsekvent användarcentrerade, affärsfokuserade lösningar.",
+        delivery_models: "Produkt-Utvecklingstriader · Agile Scrum · Kanban · SAFe",
         collab_p2: "Oavsett om jag leder upptäcktsworkshops, faciliterar designgranskningar, samordnar intressenter eller snabbt prototypar idéer, värdesätter jag transparens, delat ägarskap och ständig iteration. Mitt tillvägagångssätt är pragmatiskt och evidensbaserat — jag balanserar användarbehov, affärsmål och tekniska begränsningar för att hjälpa team att gå från oklarhet till självsäkra produktbeslut.",
         leadership_label: "Ledarskap & genomslag",
         leadership_design_label: "Designledarskap",
-        leadership_design_copy: "Har innehaft ledarroller som Director, Manager, Principal och Lead Product Designer, och styrt produktstrategi, tvärfunktionellt samarbete och tillgänglig designexekvering inom enterprise-, myndighets- och startupmiljöer.",
-        leadership_role: "UI/UX-designmentor",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Har innehaft ledarroller och styrt produktstrategi, tvärfunktionellt samarbete, designexekvering och tillgänglig produktutveckling inom enterprise-, myndighets- och startupmiljöer.",
+        leadership_role: "60+ handledda designer",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entreprenörskap",
         leadership_founder_role: "Grundare",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Grundade Sterling Reeves, en produktdesign-mikrotjänststudio inriktad på att lösa komplexa produktutmaningar genom UX-strategi, produktdesign, forskning och AI-stödda arbetsflöden.",
+        leadership_founder_copy: "Grundade Sterling Reeves, en produktdesign-mikrotjänststudio inriktad på UX-strategi, produktdesign, forskning och AI-stödda arbetsflöden.",
         leadership_mentor_label: "Mentorskap",
-        leadership_copy: "Handledde 60+ designer genom individuell coachning, UX-forskningsvägledning, portföljgranskningar och designgranskningar. Hjälpte till att utvärdera talang och identifiera de bästa kandidaterna för anställning.",
+        leadership_copy: "Handledde designer genom individuell coachning, UX-forskningsvägledning, portföljgranskningar, designgranskningar och kandidatutvärdering.",
         clients_label: "Utvalda organisationer",
         clients_intro: "Från Fortune 500-bolag och federala myndigheter till snabbväxande SaaS- och missionsdrivna organisationer.",
         skills_label: "Kompetensområden",
@@ -2650,7 +2833,12 @@
         about_h1: "Hej, jeg er Maya.",
         about_title: "AI Produkt- og Designleder",
         about_focus:
-          "Jeg løser komplekse produktproblemer i regulerede og virksomhedsmiljøer — og omdanner ambitiøs teknologi til produkter, folk stoler på.",
+          "Jeg løser komplekse produktproblemer i regulerede og virksomhedsmiljøer — og omdanner ambitiøs teknologi til tilgængelige, troværdige produkter, som folk kan bruge med tryghed.",
+        accessibility_label: "Tilgængelighed",
+        metric_years_label: "År",
+        metric_industries_label: "Brancher",
+        metric_mentees_label: "Mentorerede designere",
+        metric_career_path: "Director → Grundlægger",
         about_p1_lead: "Min baggrund spænder over produktdesign, produktledelse og brugerundersøgelser",
         about_p1_rest: " — fra senior IC til director, i startups, SaaS-virksomheder, store organisationer og missionsdrevne organisationer.",
         about_p2_lead: "I dag fokuserer jeg på AI-produkter, agenter og automatisering",
@@ -2660,19 +2848,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sydflorida, USA · Amerikansk statsborger · Public Trust-sikkerhedsgodkendelse",
         collab_label: "Samarbejde & levering",
-        collab_p1: "Jeg trives i samarbejdsorienterede, tværfunktionelle produktorganisationer, hvor design, produkt, engineering, research og forretningsinteressenter arbejder sammen fra discovery til levering. Gennem min karriere har jeg samarbejdet i produkt-engineering-triader, agile Scrum-teams, Kanban-workflows, SAFe-miljøer og tværfunktionelle teams for at levere brugercentrerede, forretningsfokuserede løsninger.",
+        collab_p1: "Jeg trives i samarbejdsorienterede, tværfunktionelle produktorganisationer, hvor design, produkt, engineering, research og forretningsinteressenter arbejder sammen fra discovery til levering, og leverer konsekvent brugercentrerede, forretningsfokuserede løsninger.",
+        delivery_models: "Produkt-Engineering-Triader · Agile Scrum · Kanban · SAFe",
         collab_p2: "Uanset om jeg leder discovery-workshops, faciliterer designkritikker, afstemmer interessenter eller hurtigt prototyper idéer, værdsætter jeg gennemsigtighed, fælles ejerskab og løbende iteration. Min tilgang er pragmatisk og evidensbaseret — jeg balancerer brugerbehov, forretningsmål og tekniske begrænsninger for at hjælpe teams med at gå fra usikkerhed til sikre produktbeslutninger.",
         leadership_label: "Ledelse & gennemslagskraft",
         leadership_design_label: "Designledelse",
-        leadership_design_copy: "Har bestridt lederroller som Director, Manager, Principal og Lead Product Designer og styret produktstrategi, tværfunktionelt samarbejde og tilgængelig designeksekvering i enterprise-, myndigheds- og startupmiljøer.",
-        leadership_role: "UI/UX-designmentor",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Har bestridt lederroller og styret produktstrategi, tværfunktionelt samarbejde, designeksekvering og tilgængelig produktudvikling i enterprise-, myndigheds- og startupmiljøer.",
+        leadership_role: "60+ mentorerede designere",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Iværksætteri",
         leadership_founder_role: "Grundlægger",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Grundlagde Sterling Reeves, et produktdesign-mikroservicestudie med fokus på at løse komplekse produktudfordringer gennem UX-strategi, produktdesign, research og AI-understøttede workflows.",
+        leadership_founder_copy: "Grundlagde Sterling Reeves, et produktdesign-mikroservicestudie med fokus på UX-strategi, produktdesign, research og AI-understøttede workflows.",
         leadership_mentor_label: "Mentorordning",
-        leadership_copy: "Var mentor for 60+ designere gennem 1:1-coaching, UX-researchvejledning, porteføljegennemgange og designkritikker. Hjalp med at evaluere talent og identificere de bedste kandidater til ansættelse.",
+        leadership_copy: "Var mentor for designere gennem 1:1-coaching, UX-researchvejledning, porteføljegennemgange, designkritikker og kandidatevaluering.",
         clients_label: "Udvalgte organisationer",
         clients_intro: "Fra Fortune 500-virksomheder og føderale myndigheder til hurtigtvoksende SaaS- og missionsdrevne organisationer.",
         skills_label: "Kompetenceområder",
@@ -2737,7 +2927,12 @@
         about_h1: "Hei, jeg er Maya.",
         about_title: "AI-produkt- og designleder",
         about_focus:
-          "Jeg løser komplekse produktproblemer i regulerte og virksomhetsmiljøer — og omgjør ambisiøs teknologi til produkter folk stoler på.",
+          "Jeg løser komplekse produktproblemer i regulerte og virksomhetsmiljøer — og omgjør ambisiøs teknologi til tilgjengelige, pålitelige produkter folk kan bruke med trygghet.",
+        accessibility_label: "Tilgjengelighet",
+        metric_years_label: "År",
+        metric_industries_label: "Bransjer",
+        metric_mentees_label: "Mentorerte designere",
+        metric_career_path: "Director → Grunnlegger",
         about_p1_lead: "Bakgrunnen min spenner over produktdesign, produktledelse og brukerforskning",
         about_p1_rest: " — fra senior IC til director, i startups, SaaS-selskaper, store organisasjoner og misjonsdrevne organisasjoner.",
         about_p2_lead: "I dag fokuserer jeg på AI-produkter, agenter og automatisering",
@@ -2747,19 +2942,21 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sør-Florida, USA · Amerikansk statsborger · Public Trust-sikkerhetsklarering",
         collab_label: "Samarbeid & levering",
-        collab_p1: "Jeg trives i samarbeidsorienterte, tverrfunksjonelle produktorganisasjoner der design, produkt, engineering, forskning og forretningsinteressenter jobber sammen fra discovery til levering. Gjennom karrieren har jeg samarbeidet i produkt-engineering-triader, agile Scrum-team, Kanban-arbeidsflyter, SAFe-miljøer og tverrfunksjonelle team for å levere brukersentrerte, forretningsfokuserte løsninger.",
+        collab_p1: "Jeg trives i samarbeidsorienterte, tverrfunksjonelle produktorganisasjoner der design, produkt, engineering, forskning og forretningsinteressenter jobber sammen fra discovery til levering, og leverer konsekvent brukersentrerte, forretningsfokuserte løsninger.",
+        delivery_models: "Produkt-Engineering-Triader · Agile Scrum · Kanban · SAFe",
         collab_p2: "Enten jeg leder discovery-workshops, fasiliterer designkritikker, samordner interessenter eller raskt prototyper idéer, verdsetter jeg åpenhet, delt eierskap og kontinuerlig iterasjon. Tilnærmingen min er pragmatisk og evidensbasert — jeg balanserer brukerbehov, forretningsmål og tekniske begrensninger for å hjelpe team med å gå fra usikkerhet til trygge produktbeslutninger.",
         leadership_label: "Ledelse & gjennomslagskraft",
         leadership_design_label: "Designledelse",
-        leadership_design_copy: "Har hatt lederroller som Director, Manager, Principal og Lead Product Designer, og styrt produktstrategi, tverrfunksjonelt samarbeid og tilgjengelig designutførelse i enterprise-, myndighets- og startupmiljøer.",
-        leadership_role: "UI/UX-designmentor",
+        leadership_design_roles: "Director · Manager · Principal · Lead Product Designer",
+        leadership_design_copy: "Har hatt lederroller og styrt produktstrategi, tverrfunksjonelt samarbeid, designutførelse og tilgjengelig produktutvikling i enterprise-, myndighets- og startupmiljøer.",
+        leadership_role: "60+ mentorerte designere",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entreprenørskap",
         leadership_founder_role: "Grunnlegger",
         leadership_founder_org: "Sterling Reeves",
-        leadership_founder_copy: "Grunnla Sterling Reeves, et produktdesign-mikrotjenestestudio med fokus på å løse komplekse produktutfordringer gjennom UX-strategi, produktdesign, forskning og AI-støttede arbeidsflyter.",
+        leadership_founder_copy: "Grunnla Sterling Reeves, et produktdesign-mikrotjenestestudio med fokus på UX-strategi, produktdesign, forskning og AI-støttede arbeidsflyter.",
         leadership_mentor_label: "Mentorskap",
-        leadership_copy: "Veiledet 60+ designere gjennom 1:1-coaching, UX-forskningsveiledning, porteføljegjennomganger og designkritikker. Bidro til å vurdere talent og identifisere de beste kandidatene for ansettelse.",
+        leadership_copy: "Veiledet designere gjennom 1:1-coaching, UX-forskningsveiledning, porteføljegjennomganger, designkritikker og kandidatevaluering.",
         clients_label: "Utvalgte organisasjoner",
         clients_intro: "Fra Fortune 500-selskaper og føderale etater til raskt voksende SaaS- og misjonsdrevne organisasjoner.",
         skills_label: "Kompetanseområder",
