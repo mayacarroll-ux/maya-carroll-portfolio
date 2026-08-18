@@ -1029,6 +1029,42 @@
       white-space: nowrap;
     }
 
+    #back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 5.5rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: var(--shadow-elevated);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.18s ease;
+      z-index: 15;
+    }
+    #back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #back-to-top:hover,
+    #back-to-top:focus-visible {
+      border-color: var(--color-accent);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #back-to-top {
+        transition: none;
+      }
+    }
+
     /* ---------- Footer: shared city-strip (time + weather + currency) ----------
        Markup/behavior powered by footer-widget.js — kept in sync with
        index.html's inline copy of the same widget. */
@@ -1605,6 +1641,12 @@
       <span class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</span>
     </p>
   </footer>
+
+  <button type="button" id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  </button>
 
   <script>
     var translations = {
@@ -2655,6 +2697,20 @@
     };
 
     document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+    // ---------- Back to top ----------
+    (function () {
+      var backToTop = document.getElementById("back-to-top");
+      if (!backToTop) return;
+      function toggleVisibility() {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+      }
+      window.addEventListener("scroll", toggleVisibility, { passive: true });
+      toggleVisibility();
+      backToTop.addEventListener("click", function () {
+        window.scrollTo(0, 0);
+      });
+    })();
 
     // ---------- Theme toggle ----------
     var themeToggle = document.getElementById("theme-toggle");
