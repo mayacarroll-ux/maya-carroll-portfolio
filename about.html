@@ -643,6 +643,38 @@
       border-radius: 999px;
       padding: 0.4rem 0.9rem;
     }
+    .industries-block {
+      margin-top: 1.75rem;
+      text-align: left;
+    }
+    .industries-block h3 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.6rem;
+    }
+    /* Bordered cards, not pills — a distinct shape from Skills right above
+       it, so "what I know" and "where I've applied it" read as two
+       separate, scannable groups rather than blurring into one list. */
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.6rem;
+    }
+    .industry-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 0.6rem 0.5rem;
+    }
     .credentials-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1097,6 +1129,17 @@
           </div>
         </div>
 
+        <div class="industries-block">
+          <h3 data-i18n="industries_label">Industries</h3>
+          <div class="industries-grid">
+            <span class="industry-card">EdTech</span>
+            <span class="industry-card">FinTech</span>
+            <span class="industry-card">B2B SaaS</span>
+            <span class="industry-card">Civic Tech</span>
+            <span class="industry-card">eCommerce</span>
+          </div>
+        </div>
+
         <div class="credentials-grid">
           <div class="credentials-group">
             <h3 data-i18n="credentials_education_label">Education</h3>
@@ -1173,6 +1216,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "South Florida, USA · U.S. Citizen · Public Trust Clearance",
         skills_label: "Skills",
+
+        industries_label: "Industries",
         skill_product_strategy: "Product Strategy",
         skill_product_design: "Product Design",
         skill_product_management: "Product Management",
@@ -1213,6 +1258,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sur de Florida, EE. UU. · Ciudadana estadounidense · Autorización Public Trust",
         skills_label: "Habilidades",
+
+        industries_label: "Industrias",
         skill_product_strategy: "Estrategia de producto",
         skill_product_design: "Diseño de producto",
         skill_product_management: "Gestión de producto",
@@ -1253,6 +1300,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Etelä-Florida, Yhdysvallat · Yhdysvaltain kansalainen · Public Trust -turvallisuusselvitys",
         skills_label: "Taidot",
+
+        industries_label: "Toimialat",
         skill_product_strategy: "Tuotestrategia",
         skill_product_design: "Tuotesuunnittelu",
         skill_product_management: "Tuotehallinta",
@@ -1293,6 +1342,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sud de la Floride, États-Unis · Citoyenne américaine · Habilitation Public Trust",
         skills_label: "Compétences",
+
+        industries_label: "Secteurs",
         skill_product_strategy: "Stratégie produit",
         skill_product_design: "Design produit",
         skill_product_management: "Gestion de produit",
@@ -1333,6 +1384,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Südflorida, USA · US-Staatsbürgerin · Public-Trust-Sicherheitsfreigabe",
         skills_label: "Fähigkeiten",
+
+        industries_label: "Branchen",
         skill_product_strategy: "Produktstrategie",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktmanagement",
@@ -1373,6 +1426,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Florida del Sud, USA · Cittadina statunitense · Nulla osta Public Trust",
         skills_label: "Competenze",
+
+        industries_label: "Settori",
         skill_product_strategy: "Strategia di prodotto",
         skill_product_design: "Design di prodotto",
         skill_product_management: "Product management",
@@ -1413,6 +1468,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sul da Flórida, EUA · Cidadã americana · Credencial Public Trust",
         skills_label: "Habilidades",
+
+        industries_label: "Indústrias",
         skill_product_strategy: "Estratégia de produto",
         skill_product_design: "Design de produto",
         skill_product_management: "Gestão de produto",
@@ -1453,6 +1510,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Zuid-Florida, VS · Amerikaans staatsburger · Public Trust-veiligheidsmachtiging",
         skills_label: "Vaardigheden",
+
+        industries_label: "Sectoren",
         skill_product_strategy: "Productstrategie",
         skill_product_design: "Productdesign",
         skill_product_management: "Productmanagement",
@@ -1493,6 +1552,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Południowa Floryda, USA · Obywatelka USA · Poświadczenie Public Trust",
         skills_label: "Umiejętności",
+
+        industries_label: "Branże",
         skill_product_strategy: "Strategia produktu",
         skill_product_design: "Design produktu",
         skill_product_management: "Zarządzanie produktem",
@@ -1533,6 +1594,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Södra Florida, USA · Amerikansk medborgare · Public Trust-säkerhetsgodkännande",
         skills_label: "Kompetenser",
+
+        industries_label: "Branscher",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledning",
@@ -1573,6 +1636,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sydflorida, USA · Amerikansk statsborger · Public Trust-sikkerhedsgodkendelse",
         skills_label: "Kompetencer",
+
+        industries_label: "Brancher",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
@@ -1613,6 +1678,8 @@
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sør-Florida, USA · Amerikansk statsborger · Public Trust-sikkerhetsklarering",
         skills_label: "Ferdigheter",
+
+        industries_label: "Bransjer",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
