@@ -325,6 +325,141 @@
       max-width: 60ch;
     }
 
+    /* ---------- Proof strip ---------- */
+    /* Pure metadata, not a headline — small, quiet, no section heading of
+       its own (the section itself carries an aria-label instead). */
+    #proof-strip .container {
+      padding-top: 0;
+      padding-bottom: clamp(1.5rem, 4vw, 2.25rem);
+    }
+    #proof-strip-line {
+      max-width: 46rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* ---------- Featured Case Studies ---------- */
+    /* The main event on this page — an editorial list, not a card grid.
+       Each row is a single block-level link so the whole row is
+       clickable, with a hairline divider standing in for the card
+       chrome the rest of the page deliberately avoids. */
+    #featured-work h2 {
+      margin-bottom: 0.5rem;
+    }
+    .featured-list {
+      list-style: none;
+      margin: 1.75rem 0 0;
+      padding: 0;
+    }
+    .featured-list li {
+      border-top: 1px solid var(--color-border);
+    }
+    .featured-list li:last-child {
+      border-bottom: 1px solid var(--color-border);
+    }
+    .featured-item {
+      display: block;
+      padding: 1.75rem 0;
+      text-decoration: none;
+      color: inherit;
+    }
+    .featured-item-industry {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .featured-item-title {
+      font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+      transition: color 0.15s ease;
+    }
+    .featured-item-outcome {
+      margin-top: 0.5rem;
+      max-width: 60ch;
+      color: var(--color-text-secondary);
+    }
+    .featured-item-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text);
+      transition: color 0.15s ease;
+    }
+    .featured-item:hover .featured-item-title,
+    .featured-item:hover .featured-item-link,
+    .featured-item:focus-visible .featured-item-title,
+    .featured-item:focus-visible .featured-item-link {
+      color: var(--color-accent);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .featured-item-title,
+      .featured-item-link {
+        transition: none;
+      }
+    }
+
+    /* ---------- Selected Organizations ---------- */
+    #selected-orgs h2 {
+      margin-bottom: 1.75rem;
+    }
+    .orgs-grid {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.1rem 2.75rem;
+      margin: 0;
+      padding: 0;
+    }
+    .org-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    /* ---------- Currently building with ---------- */
+    /* One quiet line, not a technical inventory — see about.html's
+       Technical Fluency section for the full stack. */
+    #building-with .container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.4rem 1rem;
+    }
+    .building-with-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+    }
+    .building-with-tools {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    /* ---------- Final CTA ---------- */
+    #final-cta {
+      text-align: center;
+      border-top: 1px solid var(--color-border);
+    }
+    #final-cta h2 {
+      max-width: 24ch;
+      margin: 0 auto;
+    }
+    #final-cta .btn-row {
+      justify-content: center;
+    }
+
     .visually-hidden {
       position: absolute;
       width: 1px;
@@ -1167,14 +1302,61 @@
     <section id="hero">
       <div class="container">
         <div id="hero-copy">
-          <h1 data-i18n="hero_h1">Designing clear, trustworthy AI products.</h1>
+          <h1 data-i18n="hero_h1">Designing and building AI products people trust.</h1>
           <p data-i18n="hero_p">
-             product design leader specializing in AI and complex systems
+            End-to-end product strategy, design, and AI-assisted development for enterprise and
+            regulated industries.
           </p>
           <div class="btn-row">
-            <a class="btn btn-primary" href="work.html" data-i18n="cta_view_work">View my work</a>
-            <a class="btn btn-secondary" href="booking.html" data-i18n="cta_book_call">Book a call</a>
+            <a class="btn btn-primary" href="work.html" data-i18n="cta_view_work">View Case Studies</a>
+            <a class="btn btn-secondary" href="booking.html" data-i18n="cta_book_call">Book a Call</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="proof-strip" aria-label="Career highlights">
+      <div class="container">
+        <p id="proof-strip-line" data-i18n="proof_strip">Director &middot; Founder &middot; 15+ Years &middot; 60+ Designers Mentored &middot; Public Trust Clearance</p>
+      </div>
+    </section>
+
+    <section id="featured-work" aria-labelledby="featured-work-label">
+      <div class="container">
+        <h2 id="featured-work-label" data-i18n="featured_work_label">Featured Case Studies</h2>
+        <ul id="featured-work-list" class="featured-list"></ul>
+      </div>
+    </section>
+
+    <section id="selected-orgs" aria-labelledby="selected-orgs-label">
+      <div class="container">
+        <h2 id="selected-orgs-label" data-i18n="orgs_label">Selected Organizations</h2>
+        <ul class="orgs-grid">
+          <li class="org-name">U.S. Department of Veterans Affairs</li>
+          <li class="org-name">Citrix</li>
+          <li class="org-name">UserTesting</li>
+          <li class="org-name">Office Depot</li>
+          <li class="org-name">TradeStation</li>
+          <li class="org-name">Kandji</li>
+          <li class="org-name">BriteCore</li>
+          <li class="org-name">Buildertrend</li>
+          <li class="org-name">Junior Achievement USA</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="building-with" aria-labelledby="building-with-label">
+      <div class="container">
+        <h2 id="building-with-label" class="building-with-label" data-i18n="building_with_label">Currently Building With</h2>
+        <p class="building-with-tools" data-i18n="tools_line">Claude Code &middot; Cursor &middot; Model Context Protocol (MCP) &middot; AI Agents</p>
+      </div>
+    </section>
+
+    <section id="final-cta" aria-labelledby="final-cta-label">
+      <div class="container">
+        <h2 id="final-cta-label" data-i18n="final_cta_h2">Let's build something people trust.</h2>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="booking.html" data-i18n="cta_book_call">Book a Call</a>
         </div>
       </div>
     </section>
@@ -1209,6 +1391,7 @@
     </p>
   </footer>
 
+  <script src="work-data.js"></script>
   <script>
     const translations = {
       en: {
@@ -1225,10 +1408,17 @@
         nav_calendar: "Calendar",
         nav_dashboard: "Dashboard",
         nav_signout: "Sign out",
-        cta_view_work: "View my work",
-        cta_book_call: "Book a call",
-        hero_h1: "Designing clear, trustworthy AI products.",
-        hero_p: " product design leader specializing in AI and complex systems",
+        cta_view_work: "View Case Studies",
+        cta_book_call: "Book a Call",
+        hero_h1: "Designing and building AI products people trust.",
+        hero_p: "End-to-end product strategy, design, and AI-assisted development for enterprise and regulated industries.",
+        proof_strip: "Director · Founder · 15+ Years · 60+ Designers Mentored · Public Trust Clearance",
+        featured_work_label: "Featured Case Studies",
+        view_case_study_label: "View case study",
+        orgs_label: "Selected Organizations",
+        building_with_label: "Currently Building With",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI Agents",
+        final_cta_h2: "Let's build something people trust.",
         footer_p1: "From Miami to Helsinki—designing what's next.",
         weather_loading: "loading",
         weather_unavailable: "Weather unavailable",
@@ -1273,10 +1463,17 @@
         nav_calendar: "Calendario",
         nav_dashboard: "Panel",
         nav_signout: "Cerrar sesión",
-        cta_view_work: "Ver mi trabajo",
+        cta_view_work: "Ver casos de estudio",
         cta_book_call: "Reservar una llamada",
-        hero_h1: "Diseñando productos de IA claros y confiables.",
-        hero_p: "Soy Maya Carroll, líder de diseño de producto especializada en IA y sistemas complejos.",
+        hero_h1: "Diseño y construyo productos de IA en los que las personas confían.",
+        hero_p: "Estrategia de producto, diseño y desarrollo asistido por IA de extremo a extremo para empresas e industrias reguladas.",
+        proof_strip: "Directora · Fundadora · 15+ años · 60+ diseñadores mentorizados · Autorización Public Trust",
+        featured_work_label: "Casos de estudio destacados",
+        view_case_study_label: "Ver caso de estudio",
+        orgs_label: "Organizaciones seleccionadas",
+        building_with_label: "Actualmente construyendo con",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agentes de IA",
+        final_cta_h2: "Construyamos algo en lo que la gente confíe.",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
         weather_loading: "cargando",
         weather_unavailable: "Clima no disponible",
@@ -1321,10 +1518,17 @@
         nav_calendar: "Kalenteri",
         nav_dashboard: "Kojelauta",
         nav_signout: "Kirjaudu ulos",
-        cta_view_work: "Katso työni",
+        cta_view_work: "Katso tapaustutkimukset",
         cta_book_call: "Varaa puhelu",
-        hero_h1: "Suunnittelen selkeitä, luotettavia tekoälytuotteita.",
-        hero_p: "Olen Maya Carroll, tuotesuunnittelun johtaja, joka on erikoistunut tekoälyyn ja monimutkaisiin järjestelmiin.",
+        hero_h1: "Suunnittelen ja rakennan tekoälytuotteita, joihin ihmiset luottavat.",
+        hero_p: "Kattava tuotestrategia, muotoilu ja tekoälyavusteinen kehitys yrityksille ja säännellyille toimialoille.",
+        proof_strip: "Director · Perustaja · 15+ vuotta · 60+ mentoroitua suunnittelijaa · Public Trust -turvallisuusselvitys",
+        featured_work_label: "Valitut tapaustutkimukset",
+        view_case_study_label: "Katso tapaustutkimus",
+        orgs_label: "Valitut organisaatiot",
+        building_with_label: "Rakennan tällä hetkellä",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Tekoälyagentit",
+        final_cta_h2: "Rakennetaan jotain, johon ihmiset voivat luottaa.",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
         weather_loading: "ladataan",
         weather_unavailable: "Sää ei saatavilla",
@@ -1369,10 +1573,17 @@
         nav_calendar: "Calendrier",
         nav_dashboard: "Tableau de bord",
         nav_signout: "Déconnexion",
-        cta_view_work: "Voir mon travail",
+        cta_view_work: "Voir les études de cas",
         cta_book_call: "Réserver un appel",
-        hero_h1: "Concevoir des produits d'IA clairs et fiables.",
-        hero_p: "Je suis Maya Carroll, responsable de design produit spécialisée en IA et systèmes complexes.",
+        hero_h1: "Je conçois et je construis des produits IA en lesquels les gens ont confiance.",
+        hero_p: "Stratégie produit, design et développement assisté par IA de bout en bout pour les entreprises et les secteurs réglementés.",
+        proof_strip: "Director · Fondatrice · 15+ ans · 60+ designers mentorés · Habilitation Public Trust",
+        featured_work_label: "Études de cas sélectionnées",
+        view_case_study_label: "Voir l'étude de cas",
+        orgs_label: "Organisations sélectionnées",
+        building_with_label: "Ce que j'utilise en ce moment",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agents IA",
+        final_cta_h2: "Construisons ensemble quelque chose de fiable.",
         footer_p1: "De Miami à Helsinki : concevoir ce qui vient ensuite.",
         weather_loading: "chargement",
         weather_unavailable: "Météo indisponible",
@@ -1417,10 +1628,17 @@
         nav_calendar: "Kalender",
         nav_dashboard: "Dashboard",
         nav_signout: "Abmelden",
-        cta_view_work: "Meine Arbeit ansehen",
+        cta_view_work: "Fallstudien ansehen",
         cta_book_call: "Anruf vereinbaren",
-        hero_h1: "Klare, vertrauenswürdige KI-Produkte gestalten.",
-        hero_p: "Ich bin Maya Carroll, Produktdesign-Leiterin mit Fokus auf KI und komplexe Systeme.",
+        hero_h1: "Ich gestalte und baue KI-Produkte, denen Menschen vertrauen.",
+        hero_p: "Durchgängige Produktstrategie, Design und KI-gestützte Entwicklung für Unternehmen und regulierte Branchen.",
+        proof_strip: "Director · Gründerin · 15+ Jahre · 60+ begleitete Designer:innen · Public-Trust-Sicherheitsfreigabe",
+        featured_work_label: "Ausgewählte Fallstudien",
+        view_case_study_label: "Fallstudie ansehen",
+        orgs_label: "Ausgewählte Organisationen",
+        building_with_label: "Aktuell im Einsatz",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · KI-Agenten",
+        final_cta_h2: "Lassen Sie uns etwas bauen, dem Menschen vertrauen.",
         footer_p1: "Von Miami nach Helsinki – das Nächste gestalten.",
         weather_loading: "lädt",
         weather_unavailable: "Wetter nicht verfügbar",
@@ -1465,10 +1683,17 @@
         nav_calendar: "Calendario",
         nav_dashboard: "Pannello",
         nav_signout: "Esci",
-        cta_view_work: "Guarda i miei lavori",
+        cta_view_work: "Vedi i casi di studio",
         cta_book_call: "Prenota una chiamata",
-        hero_h1: "Progetto prodotti IA chiari e affidabili.",
-        hero_p: "Sono Maya Carroll, leader di design di prodotto specializzata in IA e sistemi complessi.",
+        hero_h1: "Progetto e sviluppo prodotti IA di cui le persone si fidano.",
+        hero_p: "Strategia di prodotto, design e sviluppo assistito dall'IA end-to-end per aziende e settori regolamentati.",
+        proof_strip: "Director · Fondatrice · 15+ anni · 60+ designer mentorati · Nulla osta Public Trust",
+        featured_work_label: "Casi di studio selezionati",
+        view_case_study_label: "Vedi il caso di studio",
+        orgs_label: "Organizzazioni selezionate",
+        building_with_label: "Costruisco attualmente con",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agenti IA",
+        final_cta_h2: "Costruiamo qualcosa di cui le persone si fidano.",
         footer_p1: "Da Miami a Helsinki: progettando il prossimo passo.",
         weather_loading: "caricamento",
         weather_unavailable: "Meteo non disponibile",
@@ -1513,10 +1738,17 @@
         nav_calendar: "Calendário",
         nav_dashboard: "Painel",
         nav_signout: "Sair",
-        cta_view_work: "Ver meu trabalho",
+        cta_view_work: "Ver estudos de caso",
         cta_book_call: "Agendar uma chamada",
-        hero_h1: "Projetando produtos de IA claros e confiáveis.",
-        hero_p: "Sou Maya Carroll, líder de design de produto especializada em IA e sistemas complexos.",
+        hero_h1: "Eu projeto e construo produtos de IA em que as pessoas confiam.",
+        hero_p: "Estratégia de produto, design e desenvolvimento assistido por IA de ponta a ponta para empresas e setores regulados.",
+        proof_strip: "Director · Fundadora · 15+ anos · 60+ designers mentorados · Credencial Public Trust",
+        featured_work_label: "Estudos de caso em destaque",
+        view_case_study_label: "Ver estudo de caso",
+        orgs_label: "Organizações selecionadas",
+        building_with_label: "Atualmente construindo com",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agentes de IA",
+        final_cta_h2: "Vamos construir algo em que as pessoas confiem.",
         footer_p1: "De Miami a Helsinki — projetando o que vem a seguir.",
         weather_loading: "carregando",
         weather_unavailable: "Clima indisponível",
@@ -1561,10 +1793,17 @@
         nav_calendar: "Kalender",
         nav_dashboard: "Dashboard",
         nav_signout: "Uitloggen",
-        cta_view_work: "Bekijk mijn werk",
+        cta_view_work: "Bekijk casestudy's",
         cta_book_call: "Plan een gesprek",
-        hero_h1: "Heldere, betrouwbare AI-producten ontwerpen.",
-        hero_p: "Ik ben Maya Carroll, productdesignleider gespecialiseerd in AI en complexe systemen.",
+        hero_h1: "Ik ontwerp en bouw AI-producten die mensen vertrouwen.",
+        hero_p: "Productstrategie, design en AI-ondersteunde ontwikkeling van begin tot eind, voor enterprise- en gereguleerde sectoren.",
+        proof_strip: "Director · Oprichter · 15+ jaar · 60+ begeleide designers · Public Trust-veiligheidsmachtiging",
+        featured_work_label: "Uitgelichte casestudy's",
+        view_case_study_label: "Bekijk de casestudy",
+        orgs_label: "Geselecteerde organisaties",
+        building_with_label: "Op dit moment bouw ik met",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agents",
+        final_cta_h2: "Laten we iets bouwen dat mensen vertrouwen.",
         footer_p1: "Van Miami naar Helsinki — het volgende ontwerpen.",
         weather_loading: "laden",
         weather_unavailable: "Weer niet beschikbaar",
@@ -1609,10 +1848,17 @@
         nav_calendar: "Kalendarz",
         nav_dashboard: "Panel",
         nav_signout: "Wyloguj się",
-        cta_view_work: "Zobacz moje prace",
+        cta_view_work: "Zobacz studia przypadków",
         cta_book_call: "Umów rozmowę",
-        hero_h1: "Projektuję przejrzyste, godne zaufania produkty AI.",
-        hero_p: "Jestem Maya Carroll, liderką designu produktu specjalizującą się w AI i złożonych systemach.",
+        hero_h1: "Projektuję i tworzę produkty AI, którym ludzie ufają.",
+        hero_p: "Kompleksowa strategia produktu, design i rozwój wspierany przez AI dla przedsiębiorstw i branż regulowanych.",
+        proof_strip: "Director · Założycielka · 15+ lat · 60+ zmentorowanych projektantów · Poświadczenie Public Trust",
+        featured_work_label: "Wybrane studia przypadków",
+        view_case_study_label: "Zobacz studium przypadku",
+        orgs_label: "Wybrane organizacje",
+        building_with_label: "Obecnie tworzę z użyciem",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agenci AI",
+        final_cta_h2: "Zbudujmy coś, czemu ludzie zaufają.",
         footer_p1: "Z Miami do Helsinek — projektując to, co dalej.",
         weather_loading: "wczytywanie",
         weather_unavailable: "Pogoda niedostępna",
@@ -1657,10 +1903,17 @@
         nav_calendar: "Kalender",
         nav_dashboard: "Kontrollpanel",
         nav_signout: "Logga ut",
-        cta_view_work: "Se mitt arbete",
+        cta_view_work: "Se fallstudier",
         cta_book_call: "Boka ett samtal",
-        hero_h1: "Designar tydliga, pålitliga AI-produkter.",
-        hero_p: "Jag är Maya Carroll, produktdesignledare specialiserad på AI och komplexa system.",
+        hero_h1: "Jag designar och bygger AI-produkter som människor litar på.",
+        hero_p: "Heltäckande produktstrategi, design och AI-stödd utveckling för företag och reglerade branscher.",
+        proof_strip: "Director · Grundare · 15+ år · 60+ handledda designer · Public Trust-säkerhetsgodkännande",
+        featured_work_label: "Utvalda fallstudier",
+        view_case_study_label: "Se fallstudien",
+        orgs_label: "Utvalda organisationer",
+        building_with_label: "Bygger just nu med",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agenter",
+        final_cta_h2: "Låt oss bygga något människor litar på.",
         footer_p1: "Från Miami till Helsingfors – designar det som kommer härnäst.",
         weather_loading: "laddar",
         weather_unavailable: "Väder ej tillgängligt",
@@ -1705,10 +1958,17 @@
         nav_calendar: "Kalender",
         nav_dashboard: "Dashboard",
         nav_signout: "Log ud",
-        cta_view_work: "Se mit arbejde",
+        cta_view_work: "Se casestudier",
         cta_book_call: "Book et opkald",
-        hero_h1: "Designer klare, troværdige AI-produkter.",
-        hero_p: "Jeg er Maya Carroll, produktdesignleder med speciale i AI og komplekse systemer.",
+        hero_h1: "Jeg designer og bygger AI-produkter, folk stoler på.",
+        hero_p: "Fuld produktstrategi, design og AI-understøttet udvikling for virksomheder og regulerede brancher.",
+        proof_strip: "Director · Grundlægger · 15+ år · 60+ mentorerede designere · Public Trust-sikkerhedsgodkendelse",
+        featured_work_label: "Udvalgte casestudier",
+        view_case_study_label: "Se casestudiet",
+        orgs_label: "Udvalgte organisationer",
+        building_with_label: "Bygger i øjeblikket med",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agenter",
+        final_cta_h2: "Lad os bygge noget, folk stoler på.",
         footer_p1: "Fra Miami til Helsinki – designer det, der kommer næst.",
         weather_loading: "indlæser",
         weather_unavailable: "Vejr ikke tilgængeligt",
@@ -1753,10 +2013,17 @@
         nav_calendar: "Kalender",
         nav_dashboard: "Dashbord",
         nav_signout: "Logg ut",
-        cta_view_work: "Se arbeidet mitt",
+        cta_view_work: "Se casestudier",
         cta_book_call: "Book en samtale",
-        hero_h1: "Designer klare, pålitelige AI-produkter.",
-        hero_p: "Jeg er Maya Carroll, produktdesignleder spesialisert på AI og komplekse systemer.",
+        hero_h1: "Jeg designer og bygger AI-produkter folk stoler på.",
+        hero_p: "Helhetlig produktstrategi, design og AI-støttet utvikling for virksomheter og regulerte bransjer.",
+        proof_strip: "Director · Grunnlegger · 15+ år · 60+ mentorerte designere · Public Trust-sikkerhetsklarering",
+        featured_work_label: "Utvalgte casestudier",
+        view_case_study_label: "Se casestudiet",
+        orgs_label: "Utvalgte organisasjoner",
+        building_with_label: "Bygger for tiden med",
+        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agenter",
+        final_cta_h2: "La oss bygge noe folk stoler på.",
         footer_p1: "Fra Miami til Helsingfors – designer det som kommer neste.",
         weather_loading: "laster",
         weather_unavailable: "Vær utilgjengelig",
@@ -2607,6 +2874,75 @@
           /* api/session unreachable (e.g. static-only local preview) —
              leave the signed-out nav as-is. */
         });
+    })();
+  </script>
+
+  <script>
+    // ---------- Featured Case Studies (#featured-work-list) ----------
+    // Renders straight from work-data.js so the homepage teaser and the
+    // full /work listing never drift out of sync. Deliberately minimal —
+    // no cover mockups, no draft/confidential badges — those belong to the
+    // full case-study browsing experience, not this page's teaser. Project
+    // titles and outcome lines stay in English, matching work.html's own
+    // precedent of leaving case-study content untranslated (see that
+    // page's INDUSTRY_I18N_KEYS note); only the surrounding UI chrome is
+    // localized here.
+    (function () {
+      var list = document.getElementById("featured-work-list");
+      if (!list || !window.MayaWork) return;
+
+      function el(tag, className, text) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+      }
+
+      var projects = window.MayaWork.getPublishedWorkProjects().filter(function (p) {
+        return p.featured;
+      });
+
+      projects.forEach(function (project) {
+        var li = document.createElement("li");
+        var item = document.createElement("a");
+        item.className = "featured-item";
+        item.href = "/work/" + project.slug;
+
+        var industryLabel = window.MayaWork.INDUSTRY_LABELS[project.industry] || project.industry;
+        item.appendChild(el("span", "featured-item-industry", industryLabel));
+        item.appendChild(el("h3", "featured-item-title", project.title));
+        if (project.cardOutcome) {
+          item.appendChild(el("p", "featured-item-outcome", project.cardOutcome));
+        }
+
+        var linkLabel = el("span", "featured-item-link", null);
+        var linkText = document.createElement("span");
+        linkText.setAttribute("data-i18n", "view_case_study_label");
+        linkText.textContent = "View case study";
+        linkLabel.appendChild(linkText);
+        var arrow = document.createElement("span");
+        arrow.setAttribute("aria-hidden", "true");
+        arrow.textContent = " →";
+        linkLabel.appendChild(arrow);
+        item.appendChild(linkLabel);
+
+        li.appendChild(item);
+        list.appendChild(li);
+      });
+
+      // setLanguage's own i18n pass runs once at load, against a NodeList
+      // captured before these nodes existed, so it never sees them — apply
+      // translate() (a top-level function declaration in the script above,
+      // so it's reachable as window.translate) once now, then again on
+      // every later language switch.
+      function translateFeaturedWork() {
+        if (typeof window.translate !== "function") return;
+        list.querySelectorAll("[data-i18n]").forEach(function (node) {
+          node.textContent = window.translate(node.dataset.i18n);
+        });
+      }
+      translateFeaturedWork();
+      document.addEventListener("app:languagechange", translateFeaturedWork);
     })();
   </script>
   <script src="background.js"></script>

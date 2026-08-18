@@ -360,7 +360,7 @@ var WORK_PROJECTS = [
     ],
     platforms: ["Web", "Mobile web"],
     tags: ["Government", "Civic Tech", "Accessibility"],
-    featured: false,
+    featured: true,
     featuredOrder: 4,
     published: true,
     draft: true,
