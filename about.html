@@ -646,26 +646,44 @@
       margin: 0 auto;
       padding: clamp(1.5rem, 4vw, 2rem) 1.5rem 0;
     }
+    /* Capped reading measure — the page container matches work.html's
+       1100px, but prose stays comfortable rather than stretching to
+       150+ character lines. Scannable content (pills, tool lists,
+       grouped lists) is intentionally left uncapped since it wraps. */
     .hero-copy {
+      max-width: 42rem;
       margin: 0 0 0.9rem;
       font-size: 0.98rem;
+      line-height: 1.6;
       color: var(--color-text-secondary);
       text-align: left;
     }
     .hero-copy:last-of-type {
       margin-bottom: 0;
     }
-    .about-focus {
-      margin: 0 0 1.25rem;
-      font-size: 1.05rem;
+    /* Emphasizes the key clause of a sentence in place, rather than
+       lengthening the copy to spell it out. */
+    .copy-lead {
+      color: var(--color-text);
       font-weight: 700;
-      line-height: 1.45;
+    }
+    .about-focus {
+      max-width: 42rem;
+      margin: 0 0 1.25rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.5;
       color: var(--color-text);
       letter-spacing: -0.01em;
     }
-    /* Every content block below the hero is a distinct card — same
-       surface/border/radius language already used for buttons and
-       menus elsewhere on the site, just applied at section scale. */
+    /* Cards are used selectively now, not on every block — Practice
+       Areas, Technical Fluency, Credentials, and (with a distinct
+       treatment) Leadership keep the surface/border/radius language
+       already used for buttons and menus elsewhere on the site.
+       About, Collaboration, Selected Organizations, Industry
+       Experience, and Languages sit directly on the page background,
+       so borders don't repeat on every scroll and whitespace itself
+       carries the section rhythm. */
     .section-card {
       background: var(--color-surface);
       border: 1px solid var(--color-border);
@@ -675,11 +693,12 @@
       scroll-margin-top: 84px;
     }
     .about-card {
-      margin-top: 1.75rem;
+      margin-top: 2.5rem;
     }
     .skills-block {
-      margin-top: 1.5rem;
+      margin-top: 3rem;
       text-align: left;
+      scroll-margin-top: 84px;
     }
     .skills-block h3 {
       font-size: 0.82rem;
@@ -709,14 +728,10 @@
       font-weight: 600;
       color: var(--color-text);
     }
-    /* Collaboration, Leadership, and Clients sit in the page's primary
-       narrative tier (same weight as Practice Areas) rather than the
-       quiet supporting tier used by Credentials/Languages further down —
-       reuses .hero-copy for body paragraphs so typography stays uniform
-       with the bio above. */
     .collab-block {
-      margin-top: 1.5rem;
+      margin-top: 3.5rem;
       text-align: left;
+      scroll-margin-top: 84px;
     }
     .collab-block h3 {
       font-size: 0.78rem;
@@ -725,36 +740,49 @@
       color: var(--color-text-secondary);
       margin-bottom: 0.9rem;
     }
+    /* The one card with a deliberate accent — leadership is the
+       strongest credibility claim on the page after the org list, so
+       it gets a hairline top accent instead of blending into the same
+       neutral card treatment as Practice Areas/Fluency/Credentials. */
     .leadership-block {
-      margin-top: 1.5rem;
+      margin-top: 3.5rem;
       text-align: left;
+    }
+    .leadership-featured {
+      border-top: 2px solid var(--color-accent);
     }
     .leadership-block h3 {
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.9rem;
+      margin-bottom: 1.25rem;
     }
-    /* Three concise sub-sections rather than cards — typography and
-       spacing carry the hierarchy (no borders/containers per entry). */
+    /* Three genuinely distinct sub-sections — a divider and looser
+       spacing between them, rather than uniform margin-only stacking,
+       so Design Leadership / Entrepreneurship / Mentorship each read
+       as their own moment instead of one continuous block. */
     .leadership-entry {
-      margin-bottom: 1.5rem;
+      padding-bottom: 1.75rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 1px solid var(--color-border);
     }
     .leadership-entry:last-child {
+      padding-bottom: 0;
       margin-bottom: 0;
+      border-bottom: none;
     }
     .leadership-entry h4 {
-      margin: 0 0 0.5rem;
+      margin: 0 0 0.6rem;
       font-size: 0.72rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--color-text-secondary);
+      color: var(--color-accent);
     }
     .leadership-role {
       margin: 0 0 0.15rem;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--color-text);
     }
@@ -763,36 +791,43 @@
       font-size: 0.85rem;
       color: var(--color-text-secondary);
     }
-    .clients-block {
-      margin-top: 1.5rem;
-      text-align: left;
+    /* The credibility "pause" between Leadership and Technical Fluency —
+       larger, centered, and airier than every other block, with no card
+       and no logos (none exist in the repo for these organizations, and
+       none were downloaded or invented per instruction). Typography
+       alone has to carry the moment, so it gets real size and space. */
+    .clients-hero {
+      margin-top: 4.5rem;
+      margin-bottom: 0.5rem;
+      padding: 2rem 0;
+      text-align: center;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      scroll-margin-top: 84px;
     }
     .clients-block h3 {
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.75rem;
     }
     .clients-intro {
-      margin: 0 0 0.75rem;
-      font-size: 0.9rem;
+      max-width: 34rem;
+      margin: 0 auto 2rem;
+      font-size: 0.95rem;
       color: var(--color-text-secondary);
       line-height: 1.6;
     }
-    /* Wordmark grid, not a sentence — each name gets equal visual weight
-       and its own space, closer to a Stripe/Linear customer strip than
-       a dense run-on line. No borders, no cards, no logos (none exist
-       in the repo for these organizations, and none were downloaded or
-       invented per instruction) — typography carries the credibility. */
     .clients-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.9rem 2rem;
+      justify-content: center;
+      gap: 1.1rem 2.75rem;
       align-items: baseline;
     }
     .client-name {
-      font-size: 0.95rem;
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--color-text);
       letter-spacing: -0.01em;
@@ -803,17 +838,25 @@
        Development and Low-Code / No-Code use .tools-group/.tools-list/
        .tool-item/.tool-icon (small monochrome brand marks) since those
        genuinely are adopted tools/products, and should read one visual
-       step quieter than a capability claim. */
+       step quieter than a capability claim. Groups sit in a responsive
+       grid rather than one long vertical stack, so the section reads
+       in a glance instead of a scroll. */
     .fluency-block {
-      margin-top: 1.5rem;
+      margin-top: 3.5rem;
       text-align: left;
+      scroll-margin-top: 84px;
     }
     .fluency-block h3 {
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+    .fluency-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.75rem 2rem;
     }
     .fluency-capabilities {
       margin: 0;
@@ -822,22 +865,41 @@
       color: var(--color-text);
       line-height: 1.65;
     }
-    /* Two-tier text treatment, not boxes — industries are supporting
-       metadata (like the credentials_line under the name above), not a
-       second grid competing with Practice Areas for attention. Nothing
-       is hidden — the 6 target-role industries carry more type weight
-       and full brightness, the rest stay fully visible in quieter,
-       secondary-colored text below. */
+    /* Grouped rather than two long undifferentiated lines — AI &
+       Enterprise and Regulated carry the same bold, full-brightness
+       weight (these are the roles I'm targeting); Additional Domains
+       stays fully visible but visually quieter. No icons — typography
+       and grouping do the scanning work. */
     .industries-block {
-      margin-top: 1.5rem;
+      margin-top: 3.5rem;
       text-align: left;
+      scroll-margin-top: 84px;
     }
     .industries-block h3 {
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .industries-group {
+      margin-bottom: 1.1rem;
+    }
+    .industries-group:last-child {
+      margin-bottom: 0;
+    }
+    .industries-group h4 {
+      margin: 0 0 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-secondary);
+    }
+    .industries-group-secondary {
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--color-border);
     }
     .industries-primary {
       margin: 0;
@@ -846,26 +908,20 @@
       color: var(--color-text);
       line-height: 1.65;
     }
-    .industries-primary strong {
-      font-weight: 700;
-    }
     .industries-secondary {
-      margin: 0.7rem 0 0;
+      margin: 0;
       font-size: 0.85rem;
       font-weight: 400;
       color: var(--color-text-secondary);
       line-height: 1.65;
     }
-    .industries-secondary strong {
-      font-weight: 600;
-      color: var(--color-text-secondary);
-    }
     /* Education + Certifications share one heading and read as plain
        text lines, not a bordered two-panel grid — pushed further down
        with extra margin so it registers as a footnote, not a feature. */
     .credentials-block {
-      margin-top: 1.5rem;
+      margin-top: 3.5rem;
       text-align: left;
+      scroll-margin-top: 84px;
     }
     .credentials-block h3 {
       font-size: 0.78rem;
@@ -891,12 +947,6 @@
        of different brand hues would read as a sponsor strip, not a
        curated stack. Grouped by category rather than one long list so
        it stays scannable at this item count. */
-    .tools-group {
-      margin-bottom: 1rem;
-    }
-    .tools-group:last-child {
-      margin-bottom: 0;
-    }
     .tools-group h4 {
       font-size: 0.72rem;
       font-weight: 600;
@@ -925,8 +975,9 @@
        core value proposition — so it reuses .credentials-line styling
        with a smaller gap rather than starting a new major section. */
     .languages-block {
-      margin-top: 1.5rem;
+      margin-top: 3rem;
       text-align: left;
+      scroll-margin-top: 84px;
     }
     .languages-block h3 {
       font-size: 0.78rem;
@@ -1387,18 +1438,16 @@
       </nav>
 
       <div class="hero-content">
-        <div class="section-card about-card">
+        <div class="about-card">
           <p class="about-focus" data-i18n="about_focus">
             I solve complex product problems in regulated and enterprise environments—turning
             ambitious technology into products people trust.
           </p>
-          <p class="hero-copy" data-i18n="about_p1">
-            My background spans product design, product management, and user research—from senior
-            IC to director, across startups, SaaS, enterprise, and mission-driven organizations.
+          <p class="hero-copy">
+            <strong class="copy-lead" data-i18n="about_p1_lead">My background spans product design, product management, and user research</strong><span data-i18n="about_p1_rest"> — from senior IC to director, across startups, SaaS, enterprise, and mission-driven organizations.</span>
           </p>
-          <p class="hero-copy" data-i18n="about_p2">
-            Today, I focus on AI products, agents, and automation—partnering closely with
-            engineering to turn ambitious ideas into thoughtful, trustworthy experiences.
+          <p class="hero-copy">
+            <strong class="copy-lead" data-i18n="about_p2_lead">Today, I focus on AI products, agents, and automation</strong><span data-i18n="about_p2_rest"> — partnering closely with engineering to turn ambitious ideas into thoughtful, trustworthy experiences.</span>
           </p>
         </div>
 
@@ -1474,7 +1523,7 @@
           </div>
         </div>
 
-        <div class="section-card collab-block" id="collaboration-delivery">
+        <div class="collab-block" id="collaboration-delivery">
           <h3 data-i18n="collab_label">Collaboration &amp; Delivery</h3>
           <p class="hero-copy" data-i18n="collab_p1">
             I thrive in collaborative, cross-functional product organizations where design, product,
@@ -1492,15 +1541,15 @@
           </p>
         </div>
 
-        <div class="section-card leadership-block" id="leadership-impact">
+        <div class="section-card leadership-block leadership-featured" id="leadership-impact">
           <h3 data-i18n="leadership_label">Leadership &amp; Impact</h3>
 
           <div class="leadership-entry">
             <h4 data-i18n="leadership_design_label">Design Leadership</h4>
             <p class="hero-copy" data-i18n="leadership_design_copy">
               Served in leadership roles including Director, Manager, Principal, and Lead Product
-              Designer, guiding product strategy, cross-functional collaboration, and design
-              execution across enterprise, government, and startup environments.
+              Designer, guiding product strategy, cross-functional collaboration, and accessible
+              design execution across enterprise, government, and startup environments.
             </p>
           </div>
 
@@ -1527,7 +1576,7 @@
           </div>
         </div>
 
-        <div class="section-card clients-block" id="selected-organizations">
+        <div class="clients-block clients-hero" id="selected-organizations">
           <h3 data-i18n="clients_label">Selected Organizations</h3>
           <p class="clients-intro" data-i18n="clients_intro">
             From Fortune 500 companies and federal agencies to high-growth SaaS and mission-driven
@@ -1549,6 +1598,7 @@
         <div class="section-card fluency-block" id="technical-fluency">
           <h3 data-i18n="fluency_label">Technical Fluency</h3>
 
+          <div class="fluency-grid">
           <div class="tools-group">
             <h4 data-i18n="fluency_group_build">Build &amp; Prototype</h4>
             <p class="fluency-capabilities">
@@ -1614,19 +1664,24 @@
               <span class="tool-item"><svg class="tool-icon" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.84 2.9982v17.9987c.0086 1.6473-1.3197 2.9897-2.967 2.9984a2.9808 2.9808 0 01-.3677-.0208c-1.528-.226-2.6477-1.5558-2.6105-3.1V3.1204c-.0369-1.5458 1.0856-2.8762 2.6157-3.1 1.6361-.1915 3.1178.9796 3.3093 2.6158.014.1201.0208.241.0202.3619zM4.1326 18.0548c-1.6417 0-2.9726 1.331-2.9726 2.9726C1.16 22.6691 2.4909 24 4.1326 24s2.9726-1.3309 2.9726-2.9726-1.331-2.9726-2.9726-2.9726zm7.8728-9.0098c-.0171 0-.0342 0-.0513.0003-1.6495.0904-2.9293 1.474-2.891 3.1256v7.9846c0 2.167.9535 3.4825 2.3505 3.763 1.6118.3266 3.1832-.7152 3.5098-2.327.04-.1974.06-.3983.0593-.5998v-8.9585c.003-1.6474-1.33-2.9852-2.9773-2.9882z"/></svg>Google Analytics</span>
             </div>
           </div>
+          </div>
 
         </div>
 
-        <div class="section-card industries-block" id="industry-experience">
+        <div class="industries-block" id="industry-experience">
           <h3 data-i18n="industries_label">Industry Experience</h3>
-          <p class="industries-primary">
-            <strong data-i18n="industries_primary_label">Focus Industries</strong> &mdash;
-            AI &amp; Emerging Tech &middot; Enterprise Software &middot; Cybersecurity &middot; Financial Services &middot; Government &middot; Healthcare
-          </p>
-          <p class="industries-secondary">
-            <strong data-i18n="industries_secondary_label">Additional Experience</strong> &mdash;
-            Education &middot; Commerce &middot; Data &amp; Analytics &middot; Cloud &amp; Infrastructure &middot; Manufacturing &middot; Transportation &middot; Energy &middot; Real Estate &middot; Media &middot; Consumer &middot; Telecommunications &middot; Agriculture &middot; Nonprofit &middot; Legal &amp; Professional Services
-          </p>
+          <div class="industries-group">
+            <h4 data-i18n="industries_group_ai_enterprise">AI &amp; Enterprise</h4>
+            <p class="industries-primary">AI &amp; Emerging Tech &middot; Enterprise Software</p>
+          </div>
+          <div class="industries-group">
+            <h4 data-i18n="industries_group_regulated">Regulated</h4>
+            <p class="industries-primary">Cybersecurity &middot; Government &middot; Healthcare &middot; Financial Services</p>
+          </div>
+          <div class="industries-group industries-group-secondary">
+            <h4 data-i18n="industries_group_additional">Additional Domains</h4>
+            <p class="industries-secondary">Education &middot; Commerce &middot; Data &amp; Analytics &middot; Cloud &amp; Infrastructure &middot; Manufacturing &middot; Transportation &middot; Energy &middot; Real Estate &middot; Media &middot; Consumer &middot; Telecommunications &middot; Agriculture &middot; Nonprofit &middot; Legal &amp; Professional Services</p>
+          </div>
         </div>
 
         <div class="section-card credentials-block" id="education">
@@ -1656,7 +1711,7 @@
           </p>
         </div>
 
-        <div class="section-card languages-block" id="languages">
+        <div class="languages-block" id="languages">
           <h3 data-i18n="languages_label">Languages</h3>
           <p class="credentials-line">
             <strong data-i18n="languages_native_label">Native</strong> &mdash;
@@ -1726,10 +1781,10 @@
         about_title: "AI Product & Design Leader",
         about_focus:
           "I solve complex product problems in regulated and enterprise environments — turning ambitious technology into products people trust.",
-        about_p1:
-          "My background spans product design, product management, and user research — from senior IC to director, across startups, SaaS, enterprise, and mission-driven organizations.",
-        about_p2:
-          "Today, I focus on AI products, agents, and automation — partnering closely with engineering to turn ambitious ideas into thoughtful, trustworthy experiences.",
+        about_p1_lead: "My background spans product design, product management, and user research",
+        about_p1_rest: " — from senior IC to director, across startups, SaaS, enterprise, and mission-driven organizations.",
+        about_p2_lead: "Today, I focus on AI products, agents, and automation",
+        about_p2_rest: " — partnering closely with engineering to turn ambitious ideas into thoughtful, trustworthy experiences.",
         contact_book_call: "Book a call",
         contact_email: "Email",
         contact_linkedin: "LinkedIn ↗",
@@ -1739,7 +1794,7 @@
         collab_p2: "Whether leading discovery workshops, facilitating design critiques, aligning stakeholders, or rapidly prototyping ideas, I value transparency, shared ownership, and continuous iteration. My approach is pragmatic and evidence-driven—balancing user needs, business objectives, and technical constraints to help teams move from ambiguity to confident product decisions.",
         leadership_label: "Leadership & Impact",
         leadership_design_label: "Design Leadership",
-        leadership_design_copy: "Served in leadership roles including Director, Manager, Principal, and Lead Product Designer, guiding product strategy, cross-functional collaboration, and design execution across enterprise, government, and startup environments.",
+        leadership_design_copy: "Served in leadership roles including Director, Manager, Principal, and Lead Product Designer, guiding product strategy, cross-functional collaboration, and accessible design execution across enterprise, government, and startup environments.",
         leadership_role: "UI/UX Design Mentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entrepreneurship",
@@ -1761,8 +1816,9 @@
         tools_group_analytics: "Analytics",
 
         industries_label: "Industry Experience",
-        industries_primary_label: "Focus Industries",
-        industries_secondary_label: "Additional Experience",
+        industries_group_ai_enterprise: "AI & Enterprise",
+        industries_group_regulated: "Regulated",
+        industries_group_additional: "Additional Domains",
         skill_product_strategy: "Product Strategy",
         skill_product_design: "Product Design",
         skill_product_management: "Product Management",
@@ -1812,10 +1868,10 @@
         about_title: "Líder de Producto y Diseño de IA",
         about_focus:
           "Resuelvo problemas de producto complejos en entornos regulados y empresariales, convirtiendo tecnología ambiciosa en productos en los que las personas confían.",
-        about_p1:
-          "Mi trayectoria abarca el diseño de producto, la gestión de producto y la investigación de usuarios — desde colaboradora individual senior hasta directora, en startups, empresas SaaS, grandes organizaciones y entidades con una misión clara.",
-        about_p2:
-          "Hoy me enfoco en productos de IA, agentes y automatización, trabajando de cerca con ingeniería para convertir ideas ambiciosas en experiencias bien pensadas y confiables.",
+        about_p1_lead: "Mi trayectoria abarca el diseño de producto, la gestión de producto y la investigación de usuarios",
+        about_p1_rest: " — desde colaboradora individual senior hasta directora, en startups, empresas SaaS, grandes organizaciones y entidades con una misión clara.",
+        about_p2_lead: "Hoy me enfoco en productos de IA, agentes y automatización",
+        about_p2_rest: ", trabajando de cerca con ingeniería para convertir ideas ambiciosas en experiencias bien pensadas y confiables.",
         contact_book_call: "Agendar una llamada",
         contact_email: "Correo",
         contact_linkedin: "LinkedIn ↗",
@@ -1825,7 +1881,7 @@
         collab_p2: "Ya sea liderando talleres de descubrimiento, facilitando críticas de diseño, alineando a los stakeholders o prototipando ideas rápidamente, valoro la transparencia, la propiedad compartida y la iteración continua. Mi enfoque es pragmático y basado en evidencia, equilibrando las necesidades del usuario, los objetivos de negocio y las limitaciones técnicas para ayudar a los equipos a pasar de la ambigüedad a decisiones de producto seguras.",
         leadership_label: "Liderazgo e impacto",
         leadership_design_label: "Liderazgo de diseño",
-        leadership_design_copy: "Ocupé puestos de liderazgo, incluyendo Directora, Gerente, Principal y Diseñadora de Producto Líder, guiando la estrategia de producto, la colaboración multifuncional y la ejecución del diseño en entornos empresariales, gubernamentales y de startups.",
+        leadership_design_copy: "Ocupé puestos de liderazgo, incluyendo Directora, Gerente, Principal y Diseñadora de Producto Líder, guiando la estrategia de producto, la colaboración multifuncional y la ejecución accesible del diseño en entornos empresariales, gubernamentales y de startups.",
         leadership_role: "Mentora de Diseño UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Emprendimiento",
@@ -1847,8 +1903,9 @@
         tools_group_analytics: "Analítica",
 
         industries_label: "Experiencia sectorial",
-        industries_primary_label: "Industrias prioritarias",
-        industries_secondary_label: "Experiencia adicional",
+        industries_group_ai_enterprise: "IA y empresa",
+        industries_group_regulated: "Sectores regulados",
+        industries_group_additional: "Dominios adicionales",
         skill_product_strategy: "Estrategia de producto",
         skill_product_design: "Diseño de producto",
         skill_product_management: "Gestión de producto",
@@ -1898,10 +1955,10 @@
         about_title: "AI-tuote- ja designjohtaja",
         about_focus:
           "Ratkaisen monimutkaisia tuoteongelmia säännellyissä ja yritysympäristöissä — muutan kunnianhimoisen teknologian tuotteiksi, joihin ihmiset luottavat.",
-        about_p1:
-          "Taustani kattaa tuotesuunnittelun, tuotehallinnan ja käyttäjätutkimuksen — vanhemmasta asiantuntijasta johtajaksi startupeissa, SaaS-yrityksissä, suurissa organisaatioissa ja missiovetoisissa organisaatioissa.",
-        about_p2:
-          "Nykyään keskityn tekoälytuotteisiin, agentteihin ja automaatioon, tehden tiivistä yhteistyötä insinöörien kanssa kunnianhimoisten ideoiden muuttamiseksi harkituiksi ja luotettaviksi kokemuksiksi.",
+        about_p1_lead: "Taustani kattaa tuotesuunnittelun, tuotehallinnan ja käyttäjätutkimuksen",
+        about_p1_rest: " — vanhemmasta asiantuntijasta johtajaksi startupeissa, SaaS-yrityksissä, suurissa organisaatioissa ja missiovetoisissa organisaatioissa.",
+        about_p2_lead: "Nykyään keskityn tekoälytuotteisiin, agentteihin ja automaatioon",
+        about_p2_rest: ", tehden tiivistä yhteistyötä insinöörien kanssa kunnianhimoisten ideoiden muuttamiseksi harkituiksi ja luotettaviksi kokemuksiksi.",
         contact_book_call: "Varaa puhelu",
         contact_email: "Sähköposti",
         contact_linkedin: "LinkedIn ↗",
@@ -1911,7 +1968,7 @@
         collab_p2: "Johdinpa sitten löytämistyöpajoja, fasilitoin design-kritiikkejä, sovitan yhteen sidosryhmiä tai prototyypitän ideoita nopeasti, arvostan avoimuutta, jaettua omistajuutta ja jatkuvaa iterointia. Lähestymistapani on käytännönläheinen ja näyttöön perustuva — tasapainotan käyttäjien tarpeita, liiketoiminnan tavoitteita ja teknisiä rajoitteita auttaakseni tiimejä siirtymään epävarmuudesta luottavaisiin tuotepäätöksiin.",
         leadership_label: "Johtajuus ja vaikutus",
         leadership_design_label: "Designjohtajuus",
-        leadership_design_copy: "Toiminut johtotehtävissä, kuten Director, Manager, Principal ja Lead Product Designer, ohjaten tuotestrategiaa, monialaista yhteistyötä ja designin toteutusta yritys-, julkishallinto- ja startup-ympäristöissä.",
+        leadership_design_copy: "Toiminut johtotehtävissä, kuten Director, Manager, Principal ja Lead Product Designer, ohjaten tuotestrategiaa, monialaista yhteistyötä ja saavutettavan designin toteutusta yritys-, julkishallinto- ja startup-ympäristöissä.",
         leadership_role: "UI/UX-suunnittelun mentori",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Yrittäjyys",
@@ -1933,8 +1990,9 @@
         tools_group_analytics: "Analytiikka",
 
         industries_label: "Toimialakokemus",
-        industries_primary_label: "Keskeiset toimialat",
-        industries_secondary_label: "Muu kokemus",
+        industries_group_ai_enterprise: "Tekoäly ja yritykset",
+        industries_group_regulated: "Säännellyt alat",
+        industries_group_additional: "Muut toimialat",
         skill_product_strategy: "Tuotestrategia",
         skill_product_design: "Tuotesuunnittelu",
         skill_product_management: "Tuotehallinta",
@@ -1984,10 +2042,10 @@
         about_title: "Responsable Produit & Design IA",
         about_focus:
           "Je résous des problèmes produit complexes dans des environnements réglementés et grandes entreprises — je transforme des technologies ambitieuses en produits fiables.",
-        about_p1:
-          "Mon parcours couvre le design produit, la gestion produit et la recherche utilisateur — d'IC senior à directrice, au sein de startups, d'entreprises SaaS, de grandes organisations et d'organisations à mission.",
-        about_p2:
-          "Aujourd'hui, je me concentre sur les produits IA, les agents et l'automatisation, en collaborant étroitement avec les équipes d'ingénierie pour transformer des idées ambitieuses en expériences réfléchies et fiables.",
+        about_p1_lead: "Mon parcours couvre le design produit, la gestion produit et la recherche utilisateur",
+        about_p1_rest: " — d'IC senior à directrice, au sein de startups, d'entreprises SaaS, de grandes organisations et d'organisations à mission.",
+        about_p2_lead: "Aujourd'hui, je me concentre sur les produits IA, les agents et l'automatisation",
+        about_p2_rest: ", en collaborant étroitement avec les équipes d'ingénierie pour transformer des idées ambitieuses en expériences réfléchies et fiables.",
         contact_book_call: "Réserver un appel",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
@@ -1997,7 +2055,7 @@
         collab_p2: "Qu'il s'agisse d'animer des ateliers de découverte, de faciliter des critiques de design, d'aligner les parties prenantes ou de prototyper rapidement des idées, je valorise la transparence, la responsabilité partagée et l'itération continue. Mon approche est pragmatique et fondée sur les données — je concilie besoins utilisateurs, objectifs business et contraintes techniques pour aider les équipes à passer de l'ambiguïté à des décisions produit confiantes.",
         leadership_label: "Leadership et impact",
         leadership_design_label: "Leadership design",
-        leadership_design_copy: "A occupé des postes de direction, notamment Director, Manager, Principal et Lead Product Designer, pilotant la stratégie produit, la collaboration transverse et l'exécution du design dans des environnements d'entreprise, gouvernementaux et de startups.",
+        leadership_design_copy: "A occupé des postes de direction, notamment Director, Manager, Principal et Lead Product Designer, pilotant la stratégie produit, la collaboration transverse et l'exécution accessible du design dans des environnements d'entreprise, gouvernementaux et de startups.",
         leadership_role: "Mentore en design UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entrepreneuriat",
@@ -2019,8 +2077,9 @@
         tools_group_analytics: "Analytique",
 
         industries_label: "Expérience sectorielle",
-        industries_primary_label: "Secteurs prioritaires",
-        industries_secondary_label: "Expérience complémentaire",
+        industries_group_ai_enterprise: "IA et entreprise",
+        industries_group_regulated: "Secteurs réglementés",
+        industries_group_additional: "Autres domaines",
         skill_product_strategy: "Stratégie produit",
         skill_product_design: "Design produit",
         skill_product_management: "Gestion de produit",
@@ -2070,10 +2129,10 @@
         about_title: "KI-Produkt- & Designleiterin",
         about_focus:
           "Ich löse komplexe Produktprobleme in regulierten und unternehmensweiten Umgebungen — und mache aus ambitionierter Technologie Produkte, denen Menschen vertrauen.",
-        about_p1:
-          "Mein Werdegang umfasst Produktdesign, Produktmanagement und Nutzerforschung — von Senior IC bis Director, in Startups, SaaS-Unternehmen, Großunternehmen und missionsgetriebenen Organisationen.",
-        about_p2:
-          "Heute konzentriere ich mich auf KI-Produkte, Agenten und Automatisierung — in enger Zusammenarbeit mit Engineering-Teams, um ambitionierte Ideen in durchdachte, vertrauenswürdige Erlebnisse zu verwandeln.",
+        about_p1_lead: "Mein Werdegang umfasst Produktdesign, Produktmanagement und Nutzerforschung",
+        about_p1_rest: " — von Senior IC bis Director, in Startups, SaaS-Unternehmen, Großunternehmen und missionsgetriebenen Organisationen.",
+        about_p2_lead: "Heute konzentriere ich mich auf KI-Produkte, Agenten und Automatisierung",
+        about_p2_rest: " — in enger Zusammenarbeit mit Engineering-Teams, um ambitionierte Ideen in durchdachte, vertrauenswürdige Erlebnisse zu verwandeln.",
         contact_book_call: "Anruf vereinbaren",
         contact_email: "E-Mail",
         contact_linkedin: "LinkedIn ↗",
@@ -2083,7 +2142,7 @@
         collab_p2: "Ob ich Discovery-Workshops leite, Design-Critiques moderiere, Stakeholder abstimme oder Ideen schnell prototype — ich schätze Transparenz, geteilte Verantwortung und kontinuierliche Iteration. Mein Ansatz ist pragmatisch und evidenzbasiert: Ich balanciere Nutzerbedürfnisse, Geschäftsziele und technische Grenzen, um Teams von Unklarheit zu sicheren Produktentscheidungen zu führen.",
         leadership_label: "Führung & Wirkung",
         leadership_design_label: "Design-Führung",
-        leadership_design_copy: "War in Führungspositionen tätig, darunter Director, Manager, Principal und Lead Product Designer, und steuerte Produktstrategie, funktionsübergreifende Zusammenarbeit und Design-Umsetzung in Unternehmens-, Behörden- und Startup-Umgebungen.",
+        leadership_design_copy: "War in Führungspositionen tätig, darunter Director, Manager, Principal und Lead Product Designer, und steuerte Produktstrategie, funktionsübergreifende Zusammenarbeit und barrierefreie Design-Umsetzung in Unternehmens-, Behörden- und Startup-Umgebungen.",
         leadership_role: "UI/UX-Design-Mentorin",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Unternehmertum",
@@ -2105,8 +2164,9 @@
         tools_group_analytics: "Analytics",
 
         industries_label: "Branchenerfahrung",
-        industries_primary_label: "Schwerpunktbranchen",
-        industries_secondary_label: "Weitere Erfahrung",
+        industries_group_ai_enterprise: "KI & Unternehmen",
+        industries_group_regulated: "Regulierte Branchen",
+        industries_group_additional: "Weitere Bereiche",
         skill_product_strategy: "Produktstrategie",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktmanagement",
@@ -2156,10 +2216,10 @@
         about_title: "Leader di Prodotto e Design IA",
         about_focus:
           "Risolvo problemi di prodotto complessi in ambienti regolamentati e aziendali — trasformando tecnologie ambiziose in prodotti di cui le persone si fidano.",
-        about_p1:
-          "Il mio percorso spazia tra design di prodotto, product management e ricerca utenti — da IC senior a director, in startup, aziende SaaS, grandi organizzazioni e organizzazioni orientate a una missione.",
-        about_p2:
-          "Oggi mi concentro su prodotti IA, agenti e automazione, lavorando a stretto contatto con l'ingegneria per trasformare idee ambiziose in esperienze curate e affidabili.",
+        about_p1_lead: "Il mio percorso spazia tra design di prodotto, product management e ricerca utenti",
+        about_p1_rest: " — da IC senior a director, in startup, aziende SaaS, grandi organizzazioni e organizzazioni orientate a una missione.",
+        about_p2_lead: "Oggi mi concentro su prodotti IA, agenti e automazione",
+        about_p2_rest: ", lavorando a stretto contatto con l'ingegneria per trasformare idee ambiziose in esperienze curate e affidabili.",
         contact_book_call: "Prenota una chiamata",
         contact_email: "Email",
         contact_linkedin: "LinkedIn ↗",
@@ -2169,7 +2229,7 @@
         collab_p2: "Che si tratti di guidare workshop di discovery, facilitare critiche di design, allineare gli stakeholder o prototipare rapidamente idee, valorizzo la trasparenza, la responsabilità condivisa e l'iterazione continua. Il mio approccio è pragmatico e basato sui dati: bilancio le esigenze degli utenti, gli obiettivi di business e i vincoli tecnici per aiutare i team a passare dall'ambiguità a decisioni di prodotto sicure.",
         leadership_label: "Leadership e impatto",
         leadership_design_label: "Leadership di design",
-        leadership_design_copy: "Ha ricoperto ruoli di leadership, tra cui Director, Manager, Principal e Lead Product Designer, guidando la strategia di prodotto, la collaborazione multidisciplinare e l'esecuzione del design in contesti aziendali, governativi e startup.",
+        leadership_design_copy: "Ha ricoperto ruoli di leadership, tra cui Director, Manager, Principal e Lead Product Designer, guidando la strategia di prodotto, la collaborazione multidisciplinare e l'esecuzione accessibile del design in contesti aziendali, governativi e startup.",
         leadership_role: "Mentore di Design UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Imprenditorialità",
@@ -2191,8 +2251,9 @@
         tools_group_analytics: "Analitica",
 
         industries_label: "Esperienza settoriale",
-        industries_primary_label: "Settori prioritari",
-        industries_secondary_label: "Esperienza aggiuntiva",
+        industries_group_ai_enterprise: "IA e aziende",
+        industries_group_regulated: "Settori regolamentati",
+        industries_group_additional: "Altri ambiti",
         skill_product_strategy: "Strategia di prodotto",
         skill_product_design: "Design di prodotto",
         skill_product_management: "Product management",
@@ -2242,10 +2303,10 @@
         about_title: "Líder de Produto e Design de IA",
         about_focus:
           "Resolvo problemas complexos de produto em ambientes regulados e corporativos — transformando tecnologia ambiciosa em produtos em que as pessoas confiam.",
-        about_p1:
-          "Minha trajetória abrange design de produto, gestão de produto e pesquisa de usuários — de IC sênior a diretora, em startups, empresas SaaS, grandes organizações e organizações com propósito.",
-        about_p2:
-          "Hoje, meu foco está em produtos de IA, agentes e automação, trabalhando de perto com engenharia para transformar ideias ambiciosas em experiências cuidadosas e confiáveis.",
+        about_p1_lead: "Minha trajetória abrange design de produto, gestão de produto e pesquisa de usuários",
+        about_p1_rest: " — de IC sênior a diretora, em startups, empresas SaaS, grandes organizações e organizações com propósito.",
+        about_p2_lead: "Hoje, meu foco está em produtos de IA, agentes e automação",
+        about_p2_rest: ", trabalhando de perto com engenharia para transformar ideias ambiciosas em experiências cuidadosas e confiáveis.",
         contact_book_call: "Agendar uma chamada",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
@@ -2255,7 +2316,7 @@
         collab_p2: "Seja liderando workshops de descoberta, facilitando críticas de design, alinhando stakeholders ou prototipando ideias rapidamente, valorizo a transparência, a responsabilidade compartilhada e a iteração contínua. Minha abordagem é pragmática e baseada em evidências — equilibrando necessidades do usuário, objetivos de negócio e restrições técnicas para ajudar as equipes a passar da ambiguidade a decisões de produto confiantes.",
         leadership_label: "Liderança e impacto",
         leadership_design_label: "Liderança de design",
-        leadership_design_copy: "Atuou em cargos de liderança, incluindo Director, Manager, Principal e Lead Product Designer, orientando estratégia de produto, colaboração multifuncional e execução de design em ambientes corporativos, governamentais e de startups.",
+        leadership_design_copy: "Atuou em cargos de liderança, incluindo Director, Manager, Principal e Lead Product Designer, orientando estratégia de produto, colaboração multifuncional e execução de design acessível em ambientes corporativos, governamentais e de startups.",
         leadership_role: "Mentora de Design UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Empreendedorismo",
@@ -2277,8 +2338,9 @@
         tools_group_analytics: "Análise",
 
         industries_label: "Experiência setorial",
-        industries_primary_label: "Setores prioritários",
-        industries_secondary_label: "Experiência adicional",
+        industries_group_ai_enterprise: "IA e empresas",
+        industries_group_regulated: "Setores regulados",
+        industries_group_additional: "Outros domínios",
         skill_product_strategy: "Estratégia de produto",
         skill_product_design: "Design de produto",
         skill_product_management: "Gestão de produto",
@@ -2328,10 +2390,10 @@
         about_title: "AI Product- en Designleider",
         about_focus:
           "Ik los complexe productvraagstukken op in gereguleerde en zakelijke omgevingen — en maak van ambitieuze technologie producten die mensen vertrouwen.",
-        about_p1:
-          "Mijn achtergrond omvat productdesign, productmanagement en gebruikersonderzoek — van senior IC tot director, bij startups, SaaS-bedrijven, grote organisaties en missiegedreven organisaties.",
-        about_p2:
-          "Vandaag richt ik me op AI-producten, agents en automatisering, in nauwe samenwerking met engineering om ambitieuze ideeën om te zetten in doordachte, betrouwbare ervaringen.",
+        about_p1_lead: "Mijn achtergrond omvat productdesign, productmanagement en gebruikersonderzoek",
+        about_p1_rest: " — van senior IC tot director, bij startups, SaaS-bedrijven, grote organisaties en missiegedreven organisaties.",
+        about_p2_lead: "Vandaag richt ik me op AI-producten, agents en automatisering",
+        about_p2_rest: ", in nauwe samenwerking met engineering om ambitieuze ideeën om te zetten in doordachte, betrouwbare ervaringen.",
         contact_book_call: "Plan een gesprek",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
@@ -2341,7 +2403,7 @@
         collab_p2: "Of ik nu discovery-workshops leid, designcritiques faciliteer, stakeholders afstem of snel ideeën prototype — ik hecht waarde aan transparantie, gedeeld eigenaarschap en continue iteratie. Mijn aanpak is pragmatisch en op bewijs gebaseerd, waarbij ik gebruikersbehoeften, businessdoelen en technische beperkingen afweeg om teams te helpen van onzekerheid naar zelfverzekerde productbeslissingen te bewegen.",
         leadership_label: "Leiderschap & impact",
         leadership_design_label: "Designleiderschap",
-        leadership_design_copy: "Vervulde leiderschapsrollen waaronder Director, Manager, Principal en Lead Product Designer, en stuurde productstrategie, cross-functionele samenwerking en designuitvoering aan binnen enterprise-, overheids- en startupomgevingen.",
+        leadership_design_copy: "Vervulde leiderschapsrollen waaronder Director, Manager, Principal en Lead Product Designer, en stuurde productstrategie, cross-functionele samenwerking en toegankelijke designuitvoering aan binnen enterprise-, overheids- en startupomgevingen.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Ondernemerschap",
@@ -2363,8 +2425,9 @@
         tools_group_analytics: "Analytics",
 
         industries_label: "Sectorervaring",
-        industries_primary_label: "Focussectoren",
-        industries_secondary_label: "Aanvullende ervaring",
+        industries_group_ai_enterprise: "AI & Enterprise",
+        industries_group_regulated: "Gereguleerde sectoren",
+        industries_group_additional: "Overige domeinen",
         skill_product_strategy: "Productstrategie",
         skill_product_design: "Productdesign",
         skill_product_management: "Productmanagement",
@@ -2414,10 +2477,10 @@
         about_title: "Liderka Produktu i Designu AI",
         about_focus:
           "Rozwiązuję złożone problemy produktowe w regulowanych środowiskach korporacyjnych — zamieniając ambitną technologię w produkty, którym ludzie ufają.",
-        about_p1:
-          "Moje doświadczenie obejmuje projektowanie produktu, zarządzanie produktem i badania użytkowników — od starszego specjalisty po dyrektora, w startupach, firmach SaaS, dużych organizacjach i organizacjach misyjnych.",
-        about_p2:
-          "Obecnie koncentruję się na produktach AI, agentach i automatyzacji, ściśle współpracując z inżynierią, aby zamieniać ambitne pomysły w przemyślane i godne zaufania doświadczenia.",
+        about_p1_lead: "Moje doświadczenie obejmuje projektowanie produktu, zarządzanie produktem i badania użytkowników",
+        about_p1_rest: " — od starszego specjalisty po dyrektora, w startupach, firmach SaaS, dużych organizacjach i organizacjach misyjnych.",
+        about_p2_lead: "Obecnie koncentruję się na produktach AI, agentach i automatyzacji",
+        about_p2_rest: ", ściśle współpracując z inżynierią, aby zamieniać ambitne pomysły w przemyślane i godne zaufania doświadczenia.",
         contact_book_call: "Umów rozmowę",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
@@ -2427,7 +2490,7 @@
         collab_p2: "Niezależnie od tego, czy prowadzę warsztaty odkrywcze, facylituję krytyki designu, uzgadniam interesariuszy, czy szybko prototypuję pomysły, cenię przejrzystość, wspólną odpowiedzialność i ciągłą iterację. Moje podejście jest pragmatyczne i oparte na dowodach — równoważę potrzeby użytkowników, cele biznesowe i ograniczenia techniczne, aby pomóc zespołom przejść od niejasności do pewnych decyzji produktowych.",
         leadership_label: "Przywództwo i wpływ",
         leadership_design_label: "Przywództwo w designie",
-        leadership_design_copy: "Pełniła role przywódcze, w tym Director, Manager, Principal i Lead Product Designer, kierując strategią produktu, współpracą wielofunkcyjną i realizacją designu w środowiskach korporacyjnych, rządowych i startupowych.",
+        leadership_design_copy: "Pełniła role przywódcze, w tym Director, Manager, Principal i Lead Product Designer, kierując strategią produktu, współpracą wielofunkcyjną i realizacją dostępnego designu w środowiskach korporacyjnych, rządowych i startupowych.",
         leadership_role: "Mentorka projektowania UI/UX",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Przedsiębiorczość",
@@ -2449,8 +2512,9 @@
         tools_group_analytics: "Analityka",
 
         industries_label: "Doświadczenie branżowe",
-        industries_primary_label: "Branże priorytetowe",
-        industries_secondary_label: "Dodatkowe doświadczenie",
+        industries_group_ai_enterprise: "AI i przedsiębiorstwa",
+        industries_group_regulated: "Branże regulowane",
+        industries_group_additional: "Pozostałe obszary",
         skill_product_strategy: "Strategia produktu",
         skill_product_design: "Design produktu",
         skill_product_management: "Zarządzanie produktem",
@@ -2500,10 +2564,10 @@
         about_title: "AI-produkt- och designledare",
         about_focus:
           "Jag löser komplexa produktproblem i reglerade och företagsmiljöer — och omvandlar ambitiös teknik till produkter som människor litar på.",
-        about_p1:
-          "Min bakgrund spänner över produktdesign, produktledning och användarforskning — från senior IC till director, inom startups, SaaS-bolag, stora organisationer och missionsdrivna organisationer.",
-        about_p2:
-          "Idag fokuserar jag på AI-produkter, agenter och automation, i nära samarbete med ingenjörsteam för att omvandla ambitiösa idéer till genomtänkta, pålitliga upplevelser.",
+        about_p1_lead: "Min bakgrund spänner över produktdesign, produktledning och användarforskning",
+        about_p1_rest: " — från senior IC till director, inom startups, SaaS-bolag, stora organisationer och missionsdrivna organisationer.",
+        about_p2_lead: "Idag fokuserar jag på AI-produkter, agenter och automation",
+        about_p2_rest: " — i nära samarbete med ingenjörsteam för att omvandla ambitiösa idéer till genomtänkta, pålitliga upplevelser.",
         contact_book_call: "Boka ett samtal",
         contact_email: "E-post",
         contact_linkedin: "LinkedIn ↗",
@@ -2513,7 +2577,7 @@
         collab_p2: "Oavsett om jag leder upptäcktsworkshops, faciliterar designgranskningar, samordnar intressenter eller snabbt prototypar idéer, värdesätter jag transparens, delat ägarskap och ständig iteration. Mitt tillvägagångssätt är pragmatiskt och evidensbaserat — jag balanserar användarbehov, affärsmål och tekniska begränsningar för att hjälpa team att gå från oklarhet till självsäkra produktbeslut.",
         leadership_label: "Ledarskap & genomslag",
         leadership_design_label: "Designledarskap",
-        leadership_design_copy: "Har innehaft ledarroller som Director, Manager, Principal och Lead Product Designer, och styrt produktstrategi, tvärfunktionellt samarbete och designexekvering inom enterprise-, myndighets- och startupmiljöer.",
+        leadership_design_copy: "Har innehaft ledarroller som Director, Manager, Principal och Lead Product Designer, och styrt produktstrategi, tvärfunktionellt samarbete och tillgänglig designexekvering inom enterprise-, myndighets- och startupmiljöer.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entreprenörskap",
@@ -2535,8 +2599,9 @@
         tools_group_analytics: "Analys",
 
         industries_label: "Brancherfarenhet",
-        industries_primary_label: "Prioriterade branscher",
-        industries_secondary_label: "Ytterligare erfarenhet",
+        industries_group_ai_enterprise: "AI & företag",
+        industries_group_regulated: "Reglerade branscher",
+        industries_group_additional: "Övriga områden",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledning",
@@ -2586,10 +2651,10 @@
         about_title: "AI Produkt- og Designleder",
         about_focus:
           "Jeg løser komplekse produktproblemer i regulerede og virksomhedsmiljøer — og omdanner ambitiøs teknologi til produkter, folk stoler på.",
-        about_p1:
-          "Min baggrund spænder over produktdesign, produktledelse og brugerundersøgelser — fra senior IC til director, i startups, SaaS-virksomheder, store organisationer og missionsdrevne organisationer.",
-        about_p2:
-          "I dag fokuserer jeg på AI-produkter, agenter og automatisering, i tæt samarbejde med ingeniørteams for at omdanne ambitiøse idéer til gennemtænkte og troværdige oplevelser.",
+        about_p1_lead: "Min baggrund spænder over produktdesign, produktledelse og brugerundersøgelser",
+        about_p1_rest: " — fra senior IC til director, i startups, SaaS-virksomheder, store organisationer og missionsdrevne organisationer.",
+        about_p2_lead: "I dag fokuserer jeg på AI-produkter, agenter og automatisering",
+        about_p2_rest: " — i tæt samarbejde med ingeniørteams for at omdanne ambitiøse idéer til gennemtænkte og troværdige oplevelser.",
         contact_book_call: "Book et opkald",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
@@ -2599,7 +2664,7 @@
         collab_p2: "Uanset om jeg leder discovery-workshops, faciliterer designkritikker, afstemmer interessenter eller hurtigt prototyper idéer, værdsætter jeg gennemsigtighed, fælles ejerskab og løbende iteration. Min tilgang er pragmatisk og evidensbaseret — jeg balancerer brugerbehov, forretningsmål og tekniske begrænsninger for at hjælpe teams med at gå fra usikkerhed til sikre produktbeslutninger.",
         leadership_label: "Ledelse & gennemslagskraft",
         leadership_design_label: "Designledelse",
-        leadership_design_copy: "Har bestridt lederroller som Director, Manager, Principal og Lead Product Designer og styret produktstrategi, tværfunktionelt samarbejde og designeksekvering i enterprise-, myndigheds- og startupmiljøer.",
+        leadership_design_copy: "Har bestridt lederroller som Director, Manager, Principal og Lead Product Designer og styret produktstrategi, tværfunktionelt samarbejde og tilgængelig designeksekvering i enterprise-, myndigheds- og startupmiljøer.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Iværksætteri",
@@ -2621,8 +2686,9 @@
         tools_group_analytics: "Analyse",
 
         industries_label: "Brancheerfaring",
-        industries_primary_label: "Prioriterede brancher",
-        industries_secondary_label: "Yderligere erfaring",
+        industries_group_ai_enterprise: "AI & virksomheder",
+        industries_group_regulated: "Regulerede brancher",
+        industries_group_additional: "Øvrige områder",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
@@ -2672,10 +2738,10 @@
         about_title: "AI-produkt- og designleder",
         about_focus:
           "Jeg løser komplekse produktproblemer i regulerte og virksomhetsmiljøer — og omgjør ambisiøs teknologi til produkter folk stoler på.",
-        about_p1:
-          "Bakgrunnen min spenner over produktdesign, produktledelse og brukerforskning — fra senior IC til director, i startups, SaaS-selskaper, store organisasjoner og misjonsdrevne organisasjoner.",
-        about_p2:
-          "I dag fokuserer jeg på AI-produkter, agenter og automatisering, i tett samarbeid med ingeniørteam for å gjøre ambisiøse ideer om til gjennomtenkte og pålitelige opplevelser.",
+        about_p1_lead: "Bakgrunnen min spenner over produktdesign, produktledelse og brukerforskning",
+        about_p1_rest: " — fra senior IC til director, i startups, SaaS-selskaper, store organisasjoner og misjonsdrevne organisasjoner.",
+        about_p2_lead: "I dag fokuserer jeg på AI-produkter, agenter og automatisering",
+        about_p2_rest: " — i tett samarbeid med ingeniørteam for å gjøre ambisiøse ideer om til gjennomtenkte og pålitelige opplevelser.",
         contact_book_call: "Book en samtale",
         contact_email: "E-post",
         contact_linkedin: "LinkedIn ↗",
@@ -2685,7 +2751,7 @@
         collab_p2: "Enten jeg leder discovery-workshops, fasiliterer designkritikker, samordner interessenter eller raskt prototyper idéer, verdsetter jeg åpenhet, delt eierskap og kontinuerlig iterasjon. Tilnærmingen min er pragmatisk og evidensbasert — jeg balanserer brukerbehov, forretningsmål og tekniske begrensninger for å hjelpe team med å gå fra usikkerhet til trygge produktbeslutninger.",
         leadership_label: "Ledelse & gjennomslagskraft",
         leadership_design_label: "Designledelse",
-        leadership_design_copy: "Har hatt lederroller som Director, Manager, Principal og Lead Product Designer, og styrt produktstrategi, tverrfunksjonelt samarbeid og designutførelse i enterprise-, myndighets- og startupmiljøer.",
+        leadership_design_copy: "Har hatt lederroller som Director, Manager, Principal og Lead Product Designer, og styrt produktstrategi, tverrfunksjonelt samarbeid og tilgjengelig designutførelse i enterprise-, myndighets- og startupmiljøer.",
         leadership_role: "UI/UX-designmentor",
         leadership_org: "Springboard · 2020–2024",
         leadership_founder_label: "Entreprenørskap",
@@ -2707,8 +2773,9 @@
         tools_group_analytics: "Analyse",
 
         industries_label: "Bransjeerfaring",
-        industries_primary_label: "Prioriterte bransjer",
-        industries_secondary_label: "Ytterligere erfaring",
+        industries_group_ai_enterprise: "AI og virksomheter",
+        industries_group_regulated: "Regulerte bransjer",
+        industries_group_additional: "Øvrige områder",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
