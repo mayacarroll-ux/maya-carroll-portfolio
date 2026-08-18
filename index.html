@@ -338,28 +338,20 @@
       letter-spacing: 0.01em;
     }
 
-    /* ---------- Featured Case Studies ---------- */
-    /* The main event on this page — an editorial list, not a card grid.
-       Each row is a single block-level link so the whole row is
-       clickable, with a hairline divider standing in for the card
-       chrome the rest of the page deliberately avoids. */
+    /* ---------- Featured Work ---------- */
+    /* One project, not a teaser of the whole /work grid — the homepage
+       introduces, the Work page proves. A single generous block, not a
+       list, so there's no card chrome to avoid in the first place. */
     #featured-work h2 {
       margin-bottom: 0.5rem;
     }
-    .featured-list {
-      list-style: none;
-      margin: 1.75rem 0 0;
-      padding: 0;
-    }
-    .featured-list li {
+    #featured-work-item {
+      margin-top: 1.75rem;
+      padding-top: 1.75rem;
       border-top: 1px solid var(--color-border);
-    }
-    .featured-list li:last-child {
-      border-bottom: 1px solid var(--color-border);
     }
     .featured-item {
       display: block;
-      padding: 1.75rem 0;
       text-decoration: none;
       color: inherit;
     }
@@ -370,25 +362,26 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
     .featured-item-title {
-      font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
       font-weight: 700;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
       color: var(--color-text);
       transition: color 0.15s ease;
     }
     .featured-item-outcome {
-      margin-top: 0.5rem;
+      margin-top: 0.75rem;
       max-width: 60ch;
+      font-size: 1.02rem;
       color: var(--color-text-secondary);
     }
     .featured-item-link {
       display: inline-flex;
       align-items: center;
-      margin-top: 0.85rem;
-      font-size: 0.85rem;
+      margin-top: 1.1rem;
+      font-size: 0.9rem;
       font-weight: 600;
       color: var(--color-text);
       transition: color 0.15s ease;
@@ -399,27 +392,51 @@
     .featured-item:focus-visible .featured-item-link {
       color: var(--color-accent);
     }
+    .view-all-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 1.75rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .view-all-link:hover,
+    .view-all-link:focus-visible {
+      color: var(--color-accent);
+    }
     @media (prefers-reduced-motion: reduce) {
       .featured-item-title,
-      .featured-item-link {
+      .featured-item-link,
+      .view-all-link {
         transition: none;
       }
     }
 
     /* ---------- Selected Organizations ---------- */
+    /* One of the strongest credibility signals on the page — more air
+       and larger type than a routine list, framed with hairline
+       borders so it reads as a deliberate moment, not another block. */
+    #selected-orgs {
+      padding-top: clamp(3rem, 6vw, 4.5rem);
+      padding-bottom: clamp(3rem, 6vw, 4.5rem);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
     #selected-orgs h2 {
-      margin-bottom: 1.75rem;
+      margin-bottom: 2rem;
     }
     .orgs-grid {
       list-style: none;
       display: flex;
       flex-wrap: wrap;
-      gap: 1.1rem 2.75rem;
+      gap: 1.4rem 3rem;
       margin: 0;
       padding: 0;
     }
     .org-name {
-      font-size: 1.05rem;
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
       font-weight: 600;
       color: var(--color-text);
       letter-spacing: -0.01em;
@@ -445,6 +462,21 @@
       font-size: 0.95rem;
       font-weight: 600;
       color: var(--color-text);
+    }
+
+    /* ---------- Global collaboration ---------- */
+    /* A quiet positioning line — same understated, heading-less
+       treatment as the proof strip — paired closely with Currently
+       Building With above it rather than given its own full section
+       gap, so the two read as one connected footnote before the CTA. */
+    #global-collab .container {
+      padding-top: 0;
+      padding-bottom: clamp(1.5rem, 4vw, 2.25rem);
+    }
+    #global-collab-line {
+      max-width: 46rem;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
     }
 
     /* ---------- Final CTA ---------- */
@@ -1323,8 +1355,11 @@
 
     <section id="featured-work" aria-labelledby="featured-work-label">
       <div class="container">
-        <h2 id="featured-work-label" data-i18n="featured_work_label">Featured Case Studies</h2>
-        <ul id="featured-work-list" class="featured-list"></ul>
+        <h2 id="featured-work-label" data-i18n="featured_work_label">Featured Work</h2>
+        <div id="featured-work-item"></div>
+        <a class="view-all-link" href="work.html">
+          <span data-i18n="view_all_label">View All Case Studies</span><span aria-hidden="true"> &rarr;</span>
+        </a>
       </div>
     </section>
 
@@ -1352,7 +1387,13 @@
     <section id="building-with" aria-labelledby="building-with-label">
       <div class="container">
         <h2 id="building-with-label" class="building-with-label" data-i18n="building_with_label">Currently Building With</h2>
-        <p class="building-with-tools" data-i18n="tools_line">Claude Code &middot; Cursor &middot; Model Context Protocol (MCP) &middot; AI Agents</p>
+        <p class="building-with-tools" data-i18n="tools_line">Claude Code &middot; Cursor &middot; MCP &middot; AI Agents</p>
+      </div>
+    </section>
+
+    <section id="global-collab" aria-label="Location and collaboration">
+      <div class="container">
+        <p id="global-collab-line" data-i18n="global_collab_line">Based in South Florida, working between Miami and Helsinki &mdash; available for remote collaboration across North America and Europe.</p>
       </div>
     </section>
 
@@ -1417,11 +1458,13 @@
         hero_h1: "Designing and building AI products people trust.",
         hero_p: "End-to-end product strategy, design, and AI-assisted development for enterprise and regulated industries.",
         proof_strip: "Director · Founder · 15+ Years · 60+ Designers Mentored · Public Trust Clearance",
-        featured_work_label: "Featured Case Studies",
+        featured_work_label: "Featured Work",
+        view_all_label: "View All Case Studies",
         view_case_study_label: "View case study",
         orgs_label: "Selected Organizations",
         building_with_label: "Currently Building With",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI Agents",
+        tools_line: "Claude Code · Cursor · MCP · AI Agents",
+        global_collab_line: "Based in South Florida, working between Miami and Helsinki — available for remote collaboration across North America and Europe.",
         final_cta_h2: "Let's build something people trust.",
         footer_p1: "From Miami to Helsinki—designing what's next.",
         weather_loading: "loading",
@@ -1472,11 +1515,13 @@
         hero_h1: "Diseño y construyo productos de IA en los que las personas confían.",
         hero_p: "Estrategia de producto, diseño y desarrollo asistido por IA de extremo a extremo para empresas e industrias reguladas.",
         proof_strip: "Directora · Fundadora · 15+ años · 60+ diseñadores mentorizados · Autorización Public Trust",
-        featured_work_label: "Casos de estudio destacados",
+        featured_work_label: "Trabajo destacado",
+        view_all_label: "Ver todos los casos de estudio",
         view_case_study_label: "Ver caso de estudio",
         orgs_label: "Organizaciones seleccionadas",
         building_with_label: "Actualmente construyendo con",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agentes de IA",
+        tools_line: "Claude Code · Cursor · MCP · Agentes de IA",
+        global_collab_line: "Con base en el sur de Florida, trabajando entre Miami y Helsinki — disponible para colaboración remota en Norteamérica y Europa.",
         final_cta_h2: "Construyamos algo en lo que la gente confíe.",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
         weather_loading: "cargando",
@@ -1527,11 +1572,13 @@
         hero_h1: "Suunnittelen ja rakennan tekoälytuotteita, joihin ihmiset luottavat.",
         hero_p: "Kattava tuotestrategia, muotoilu ja tekoälyavusteinen kehitys yrityksille ja säännellyille toimialoille.",
         proof_strip: "Director · Perustaja · 15+ vuotta · 60+ mentoroitua suunnittelijaa · Public Trust -turvallisuusselvitys",
-        featured_work_label: "Valitut tapaustutkimukset",
+        featured_work_label: "Valitut työt",
+        view_all_label: "Katso kaikki tapaustutkimukset",
         view_case_study_label: "Katso tapaustutkimus",
         orgs_label: "Valitut organisaatiot",
         building_with_label: "Rakennan tällä hetkellä",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Tekoälyagentit",
+        tools_line: "Claude Code · Cursor · MCP · Tekoälyagentit",
+        global_collab_line: "Toimin Etelä-Floridasta käsin, Miamin ja Helsingin välillä — käytettävissä etäyhteistyöhön Pohjois-Amerikassa ja Euroopassa.",
         final_cta_h2: "Rakennetaan jotain, johon ihmiset voivat luottaa.",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
         weather_loading: "ladataan",
@@ -1582,11 +1629,13 @@
         hero_h1: "Je conçois et je construis des produits IA en lesquels les gens ont confiance.",
         hero_p: "Stratégie produit, design et développement assisté par IA de bout en bout pour les entreprises et les secteurs réglementés.",
         proof_strip: "Director · Fondatrice · 15+ ans · 60+ designers mentorés · Habilitation Public Trust",
-        featured_work_label: "Études de cas sélectionnées",
+        featured_work_label: "Travaux sélectionnés",
+        view_all_label: "Voir toutes les études de cas",
         view_case_study_label: "Voir l'étude de cas",
         orgs_label: "Organisations sélectionnées",
         building_with_label: "Ce que j'utilise en ce moment",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agents IA",
+        tools_line: "Claude Code · Cursor · MCP · Agents IA",
+        global_collab_line: "Basée dans le sud de la Floride, travaillant entre Miami et Helsinki — disponible pour une collaboration à distance en Amérique du Nord et en Europe.",
         final_cta_h2: "Construisons ensemble quelque chose de fiable.",
         footer_p1: "De Miami à Helsinki : concevoir ce qui vient ensuite.",
         weather_loading: "chargement",
@@ -1637,11 +1686,13 @@
         hero_h1: "Ich gestalte und baue KI-Produkte, denen Menschen vertrauen.",
         hero_p: "Durchgängige Produktstrategie, Design und KI-gestützte Entwicklung für Unternehmen und regulierte Branchen.",
         proof_strip: "Director · Gründerin · 15+ Jahre · 60+ begleitete Designer:innen · Public-Trust-Sicherheitsfreigabe",
-        featured_work_label: "Ausgewählte Fallstudien",
+        featured_work_label: "Ausgewählte Arbeiten",
+        view_all_label: "Alle Fallstudien ansehen",
         view_case_study_label: "Fallstudie ansehen",
         orgs_label: "Ausgewählte Organisationen",
         building_with_label: "Aktuell im Einsatz",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · KI-Agenten",
+        tools_line: "Claude Code · Cursor · MCP · KI-Agenten",
+        global_collab_line: "Mit Sitz in South Florida, tätig zwischen Miami und Helsinki — verfügbar für die Zusammenarbeit mit Teams in Nordamerika und Europa.",
         final_cta_h2: "Lassen Sie uns etwas bauen, dem Menschen vertrauen.",
         footer_p1: "Von Miami nach Helsinki – das Nächste gestalten.",
         weather_loading: "lädt",
@@ -1692,11 +1743,13 @@
         hero_h1: "Progetto e sviluppo prodotti IA di cui le persone si fidano.",
         hero_p: "Strategia di prodotto, design e sviluppo assistito dall'IA end-to-end per aziende e settori regolamentati.",
         proof_strip: "Director · Fondatrice · 15+ anni · 60+ designer mentorati · Nulla osta Public Trust",
-        featured_work_label: "Casi di studio selezionati",
+        featured_work_label: "Lavori selezionati",
+        view_all_label: "Vedi tutti i casi di studio",
         view_case_study_label: "Vedi il caso di studio",
         orgs_label: "Organizzazioni selezionate",
         building_with_label: "Costruisco attualmente con",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agenti IA",
+        tools_line: "Claude Code · Cursor · MCP · Agenti IA",
+        global_collab_line: "Con base nel sud della Florida, tra Miami ed Helsinki — disponibile per collaborazioni da remoto in Nord America ed Europa.",
         final_cta_h2: "Costruiamo qualcosa di cui le persone si fidano.",
         footer_p1: "Da Miami a Helsinki: progettando il prossimo passo.",
         weather_loading: "caricamento",
@@ -1747,11 +1800,13 @@
         hero_h1: "Eu projeto e construo produtos de IA em que as pessoas confiam.",
         hero_p: "Estratégia de produto, design e desenvolvimento assistido por IA de ponta a ponta para empresas e setores regulados.",
         proof_strip: "Director · Fundadora · 15+ anos · 60+ designers mentorados · Credencial Public Trust",
-        featured_work_label: "Estudos de caso em destaque",
+        featured_work_label: "Trabalho em destaque",
+        view_all_label: "Ver todos os estudos de caso",
         view_case_study_label: "Ver estudo de caso",
         orgs_label: "Organizações selecionadas",
         building_with_label: "Atualmente construindo com",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agentes de IA",
+        tools_line: "Claude Code · Cursor · MCP · Agentes de IA",
+        global_collab_line: "Baseada no sul da Flórida, trabalhando entre Miami e Helsinque — disponível para colaboração remota na América do Norte e na Europa.",
         final_cta_h2: "Vamos construir algo em que as pessoas confiem.",
         footer_p1: "De Miami a Helsinki — projetando o que vem a seguir.",
         weather_loading: "carregando",
@@ -1802,11 +1857,13 @@
         hero_h1: "Ik ontwerp en bouw AI-producten die mensen vertrouwen.",
         hero_p: "Productstrategie, design en AI-ondersteunde ontwikkeling van begin tot eind, voor enterprise- en gereguleerde sectoren.",
         proof_strip: "Director · Oprichter · 15+ jaar · 60+ begeleide designers · Public Trust-veiligheidsmachtiging",
-        featured_work_label: "Uitgelichte casestudy's",
+        featured_work_label: "Uitgelicht werk",
+        view_all_label: "Bekijk alle casestudy's",
         view_case_study_label: "Bekijk de casestudy",
         orgs_label: "Geselecteerde organisaties",
         building_with_label: "Op dit moment bouw ik met",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agents",
+        tools_line: "Claude Code · Cursor · MCP · AI-agents",
+        global_collab_line: "Gevestigd in Zuid-Florida, werkzaam tussen Miami en Helsinki — beschikbaar voor remote samenwerking in Noord-Amerika en Europa.",
         final_cta_h2: "Laten we iets bouwen dat mensen vertrouwen.",
         footer_p1: "Van Miami naar Helsinki — het volgende ontwerpen.",
         weather_loading: "laden",
@@ -1857,11 +1914,13 @@
         hero_h1: "Projektuję i tworzę produkty AI, którym ludzie ufają.",
         hero_p: "Kompleksowa strategia produktu, design i rozwój wspierany przez AI dla przedsiębiorstw i branż regulowanych.",
         proof_strip: "Director · Założycielka · 15+ lat · 60+ zmentorowanych projektantów · Poświadczenie Public Trust",
-        featured_work_label: "Wybrane studia przypadków",
+        featured_work_label: "Wybrane prace",
+        view_all_label: "Zobacz wszystkie studia przypadków",
         view_case_study_label: "Zobacz studium przypadku",
         orgs_label: "Wybrane organizacje",
         building_with_label: "Obecnie tworzę z użyciem",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · Agenci AI",
+        tools_line: "Claude Code · Cursor · MCP · Agenci AI",
+        global_collab_line: "Mieszkam na południu Florydy, pracuję między Miami a Helsinkami — dostępna do zdalnej współpracy w Ameryce Północnej i Europie.",
         final_cta_h2: "Zbudujmy coś, czemu ludzie zaufają.",
         footer_p1: "Z Miami do Helsinek — projektując to, co dalej.",
         weather_loading: "wczytywanie",
@@ -1912,11 +1971,13 @@
         hero_h1: "Jag designar och bygger AI-produkter som människor litar på.",
         hero_p: "Heltäckande produktstrategi, design och AI-stödd utveckling för företag och reglerade branscher.",
         proof_strip: "Director · Grundare · 15+ år · 60+ handledda designer · Public Trust-säkerhetsgodkännande",
-        featured_work_label: "Utvalda fallstudier",
+        featured_work_label: "Utvalda arbeten",
+        view_all_label: "Se alla fallstudier",
         view_case_study_label: "Se fallstudien",
         orgs_label: "Utvalda organisationer",
         building_with_label: "Bygger just nu med",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agenter",
+        tools_line: "Claude Code · Cursor · MCP · AI-agenter",
+        global_collab_line: "Baserad i södra Florida, verksam mellan Miami och Helsingfors — tillgänglig för distansarbete i Nordamerika och Europa.",
         final_cta_h2: "Låt oss bygga något människor litar på.",
         footer_p1: "Från Miami till Helsingfors – designar det som kommer härnäst.",
         weather_loading: "laddar",
@@ -1967,11 +2028,13 @@
         hero_h1: "Jeg designer og bygger AI-produkter, folk stoler på.",
         hero_p: "Fuld produktstrategi, design og AI-understøttet udvikling for virksomheder og regulerede brancher.",
         proof_strip: "Director · Grundlægger · 15+ år · 60+ mentorerede designere · Public Trust-sikkerhedsgodkendelse",
-        featured_work_label: "Udvalgte casestudier",
+        featured_work_label: "Udvalgt arbejde",
+        view_all_label: "Se alle casestudier",
         view_case_study_label: "Se casestudiet",
         orgs_label: "Udvalgte organisationer",
         building_with_label: "Bygger i øjeblikket med",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agenter",
+        tools_line: "Claude Code · Cursor · MCP · AI-agenter",
+        global_collab_line: "Baseret i det sydlige Florida, arbejder mellem Miami og Helsinki — tilgængelig for fjernsamarbejde i Nordamerika og Europa.",
         final_cta_h2: "Lad os bygge noget, folk stoler på.",
         footer_p1: "Fra Miami til Helsinki – designer det, der kommer næst.",
         weather_loading: "indlæser",
@@ -2022,11 +2085,13 @@
         hero_h1: "Jeg designer og bygger AI-produkter folk stoler på.",
         hero_p: "Helhetlig produktstrategi, design og AI-støttet utvikling for virksomheter og regulerte bransjer.",
         proof_strip: "Director · Grunnlegger · 15+ år · 60+ mentorerte designere · Public Trust-sikkerhetsklarering",
-        featured_work_label: "Utvalgte casestudier",
+        featured_work_label: "Utvalgt arbeid",
+        view_all_label: "Se alle casestudier",
         view_case_study_label: "Se casestudiet",
         orgs_label: "Utvalgte organisasjoner",
         building_with_label: "Bygger for tiden med",
-        tools_line: "Claude Code · Cursor · Model Context Protocol (MCP) · AI-agenter",
+        tools_line: "Claude Code · Cursor · MCP · AI-agenter",
+        global_collab_line: "Basert i Sør-Florida, arbeider mellom Miami og Helsingfors — tilgjengelig for eksternt samarbeid i Nord-Amerika og Europa.",
         final_cta_h2: "La oss bygge noe folk stoler på.",
         footer_p1: "Fra Miami til Helsingfors – designer det som kommer neste.",
         weather_loading: "laster",
@@ -2882,18 +2947,18 @@
   </script>
 
   <script>
-    // ---------- Featured Case Studies (#featured-work-list) ----------
-    // Renders straight from work-data.js so the homepage teaser and the
-    // full /work listing never drift out of sync. Deliberately minimal —
-    // no cover mockups, no draft/confidential badges — those belong to the
-    // full case-study browsing experience, not this page's teaser. Project
-    // titles and outcome lines stay in English, matching work.html's own
-    // precedent of leaving case-study content untranslated (see that
-    // page's INDUSTRY_I18N_KEYS note); only the surrounding UI chrome is
-    // localized here.
+    // ---------- Featured Work (#featured-work-item) ----------
+    // One project, not a teaser of the whole /work grid — the homepage
+    // introduces, the Work page proves. Renders straight from
+    // work-data.js so it can never drift from the detail page it links
+    // to. Whichever project has `featured: true` there is the one shown
+    // here; only one project should carry that flag at a time. Title and
+    // summary stay in English, matching work.html's own precedent of
+    // leaving case-study content untranslated; only the surrounding UI
+    // chrome is localized here.
     (function () {
-      var list = document.getElementById("featured-work-list");
-      if (!list || !window.MayaWork) return;
+      var container = document.getElementById("featured-work-item");
+      if (!container || !window.MayaWork) return;
 
       function el(tag, className, text) {
         var node = document.createElement(tag);
@@ -2902,46 +2967,43 @@
         return node;
       }
 
-      var projects = window.MayaWork.getPublishedWorkProjects().filter(function (p) {
+      var project = window.MayaWork.getPublishedWorkProjects().filter(function (p) {
         return p.featured;
-      });
+      })[0];
+      if (!project) return;
 
-      projects.forEach(function (project) {
-        var li = document.createElement("li");
-        var item = document.createElement("a");
-        item.className = "featured-item";
-        item.href = "/work/" + project.slug;
+      var item = document.createElement("a");
+      item.className = "featured-item";
+      item.href = "/work/" + project.slug;
 
-        var industryLabel = window.MayaWork.INDUSTRY_LABELS[project.industry] || project.industry;
-        item.appendChild(el("span", "featured-item-industry", industryLabel));
-        item.appendChild(el("h3", "featured-item-title", project.title));
-        if (project.cardOutcome) {
-          item.appendChild(el("p", "featured-item-outcome", project.cardOutcome));
-        }
+      var industryLabel = window.MayaWork.INDUSTRY_LABELS[project.industry] || project.industry;
+      item.appendChild(el("span", "featured-item-industry", industryLabel));
+      item.appendChild(el("h3", "featured-item-title", project.title));
+      if (project.summary) {
+        item.appendChild(el("p", "featured-item-outcome", project.summary));
+      }
 
-        var linkLabel = el("span", "featured-item-link", null);
-        var linkText = document.createElement("span");
-        linkText.setAttribute("data-i18n", "view_case_study_label");
-        linkText.textContent = "View case study";
-        linkLabel.appendChild(linkText);
-        var arrow = document.createElement("span");
-        arrow.setAttribute("aria-hidden", "true");
-        arrow.textContent = " →";
-        linkLabel.appendChild(arrow);
-        item.appendChild(linkLabel);
+      var linkLabel = el("span", "featured-item-link", null);
+      var linkText = document.createElement("span");
+      linkText.setAttribute("data-i18n", "view_case_study_label");
+      linkText.textContent = "View case study";
+      linkLabel.appendChild(linkText);
+      var arrow = document.createElement("span");
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = " →";
+      linkLabel.appendChild(arrow);
+      item.appendChild(linkLabel);
 
-        li.appendChild(item);
-        list.appendChild(li);
-      });
+      container.appendChild(item);
 
       // setLanguage's own i18n pass runs once at load, against a NodeList
-      // captured before these nodes existed, so it never sees them — apply
+      // captured before this node existed, so it never sees it — apply
       // translate() (a top-level function declaration in the script above,
       // so it's reachable as window.translate) once now, then again on
       // every later language switch.
       function translateFeaturedWork() {
         if (typeof window.translate !== "function") return;
-        list.querySelectorAll("[data-i18n]").forEach(function (node) {
+        container.querySelectorAll("[data-i18n]").forEach(function (node) {
           node.textContent = window.translate(node.dataset.i18n);
         });
       }
