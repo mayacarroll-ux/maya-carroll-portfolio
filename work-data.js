@@ -43,6 +43,10 @@ var WORK_PROJECTS = [
     title: "AI Case Triage Assistant",
     cardChallenge: "Support analysts spent 40% of their day manually routing cases across three disconnected systems.",
     cardOutcome: "Cut triage time from 12 minutes to under 3, with analysts trusting the agent's calls 9 times in 10.",
+    // One-sentence version for the homepage's Featured Work card — tighter
+    // than cardOutcome/summary, which are tuned for the /work grid and
+    // case-study hero respectively.
+    homepageOutcome: "Designed an AI agent that reduced enterprise support triage time by more than 70% while preserving human oversight.",
     projectType: "0→1 AI product, agent-assisted workflow",
     summary: "Designed an AI agent that triages and routes enterprise support cases in real time, cutting manual handling time by more than 70% while keeping a human in the loop for every high-stakes decision.",
     organization: "Confidential — enterprise SaaS company (10,000+ employee customers)",

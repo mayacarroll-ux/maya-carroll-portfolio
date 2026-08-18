@@ -231,10 +231,11 @@
       line-height: 1.15;
     }
     h1 {
-      font-size: clamp(2rem, 4.2vw, 3rem);
+      font-size: clamp(2.75rem, 8vw, 5.5rem);
       font-weight: 700;
-      line-height: 1.02;
+      line-height: 0.98;
       letter-spacing: -0.04em;
+      text-wrap: balance;
     }
     h2 {
       font-size: clamp(1.5rem, 3vw, 2.1rem);
@@ -304,18 +305,49 @@
     }
 
     /* ---------- Hero ---------- */
+    /* The headline is the visual anchor of the page — a tight measure on
+       the h1 (independent of the wider copy column) forces it to break
+       into short, deliberate lines rather than a wide two-line paragraph,
+       with text-wrap: balance evening those lines out per language. */
     #hero .container {
-      padding-top: clamp(2rem, 6vw, 4rem);
-      padding-bottom: clamp(2rem, 6vw, 3rem);
+      padding-top: clamp(2.5rem, 7vw, 5rem);
+      padding-bottom: clamp(2.5rem, 6vw, 4rem);
       max-width: 1040px;
     }
     #hero-copy {
-      max-width: 640px;
+      max-width: 680px;
+    }
+    #hero h1 {
+      max-width: 13ch;
     }
     #hero p {
-      margin-top: 1.25rem;
+      margin-top: 1.75rem;
       font-size: 1.05rem;
-      max-width: 60ch;
+      max-width: 46ch;
+    }
+    #hero .btn-row {
+      margin-top: 2.25rem;
+    }
+    /* At short viewport heights (laptop browsers zoomed to ~150-200%,
+       landscape phones) the large headline can run tall enough for the
+       sticky footer to overlap its last line before any scrolling
+       happens. Shrinking the headline here — rather than touching the
+       shared sticky-footer behavior other pages also rely on — keeps
+       the hero fully legible without a scroll. */
+    @media (max-height: 500px) {
+      #hero h1 {
+        font-size: clamp(1.75rem, 6vw, 2.75rem);
+      }
+      #hero .container {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+      }
+      #hero p {
+        margin-top: 1rem;
+      }
+      #hero .btn-row {
+        margin-top: 1.25rem;
+      }
     }
 
     /* ---------- Proof strip ---------- */
@@ -331,64 +363,102 @@
       letter-spacing: 0.01em;
     }
 
+    /* ---------- Selected Organizations ---------- */
+    /* Trust before proof — sits right after the hero/credibility row.
+       Centered and wide, in deliberate contrast to the hero's left
+       alignment, so the page gets real compositional rhythm instead of
+       one alignment repeated section after section. */
+    #selected-orgs {
+      padding-top: clamp(3rem, 6vw, 4.5rem);
+      padding-bottom: clamp(3rem, 6vw, 4.5rem);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      text-align: center;
+    }
+    #selected-orgs h2 {
+      margin-bottom: 2.25rem;
+    }
+    .orgs-grid {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.6rem 3.5rem;
+      margin: 0;
+      padding: 0;
+    }
+    .org-name {
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
     /* ---------- Featured Work ---------- */
-    /* One project, not a teaser of the whole /work grid — the homepage
-       introduces, the Work page proves. A single generous block, not a
-       list, so there's no card chrome to avoid in the first place. */
+    /* One project, bounded in a bordered card — a deliberately different
+       register from the open hero/organizations sections above it. No
+       case-study photography exists yet (see work-data.js's FPO note),
+       so the card's own oversized title stands in as the visual: large,
+       confident typography rather than an invented screenshot or empty
+       placeholder box. Swap in a real image inside .featured-card
+       later without touching the surrounding layout. */
     #featured-work h2 {
       margin-bottom: 0.5rem;
     }
     #featured-work-item {
       margin-top: 1.75rem;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--color-border);
     }
-    .featured-item {
+    .featured-card {
       display: block;
+      padding: clamp(2rem, 5vw, 3.5rem);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      background: var(--color-surface);
       text-decoration: none;
       color: inherit;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
-    .featured-item-industry {
+    .featured-card:hover,
+    .featured-card:focus-visible {
+      border-color: var(--color-accent);
+      box-shadow: var(--glow-hover);
+    }
+    .featured-card-industry {
       display: block;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.6rem;
+      margin-bottom: 1rem;
     }
-    .featured-item-title {
-      font-size: clamp(1.4rem, 3vw, 1.9rem);
+    .featured-card-title {
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
       font-weight: 700;
       letter-spacing: -0.02em;
+      line-height: 1.05;
       color: var(--color-text);
-      transition: color 0.15s ease;
+      max-width: 16ch;
+      text-wrap: balance;
     }
-    .featured-item-outcome {
-      margin-top: 0.75rem;
-      max-width: 60ch;
-      font-size: 1.02rem;
+    .featured-card-outcome {
+      margin-top: 1.1rem;
+      max-width: 52ch;
+      font-size: 1.05rem;
       color: var(--color-text-secondary);
     }
-    .featured-item-link {
+    .featured-card-link {
       display: inline-flex;
       align-items: center;
-      margin-top: 1.1rem;
+      margin-top: 1.5rem;
       font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--color-text);
-      transition: color 0.15s ease;
-    }
-    .featured-item:hover .featured-item-title,
-    .featured-item:hover .featured-item-link,
-    .featured-item:focus-visible .featured-item-title,
-    .featured-item:focus-visible .featured-item-link {
+      font-weight: 700;
       color: var(--color-accent);
     }
     .view-all-link {
       display: inline-flex;
       align-items: center;
-      margin-top: 1.75rem;
+      margin-top: 1.5rem;
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--color-text-secondary);
@@ -400,76 +470,10 @@
       color: var(--color-accent);
     }
     @media (prefers-reduced-motion: reduce) {
-      .featured-item-title,
-      .featured-item-link,
+      .featured-card,
       .view-all-link {
         transition: none;
       }
-    }
-
-    /* ---------- Selected Organizations ---------- */
-    /* One of the strongest credibility signals on the page — more air
-       and larger type than a routine list, framed with hairline
-       borders so it reads as a deliberate moment, not another block. */
-    #selected-orgs {
-      padding-top: clamp(3rem, 6vw, 4.5rem);
-      padding-bottom: clamp(3rem, 6vw, 4.5rem);
-      border-top: 1px solid var(--color-border);
-      border-bottom: 1px solid var(--color-border);
-    }
-    #selected-orgs h2 {
-      margin-bottom: 2rem;
-    }
-    .orgs-grid {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.4rem 3rem;
-      margin: 0;
-      padding: 0;
-    }
-    .org-name {
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
-      font-weight: 600;
-      color: var(--color-text);
-      letter-spacing: -0.01em;
-    }
-
-    /* ---------- Currently building with ---------- */
-    /* One quiet line, not a technical inventory — see about.html's
-       Technical Fluency section for the full stack. */
-    #building-with .container {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.4rem 1rem;
-    }
-    .building-with-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--color-text-secondary);
-    }
-    .building-with-tools {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--color-text);
-    }
-
-    /* ---------- Global collaboration ---------- */
-    /* A quiet positioning line — same understated, heading-less
-       treatment as the proof strip — paired closely with Currently
-       Building With above it rather than given its own full section
-       gap, so the two read as one connected footnote before the CTA. */
-    #global-collab .container {
-      padding-top: 0;
-      padding-bottom: clamp(1.5rem, 4vw, 2.25rem);
-    }
-    #global-collab-line {
-      max-width: 46rem;
-      font-size: 0.9rem;
-      color: var(--color-text-secondary);
     }
 
     /* ---------- Final CTA ---------- */
@@ -1198,6 +1202,10 @@
       flex-direction: column;
       gap: 0.3rem;
     }
+    footer .footer-meta {
+      font-size: 0.78rem;
+      opacity: 0.85;
+    }
     footer .copyright {
       font-size: 0.75rem;
       opacity: 0.8;
@@ -1342,17 +1350,7 @@
 
     <section id="proof-strip" aria-label="Career highlights">
       <div class="container">
-        <p id="proof-strip-line" data-i18n="proof_strip">Director &middot; Founder &middot; 15+ Years &middot; 60+ Designers Mentored &middot; Public Trust Clearance</p>
-      </div>
-    </section>
-
-    <section id="featured-work" aria-labelledby="featured-work-label">
-      <div class="container">
-        <h2 id="featured-work-label" data-i18n="featured_work_label">Featured Work</h2>
-        <div id="featured-work-item"></div>
-        <a class="view-all-link" href="work.html">
-          <span data-i18n="view_all_label">View All Case Studies</span><span aria-hidden="true"> &rarr;</span>
-        </a>
+        <p id="proof-strip-line" data-i18n="proof_strip">15+ Years &middot; Director &rarr; Founder &middot; 60+ Designers Mentored &middot; Public Trust Clearance</p>
       </div>
     </section>
 
@@ -1361,12 +1359,8 @@
         <h2 id="selected-orgs-label" data-i18n="orgs_label">Selected Organizations</h2>
         <ul class="orgs-grid">
           <li class="org-name">AbbVie</li>
-          <li class="org-name">Boston Market</li>
-          <li class="org-name">BriteCore</li>
-          <li class="org-name">Buildertrend</li>
           <li class="org-name">Citrix</li>
           <li class="org-name">Junior Achievement USA</li>
-          <li class="org-name">Kandji</li>
           <li class="org-name">Office Depot</li>
           <li class="org-name">TradeStation</li>
           <li class="org-name">U.S. Department of Veterans Affairs</li>
@@ -1377,16 +1371,13 @@
       </div>
     </section>
 
-    <section id="building-with" aria-labelledby="building-with-label">
+    <section id="featured-work" aria-labelledby="featured-work-label">
       <div class="container">
-        <h2 id="building-with-label" class="building-with-label" data-i18n="building_with_label">Currently Building With</h2>
-        <p class="building-with-tools" data-i18n="tools_line">Claude Code &middot; Cursor &middot; MCP &middot; AI Agents</p>
-      </div>
-    </section>
-
-    <section id="global-collab" aria-label="Location and collaboration">
-      <div class="container">
-        <p id="global-collab-line" data-i18n="global_collab_line">Based in South Florida, working between Miami and Helsinki &mdash; available for remote collaboration across North America and Europe.</p>
+        <h2 id="featured-work-label" data-i18n="featured_work_label">Featured Work</h2>
+        <div id="featured-work-item"></div>
+        <a class="view-all-link" href="work.html">
+          <span data-i18n="view_all_label">View All Work</span><span aria-hidden="true"> &rarr;</span>
+        </a>
       </div>
     </section>
 
@@ -1423,6 +1414,10 @@
         <span id="currency-rate">&hellip;</span>
       </div>
     </div>
+    <p class="footer-meta">
+      <span data-i18n="building_with_label">Currently building with</span> <span data-i18n="tools_line">Claude Code &middot; Cursor &middot; MCP &middot; AI Agents</span>
+    </p>
+    <p class="footer-meta" data-i18n="global_collab_line">Based in South Florida &middot; Available for remote collaboration across the U.S., Canada, and Europe.</p>
     <p>
       <span data-i18n="footer_p1">From Miami to Helsinki—designing what's next.</span>
       <span class="copyright">&copy; <span id="footer-year"></span> Maya Carroll</span>
@@ -1450,14 +1445,14 @@
         cta_book_call: "Book a Call",
         hero_h1: "Designing and building AI products people trust.",
         hero_p: "End-to-end product strategy, design, and AI-assisted development for enterprise and regulated industries.",
-        proof_strip: "Director · Founder · 15+ Years · 60+ Designers Mentored · Public Trust Clearance",
+        proof_strip: "15+ Years · Director → Founder · 60+ Designers Mentored · Public Trust Clearance",
         featured_work_label: "Featured Work",
-        view_all_label: "View All Case Studies",
-        view_case_study_label: "View case study",
+        view_all_label: "View All Work",
+        view_case_study_label: "View Case Study",
         orgs_label: "Selected Organizations",
-        building_with_label: "Currently Building With",
+        building_with_label: "Currently building with",
         tools_line: "Claude Code · Cursor · MCP · AI Agents",
-        global_collab_line: "Based in South Florida, working between Miami and Helsinki — available for remote collaboration across North America and Europe.",
+        global_collab_line: "Based in South Florida · Available for remote collaboration across the U.S., Canada, and Europe.",
         final_cta_h2: "Let's build something people trust.",
         footer_p1: "From Miami to Helsinki—designing what's next.",
         weather_loading: "loading",
@@ -1507,14 +1502,14 @@
         cta_book_call: "Reservar una llamada",
         hero_h1: "Diseño y construyo productos de IA en los que las personas confían.",
         hero_p: "Estrategia de producto, diseño y desarrollo asistido por IA de extremo a extremo para empresas e industrias reguladas.",
-        proof_strip: "Directora · Fundadora · 15+ años · 60+ diseñadores mentorizados · Autorización Public Trust",
+        proof_strip: "15+ años · Directora → Fundadora · 60+ diseñadores mentorizados · Autorización Public Trust",
         featured_work_label: "Trabajo destacado",
-        view_all_label: "Ver todos los casos de estudio",
+        view_all_label: "Ver todo el trabajo",
         view_case_study_label: "Ver caso de estudio",
         orgs_label: "Organizaciones seleccionadas",
         building_with_label: "Actualmente construyendo con",
         tools_line: "Claude Code · Cursor · MCP · Agentes de IA",
-        global_collab_line: "Con base en el sur de Florida, trabajando entre Miami y Helsinki — disponible para colaboración remota en Norteamérica y Europa.",
+        global_collab_line: "Con base en el sur de Florida · Disponible para colaboración remota en EE. UU., Canadá y Europa.",
         final_cta_h2: "Construyamos algo en lo que la gente confíe.",
         footer_p1: "De Miami a Helsinki: diseñando lo que sigue.",
         weather_loading: "cargando",
@@ -1564,14 +1559,14 @@
         cta_book_call: "Varaa puhelu",
         hero_h1: "Suunnittelen ja rakennan tekoälytuotteita, joihin ihmiset luottavat.",
         hero_p: "Kattava tuotestrategia, muotoilu ja tekoälyavusteinen kehitys yrityksille ja säännellyille toimialoille.",
-        proof_strip: "Director · Perustaja · 15+ vuotta · 60+ mentoroitua suunnittelijaa · Public Trust -turvallisuusselvitys",
+        proof_strip: "15+ vuotta · Director → Perustaja · 60+ mentoroitua suunnittelijaa · Public Trust -turvallisuusselvitys",
         featured_work_label: "Valitut työt",
-        view_all_label: "Katso kaikki tapaustutkimukset",
+        view_all_label: "Katso kaikki työt",
         view_case_study_label: "Katso tapaustutkimus",
         orgs_label: "Valitut organisaatiot",
         building_with_label: "Rakennan tällä hetkellä",
         tools_line: "Claude Code · Cursor · MCP · Tekoälyagentit",
-        global_collab_line: "Toimin Etelä-Floridasta käsin, Miamin ja Helsingin välillä — käytettävissä etäyhteistyöhön Pohjois-Amerikassa ja Euroopassa.",
+        global_collab_line: "Toimin Etelä-Floridasta käsin · Käytettävissä etätyöhön Yhdysvalloissa, Kanadassa ja Euroopassa.",
         final_cta_h2: "Rakennetaan jotain, johon ihmiset voivat luottaa.",
         footer_p1: "Miamista Helsinkiin — suunnittelemassa tulevaa.",
         weather_loading: "ladataan",
@@ -1621,14 +1616,14 @@
         cta_book_call: "Réserver un appel",
         hero_h1: "Je conçois et je construis des produits IA en lesquels les gens ont confiance.",
         hero_p: "Stratégie produit, design et développement assisté par IA de bout en bout pour les entreprises et les secteurs réglementés.",
-        proof_strip: "Director · Fondatrice · 15+ ans · 60+ designers mentorés · Habilitation Public Trust",
+        proof_strip: "15+ ans · Director → Fondatrice · 60+ designers mentorés · Habilitation Public Trust",
         featured_work_label: "Travaux sélectionnés",
-        view_all_label: "Voir toutes les études de cas",
+        view_all_label: "Voir tous les travaux",
         view_case_study_label: "Voir l'étude de cas",
         orgs_label: "Organisations sélectionnées",
-        building_with_label: "Ce que j'utilise en ce moment",
+        building_with_label: "Je construis actuellement avec",
         tools_line: "Claude Code · Cursor · MCP · Agents IA",
-        global_collab_line: "Basée dans le sud de la Floride, travaillant entre Miami et Helsinki — disponible pour une collaboration à distance en Amérique du Nord et en Europe.",
+        global_collab_line: "Basée dans le sud de la Floride · Disponible pour une collaboration à distance aux États-Unis, au Canada et en Europe.",
         final_cta_h2: "Construisons ensemble quelque chose de fiable.",
         footer_p1: "De Miami à Helsinki : concevoir ce qui vient ensuite.",
         weather_loading: "chargement",
@@ -1678,14 +1673,14 @@
         cta_book_call: "Anruf vereinbaren",
         hero_h1: "Ich gestalte und baue KI-Produkte, denen Menschen vertrauen.",
         hero_p: "Durchgängige Produktstrategie, Design und KI-gestützte Entwicklung für Unternehmen und regulierte Branchen.",
-        proof_strip: "Director · Gründerin · 15+ Jahre · 60+ begleitete Designer:innen · Public-Trust-Sicherheitsfreigabe",
+        proof_strip: "15+ Jahre · Director → Gründerin · 60+ begleitete Designer:innen · Public-Trust-Sicherheitsfreigabe",
         featured_work_label: "Ausgewählte Arbeiten",
-        view_all_label: "Alle Fallstudien ansehen",
+        view_all_label: "Alle Arbeiten ansehen",
         view_case_study_label: "Fallstudie ansehen",
         orgs_label: "Ausgewählte Organisationen",
-        building_with_label: "Aktuell im Einsatz",
+        building_with_label: "Ich baue aktuell mit",
         tools_line: "Claude Code · Cursor · MCP · KI-Agenten",
-        global_collab_line: "Mit Sitz in South Florida, tätig zwischen Miami und Helsinki — verfügbar für die Zusammenarbeit mit Teams in Nordamerika und Europa.",
+        global_collab_line: "Mit Sitz in South Florida · Verfügbar für die Zusammenarbeit mit Teams in den USA, Kanada und Europa.",
         final_cta_h2: "Lassen Sie uns etwas bauen, dem Menschen vertrauen.",
         footer_p1: "Von Miami nach Helsinki – das Nächste gestalten.",
         weather_loading: "lädt",
@@ -1735,14 +1730,14 @@
         cta_book_call: "Prenota una chiamata",
         hero_h1: "Progetto e sviluppo prodotti IA di cui le persone si fidano.",
         hero_p: "Strategia di prodotto, design e sviluppo assistito dall'IA end-to-end per aziende e settori regolamentati.",
-        proof_strip: "Director · Fondatrice · 15+ anni · 60+ designer mentorati · Nulla osta Public Trust",
+        proof_strip: "15+ anni · Director → Fondatrice · 60+ designer mentorati · Nulla osta Public Trust",
         featured_work_label: "Lavori selezionati",
-        view_all_label: "Vedi tutti i casi di studio",
+        view_all_label: "Vedi tutti i lavori",
         view_case_study_label: "Vedi il caso di studio",
         orgs_label: "Organizzazioni selezionate",
         building_with_label: "Costruisco attualmente con",
         tools_line: "Claude Code · Cursor · MCP · Agenti IA",
-        global_collab_line: "Con base nel sud della Florida, tra Miami ed Helsinki — disponibile per collaborazioni da remoto in Nord America ed Europa.",
+        global_collab_line: "Con base nel sud della Florida · Disponibile per collaborazioni da remoto negli Stati Uniti, in Canada e in Europa.",
         final_cta_h2: "Costruiamo qualcosa di cui le persone si fidano.",
         footer_p1: "Da Miami a Helsinki: progettando il prossimo passo.",
         weather_loading: "caricamento",
@@ -1792,14 +1787,14 @@
         cta_book_call: "Agendar uma chamada",
         hero_h1: "Eu projeto e construo produtos de IA em que as pessoas confiam.",
         hero_p: "Estratégia de produto, design e desenvolvimento assistido por IA de ponta a ponta para empresas e setores regulados.",
-        proof_strip: "Director · Fundadora · 15+ anos · 60+ designers mentorados · Credencial Public Trust",
+        proof_strip: "15+ anos · Director → Fundadora · 60+ designers mentorados · Credencial Public Trust",
         featured_work_label: "Trabalho em destaque",
-        view_all_label: "Ver todos os estudos de caso",
+        view_all_label: "Ver todo o trabalho",
         view_case_study_label: "Ver estudo de caso",
         orgs_label: "Organizações selecionadas",
         building_with_label: "Atualmente construindo com",
         tools_line: "Claude Code · Cursor · MCP · Agentes de IA",
-        global_collab_line: "Baseada no sul da Flórida, trabalhando entre Miami e Helsinque — disponível para colaboração remota na América do Norte e na Europa.",
+        global_collab_line: "Baseada no sul da Flórida · Disponível para colaboração remota nos EUA, no Canadá e na Europa.",
         final_cta_h2: "Vamos construir algo em que as pessoas confiem.",
         footer_p1: "De Miami a Helsinki — projetando o que vem a seguir.",
         weather_loading: "carregando",
@@ -1849,14 +1844,14 @@
         cta_book_call: "Plan een gesprek",
         hero_h1: "Ik ontwerp en bouw AI-producten die mensen vertrouwen.",
         hero_p: "Productstrategie, design en AI-ondersteunde ontwikkeling van begin tot eind, voor enterprise- en gereguleerde sectoren.",
-        proof_strip: "Director · Oprichter · 15+ jaar · 60+ begeleide designers · Public Trust-veiligheidsmachtiging",
+        proof_strip: "15+ jaar · Director → Oprichter · 60+ begeleide designers · Public Trust-veiligheidsmachtiging",
         featured_work_label: "Uitgelicht werk",
-        view_all_label: "Bekijk alle casestudy's",
+        view_all_label: "Bekijk al het werk",
         view_case_study_label: "Bekijk de casestudy",
         orgs_label: "Geselecteerde organisaties",
         building_with_label: "Op dit moment bouw ik met",
         tools_line: "Claude Code · Cursor · MCP · AI-agents",
-        global_collab_line: "Gevestigd in Zuid-Florida, werkzaam tussen Miami en Helsinki — beschikbaar voor remote samenwerking in Noord-Amerika en Europa.",
+        global_collab_line: "Gevestigd in Zuid-Florida · Beschikbaar voor remote samenwerking in de VS, Canada en Europa.",
         final_cta_h2: "Laten we iets bouwen dat mensen vertrouwen.",
         footer_p1: "Van Miami naar Helsinki — het volgende ontwerpen.",
         weather_loading: "laden",
@@ -1906,14 +1901,14 @@
         cta_book_call: "Umów rozmowę",
         hero_h1: "Projektuję i tworzę produkty AI, którym ludzie ufają.",
         hero_p: "Kompleksowa strategia produktu, design i rozwój wspierany przez AI dla przedsiębiorstw i branż regulowanych.",
-        proof_strip: "Director · Założycielka · 15+ lat · 60+ zmentorowanych projektantów · Poświadczenie Public Trust",
+        proof_strip: "15+ lat · Director → Założycielka · 60+ zmentorowanych projektantów · Poświadczenie Public Trust",
         featured_work_label: "Wybrane prace",
-        view_all_label: "Zobacz wszystkie studia przypadków",
+        view_all_label: "Zobacz wszystkie prace",
         view_case_study_label: "Zobacz studium przypadku",
         orgs_label: "Wybrane organizacje",
         building_with_label: "Obecnie tworzę z użyciem",
         tools_line: "Claude Code · Cursor · MCP · Agenci AI",
-        global_collab_line: "Mieszkam na południu Florydy, pracuję między Miami a Helsinkami — dostępna do zdalnej współpracy w Ameryce Północnej i Europie.",
+        global_collab_line: "Mieszkam na południu Florydy · Dostępna do zdalnej współpracy w USA, Kanadzie i Europie.",
         final_cta_h2: "Zbudujmy coś, czemu ludzie zaufają.",
         footer_p1: "Z Miami do Helsinek — projektując to, co dalej.",
         weather_loading: "wczytywanie",
@@ -1963,14 +1958,14 @@
         cta_book_call: "Boka ett samtal",
         hero_h1: "Jag designar och bygger AI-produkter som människor litar på.",
         hero_p: "Heltäckande produktstrategi, design och AI-stödd utveckling för företag och reglerade branscher.",
-        proof_strip: "Director · Grundare · 15+ år · 60+ handledda designer · Public Trust-säkerhetsgodkännande",
+        proof_strip: "15+ år · Director → Grundare · 60+ handledda designer · Public Trust-säkerhetsgodkännande",
         featured_work_label: "Utvalda arbeten",
-        view_all_label: "Se alla fallstudier",
+        view_all_label: "Se allt arbete",
         view_case_study_label: "Se fallstudien",
         orgs_label: "Utvalda organisationer",
         building_with_label: "Bygger just nu med",
         tools_line: "Claude Code · Cursor · MCP · AI-agenter",
-        global_collab_line: "Baserad i södra Florida, verksam mellan Miami och Helsingfors — tillgänglig för distansarbete i Nordamerika och Europa.",
+        global_collab_line: "Baserad i södra Florida · Tillgänglig för distansarbete i USA, Kanada och Europa.",
         final_cta_h2: "Låt oss bygga något människor litar på.",
         footer_p1: "Från Miami till Helsingfors – designar det som kommer härnäst.",
         weather_loading: "laddar",
@@ -2020,14 +2015,14 @@
         cta_book_call: "Book et opkald",
         hero_h1: "Jeg designer og bygger AI-produkter, folk stoler på.",
         hero_p: "Fuld produktstrategi, design og AI-understøttet udvikling for virksomheder og regulerede brancher.",
-        proof_strip: "Director · Grundlægger · 15+ år · 60+ mentorerede designere · Public Trust-sikkerhedsgodkendelse",
+        proof_strip: "15+ år · Director → Grundlægger · 60+ mentorerede designere · Public Trust-sikkerhedsgodkendelse",
         featured_work_label: "Udvalgt arbejde",
-        view_all_label: "Se alle casestudier",
+        view_all_label: "Se alt arbejde",
         view_case_study_label: "Se casestudiet",
         orgs_label: "Udvalgte organisationer",
         building_with_label: "Bygger i øjeblikket med",
         tools_line: "Claude Code · Cursor · MCP · AI-agenter",
-        global_collab_line: "Baseret i det sydlige Florida, arbejder mellem Miami og Helsinki — tilgængelig for fjernsamarbejde i Nordamerika og Europa.",
+        global_collab_line: "Baseret i det sydlige Florida · Tilgængelig for fjernsamarbejde i USA, Canada og Europa.",
         final_cta_h2: "Lad os bygge noget, folk stoler på.",
         footer_p1: "Fra Miami til Helsinki – designer det, der kommer næst.",
         weather_loading: "indlæser",
@@ -2077,14 +2072,14 @@
         cta_book_call: "Book en samtale",
         hero_h1: "Jeg designer og bygger AI-produkter folk stoler på.",
         hero_p: "Helhetlig produktstrategi, design og AI-støttet utvikling for virksomheter og regulerte bransjer.",
-        proof_strip: "Director · Grunnlegger · 15+ år · 60+ mentorerte designere · Public Trust-sikkerhetsklarering",
+        proof_strip: "15+ år · Director → Grunnlegger · 60+ mentorerte designere · Public Trust-sikkerhetsklarering",
         featured_work_label: "Utvalgt arbeid",
-        view_all_label: "Se alle casestudier",
+        view_all_label: "Se alt arbeid",
         view_case_study_label: "Se casestudiet",
         orgs_label: "Utvalgte organisasjoner",
         building_with_label: "Bygger for tiden med",
         tools_line: "Claude Code · Cursor · MCP · AI-agenter",
-        global_collab_line: "Basert i Sør-Florida, arbeider mellom Miami og Helsingfors — tilgjengelig for eksternt samarbeid i Nord-Amerika og Europa.",
+        global_collab_line: "Basert i Sør-Florida · Tilgjengelig for eksternt samarbeid i USA, Canada og Europa.",
         final_cta_h2: "La oss bygge noe folk stoler på.",
         footer_p1: "Fra Miami til Helsingfors – designer det som kommer neste.",
         weather_loading: "laster",
@@ -2965,29 +2960,30 @@
       })[0];
       if (!project) return;
 
-      var item = document.createElement("a");
-      item.className = "featured-item";
-      item.href = "/work/" + project.slug;
+      var card = document.createElement("a");
+      card.className = "featured-card";
+      card.href = "/work/" + project.slug;
 
       var industryLabel = window.MayaWork.INDUSTRY_LABELS[project.industry] || project.industry;
-      item.appendChild(el("span", "featured-item-industry", industryLabel));
-      item.appendChild(el("h3", "featured-item-title", project.title));
-      if (project.summary) {
-        item.appendChild(el("p", "featured-item-outcome", project.summary));
+      card.appendChild(el("span", "featured-card-industry", industryLabel));
+      card.appendChild(el("h3", "featured-card-title", project.title));
+      var outcome = project.homepageOutcome || project.cardOutcome || project.summary;
+      if (outcome) {
+        card.appendChild(el("p", "featured-card-outcome", outcome));
       }
 
-      var linkLabel = el("span", "featured-item-link", null);
+      var linkLabel = el("span", "featured-card-link", null);
       var linkText = document.createElement("span");
       linkText.setAttribute("data-i18n", "view_case_study_label");
-      linkText.textContent = "View case study";
+      linkText.textContent = "View Case Study";
       linkLabel.appendChild(linkText);
       var arrow = document.createElement("span");
       arrow.setAttribute("aria-hidden", "true");
       arrow.textContent = " →";
       linkLabel.appendChild(arrow);
-      item.appendChild(linkLabel);
+      card.appendChild(linkLabel);
 
-      container.appendChild(item);
+      container.appendChild(card);
 
       // setLanguage's own i18n pass runs once at load, against a NodeList
       // captured before this node existed, so it never sees it — apply
