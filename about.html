@@ -610,16 +610,30 @@
       padding: clamp(1.5rem, 4vw, 2rem) 1.5rem 0;
     }
     .hero-copy {
-      margin: 0 0 1.1rem;
-      font-size: 1.03rem;
+      margin: 0 0 0.9rem;
+      font-size: 0.98rem;
       color: var(--color-text-secondary);
       text-align: left;
     }
     .hero-copy:last-of-type {
       margin-bottom: 0;
     }
+    .about-focus {
+      margin: 0 0 1.25rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+    .about-aside {
+      margin: 0.9rem 0 0;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      opacity: 0.75;
+    }
     .skills-block {
-      margin-top: 1.75rem;
+      margin-top: 2.25rem;
       text-align: left;
     }
     .skills-block h3 {
@@ -643,64 +657,90 @@
       border-radius: 999px;
       padding: 0.4rem 0.9rem;
     }
+    /* Two-tier text treatment, not boxes — industries are supporting
+       metadata (like the credentials_line under the name above), not a
+       second grid competing with Practice Areas for attention. The 6
+       roles matching the target-role list stay visible; the rest sit
+       behind a disclosure so breadth doesn't dominate the page. */
     .industries-block {
-      margin-top: 1.75rem;
+      margin-top: 2rem;
       text-align: left;
     }
     .industries-block h3 {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
       margin-bottom: 0.6rem;
     }
-    /* Bordered cards, not pills — a distinct shape from Skills right above
-       it, so "what I know" and "where I've applied it" read as two
-       separate, scannable groups rather than blurring into one list. */
-    .industries-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
-      gap: 0.6rem;
-    }
-    .industry-card {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      line-height: 1.25;
-      font-size: 0.85rem;
+    .industries-primary {
+      margin: 0;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--color-text);
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: 10px;
-      padding: 0.6rem 0.5rem;
+      line-height: 1.6;
     }
-    .credentials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.75rem;
+    .industries-more {
+      margin-top: 0.5rem;
+    }
+    .industries-more summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      list-style: none;
+      padding: 0.2rem 0;
+    }
+    .industries-more summary::-webkit-details-marker {
+      display: none;
+    }
+    .industries-more summary::before {
+      content: "+";
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+    .industries-more[open] summary::before {
+      content: "\2013";
+    }
+    .industries-more summary:hover,
+    .industries-more summary:focus-visible {
+      color: var(--color-text);
+    }
+    .industries-secondary {
+      margin: 0.6rem 0 0;
+      font-size: 0.88rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    /* Education + Certifications share one heading and read as plain
+       text lines, not a bordered two-panel grid — pushed further down
+       with extra margin so it registers as a footnote, not a feature. */
+    .credentials-block {
+      margin-top: 2.75rem;
       text-align: left;
     }
-    .credentials-group h3 {
-      font-size: 0.82rem;
+    .credentials-block h3 {
+      font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
-    .credentials-group ul {
-      margin: 0;
-      padding-left: 1.1rem;
-    }
-    .credentials-group li {
-      font-size: 0.92rem;
+    .credentials-line {
+      margin: 0 0 0.35rem;
+      font-size: 0.85rem;
       color: var(--color-text-secondary);
-      margin-bottom: 0.3rem;
+      line-height: 1.6;
     }
-    .credentials-group li:last-child {
+    .credentials-line:last-child {
       margin-bottom: 0;
+    }
+    .credentials-line strong {
+      color: var(--color-text);
+      font-weight: 600;
     }
     .hero-actions {
       display: flex;
@@ -1105,20 +1145,24 @@
       </div>
 
       <div class="hero-content">
+        <p class="about-focus" data-i18n="about_focus">
+          I solve complex product problems in regulated and enterprise environments—turning
+          ambitious technology into products people trust.
+        </p>
         <p class="hero-copy" data-i18n="about_p1">
-          I turn complex technology into clear, useful products people can trust. My
-          background spans product design, product management, and user research—from senior
-          IC to director across startups, SaaS, enterprise, and mission-driven organizations.
+          My background spans product design, product management, and user research—from senior
+          IC to director, across startups, SaaS, enterprise, and mission-driven organizations.
         </p>
         <p class="hero-copy" data-i18n="about_p2">
-          Today, I focus on AI products, agents, and automation. I love working with
-          engineers to turn ambitious ideas into thoughtful experiences. Based in South
-          Florida, I'm also learning Finnish and always open to a good conversation about
-          what's next.
+          Today, I focus on AI products, agents, and automation—partnering closely with
+          engineering to turn ambitious ideas into thoughtful, trustworthy experiences.
+        </p>
+        <p class="about-aside" data-i18n="about_aside">
+          Based in South Florida. Currently learning Finnish.
         </p>
 
         <div class="skills-block">
-          <h3 data-i18n="skills_label">Skills</h3>
+          <h3 data-i18n="skills_label">Practice Areas</h3>
           <div class="skills-pills">
             <span class="skill-pill" data-i18n="skill_product_strategy">Product Strategy</span>
             <span class="skill-pill" data-i18n="skill_product_design">Product Design</span>
@@ -1131,48 +1175,32 @@
         </div>
 
         <div class="industries-block">
-          <h3 data-i18n="industries_label">Industries</h3>
-          <div class="industries-grid">
-            <span class="industry-card">AI &amp; Emerging Tech</span>
-            <span class="industry-card">Enterprise Software</span>
-            <span class="industry-card">Cybersecurity</span>
-            <span class="industry-card">Financial Services</span>
-            <span class="industry-card">Government</span>
-            <span class="industry-card">Healthcare</span>
-            <span class="industry-card">Education</span>
-            <span class="industry-card">Commerce</span>
-            <span class="industry-card">Data &amp; Analytics</span>
-            <span class="industry-card">Cloud &amp; Infrastructure</span>
-            <span class="industry-card">Manufacturing</span>
-            <span class="industry-card">Transportation</span>
-            <span class="industry-card">Energy</span>
-            <span class="industry-card">Real Estate</span>
-            <span class="industry-card">Media</span>
-            <span class="industry-card">Consumer</span>
-            <span class="industry-card">Telecommunications</span>
-            <span class="industry-card">Agriculture</span>
-            <span class="industry-card">Nonprofit</span>
-            <span class="industry-card">Legal &amp; Professional Services</span>
-          </div>
+          <h3 data-i18n="industries_label">Industry Experience</h3>
+          <p class="industries-primary">
+            AI &amp; Emerging Tech &middot; Enterprise Software &middot; Cybersecurity &middot; Financial Services &middot; Government &middot; Healthcare
+          </p>
+          <details class="industries-more">
+            <summary data-i18n="industries_more_label">More industries</summary>
+            <p class="industries-secondary">
+              Education &middot; Commerce &middot; Data &amp; Analytics &middot; Cloud &amp; Infrastructure &middot; Manufacturing &middot; Transportation &middot; Energy &middot; Real Estate &middot; Media &middot; Consumer &middot; Telecommunications &middot; Agriculture &middot; Nonprofit &middot; Legal &amp; Professional Services
+            </p>
+          </details>
         </div>
 
-        <div class="credentials-grid">
-          <div class="credentials-group">
-            <h3 data-i18n="credentials_education_label">Education</h3>
-            <ul>
-              <li data-i18n="credential_bfa">BFA, Graphic Design</li>
-              <li data-i18n="credential_msit">M.S., Information Technology</li>
-            </ul>
-          </div>
-          <div class="credentials-group">
-            <h3 data-i18n="credentials_certifications_label">Certifications</h3>
-            <ul>
-              <li data-i18n="credential_cspo">Certified Scrum Product Owner (CSPO)</li>
-              <li data-i18n="credential_ai1">Applied AI</li>
-              <li data-i18n="credential_ai2">Vibe Coding with AI</li>
-              <li data-i18n="credential_ai3">Building AI Agents &amp; Workflows</li>
-            </ul>
-          </div>
+        <div class="credentials-block">
+          <h3 data-i18n="credentials_label">Credentials</h3>
+          <p class="credentials-line">
+            <strong data-i18n="credentials_education_label">Education</strong> &mdash;
+            <span data-i18n="credential_bfa">BFA, Graphic Design</span> &middot;
+            <span data-i18n="credential_msit">M.S., Information Technology</span>
+          </p>
+          <p class="credentials-line">
+            <strong data-i18n="credentials_certifications_label">Certifications</strong> &mdash;
+            <span data-i18n="credential_cspo">Certified Scrum Product Owner (CSPO)</span> &middot;
+            <span data-i18n="credential_ai1">Applied AI</span> &middot;
+            <span data-i18n="credential_ai2">Vibe Coding with AI</span> &middot;
+            <span data-i18n="credential_ai3">Building AI Agents &amp; Workflows</span>
+          </p>
         </div>
       </div>
     </section>
@@ -1223,17 +1251,21 @@
         nav_signout: "Sign out",
         about_h1: "Hi, I'm Maya.",
         about_title: "AI Product & Design Leader",
+        about_focus:
+          "I solve complex product problems in regulated and enterprise environments — turning ambitious technology into products people trust.",
         about_p1:
-          "I turn complex technology into clear, useful products people can trust. My background spans product design, product management, and user research—from senior IC to director across startups, SaaS, enterprise, and mission-driven organizations.",
+          "My background spans product design, product management, and user research — from senior IC to director, across startups, SaaS, enterprise, and mission-driven organizations.",
         about_p2:
-          "Today, I focus on AI products, agents, and automation. I love working with engineers to turn ambitious ideas into thoughtful experiences. Based in South Florida, I'm also learning Finnish and always open to a good conversation about what's next.",
+          "Today, I focus on AI products, agents, and automation — partnering closely with engineering to turn ambitious ideas into thoughtful, trustworthy experiences.",
+        about_aside: "Based in South Florida. Currently learning Finnish.",
         contact_book_call: "Book a call",
         contact_email: "Email",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "South Florida, USA · U.S. Citizen · Public Trust Clearance",
-        skills_label: "Skills",
+        skills_label: "Practice Areas",
 
-        industries_label: "Industries",
+        industries_label: "Industry Experience",
+        industries_more_label: "More industries",
         skill_product_strategy: "Product Strategy",
         skill_product_design: "Product Design",
         skill_product_management: "Product Management",
@@ -1241,6 +1273,7 @@
         skill_human_ai: "Human-AI Interaction",
         skill_ai_agents: "AI Agents & Automation",
         skill_enterprise_ux: "Enterprise UX",
+        credentials_label: "Credentials",
         credentials_education_label: "Education",
         credential_bfa: "BFA, Graphic Design",
         credential_msit: "M.S., Information Technology",
@@ -1265,17 +1298,21 @@
         nav_signout: "Cerrar sesión",
         about_h1: "Hola, soy Maya.",
         about_title: "Líder de Producto y Diseño de IA",
+        about_focus:
+          "Resuelvo problemas de producto complejos en entornos regulados y empresariales, convirtiendo tecnología ambiciosa en productos en los que las personas confían.",
         about_p1:
-          "Convierto tecnología compleja en productos claros y útiles en los que las personas pueden confiar. Mi trayectoria abarca el diseño de producto, la gestión de producto y la investigación de usuarios, desde colaboradora individual senior hasta directora, en startups, empresas SaaS, grandes organizaciones y entidades con una misión clara.",
+          "Mi trayectoria abarca el diseño de producto, la gestión de producto y la investigación de usuarios — desde colaboradora individual senior hasta directora, en startups, empresas SaaS, grandes organizaciones y entidades con una misión clara.",
         about_p2:
-          "Hoy me enfoco en productos de IA, agentes y automatización. Me encanta trabajar con ingenieros para convertir ideas ambiciosas en experiencias bien pensadas. Con base en el sur de Florida, también estoy aprendiendo finlandés y siempre estoy abierta a una buena conversación sobre lo que viene.",
+          "Hoy me enfoco en productos de IA, agentes y automatización, trabajando de cerca con ingeniería para convertir ideas ambiciosas en experiencias bien pensadas y confiables.",
+        about_aside: "Con base en el sur de Florida. Actualmente aprendiendo finlandés.",
         contact_book_call: "Agendar una llamada",
         contact_email: "Correo",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sur de Florida, EE. UU. · Ciudadana estadounidense · Autorización Public Trust",
-        skills_label: "Habilidades",
+        skills_label: "Áreas de especialización",
 
-        industries_label: "Industrias",
+        industries_label: "Experiencia sectorial",
+        industries_more_label: "Más sectores",
         skill_product_strategy: "Estrategia de producto",
         skill_product_design: "Diseño de producto",
         skill_product_management: "Gestión de producto",
@@ -1283,6 +1320,7 @@
         skill_human_ai: "Interacción humano-IA",
         skill_ai_agents: "Agentes de IA y automatización",
         skill_enterprise_ux: "UX empresarial",
+        credentials_label: "Credenciales",
         credentials_education_label: "Educación",
         credential_bfa: "Licenciatura en Bellas Artes (BFA), Diseño Gráfico",
         credential_msit: "Maestría en Ciencias, Tecnología de la Información",
@@ -1307,17 +1345,21 @@
         nav_signout: "Kirjaudu ulos",
         about_h1: "Hei, olen Maya.",
         about_title: "AI-tuote- ja designjohtaja",
+        about_focus:
+          "Ratkaisen monimutkaisia tuoteongelmia säännellyissä ja yritysympäristöissä — muutan kunnianhimoisen teknologian tuotteiksi, joihin ihmiset luottavat.",
         about_p1:
-          "Muutan monimutkaisen teknologian selkeiksi, hyödyllisiksi tuotteiksi, joihin ihmiset voivat luottaa. Taustani kattaa tuotesuunnittelun, tuotehallinnan ja käyttäjätutkimuksen — vanhemmasta asiantuntijasta johtajaksi startupeissa, SaaS-yrityksissä, suurissa organisaatioissa ja missiovetoisissa organisaatioissa.",
+          "Taustani kattaa tuotesuunnittelun, tuotehallinnan ja käyttäjätutkimuksen — vanhemmasta asiantuntijasta johtajaksi startupeissa, SaaS-yrityksissä, suurissa organisaatioissa ja missiovetoisissa organisaatioissa.",
         about_p2:
-          "Nykyään keskityn tekoälytuotteisiin, agentteihin ja automaatioon. Nautin insinöörien kanssa työskentelystä kunnianhimoisten ideoiden muuttamiseksi harkituiksi kokemuksiksi. Asun Etelä-Floridassa, opiskelen myös suomea ja olen aina avoin hyvälle keskustelulle siitä, mitä seuraavaksi on tulossa.",
+          "Nykyään keskityn tekoälytuotteisiin, agentteihin ja automaatioon, tehden tiivistä yhteistyötä insinöörien kanssa kunnianhimoisten ideoiden muuttamiseksi harkituiksi ja luotettaviksi kokemuksiksi.",
+        about_aside: "Asun Etelä-Floridassa. Opiskelen parhaillaan suomea.",
         contact_book_call: "Varaa puhelu",
         contact_email: "Sähköposti",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Etelä-Florida, Yhdysvallat · Yhdysvaltain kansalainen · Public Trust -turvallisuusselvitys",
-        skills_label: "Taidot",
+        skills_label: "Osaamisalueet",
 
-        industries_label: "Toimialat",
+        industries_label: "Toimialakokemus",
+        industries_more_label: "Lisää toimialoja",
         skill_product_strategy: "Tuotestrategia",
         skill_product_design: "Tuotesuunnittelu",
         skill_product_management: "Tuotehallinta",
@@ -1325,6 +1367,7 @@
         skill_human_ai: "Ihmisen ja tekoälyn vuorovaikutus",
         skill_ai_agents: "Tekoälyagentit ja automaatio",
         skill_enterprise_ux: "Yritys-UX",
+        credentials_label: "Pätevyys",
         credentials_education_label: "Koulutus",
         credential_bfa: "BFA, graafinen suunnittelu",
         credential_msit: "Tietotekniikan maisteri (M.S.)",
@@ -1349,17 +1392,21 @@
         nav_signout: "Déconnexion",
         about_h1: "Bonjour, je suis Maya.",
         about_title: "Responsable Produit & Design IA",
+        about_focus:
+          "Je résous des problèmes produit complexes dans des environnements réglementés et grandes entreprises — je transforme des technologies ambitieuses en produits fiables.",
         about_p1:
-          "Je transforme des technologies complexes en produits clairs et utiles, dignes de confiance. Mon parcours couvre le design produit, la gestion de produit et la recherche utilisateur — de collaboratrice individuelle senior à directrice, dans des startups, des entreprises SaaS, de grandes organisations et des structures à mission.",
+          "Mon parcours couvre le design produit, la gestion produit et la recherche utilisateur — d'IC senior à directrice, au sein de startups, d'entreprises SaaS, de grandes organisations et d'organisations à mission.",
         about_p2:
-          "Aujourd'hui, je me concentre sur les produits d'IA, les agents et l'automatisation. J'aime travailler avec des ingénieurs pour transformer des idées ambitieuses en expériences bien pensées. Basée dans le sud de la Floride, j'apprends aussi le finnois et je suis toujours ouverte à une bonne conversation sur ce qui s'en vient.",
+          "Aujourd'hui, je me concentre sur les produits IA, les agents et l'automatisation, en collaborant étroitement avec les équipes d'ingénierie pour transformer des idées ambitieuses en expériences réfléchies et fiables.",
+        about_aside: "Basée dans le sud de la Floride. J'apprends actuellement le finnois.",
         contact_book_call: "Réserver un appel",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sud de la Floride, États-Unis · Citoyenne américaine · Habilitation Public Trust",
-        skills_label: "Compétences",
+        skills_label: "Domaines d'expertise",
 
-        industries_label: "Secteurs",
+        industries_label: "Expérience sectorielle",
+        industries_more_label: "Autres secteurs",
         skill_product_strategy: "Stratégie produit",
         skill_product_design: "Design produit",
         skill_product_management: "Gestion de produit",
@@ -1367,6 +1414,7 @@
         skill_human_ai: "Interaction humain-IA",
         skill_ai_agents: "Agents IA et automatisation",
         skill_enterprise_ux: "UX d'entreprise",
+        credentials_label: "Qualifications",
         credentials_education_label: "Formation",
         credential_bfa: "Licence en beaux-arts (BFA), Design graphique",
         credential_msit: "Master en sciences, Technologies de l'information",
@@ -1391,17 +1439,21 @@
         nav_signout: "Abmelden",
         about_h1: "Hallo, ich bin Maya.",
         about_title: "KI-Produkt- & Designleiterin",
+        about_focus:
+          "Ich löse komplexe Produktprobleme in regulierten und unternehmensweiten Umgebungen — und mache aus ambitionierter Technologie Produkte, denen Menschen vertrauen.",
         about_p1:
-          "Ich verwandle komplexe Technologie in klare, nützliche Produkte, denen Menschen vertrauen können. Mein Hintergrund umfasst Produktdesign, Produktmanagement und Nutzerforschung – von leitender Einzelbeitragenden bis zur Direktorin, in Startups, SaaS-Unternehmen, Konzernen und missionsgetriebenen Organisationen.",
+          "Mein Werdegang umfasst Produktdesign, Produktmanagement und Nutzerforschung — von Senior IC bis Director, in Startups, SaaS-Unternehmen, Großunternehmen und missionsgetriebenen Organisationen.",
         about_p2:
-          "Heute konzentriere ich mich auf KI-Produkte, Agenten und Automatisierung. Ich arbeite gerne mit Ingenieuren zusammen, um ehrgeizige Ideen in durchdachte Erlebnisse zu verwandeln. Ich lebe in Südflorida, lerne außerdem Finnisch und bin immer offen für ein gutes Gespräch darüber, was als Nächstes kommt.",
+          "Heute konzentriere ich mich auf KI-Produkte, Agenten und Automatisierung — in enger Zusammenarbeit mit Engineering-Teams, um ambitionierte Ideen in durchdachte, vertrauenswürdige Erlebnisse zu verwandeln.",
+        about_aside: "Wohnhaft in South Florida. Lerne derzeit Finnisch.",
         contact_book_call: "Anruf vereinbaren",
         contact_email: "E-Mail",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Südflorida, USA · US-Staatsbürgerin · Public-Trust-Sicherheitsfreigabe",
-        skills_label: "Fähigkeiten",
+        skills_label: "Kompetenzbereiche",
 
-        industries_label: "Branchen",
+        industries_label: "Branchenerfahrung",
+        industries_more_label: "Weitere Branchen",
         skill_product_strategy: "Produktstrategie",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktmanagement",
@@ -1409,6 +1461,7 @@
         skill_human_ai: "Mensch-KI-Interaktion",
         skill_ai_agents: "KI-Agenten & Automatisierung",
         skill_enterprise_ux: "Enterprise-UX",
+        credentials_label: "Qualifikationen",
         credentials_education_label: "Ausbildung",
         credential_bfa: "BFA, Grafikdesign",
         credential_msit: "M.Sc., Informationstechnologie",
@@ -1433,17 +1486,21 @@
         nav_signout: "Esci",
         about_h1: "Ciao, sono Maya.",
         about_title: "Leader di Prodotto e Design IA",
+        about_focus:
+          "Risolvo problemi di prodotto complessi in ambienti regolamentati e aziendali — trasformando tecnologie ambiziose in prodotti di cui le persone si fidano.",
         about_p1:
-          "Trasformo tecnologie complesse in prodotti chiari e utili di cui le persone possono fidarsi. Il mio percorso spazia tra design di prodotto, product management e ricerca utenti — da senior individual contributor a direttrice, in startup, aziende SaaS, grandi organizzazioni ed enti orientati a una missione.",
+          "Il mio percorso spazia tra design di prodotto, product management e ricerca utenti — da IC senior a director, in startup, aziende SaaS, grandi organizzazioni e organizzazioni orientate a una missione.",
         about_p2:
-          "Oggi mi concentro su prodotti IA, agenti e automazione. Amo lavorare con gli ingegneri per trasformare idee ambiziose in esperienze curate. Con base nel sud della Florida, sto anche imparando il finlandese e sono sempre aperta a una buona conversazione su cosa viene dopo.",
+          "Oggi mi concentro su prodotti IA, agenti e automazione, lavorando a stretto contatto con l'ingegneria per trasformare idee ambiziose in esperienze curate e affidabili.",
+        about_aside: "Con base nel sud della Florida. Attualmente sto imparando il finlandese.",
         contact_book_call: "Prenota una chiamata",
         contact_email: "Email",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Florida del Sud, USA · Cittadina statunitense · Nulla osta Public Trust",
-        skills_label: "Competenze",
+        skills_label: "Aree di competenza",
 
-        industries_label: "Settori",
+        industries_label: "Esperienza settoriale",
+        industries_more_label: "Altri settori",
         skill_product_strategy: "Strategia di prodotto",
         skill_product_design: "Design di prodotto",
         skill_product_management: "Product management",
@@ -1451,6 +1508,7 @@
         skill_human_ai: "Interazione uomo-IA",
         skill_ai_agents: "Agenti IA e automazione",
         skill_enterprise_ux: "UX enterprise",
+        credentials_label: "Qualifiche",
         credentials_education_label: "Formazione",
         credential_bfa: "BFA, Graphic Design",
         credential_msit: "Laurea magistrale, Tecnologia dell'informazione",
@@ -1475,17 +1533,21 @@
         nav_signout: "Sair",
         about_h1: "Olá, eu sou a Maya.",
         about_title: "Líder de Produto e Design de IA",
+        about_focus:
+          "Resolvo problemas complexos de produto em ambientes regulados e corporativos — transformando tecnologia ambiciosa em produtos em que as pessoas confiam.",
         about_p1:
-          "Transformo tecnologia complexa em produtos claros e úteis em que as pessoas podem confiar. Minha trajetória abrange design de produto, gestão de produto e pesquisa de usuários — de colaboradora sênior a diretora, em startups, empresas SaaS, grandes organizações e entidades com propósito.",
+          "Minha trajetória abrange design de produto, gestão de produto e pesquisa de usuários — de IC sênior a diretora, em startups, empresas SaaS, grandes organizações e organizações com propósito.",
         about_p2:
-          "Hoje, meu foco é em produtos de IA, agentes e automação. Adoro trabalhar com engenheiros para transformar ideias ambiciosas em experiências bem pensadas. Baseada no sul da Flórida, também estou aprendendo finlandês e estou sempre aberta a uma boa conversa sobre o que vem a seguir.",
+          "Hoje, meu foco está em produtos de IA, agentes e automação, trabalhando de perto com engenharia para transformar ideias ambiciosas em experiências cuidadosas e confiáveis.",
+        about_aside: "Baseada no sul da Flórida. Atualmente aprendendo finlandês.",
         contact_book_call: "Agendar uma chamada",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sul da Flórida, EUA · Cidadã americana · Credencial Public Trust",
-        skills_label: "Habilidades",
+        skills_label: "Áreas de atuação",
 
-        industries_label: "Indústrias",
+        industries_label: "Experiência setorial",
+        industries_more_label: "Mais setores",
         skill_product_strategy: "Estratégia de produto",
         skill_product_design: "Design de produto",
         skill_product_management: "Gestão de produto",
@@ -1493,6 +1555,7 @@
         skill_human_ai: "Interação humano-IA",
         skill_ai_agents: "Agentes de IA e automação",
         skill_enterprise_ux: "UX empresarial",
+        credentials_label: "Credenciais",
         credentials_education_label: "Formação",
         credential_bfa: "Bacharelado em Belas Artes (BFA), Design Gráfico",
         credential_msit: "Mestrado em Ciências, Tecnologia da Informação",
@@ -1517,17 +1580,21 @@
         nav_signout: "Uitloggen",
         about_h1: "Hoi, ik ben Maya.",
         about_title: "AI Product- en Designleider",
+        about_focus:
+          "Ik los complexe productvraagstukken op in gereguleerde en zakelijke omgevingen — en maak van ambitieuze technologie producten die mensen vertrouwen.",
         about_p1:
-          "Ik zet complexe technologie om in heldere, nuttige producten die mensen kunnen vertrouwen. Mijn achtergrond omvat productdesign, productmanagement en gebruikersonderzoek — van senior individuele bijdrager tot directeur, bij startups, SaaS-bedrijven, grote organisaties en missiegedreven organisaties.",
+          "Mijn achtergrond omvat productdesign, productmanagement en gebruikersonderzoek — van senior IC tot director, bij startups, SaaS-bedrijven, grote organisaties en missiegedreven organisaties.",
         about_p2:
-          "Vandaag richt ik me op AI-producten, agents en automatisering. Ik werk graag samen met engineers om ambitieuze ideeën om te zetten in doordachte ervaringen. Ik woon in Zuid-Florida, leer ook Fins en sta altijd open voor een goed gesprek over wat er hierna komt.",
+          "Vandaag richt ik me op AI-producten, agents en automatisering, in nauwe samenwerking met engineering om ambitieuze ideeën om te zetten in doordachte, betrouwbare ervaringen.",
+        about_aside: "Gevestigd in Zuid-Florida. Leer momenteel Fins.",
         contact_book_call: "Plan een gesprek",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Zuid-Florida, VS · Amerikaans staatsburger · Public Trust-veiligheidsmachtiging",
-        skills_label: "Vaardigheden",
+        skills_label: "Expertisegebieden",
 
-        industries_label: "Sectoren",
+        industries_label: "Sectorervaring",
+        industries_more_label: "Meer sectoren",
         skill_product_strategy: "Productstrategie",
         skill_product_design: "Productdesign",
         skill_product_management: "Productmanagement",
@@ -1535,6 +1602,7 @@
         skill_human_ai: "Mens-AI-interactie",
         skill_ai_agents: "AI-agents & automatisering",
         skill_enterprise_ux: "Enterprise UX",
+        credentials_label: "Kwalificaties",
         credentials_education_label: "Opleiding",
         credential_bfa: "BFA, Grafisch Ontwerp",
         credential_msit: "MSc, Informatietechnologie",
@@ -1559,17 +1627,21 @@
         nav_signout: "Wyloguj się",
         about_h1: "Cześć, jestem Maya.",
         about_title: "Liderka Produktu i Designu AI",
+        about_focus:
+          "Rozwiązuję złożone problemy produktowe w regulowanych środowiskach korporacyjnych — zamieniając ambitną technologię w produkty, którym ludzie ufają.",
         about_p1:
-          "Zamieniam skomplikowaną technologię w przejrzyste, użyteczne produkty, którym ludzie mogą zaufać. Moje doświadczenie obejmuje design produktu, zarządzanie produktem i badania użytkowników — od starszej specjalistki po dyrektorkę, w startupach, firmach SaaS, dużych organizacjach i organizacjach misyjnych.",
+          "Moje doświadczenie obejmuje projektowanie produktu, zarządzanie produktem i badania użytkowników — od starszego specjalisty po dyrektora, w startupach, firmach SaaS, dużych organizacjach i organizacjach misyjnych.",
         about_p2:
-          "Obecnie koncentruję się na produktach AI, agentach i automatyzacji. Uwielbiam współpracować z inżynierami, aby zamieniać ambitne pomysły w przemyślane doświadczenia. Mieszkam na południu Florydy, uczę się też fińskiego i zawsze jestem otwarta na dobrą rozmowę o tym, co dalej.",
+          "Obecnie koncentruję się na produktach AI, agentach i automatyzacji, ściśle współpracując z inżynierią, aby zamieniać ambitne pomysły w przemyślane i godne zaufania doświadczenia.",
+        about_aside: "Mieszkam na południu Florydy. Obecnie uczę się fińskiego.",
         contact_book_call: "Umów rozmowę",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Południowa Floryda, USA · Obywatelka USA · Poświadczenie Public Trust",
-        skills_label: "Umiejętności",
+        skills_label: "Obszary kompetencji",
 
-        industries_label: "Branże",
+        industries_label: "Doświadczenie branżowe",
+        industries_more_label: "Więcej branż",
         skill_product_strategy: "Strategia produktu",
         skill_product_design: "Design produktu",
         skill_product_management: "Zarządzanie produktem",
@@ -1577,6 +1649,7 @@
         skill_human_ai: "Interakcja człowiek-AI",
         skill_ai_agents: "Agenci AI i automatyzacja",
         skill_enterprise_ux: "UX dla przedsiębiorstw",
+        credentials_label: "Kwalifikacje",
         credentials_education_label: "Wykształcenie",
         credential_bfa: "BFA, Grafika",
         credential_msit: "Magister nauk, Technologia informacyjna",
@@ -1601,17 +1674,21 @@
         nav_signout: "Logga ut",
         about_h1: "Hej, jag är Maya.",
         about_title: "AI-produkt- och designledare",
+        about_focus:
+          "Jag löser komplexa produktproblem i reglerade och företagsmiljöer — och omvandlar ambitiös teknik till produkter som människor litar på.",
         about_p1:
-          "Jag omvandlar komplex teknik till tydliga, användbara produkter som människor kan lita på. Min bakgrund spänner över produktdesign, produktledning och användarforskning — från senior individuell bidragsgivare till direktör, inom startups, SaaS-bolag, stora organisationer och missionsdrivna organisationer.",
+          "Min bakgrund spänner över produktdesign, produktledning och användarforskning — från senior IC till director, inom startups, SaaS-bolag, stora organisationer och missionsdrivna organisationer.",
         about_p2:
-          "Idag fokuserar jag på AI-produkter, agenter och automation. Jag älskar att arbeta med ingenjörer för att förvandla ambitiösa idéer till genomtänkta upplevelser. Baserad i södra Florida håller jag också på att lära mig finska och är alltid öppen för ett bra samtal om vad som väntar härnäst.",
+          "Idag fokuserar jag på AI-produkter, agenter och automation, i nära samarbete med ingenjörsteam för att omvandla ambitiösa idéer till genomtänkta, pålitliga upplevelser.",
+        about_aside: "Baserad i södra Florida. Lär mig för närvarande finska.",
         contact_book_call: "Boka ett samtal",
         contact_email: "E-post",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Södra Florida, USA · Amerikansk medborgare · Public Trust-säkerhetsgodkännande",
-        skills_label: "Kompetenser",
+        skills_label: "Kompetensområden",
 
-        industries_label: "Branscher",
+        industries_label: "Brancherfarenhet",
+        industries_more_label: "Fler branscher",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledning",
@@ -1619,6 +1696,7 @@
         skill_human_ai: "Människa-AI-interaktion",
         skill_ai_agents: "AI-agenter & automation",
         skill_enterprise_ux: "Enterprise-UX",
+        credentials_label: "Kvalifikationer",
         credentials_education_label: "Utbildning",
         credential_bfa: "BFA, Grafisk design",
         credential_msit: "M.Sc., Informationsteknik",
@@ -1643,17 +1721,21 @@
         nav_signout: "Log ud",
         about_h1: "Hej, jeg er Maya.",
         about_title: "AI Produkt- og Designleder",
+        about_focus:
+          "Jeg løser komplekse produktproblemer i regulerede og virksomhedsmiljøer — og omdanner ambitiøs teknologi til produkter, folk stoler på.",
         about_p1:
-          "Jeg omdanner kompleks teknologi til klare, nyttige produkter, som folk kan stole på. Min baggrund spænder over produktdesign, produktledelse og brugerundersøgelser — fra senior individuel bidragyder til direktør, i startups, SaaS-virksomheder, store organisationer og missionsdrevne organisationer.",
+          "Min baggrund spænder over produktdesign, produktledelse og brugerundersøgelser — fra senior IC til director, i startups, SaaS-virksomheder, store organisationer og missionsdrevne organisationer.",
         about_p2:
-          "I dag fokuserer jeg på AI-produkter, agenter og automatisering. Jeg elsker at arbejde sammen med ingeniører om at forvandle ambitiøse idéer til gennemtænkte oplevelser. Jeg bor i Sydflorida, lærer også finsk og er altid åben for en god samtale om, hvad der kommer næst.",
+          "I dag fokuserer jeg på AI-produkter, agenter og automatisering, i tæt samarbejde med ingeniørteams for at omdanne ambitiøse idéer til gennemtænkte og troværdige oplevelser.",
+        about_aside: "Baseret i det sydlige Florida. Lærer i øjeblikket finsk.",
         contact_book_call: "Book et opkald",
         contact_email: "E-mail",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sydflorida, USA · Amerikansk statsborger · Public Trust-sikkerhedsgodkendelse",
-        skills_label: "Kompetencer",
+        skills_label: "Kompetenceområder",
 
-        industries_label: "Brancher",
+        industries_label: "Brancheerfaring",
+        industries_more_label: "Flere brancher",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
@@ -1661,6 +1743,7 @@
         skill_human_ai: "Menneske-AI-interaktion",
         skill_ai_agents: "AI-agenter & automatisering",
         skill_enterprise_ux: "Enterprise-UX",
+        credentials_label: "Kvalifikationer",
         credentials_education_label: "Uddannelse",
         credential_bfa: "BFA, Grafisk design",
         credential_msit: "M.Sc., Informationsteknologi",
@@ -1685,17 +1768,21 @@
         nav_signout: "Logg ut",
         about_h1: "Hei, jeg er Maya.",
         about_title: "AI-produkt- og designleder",
+        about_focus:
+          "Jeg løser komplekse produktproblemer i regulerte og virksomhetsmiljøer — og omgjør ambisiøs teknologi til produkter folk stoler på.",
         about_p1:
-          "Jeg omdanner kompleks teknologi til klare, nyttige produkter folk kan stole på. Bakgrunnen min spenner over produktdesign, produktledelse og brukerforskning – fra senior individuell bidragsyter til direktør, i startups, SaaS-selskaper, store organisasjoner og misjonsdrevne organisasjoner.",
+          "Bakgrunnen min spenner over produktdesign, produktledelse og brukerforskning — fra senior IC til director, i startups, SaaS-selskaper, store organisasjoner og misjonsdrevne organisasjoner.",
         about_p2:
-          "I dag fokuserer jeg på AI-produkter, agenter og automatisering. Jeg elsker å jobbe med ingeniører for å gjøre ambisiøse ideer om til gjennomtenkte opplevelser. Basert i Sør-Florida lærer jeg meg også finsk, og er alltid åpen for en god samtale om hva som kommer videre.",
+          "I dag fokuserer jeg på AI-produkter, agenter og automatisering, i tett samarbeid med ingeniørteam for å gjøre ambisiøse ideer om til gjennomtenkte og pålitelige opplevelser.",
+        about_aside: "Basert i Sør-Florida. Lærer for tiden finsk.",
         contact_book_call: "Book en samtale",
         contact_email: "E-post",
         contact_linkedin: "LinkedIn ↗",
         credentials_line: "Sør-Florida, USA · Amerikansk statsborger · Public Trust-sikkerhetsklarering",
-        skills_label: "Ferdigheter",
+        skills_label: "Kompetanseområder",
 
-        industries_label: "Bransjer",
+        industries_label: "Bransjeerfaring",
+        industries_more_label: "Flere bransjer",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
@@ -1703,6 +1790,7 @@
         skill_human_ai: "Menneske-AI-interaksjon",
         skill_ai_agents: "AI-agenter og automatisering",
         skill_enterprise_ux: "Enterprise-UX",
+        credentials_label: "Kvalifikasjoner",
         credentials_education_label: "Utdanning",
         credential_bfa: "BFA, grafisk design",
         credential_msit: "M.Sc., informasjonsteknologi",
