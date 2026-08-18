@@ -1116,7 +1116,7 @@
 
         <div id="lang-switcher" data-open="false">
           <button type="button" id="lang-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language: English">
-            <span class="globe" aria-hidden="true">🌐</span>
+            <span class="globe" id="lang-toggle-flag" aria-hidden="true">🌐</span>
             <span id="lang-toggle-label">EN</span>
             <span class="chevron" aria-hidden="true">▼</span>
           </button>
@@ -1827,6 +1827,7 @@
     const switcher = document.getElementById("lang-switcher");
     const toggle = document.getElementById("lang-toggle");
     const toggleLabel = document.getElementById("lang-toggle-label");
+    const toggleFlag = document.getElementById("lang-toggle-flag");
     const options = document.querySelectorAll("#lang-menu button");
     const i18nEls = document.querySelectorAll("[data-i18n]");
 
@@ -1863,6 +1864,8 @@
         if (t[key]) el.textContent = t[key];
       });
       toggleLabel.textContent = t.label;
+      const flagEl = document.querySelector(`#lang-menu button[data-lang="${lang}"] .flag`);
+      if (flagEl) toggleFlag.textContent = flagEl.textContent;
       toggle.setAttribute("aria-label", `Language: ${t.fullName}. Choose a different language`);
       document.documentElement.lang = lang;
       options.forEach((opt) => {
