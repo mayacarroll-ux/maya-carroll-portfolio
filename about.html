@@ -653,9 +653,10 @@
     }
     /* Two-tier text treatment, not boxes — industries are supporting
        metadata (like the credentials_line under the name above), not a
-       second grid competing with Practice Areas for attention. The 6
-       roles matching the target-role list stay visible; the rest sit
-       behind a disclosure so breadth doesn't dominate the page. */
+       second grid competing with Practice Areas for attention. Nothing
+       is hidden — the 6 target-role industries carry more type weight
+       and full brightness, the rest stay fully visible in quieter,
+       secondary-colored text below. */
     .industries-block {
       margin-top: 2rem;
       text-align: left;
@@ -669,45 +670,24 @@
     }
     .industries-primary {
       margin: 0;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--color-text);
-      line-height: 1.6;
+      line-height: 1.65;
     }
-    .industries-more {
-      margin-top: 0.5rem;
-    }
-    .industries-more summary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--color-text-secondary);
-      list-style: none;
-      padding: 0.2rem 0;
-    }
-    .industries-more summary::-webkit-details-marker {
-      display: none;
-    }
-    .industries-more summary::before {
-      content: "+";
+    .industries-primary strong {
       font-weight: 700;
-      color: var(--color-accent);
-    }
-    .industries-more[open] summary::before {
-      content: "\2013";
-    }
-    .industries-more summary:hover,
-    .industries-more summary:focus-visible {
-      color: var(--color-text);
     }
     .industries-secondary {
-      margin: 0.6rem 0 0;
-      font-size: 0.88rem;
+      margin: 0.7rem 0 0;
+      font-size: 0.85rem;
+      font-weight: 400;
       color: var(--color-text-secondary);
-      line-height: 1.6;
+      line-height: 1.65;
+    }
+    .industries-secondary strong {
+      font-weight: 600;
+      color: var(--color-text-secondary);
     }
     /* Education + Certifications share one heading and read as plain
        text lines, not a bordered two-panel grid — pushed further down
@@ -1167,14 +1147,13 @@
         <div class="industries-block">
           <h3 data-i18n="industries_label">Industry Experience</h3>
           <p class="industries-primary">
+            <strong data-i18n="industries_primary_label">Focus Industries</strong> &mdash;
             AI &amp; Emerging Tech &middot; Enterprise Software &middot; Cybersecurity &middot; Financial Services &middot; Government &middot; Healthcare
           </p>
-          <details class="industries-more">
-            <summary data-i18n="industries_more_label">More industries</summary>
-            <p class="industries-secondary">
-              Education &middot; Commerce &middot; Data &amp; Analytics &middot; Cloud &amp; Infrastructure &middot; Manufacturing &middot; Transportation &middot; Energy &middot; Real Estate &middot; Media &middot; Consumer &middot; Telecommunications &middot; Agriculture &middot; Nonprofit &middot; Legal &amp; Professional Services
-            </p>
-          </details>
+          <p class="industries-secondary">
+            <strong data-i18n="industries_secondary_label">Additional Experience</strong> &mdash;
+            Education &middot; Commerce &middot; Data &amp; Analytics &middot; Cloud &amp; Infrastructure &middot; Manufacturing &middot; Transportation &middot; Energy &middot; Real Estate &middot; Media &middot; Consumer &middot; Telecommunications &middot; Agriculture &middot; Nonprofit &middot; Legal &amp; Professional Services
+          </p>
         </div>
 
         <div class="credentials-block">
@@ -1254,7 +1233,8 @@
         skills_label: "Practice Areas",
 
         industries_label: "Industry Experience",
-        industries_more_label: "More industries",
+        industries_primary_label: "Focus Industries",
+        industries_secondary_label: "Additional Experience",
         skill_product_strategy: "Product Strategy",
         skill_product_design: "Product Design",
         skill_product_management: "Product Management",
@@ -1300,7 +1280,8 @@
         skills_label: "Áreas de especialización",
 
         industries_label: "Experiencia sectorial",
-        industries_more_label: "Más sectores",
+        industries_primary_label: "Industrias prioritarias",
+        industries_secondary_label: "Experiencia adicional",
         skill_product_strategy: "Estrategia de producto",
         skill_product_design: "Diseño de producto",
         skill_product_management: "Gestión de producto",
@@ -1346,7 +1327,8 @@
         skills_label: "Osaamisalueet",
 
         industries_label: "Toimialakokemus",
-        industries_more_label: "Lisää toimialoja",
+        industries_primary_label: "Keskeiset toimialat",
+        industries_secondary_label: "Muu kokemus",
         skill_product_strategy: "Tuotestrategia",
         skill_product_design: "Tuotesuunnittelu",
         skill_product_management: "Tuotehallinta",
@@ -1392,7 +1374,8 @@
         skills_label: "Domaines d'expertise",
 
         industries_label: "Expérience sectorielle",
-        industries_more_label: "Autres secteurs",
+        industries_primary_label: "Secteurs prioritaires",
+        industries_secondary_label: "Expérience complémentaire",
         skill_product_strategy: "Stratégie produit",
         skill_product_design: "Design produit",
         skill_product_management: "Gestion de produit",
@@ -1438,7 +1421,8 @@
         skills_label: "Kompetenzbereiche",
 
         industries_label: "Branchenerfahrung",
-        industries_more_label: "Weitere Branchen",
+        industries_primary_label: "Schwerpunktbranchen",
+        industries_secondary_label: "Weitere Erfahrung",
         skill_product_strategy: "Produktstrategie",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktmanagement",
@@ -1484,7 +1468,8 @@
         skills_label: "Aree di competenza",
 
         industries_label: "Esperienza settoriale",
-        industries_more_label: "Altri settori",
+        industries_primary_label: "Settori prioritari",
+        industries_secondary_label: "Esperienza aggiuntiva",
         skill_product_strategy: "Strategia di prodotto",
         skill_product_design: "Design di prodotto",
         skill_product_management: "Product management",
@@ -1530,7 +1515,8 @@
         skills_label: "Áreas de atuação",
 
         industries_label: "Experiência setorial",
-        industries_more_label: "Mais setores",
+        industries_primary_label: "Setores prioritários",
+        industries_secondary_label: "Experiência adicional",
         skill_product_strategy: "Estratégia de produto",
         skill_product_design: "Design de produto",
         skill_product_management: "Gestão de produto",
@@ -1576,7 +1562,8 @@
         skills_label: "Expertisegebieden",
 
         industries_label: "Sectorervaring",
-        industries_more_label: "Meer sectoren",
+        industries_primary_label: "Focussectoren",
+        industries_secondary_label: "Aanvullende ervaring",
         skill_product_strategy: "Productstrategie",
         skill_product_design: "Productdesign",
         skill_product_management: "Productmanagement",
@@ -1622,7 +1609,8 @@
         skills_label: "Obszary kompetencji",
 
         industries_label: "Doświadczenie branżowe",
-        industries_more_label: "Więcej branż",
+        industries_primary_label: "Branże priorytetowe",
+        industries_secondary_label: "Dodatkowe doświadczenie",
         skill_product_strategy: "Strategia produktu",
         skill_product_design: "Design produktu",
         skill_product_management: "Zarządzanie produktem",
@@ -1668,7 +1656,8 @@
         skills_label: "Kompetensområden",
 
         industries_label: "Brancherfarenhet",
-        industries_more_label: "Fler branscher",
+        industries_primary_label: "Prioriterade branscher",
+        industries_secondary_label: "Ytterligare erfarenhet",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledning",
@@ -1714,7 +1703,8 @@
         skills_label: "Kompetenceområder",
 
         industries_label: "Brancheerfaring",
-        industries_more_label: "Flere brancher",
+        industries_primary_label: "Prioriterede brancher",
+        industries_secondary_label: "Yderligere erfaring",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
@@ -1760,7 +1750,8 @@
         skills_label: "Kompetanseområder",
 
         industries_label: "Bransjeerfaring",
-        industries_more_label: "Flere bransjer",
+        industries_primary_label: "Prioriterte bransjer",
+        industries_secondary_label: "Ytterligere erfaring",
         skill_product_strategy: "Produktstrategi",
         skill_product_design: "Produktdesign",
         skill_product_management: "Produktledelse",
