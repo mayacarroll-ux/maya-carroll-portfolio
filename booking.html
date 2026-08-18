@@ -534,8 +534,12 @@
     }
 
     /* ==================== Booking page ==================== */
+    /* 1100px matches the .container standard used on index.html/work.html
+       for main content sections, so the heading here starts at the same
+       left edge as "Selected work" etc. elsewhere on the site — was a
+       one-off 1400px before, which sat further left than everywhere else. */
     #booking-hero {
-      max-width: 1400px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: clamp(2.5rem, 6vw, 4rem) 1.5rem clamp(1.5rem, 4vw, 2rem);
     }
@@ -575,8 +579,11 @@
       outline: 2px solid var(--focus-ring);
       outline-offset: 2px;
     }
+    /* Same 1100px standard as #booking-hero above, so the timeslot list's
+       left edge lines up with the heading above it instead of sitting in
+       its own independently-centered, narrower column. */
     #booking-body {
-      max-width: 46rem;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 0 1.5rem clamp(2.5rem, 6vw, 4rem);
     }
