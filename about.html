@@ -626,8 +626,20 @@
       color: var(--color-text);
       letter-spacing: -0.01em;
     }
+    /* Every content block below the hero is a distinct card — same
+       surface/border/radius language already used for buttons and
+       menus elsewhere on the site, just applied at section scale. */
+    .section-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .about-card {
+      margin-top: 1.75rem;
+    }
     .skills-block {
-      margin-top: 2.25rem;
+      margin-top: 1.5rem;
       text-align: left;
     }
     .skills-block h3 {
@@ -665,7 +677,7 @@
        reuses .hero-copy for body paragraphs so typography stays uniform
        with the bio above. */
     .collab-block {
-      margin-top: 2.25rem;
+      margin-top: 1.5rem;
       text-align: left;
     }
     .collab-block h3 {
@@ -676,7 +688,7 @@
       margin-bottom: 0.9rem;
     }
     .leadership-block {
-      margin-top: 2.25rem;
+      margin-top: 1.5rem;
       text-align: left;
     }
     .leadership-block h3 {
@@ -714,7 +726,7 @@
       color: var(--color-text-secondary);
     }
     .clients-block {
-      margin-top: 2.25rem;
+      margin-top: 1.5rem;
       text-align: left;
     }
     .clients-block h3 {
@@ -755,7 +767,7 @@
        genuinely are adopted tools/products, and should read one visual
        step quieter than a capability claim. */
     .fluency-block {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       text-align: left;
     }
     .fluency-block h3 {
@@ -779,7 +791,7 @@
        and full brightness, the rest stay fully visible in quieter,
        secondary-colored text below. */
     .industries-block {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       text-align: left;
     }
     .industries-block h3 {
@@ -814,7 +826,7 @@
        text lines, not a bordered two-panel grid — pushed further down
        with extra margin so it registers as a footnote, not a feature. */
     .credentials-block {
-      margin-top: 2.75rem;
+      margin-top: 1.5rem;
       text-align: left;
     }
     .credentials-block h3 {
@@ -1288,19 +1300,22 @@
       </div>
 
       <div class="hero-content">
-        <p class="about-focus" data-i18n="about_focus">
-          I solve complex product problems in regulated and enterprise environments—turning
-          ambitious technology into products people trust.
-        </p>
-        <p class="hero-copy" data-i18n="about_p1">
-          My background spans product design, product management, and user research—from senior
-          IC to director, across startups, SaaS, enterprise, and mission-driven organizations.
-        </p>
-        <p class="hero-copy" data-i18n="about_p2">
-          Today, I focus on AI products, agents, and automation—partnering closely with
-          engineering to turn ambitious ideas into thoughtful, trustworthy experiences.
-        </p>
-        <div class="skills-block">
+        <div class="section-card about-card">
+          <p class="about-focus" data-i18n="about_focus">
+            I solve complex product problems in regulated and enterprise environments—turning
+            ambitious technology into products people trust.
+          </p>
+          <p class="hero-copy" data-i18n="about_p1">
+            My background spans product design, product management, and user research—from senior
+            IC to director, across startups, SaaS, enterprise, and mission-driven organizations.
+          </p>
+          <p class="hero-copy" data-i18n="about_p2">
+            Today, I focus on AI products, agents, and automation—partnering closely with
+            engineering to turn ambitious ideas into thoughtful, trustworthy experiences.
+          </p>
+        </div>
+
+        <div class="section-card skills-block">
           <h3 data-i18n="skills_label">Practice Areas</h3>
           <div class="skills-pills">
             <span class="skill-pill" data-i18n="skill_product_strategy">Product Strategy</span>
@@ -1317,7 +1332,7 @@
           </p>
         </div>
 
-        <div class="collab-block">
+        <div class="section-card collab-block">
           <h3 data-i18n="collab_label">Collaboration &amp; Delivery</h3>
           <p class="hero-copy" data-i18n="collab_p1">
             I thrive in collaborative, cross-functional product organizations where design, product,
@@ -1335,7 +1350,7 @@
           </p>
         </div>
 
-        <div class="leadership-block">
+        <div class="section-card leadership-block">
           <h3 data-i18n="leadership_label">Leadership &amp; Impact</h3>
 
           <div class="leadership-entry">
@@ -1370,7 +1385,7 @@
           </div>
         </div>
 
-        <div class="clients-block">
+        <div class="section-card clients-block">
           <h3 data-i18n="clients_label">Selected Organizations</h3>
           <p class="clients-intro" data-i18n="clients_intro">
             From Fortune 500 companies and federal agencies to high-growth SaaS and mission-driven
@@ -1389,7 +1404,7 @@
           </div>
         </div>
 
-        <div class="fluency-block">
+        <div class="section-card fluency-block">
           <h3 data-i18n="fluency_label">Technical Fluency</h3>
 
           <div class="tools-group">
@@ -1461,7 +1476,7 @@
 
         </div>
 
-        <div class="industries-block">
+        <div class="section-card industries-block">
           <h3 data-i18n="industries_label">Industry Experience</h3>
           <p class="industries-primary">
             <strong data-i18n="industries_primary_label">Focus Industries</strong> &mdash;
@@ -1473,7 +1488,7 @@
           </p>
         </div>
 
-        <div class="credentials-block">
+        <div class="section-card credentials-block">
           <h3 data-i18n="credentials_label">Education &amp; Professional Development</h3>
           <p class="credentials-line">
             <strong data-i18n="credentials_education_label">Education</strong> &mdash;
@@ -1500,7 +1515,7 @@
           </p>
         </div>
 
-        <div class="languages-block">
+        <div class="section-card languages-block">
           <h3 data-i18n="languages_label">Languages</h3>
           <p class="credentials-line">
             <strong data-i18n="languages_native_label">Native</strong> &mdash;
